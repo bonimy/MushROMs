@@ -9,7 +9,7 @@ Super Nintendo game editing libraries and tools
 * [Credits](#credits)
 * [License](#license)
 # What is MushROMs?
-MushROMs started as a basic level editor for Super Mario All-Stars for the SNES. In time, it fell back to being a generic editor for any tile-based layout game (NES, SNES, Genesis, etc.). However, most of the work currently emphasizes SNES games. What it can ultimately do will come down to what the contributors want it to do.
+MushROMs started as a basic level editor for Super Mario All-Stars for the SNES. In time, it grew to being a generic editor for any tile-based layout game (NES, SNES, Genesis, etc.). However, most of the work currently emphasizes SNES games. What it can ultimately do will come down to what the contributors want it to do.
 # Installation
 Presently, the Visual Studio IDE is the only supported environment for MushROMs. Users are encouraged to suggest new environments as an [Issue](https://github.com/bonimy/MushROMs/issues) or [Pull Request](https://github.com/bonimy/MushROMs/pulls).
 ## Visual Studio
@@ -17,7 +17,7 @@ MushROMs is primarily being built in [Visual Studio 2017](https://www.visualstud
 # Contributions
 Do you want to add a feature, report a bug, or propose a change to MushROMs? That's awesome! First, please refer to our [Contributing](CONTRIBUTING.md) file. We use it in hopes having the best working environment we can.
 # Milestones
-Below are the current [Milestones](https://github.com/bonimy/MushROMs/milestones) for MushROMs.
+Below are the current [Milestones](https://github.com/bonimy/MushROMs/milestones) for MushROMs. If you have an idea of what you want to offer, this is a good section get started with.
 * **[Ready, Set...](https://github.com/bonimy/MushROMs/milestone/1)**: Let's set up the project to a working standard. Let's have community and contributing guidelines and create a solid understanding of _how_ we want to build and create before we go!
 # Credits
 Major contributors to MushROMs
