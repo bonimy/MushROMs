@@ -1,12 +1,12 @@
 # MushROMs
 Super Nintendo game editing libraries and tools
 # Table of Contents
-* ### [What is MushROMs?](#what-is-mushroms-1)
-* ### [Installation](#installation-1)
-    * #### [Visual Studio](#visual-studio-1)
-* ### [Contributions](#contributions-1)
-* ### [Credits](#credits-1)
-* ### [License](#license-1)
+* [What is MushROMs?](#what-is-mushroms)
+* [Installation](#installation)
+    * [Visual Studio](#visual-studio)
+* [Contributions](#contributions)
+* [Credits](#credits)
+* [License](#license)
 # What is MushROMs?
 MushROMs started as a basic level editor for Super Mario All-Stars for the SNES. In time, it fell back to being a generic editor for any tile-based layout game (NES, SNES, Genesis, etc.). However, most of the work currently emphasizes SNES games. What it can ultimately do will come down to what the contributors want it to do.
 # Installation
