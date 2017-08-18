@@ -5,6 +5,7 @@ Super Nintendo game editing libraries and tools
 * [Installation](#installation)
     * [Visual Studio](#visual-studio)
 * [Contributions](#contributions)
+* [Milestones](#milestones)
 * [Credits](#credits)
 * [License](#license)
 # What is MushROMs?
@@ -15,6 +16,9 @@ Presently, the Visual Studio IDE is the only supported environment for MushROMs.
 MushROMs is primarily being built in [Visual Studio 2017](https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes) with [.NET 4.7](https://blogs.msdn.microsoft.com/dotnet/2017/04/05/announcing-the-net-framework-4-7/). Both are free of charge. There are currently no other known dependencies, so setup should be as easy as hitting the Build & Run button.
 # Contributions
 Do you want to add a feature, report a bug, or propose a change to MushROMs? That's awesome! First, please refer to our [Contributing](CONTRIBUTING.md) file. We use it in hopes having the best working environment we can.
+# Milestones
+Below are the current [Milestones](https://github.com/bonimy/MushROMs/milestones) for MushROMs.
+* **[Ready, Set...](https://github.com/bonimy/MushROMs/milestone/1)**: Let's set up the project to a working standard. Let's have community and contributing guidelines and create a solid understanding of _how_ we want to build and create before we go!
 # Credits
 Major contributors to MushROMs
 * [Nelson Garcia](https://github.com/bonimy)
