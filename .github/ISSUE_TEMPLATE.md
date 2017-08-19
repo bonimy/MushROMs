@@ -3,15 +3,16 @@
 
 **Example**:
 The project currently does not have an ISSUE_TEMPLATE.md file
-# Features
->List the benefits of resolving your issue here. This section is optional and likely not needed for bug reports.
+# Features/Steps to Reproduce
+>List the benefits of resolving your issue here, or the steps to reproduce it for bugs.
 
 **Example**:
 An ISSUE_TEMPLATE.md file guides new contributors to discuss their problems and ideas in a format existing contributors are already familiar with.
 
 Additionally, such a file helps improve our organizational quality by keeping a consistent  standard for every issue. We spend more time thinking about the content provided and less time trying to make sense of how a contributor formatted their issue.
-# Resolution
+# Resolution/Bug tracking progress
 >If you have a proposed resolution ready, discuss it here. try to organize it in separate labels if there is a lot of content. This format is also helpful if you want to use the [Task List](#task-list) section also.
+>For bug reports this section can cover progress tracking the bug, possibly related issues, or previous resolution attempts.
 
 **Example**:
 ## Create an example template
