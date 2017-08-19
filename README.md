@@ -1,5 +1,5 @@
 # MushROMs
-Super Nintendo game editing libraries and tools
+Super Nintendo game editing libraries and tools written in C# .NET.
 # Table of Contents
 * [What is MushROMs?](#what-is-mushroms)
 * [Installation](#installation)
@@ -11,9 +11,17 @@ Super Nintendo game editing libraries and tools
 # What is MushROMs?
 MushROMs started as a basic level editor for Super Mario All-Stars for the SNES. In time, it grew to being a generic editor for any tile-based layout game (NES, SNES, Genesis, etc.). However, most of the work currently emphasizes SNES games. What it can ultimately do will come down to what the contributors want it to do.
 # Installation
-Presently, the Visual Studio IDE is the only supported environment for MushROMs. Users are encouraged to suggest new environments as an [Issue](https://github.com/bonimy/MushROMs/issues) or [Pull Request](https://github.com/bonimy/MushROMs/pulls).
+Presently, the [Visual Studio 2017 IDE](https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes) is the only supported environment for MushROMs. Users are encouraged to suggest new environments in our [Issues](https://github.com/bonimy/MushROMs/issues) section.
 ## Visual Studio
-MushROMs is primarily being built in [Visual Studio 2017](https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes) with [.NET 4.7](https://blogs.msdn.microsoft.com/dotnet/2017/04/05/announcing-the-net-framework-4-7/). Both are free of charge. There are currently no other known dependencies, so setup should be as easy as hitting the Build & Run button.
+* Get the [latest](https://www.visualstudio.com/downloads/) version of Visual Studio. At the time of writing this, it should be Visual Studio 2017. You have three options: [Community, Professional, and Enterprise](https://www.visualstudio.com/vs/compare/). Any of these three are fine. The collaborators presently build against community since it is free. See that you meet the [System Requirements](https://www.visualstudio.com/en-us/productinfo/vs2017-system-requirements-vs) for Visual Studio for best interaction.
+* When installing Visual Studio (or if you've already installed but missed these components, go to the installer),
+    - Under the Workloads tab, select **.NET desktop development**
+    - Under the Individual Components tab, select .NET Framework 4.7 SDK and .NET Framework 4.7 targeting pack if they weren't already selected.
+    - Under the _Code Tools_ section (still in Individual Components tab), select **Git for Windows** and **GitHub extension for Visual Studio**.
+* Click Install and let the installer do it's thing.
+* Clone our repository and open [MushROMs.sln](MushROMs.sln) in Visual Studio.
+* Hit `F5` to Build and Run and you should be all set!
+
 # Contributions
 Do you want to add a feature, report a bug, or propose a change to MushROMs? That's awesome! First, please refer to our [Contributing](CONTRIBUTING.md) file. We use it in hopes having the best working environment we can.
 # Milestones
