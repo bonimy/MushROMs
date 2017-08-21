@@ -1,4 +1,4 @@
-# Personal Checklist (Delete when completed)
+# Personal Checklist (Delete before submitting)
 For all issues, makes sure you have completed these tasks
 - [ ] - I have read the [CODE OF CONDUCT](../CODE_OF_CONDUCT.md).
 - [ ] - I have read the [CONTRIBUTING](../CONTRIBUTING) guidelines.
