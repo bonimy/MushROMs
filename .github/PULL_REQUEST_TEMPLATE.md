@@ -17,6 +17,6 @@ Please be sure the following are completed before submitting a pull request:
 > Give a full description of what this Pull Request is trying to accomplish. Be sure to also mention if your 
 
 **Example**:
-Adds the .githug/PULL_REQUEST_TEMPLATE.md file, which GitHub uses for all future Pull Requests. This file outlines the criteria and format that contributors should follow when creating a pull request.
+Adds the .github/PULL_REQUEST_TEMPLATE.md file, which GitHub uses for all future Pull Requests. This file outlines the criteria and format that contributors should follow when creating a pull request.
 
 Closes #9.
