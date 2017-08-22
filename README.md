@@ -1,5 +1,6 @@
 # MushROMs
 Super Nintendo game editing libraries and tools written in C# .NET.
+
 # Table of Contents
 * [What is MushROMs?](#what-is-mushroms)
 * [Installation](#installation)
@@ -8,10 +9,13 @@ Super Nintendo game editing libraries and tools written in C# .NET.
 * [Milestones](#milestones)
 * [Credits](#credits)
 * [License](#license)
+
 # What is MushROMs?
 MushROMs started as a basic level editor for Super Mario All-Stars for the SNES. In time, it grew to being a generic editor for any tile-based layout game (NES, SNES, Genesis, etc.). However, most of the work currently emphasizes SNES games. What it can ultimately do will come down to what the contributors want it to do.
+
 # Installation
 Presently, the [Visual Studio 2017 IDE](https://www.visualstudio.com/en-us/news/releasenotes/vs2017-relnotes) is the only supported environment for MushROMs. Users are encouraged to suggest new environments in our [Issues](https://github.com/bonimy/MushROMs/issues) section.
+
 ## Visual Studio
 * Get the [latest](https://www.visualstudio.com/downloads/) version of Visual Studio. At the time of writing this, it should be Visual Studio 2017. You have three options: [Community, Professional, and Enterprise](https://www.visualstudio.com/vs/compare/). Any of these three are fine. The collaborators presently build against community since it is free. See that you meet the [System Requirements](https://www.visualstudio.com/en-us/productinfo/vs2017-system-requirements-vs) for Visual Studio for best interaction.
 * When installing Visual Studio (or if you've already installed but missed these components, go to the installer),
@@ -24,12 +28,15 @@ Presently, the [Visual Studio 2017 IDE](https://www.visualstudio.com/en-us/news/
 
 # Contributions
 Do you want to add a feature, report a bug, or propose a change to MushROMs? That's awesome! First, please refer to our [Contributing](CONTRIBUTING.md) file. We use it in hopes having the best working environment we can.
+
 # Milestones
 Below are the current [Milestones](https://github.com/bonimy/MushROMs/milestones) for MushROMs. If you have an idea of what you want to offer, this is a good section get started with.
 * **[Ready, Set...](https://github.com/bonimy/MushROMs/milestone/1)**: Let's set up the project to a working standard. Let's have community and contributing guidelines and create a solid understanding of _how_ we want to build and create before we go!
+
 # Credits
 Major contributors to MushROMs
 * [Nelson Garcia](https://github.com/bonimy)
+
 # License
 MushROMs: Super Nintendo game editing libraries and tools
 Copyright (C) 2017 Nelson Garcia
