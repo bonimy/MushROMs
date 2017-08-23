@@ -1,7 +1,7 @@
 # Personal Checklist (Delete before submitting)
 For all issues, makes sure you have completed these tasks
-- [ ] - I have read the [CODE OF CONDUCT](../CODE_OF_CONDUCT.md).
-- [ ] - I have read the [CONTRIBUTING](../CONTRIBUTING) guidelines.
+- [ ] - I have read the [CODE OF CONDUCT](https://github.com/bonimy/MushROMs/blob/master/CODE_OF_CONDUCT.md).
+- [ ] - I have read the [CONTRIBUTING](https://github.com/bonimy/MushROMs/blob/master/CONTRIBUTING.md) guidelines.
 
 # Issue
 >Put the subject of the issue here. This can be a sentence, a paragraph, or a whole page. Whatever best describes the problem.
@@ -38,7 +38,7 @@ Now that this file exists, use it and have fun in the experience of open source 
 - [ ] - Have fun!
 
 
-# My Running Environment
+# My Running Environment (Optional)
 > Provide some details about what kind of computer you are using.
 
 **Example**:
