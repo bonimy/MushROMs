@@ -13,6 +13,10 @@ Coding conventions serve the following purposes:
  - [Layout Conventions](#layout-conventions)
  - [Commenting Conventions](#commenting-conventions)
  - [Language Guidelines](#language-guidelines)
+     - [General Code Style](#general-code-style)
+     - [Indentation](#indentation)
+     - [New Lines](#new-lines)
+     - [Spacing](#spacing)
      - [String Data Type](#string-data-type)
      - [Implicitly Typed Local Variables](#implicitly-typed-local-variables)
      - [Unsigned Data Type](#unsigned-data-type)
@@ -68,6 +72,48 @@ if ((val1 > val2) && (val1 > val3))
 
 ## Language Guidelines
 The following sections describe practices that you should follow when writing code.
+
+### General Code Style
+- Do _not_ qualify field, property, method, or event access with `this.`.
+- For locals, parameters, and members, use the predefined type (e.g. `int`, `string`, etc.),
+- For member access expressions, use the framework type (e.g. `System.Int32.MaxValue`).
+- Uses braces for single-line code blocks
+```C#
+if (test)
+{
+    Display();
+}
+```
+- Use object and collection initializers.
+- Use pattern matching in `is` and `as` statements (.NET 4.7 required).
+- Use explicit tuple names.
+- Use simple default expressions.
+- Use expression bodies for single-line properties, indexers, and accessors.
+- Do _not_ use expression bodies for methods, constructors, or operators.
+- Use inlined variable declaration (.NET 4.7 required).
+- Use `?` and `??` for `null` checking.
+
+### Indentation
+- Always indent block and case contents.
+- Do _not_ indent open and close braces or case labels.
+- Place labels one indent less than current.
+
+### New Lines
+- Place open and close braces on new lines.
+- Place `else`, `catch`, and `finally` on new lines.
+- Place members in object initializers and anonymous types on new line.
+- Place query expression clauses on new line.
+
+### Spacing
+- Do _not_ insert space between method name and its opening parenthesis, within parameter/argument list parentheses, or within empty parameter/argument list parentheses.
+- Insert space after keywords in control flow statements (`for`, `foreach`, `if`, etc.).
+- Do not insert space within parentheses of expressions, type casts, or control flow statements.
+- Do not insert space after a cast.
+- Extra space in declaration statements is okay for alignment purposes.
+- Do not insert space before or within square brackets.
+- Insert space before and after colon delimeters.
+- Insert space after (but not before) comma delimeters and semicolon delimeters in `for` statements.
+- Insert space before and after binary operators.
 
 ### String Data Type
 - Use the `+` operator to concatenate short strings, as shown in the following code.
