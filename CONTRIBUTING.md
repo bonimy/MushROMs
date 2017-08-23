@@ -10,6 +10,7 @@ Hello. My name is Nelson and MushROMs has been a passion project of mine for man
 * [The types of contributions we're looking for](#the-types-of-contributions-were-looking-for)
 * [Our vision for the project](#our-vision-for-the-project)
 * [Code styles](#code-styles)
+    - [Commit messages](#commit-messages)
 
 ## How to file a bug report
 To file a bug report, visit the [Issues](https://github.com/bonimy/MushROMs/issues) page, and search if the bug has already been reported. If it has not, then open a new issue, giving a short, descriptive title explaining the bug. From there, you will get a template file that outlines how to describe your bug and what information we are looking for when you submit it.
@@ -47,3 +48,14 @@ Refer to [VISION](VISION.md) for a complete description of our project's vision.
 
 ## Code styles
 >This section is under construction.
+### Commit messages
+[This](https://chris.beams.io/posts/git-commit/) article does a great job describing the value of a formatted git commit message. The things to take away from it are
+1. [Separate subject from body with a blank line](https://chris.beams.io/posts/git-commit/#separate)
+2. [Limit the subject line to 50 characters](https://chris.beams.io/posts/git-commit/#limit-50)
+3. [Capitalize the subject line](https://chris.beams.io/posts/git-commit/#capitalize)
+4. [Do not end the subject line with a period](https://chris.beams.io/posts/git-commit/#end)
+5. [Use the imperative mood in the subject line](https://chris.beams.io/posts/git-commit/#imperative)
+6. [Wrap the body at 72 characters](https://chris.beams.io/posts/git-commit/#wrap-72)
+7. [Use the body to explain _what_ and _why_ vs. _how_](https://chris.beams.io/posts/git-commit/#why-not-how)
+
+Try to comply to these rules as much as possible.
