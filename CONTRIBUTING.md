@@ -47,7 +47,8 @@ Below are some things we think wouldn't be helpful for contributions
 Refer to [VISION](VISION.md) for a complete description of our project's vision.
 
 ## Code styles
->This section is under construction.
+Refer to our [CODE STYLES](CODE_STYLES.md) guide for an in-depth discussion on how to write your code for this project.
+
 ### Commit messages
 [This](https://chris.beams.io/posts/git-commit/) article does a great job describing the value of a formatted git commit message. The things to take away from it are
 1. [Separate subject from body with a blank line](https://chris.beams.io/posts/git-commit/#separate)
