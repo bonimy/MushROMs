@@ -18,11 +18,40 @@ Here we document the format and important numbers for the SMAS SMB1 level data. 
   8 | `20` | `30 32 21 65`
 
   So for example, for W4-3 would have world offset `0E`. We go four values down the list because we add an extra map number for the autowalk sequence of W4-2. Thus, the map number of W4-3 is `2C`.
+## Map number basics
+The map number byte is more than just an index value. Some bits serve different purposes.
+
+`0 t t i i i i i`
+Bit | Description
+--- | ---
+0 | The highest bit is insignificant. This is because pipe pointer sprite codes use the first byte to specify the map number. The first byte of sprite codes also use the most significant bit as a page flag. So map numbers ignore the MSB since it would otherwise give different values if it had a set page flag.
+`t` | The `t` bits specify the map _type_ of the map (see [below](#map-types).
+`i` | The `i` bits specify the map base index value.).
+
+### Map types
+The `t` bits of the map number specify four possible map types. SMB1 interprets the values as follows:
+
+Bits | Value | Description
+---- | ----- | ---
+00 | 0 | Underwater level
+01 | 1 | Normal ground level
+10 | 2 | Underground level
+11 | 3 | Castle level
+
 ## Level address by map number
-- Now that we know how to get the map number by level, to find the pointer to the level data, we need to find the bank byte, high byte, and low byte.
-  - The bank byte is hardcoded as `04` by the program bank byte register.
-  - The low byte is indexed by map number at `$04:C194` (called at `$04:C092`).
+We now know how to get the map number by level, and how it is formatted. To find the pointer to the level data, we need to find the bank byte, high byte, and low byte.
+- `$04:C148`: An offset index  table by map type (called at `$04:C05A`). The values in this table specify the zero index to add to the base index value described [earlier](#map-number-basics).
   
-    Map Base | Number of levels | Values
-    ---- | ---- | ----
-    `00-1F` | 3 | `08 71 0D`
+  Map type | Name | Index
+  --- | --- | ---
+  0 | Underwater | `1F`
+  1 | Normal | `06`
+  2 | Underground | `1C`
+  3 | Castle | `00`
+  
+- The bank byte is hardcoded as `04` by the program bank byte register.
+- The low byte is indexed by map number at `$04:C194` (called at `$04:C092`).
+
+  Map Base | Number of levels | Values
+  ---- | ---- | ----
+  `00-1F` | 3 | `08 71 0D`
