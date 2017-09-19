@@ -1,6 +1,33 @@
 # Super Mario All-Stars: Super Mario Bros. 1 Level Data
-Here we document the format and important numbers for the SMAS SMB1 level data. All addresses are given SNES mode.
-## Map number by world and level
+Here we document the format and important numbers for the SMAS SMB1 level data. All addresses are given in SNES mode.
+## Terminology
+Most people are familiar with how Super Mario Bros. 1 (SMB1) works. There are eight worlds, and each world has four levels. When we imagine a full level in SMB1, we imagine all of this:
+
+![W1-1 Example](images/screen1.png)
+
+However, this level actually has a bonus room too:
+
+![W1-1 Bonus Room](images/screen2.png)
+
+These are part of the same level, but are considered different "areas".
+
+More interestingly, we have W1-3 and W5-3.
+
+![W1-3 Example](images/screen3.png)
+![W5-3 Example](images/screen4.png)
+
+These, conversely, are different levels but the same "areas".
+
+For simplicity, we define **area** as each individual location as shown. They are distinct from **levels** in that levels can have multiple areas (the main loaded area, a bonus area, or a miscellaneous room). A **world** is defined as every level until a Bowser is encounted. Internally, the game increments you to the next world after beating a Bowser (more precisely after stepping on his bridge-destroying axe).
+
+Every area is defined by a single byte, used as a pointer index for getting the area data (blocks, pipes, bricks, etc.) and sprite data (enemies, commands, etc.). For the images shown above, the area numbers are 0x25 for W1-1, 0xC2 for its bonus room, and 0x26 for both W1-3 and W5-3.
+
+There are two ways the game engine determines which area number to use next:
+- **Current world and level number**: By starting the game or beating the level, the internal world and level number are appropriately set and these determine which map number to use.
+- **Exit the level**: By entering a pipe or climbing a vine, you exit the level. Using a sprite command (discussed later), the game knows which area to load if you exit the level.
+
+## Area number determined by current world and level
+There are several constants, addresses, and byte tables that determine the map number when given the world and level numbers. The complete routine is provided at 
 - `$04:C026`: Max world number `08`. When the player beats Bowser, the world number is incremented. The world number is set to zero (W1) when it is equal to or greater than the max world number.
 - `$04:C11C`: Level offsets per world (called at `$04:C034`).
   - `00 05 0A 0E 13 17 1B 20`: These values are indexed by world. They represent how many bytes to offset the map pointer array to load the current map by world. For example, world 1 offsets zero bytes and world 2 offsets five bytes: four bytes for each standard level, and one more byte for the pipe autowalk entrace "level" at the start of W1-2. Entering those pipes increases the base level number, and thus takes you to the real W1-2 (the underground level). Hence why some worlds have five bytes offsets instead of four. World 3's offset is 10 bytes instead of 5 because it accounts for the offset of 5 levels in World 1 and the offset of 5 levels in world 2. So this number is always increasing per world.
