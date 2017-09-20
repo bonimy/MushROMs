@@ -54,7 +54,7 @@ Bits | Value | Area type
   
 **`$04:C026`**: Max world number, `08`. When the player exceeds this, the game state is set back to W1-1.
 
-**`$04:C11C`**: An index table that determines the start index to for the area number. This table is indexed by world number (called at `$04:C034`).
+**`$04:C11C`**: An index table that determines the start index for the "area number table per level". This table is indexed by world number (called at `$04:C034`).
 
 World | Offset | Levels per world
 ---- | ---- | ----
@@ -71,7 +71,7 @@ World | Offset | Levels per world
       
   ![W1-2 autowalk](images/screen5.png)
       
-  This, while being shown as W1-2 along with the underground area that follows, is actually a separate level. So when the player enters the pipe, the game internally increments the level number (but doesn't display it on the screen). So technically, the underground area is level 3, the green trees area is level 4, and the castle is level 5. But the game still displays the level number we're all used to seeing.
+  This, while being shown as W1-2 along with the underground area that follows, is actually a separate level. So when the player enters the pipe, the game internally increments the level number (but doesn't display it on the screen). So technically, the underground area is level 3, the green trees area is level 4, and the castle is level 5. But the game still displays the level number we're all used to seeing. The reasoning behind this being that if you die in, say, the undergorund area of W1-2, you respawn in the underground area, and not the autowalk pipe entrance every time.
     
 **`$04:C124`**: Table of area numbers (called at `$04:C03C`). The world start index determined by table `$04:C11C` is added to the current level number, and this indexes the table to get the current area number.
   
@@ -86,7 +86,7 @@ World | Offset | Area Number per level
 7 | `1B` | `33 29 01 27 64`
 8 | `20` | `30 32 21 65`
 
-For example, W4-3 would have world offset `0x0E`. We go four values down the list because we add an extra area number for the autowalk sequence of W4-2. Thus, the area number of W4-3 is `0x2C`.
+For example, W4-3 would have world offset `0x0E`. We go four values down the list because we add an extra level number for the autowalk sequence of W4-2. Thus, the area number of W4-3 is `0x2C`.
   
 - **Note**: There are interesting cases that can occur when the player does or doesn't complete a world. For example, if we put an Axe in W1-1 and the player used that to beat the level, the game would start the player at world 2, so our next level loaded would be W2-1, not W1-2.
 
@@ -95,7 +95,7 @@ For example, W4-3 would have world offset `0x0E`. We go four values down the lis
   Further, if the player made it to W1-8 (W2-4 normally) and beat the level by the axe, we wouldn't be taken to W3-1. The game will increment the world number to W2 and would reset us to level 1. Hence, we'd be taken back to area `0x28` under the standard W2-1. We would have to do this whole world again to get back on track. Acmlm's Strange Mario Bros. uses this oddity a lot.
     
 ## Area data from area number
-Now that we know how to get the area number, we need to get the area data. The **area object data** (or **object data**) is a string of bytes that determines how to place objects in the level. We loosely define **objects** as things such as question blocks, bricks, spring boards, pipes, etc. This definition is weak because it doesn't comprehensively cover everything. There are oddities like page skips, scenery changes, pipe pointers, loop commands, and warp zone specifies, which can eithr be classified as object data or sprite data. A comprehensive dissection of area data vs sprite data will be given later in this document. But on this same token, we will define **area sprite data** (or **sprite data**) as the string of bytes determining how to place sprites in the level, and we equally give a loose definition of **sprites** as things such Goombas, Koopas, Lakitus, etc. We define **area data** itself as the object data, sprite data, and other area-specific information we will discuss in this section.
+Now that we know how to get the area number, we need to get the area data. The **area object data** (or **object data**) is a string of bytes that determines how to place objects in the level. We loosely define **objects** as things such as question blocks, bricks, spring boards, pipes, etc. This definition is weak because it doesn't comprehensively cover everything. There are oddities like page skips, scenery changes, pipe pointers, loop commands, and warp zone specifies, which can either be classified as object data or sprite data. A comprehensive dissection of area data vs sprite data will be given later in this document. But on this same token, we will define **area sprite data** (or **sprite data**) as the string of bytes determining how to place sprites in the level, and we equally give a loose definition of **sprites** as things such Goombas, Koopas, Lakitus, etc. We define **area data** itself as the object data, sprite data, and other area-specific information we will discuss in this section.
 
 **`$04:C041`**: The complete routine for getting the area data.
 
@@ -106,13 +106,13 @@ Value | Description
 0 | Light blue background with underwater music
 1 | Light blue background with above ground music
 2 | Black background with underground music
-3 | Black backgorund with castle music
+3 | Black background with castle music
 
 - **Note**: This variable will always have the same value as `$7E:005C`, the area type.
 
 **`$7E:074F`**: Area _index_. This is determined by the lower five bits of `$7E:0750`, the area _number_. The difference can be confusing at first, but will be analyzed shortly.
 
-**`$04:C148`**: Table of relative indices to sprite area data pointer tables (called at `$04:C05A`). This table is indexed by area type. Much like how we used the worl number to determine the start offset for getting the area number per level, we're using the area type to get the pointer to the sprite data per area index (an example will be provided afterward to try to clear any confusion).
+**`$04:C148`**: Table of relative indices to sprite area data pointer tables (called at `$04:C05A`). This table is indexed by area type. Much like how we used the world number to determine the start offset for getting the area number per level, we're using the area type to get the pointer to the sprite data per area index (an example will be provided afterward to try to clear any confusion).
 
 Index | Area Type | Table Value
 --- | --- | ---
