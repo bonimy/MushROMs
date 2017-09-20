@@ -20,6 +20,8 @@ These, conversely, are different levels but the same "areas".
 
 We will define **area** as how it was described above Areas can also be called **maps** or **rooms**. For our purpose, we will stick to _area_. Areas are distinct from **levels** in that levels can have multiple areas (the main area, a bonus area, or a miscellaneous area). A **world** is defined as every level until a Bowser is encountered. Internally, the game increments you to the next world after beating a Bowser (more precisely after stepping on his bridge-destroying axe).
 
+- **Note**: For simplicity, when we refer to the main area of the level, we will simply refer to the level. So instead of saying "the main area of W1-1", we'll simply say "W1-1".
+
 Every area is defined by a single byte, used as a pointer index for getting the area data (blocks, pipes, bricks, etc.) and sprite data (enemies, commands, etc.). For the images shown above, the area numbers are 0x25 for W1-1, 0xC2 for its bonus room, and 0x26 for both W1-3 and W5-3.
 
 There are two ways the game engine determines which area number to use next:
@@ -35,7 +37,7 @@ There are several constants, addresses, and byte tables that determine the area 
 
 **`$04:C00B`**: Full routine for getting area number from world and level numbers.
 
-**`$7E:0750`**: Stores the current area number.
+**`$7E:0750`**: Stores the current area number. The range goes from `0x00-0x7F`. If it exceeds this, the highest bit is ignored. The highest bit is only set if it has to be set by a sprite command (more on this later).
 
 **`$7E:075C`**: "Hard mode" flag. This flag changes sprite properties starting at W5-3 (e.g. bullet bills in W5-3 but not W1-3, fire bars in W6-4 but not W1-4, shorter moving platforms, etc.)
 
@@ -75,7 +77,7 @@ World | Offset | Levels per world
     
 **`$04:C124`**: Table of area numbers (called at `$04:C03C`). The world start index determined by table `$04:C11C` is added to the current level number, and this indexes the table to get the current area number.
   
-World | Offset | Area Number per level
+World | Table Offset | Area Number per level
 ---- | ---- | ----
 1 | `00` | `25 29 C0 26 60`
 2 | `05` | `28 29 01 27 62`
@@ -112,7 +114,7 @@ Value | Description
 
 **`$7E:074F`**: Area _index_. This is determined by the lower five bits of `$7E:0750`, the area _number_. The difference can be confusing at first, but will be analyzed shortly.
 
-**`$04:C148`**: Table of relative indices to sprite area data pointer tables (called at `$04:C05A`). This table is indexed by area type. Much like how we used the world number to determine the start offset for getting the area number per level, we're using the area type to get the pointer to the sprite data per area index (an example will be provided afterward to try to clear any confusion).
+**`$04:C148`**: Table of relative indices to area sprite data pointer tables (called at `$04:C05A`). This table is indexed by area type. Much like how we used the world number to determine the start offset for getting the area number per level, we're using the area type to get the pointer to the sprite data per area index (an example will be provided afterward to try to clear any confusion).
 
 Index | Area Type | Table Value
 --- | --- | ---
@@ -125,20 +127,96 @@ Index | Area Type | Table Value
 
 **`$04:C14C`**: Table of low bytes of area sprite data pointers (called at `$04:C062`).
 
-Area Type | Table Values
---- | ---
-Castle | `D8 FF 18 47 72 87`
-Above Ground | `C1 E6 03 11 38 69 87 A4 B9 E3 E4 08 11 36 59 62 63 9D C8 F6 12 1B`
-Underground | `40 6D 9B`
-Underwater | `C8 D9 03`
+Area Type | Table Offset | Table Values
+--- | --- | ---
+Castle | `00` | `D8 FF 18 47 72 87`
+Above Ground | `06` | `C1 E6 03 11 38 69 87 A4 B9 E3 E4 08 11 36 59 62 63 9D C8 F6 12 1B`
+Underground | `1C` | `40 6D 9B`
+Underwater | `1F` | `C8 D9 03`
 
 **`$04:C16E`**: Table of high bytes of area sprite data pointers (called at `$04:C06C`).
 
-Area Type | Table Values
---- | ---
-Castle | `C1 C1 C2 C2 C2`
-Above Ground | `C2 C2 C3 C3 C3 C3 C3 C3 C3 C3 C3 C4 C4 C4 C4 C4 C4 C4 C4 C4 C5 C5`
-Underground | `C5 C5 C5`
-Underwater | `C5 C5 C6`
+Area Type | Table Offset | Table Values
+--- | --- | ---
+Castle | `00` | `C1 C1 C2 C2 C2 C2`
+Above Ground | `06` | `C2 C2 C3 C3 C3 C3 C3 C3 C3 C3 C3 C4 C4 C4 C4 C4 C4 C4 C4 C4 C5 C5`
+Underground | `1C` | `C5 C5 C5`
+Underwater | `1F` | `C5 C5 C6`
 
 **`$04:C06C`**: Hardcodes the bank byte of the area sprite data pointer to `0x04`.
+
+As an example, we will get the sprite data pointer for the first area of W1-1. It's area number is `0x25`. Its area type is _Above ground_ and its area index is `0x05`. The table offset for _above ground_ is `0x06`, so we move 6 bytes down the low and high byte pointers (2nd row of tables). Then from the second row, we move 5 bytes down the list. So the low byte of the sprite pointer is `0x38` and the high byte is `0xC3`. The bank byte is always `0x04`, so the sprite data pointer for area 0x25 is `$04:C369`.
+
+**`$04:C190`**: Table of relative indices to area object data pointer tables (called at `$04:C072`). This table is like table `$04:C148`.
+
+Area Type | Table Offset | Table Values
+--- | --- | ---
+0 | Underwater | `00`
+1 | Above ground | `03`
+2 | Underground | `19`
+3 | Castle | `1C`
+
+**`$7E:00FA`**: A three byte pointer to the current area's object data.
+
+**`$04:C194`**: Table of low bytes of area object data pointers (called at `$04:C092`).
+
+Area Type | Table Offset | Table Values
+--- | --- | ---
+Underwater | `00` | `08 71 0D`
+Above Ground | `03` | `0B 74 C3 1B B0 2F 9A F1 7A E7 F1 35 4A BB 28 A3 D5 6D EB 6B CA F5`
+Underground | `19` | `2D D2 76`
+Castle | `1C` | `17 D2 FA D8 D4 01`
+
+**`$04:C1B6`**: Table of high bytes of area object data pointers (called at `$04:C097`).
+
+Area Type | Table Offset | Table Values
+--- | --- | ---
+Underwater | `00` | `D6 D6 D7`
+Above Ground | `03` | `CC CC CC CD CD CE CE CE CF CF CF D0 D0 D0 D1 D1 D1 D2 D2 D3 D3 D3`
+Underground | `19` | `D4 D4 D5`
+Castle | `1C` | `C6 C6 C7 C8 C9 CB`
+
+**`$04:C09C`**: Hardcodes the bank byte of the area object data pointer to `0x04`.
+
+So the area object data pointer for area `0x25` is `$04:CE2F`. Another point of interest is that an area index can exceed its bounds. For example, if we had area number `0x08` (not an area in the game), it would have area type _underwater_ and area index `0x08`. So we would go 8 bytes down the pointer tables starting at the underwater offset. For the area object data, this pointer would `$04:CE2F`. This is the same as area `0x25` (main area of W1-1). So what we would get is an underwater version of this area.
+
+The sprites data however, would be undefined, as it exceeds the table size when starting at the underwater offset.
+
+**`$7E:00DB`**: Stores the area's layer 2 background. This value is determined by table `$04:C190` and the area index. More precisely, the value that the aforementioned table returns when given the area type, is added to the area index, and the result is stored as the layer 2 background.
+
+Value | Area number | Layer 2 background
+--- | --- | ---
+`00` | `00` | Underwater (short)
+`01` | `01` | Underwater (full)
+`02` | `02` | Underwater (castle)
+`03` | `20` | Night sky (w/o mountains)
+`04` | `21` | Outside castle (W8-3)
+`05` | `22` | Mountains and trees
+`06` | `23` | Night sky (w/ mountains)
+`07` | `24` | Night sky (w/ mountains and snow)
+`08` | `25` | Mountains
+`09` | `26` | Waterfall
+`0A` | `27` | Goomba statues/pillars
+`0B` | `28` | Narrow green hills (W2-1)
+`0C` | `29` | One big mountain (autowalk intro level)
+`0D` | `2A` | Narrow hills w/ snow (W5-1)
+`0E` | `2B` | Mario/Luigi bonus room
+`0F` | `2C` | Mushrooms (W4-3)
+`10` | `2D` | Night sky (w/o mountains)
+`11` | `2E` | 
+`12` | `2F` | 
+`13` | `30` | 
+`14` | `31` | 
+`15` | `32` | 
+`16` | `23` | 
+`17` | `24` | 
+`18` | `25` | 
+`19` | `40` | 
+`1A` | `41` | 
+`1B` | `42` | 
+`1C` | `60` | 
+`1D` | `61` | 
+`1E` | `62` | 
+`1F` | `63` | 
+`20` | `64` | 
+`21` | `65` | 
