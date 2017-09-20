@@ -185,7 +185,7 @@ The sprites data however, would be undefined, as it exceeds the table size when 
 **`$7E:00DB`**: Stores the area's layer 2 background. This value is determined by table `$04:C190` and the area index. More precisely, the value that the aforementioned table returns when given the area type, is added to the area index, and the result is stored as the layer 2 background.
 
 Value | Area number | Appears in | Layer 2 background
---- | --- | ---
+--- | --- | --- | ---
 `00` | `00` | Various |  Underwater bonus area
 `01` | `01` | W1-2 & W7-2 | Underwater
 `02` | `02` | W8-4 underwater | Underwater
