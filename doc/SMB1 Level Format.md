@@ -178,45 +178,45 @@ Castle | `1C` | `C6 C6 C7 C8 C9 CB`
 
 **`$04:C09C`**: Hardcodes the bank byte of the area object data pointer to `0x04`.
 
-So the area object data pointer for area `0x25` is `$04:CE2F`. Another point of interest is that an area index can exceed its bounds. For example, if we had area number `0x08` (not an area in the game), it would have area type _underwater_ and area index `0x08`. So we would go 8 bytes down the pointer tables starting at the underwater offset. For the area object data, this pointer would `$04:CE2F`. This is the same as area `0x25` (main area of W1-1). So what we would get is an underwater version of this area.
+So the area object data pointer for area `0x25` is `$04:CE2F`. Another point of interest is that an area index can exceed its bounds. For example, if we had area number `0x08` (not an area in the game), it would have area type _underwater_ and area index `0x08`. So we would go 8 bytes down the pointer tables starting at the underwater offset. For the area object data, this pointer would `$04:CE2F`. This is the same as area `0x25` (W1-1). So what we would get is an underwater version of this area.
 
 The sprites data however, would be undefined, as it exceeds the table size when starting at the underwater offset.
 
 **`$7E:00DB`**: Stores the area's layer 2 background. This value is determined by table `$04:C190` and the area index. More precisely, the value that the aforementioned table returns when given the area type, is added to the area index, and the result is stored as the layer 2 background.
 
-Value | Area number | Layer 2 background
+Value | Area number | Appears in | Layer 2 background
 --- | --- | ---
-`00` | `00` | Underwater (short)
-`01` | `01` | Underwater (full)
-`02` | `02` | Underwater (castle)
-`03` | `20` | Night sky (w/o mountains)
-`04` | `21` | Outside castle (W8-3)
-`05` | `22` | Mountains and trees
-`06` | `23` | Night sky (w/ mountains)
-`07` | `24` | Night sky (w/ mountains and snow)
-`08` | `25` | Mountains
-`09` | `26` | Waterfall
-`0A` | `27` | Goomba statues/pillars
-`0B` | `28` | Narrow green hills (W2-1)
-`0C` | `29` | One big mountain (autowalk intro level)
-`0D` | `2A` | Narrow hills w/ snow (W5-1)
-`0E` | `2B` | Mario/Luigi bonus room
-`0F` | `2C` | Mushrooms (W4-3)
-`10` | `2D` | Night sky (w/o mountains)
-`11` | `2E` | 
-`12` | `2F` | 
-`13` | `30` | 
-`14` | `31` | 
-`15` | `32` | 
-`16` | `23` | 
-`17` | `24` | 
-`18` | `25` | 
-`19` | `40` | 
-`1A` | `41` | 
-`1B` | `42` | 
-`1C` | `60` | 
-`1D` | `61` | 
-`1E` | `62` | 
-`1F` | `63` | 
-`20` | `64` | 
-`21` | `65` | 
+`00` | `00` | Various |  Underwater bonus area
+`01` | `01` | W1-2 & W7-2 | Underwater
+`02` | `02` | W8-4 underwater | Underwater
+`03` | `20` | W3-3 | Night sky w/o mountains
+`04` | `21` | W8-3 | Outside castle
+`05` | `22` | W4-1 | Mountains and trees
+`06` | `23` | W6-2 | Night sky w/ mountains
+`07` | `24` | W3-1 | Night sky w/ mountains and snow 
+`08` | `25` | W1-1 | Mountains
+`09` | `26` | W1-3 & W5-3 | Waterfall
+`0A` | `27` | W2-3 & W7-3 | Goomba statues/pillars
+`0B` | `28` | W2-1 | Narrow green hills
+`0C` | `29` | Autowalk | One big mountain
+`0D` | `2A` | W5-1 | Narrow hills w/ snow
+`0E` | `2B` | Sky bonus area | Mario/Luigi bonus area (day)
+`0F` | `2C` | W4-3 | Mushrooms
+`10` | `2D` | W6-3 | Night sky w/o mountains
+`11` | `2E` | W6-1 | Nigh sky w/ mountains
+`12` | `2F` | W4-2 Warp zone | Mushrooms
+`13` | `30` | W8-1 | Mountains
+`14` | `31` | W5-2 | Narrow hills w/ snow
+`15` | `32` | W8-2 | Narrow orange hills
+`16` | `33` | W7-1 | Narrow hills w/ snow
+`17` | `34` | Sky bonus area | Mario/Luigi bonus area (night)
+`18` | `35` | W3-2 | Night sky w/ mountains
+`19` | `40` | W1-2 | Underground
+`1A` | `41` | W4-2 | Underground
+`1B` | `42` | Underground bonus area | Mario/Luigi bonus room
+`1C` | `60` | W1-4 & W6-4 | Castle
+`1D` | `61` | W4-4 | Castle w/ pillars and chandeliers
+`1E` | `62` | W2-4 & W5-4 | Castle w/ pillars
+`1F` | `63` | W3-4 | Castle w/ pillars
+`20` | `64` | W7-4 | Castle w/ pillars and doors
+`21` | `65` | W8-4 | Castle w/ windows and thunder/lightning
