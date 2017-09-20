@@ -220,3 +220,102 @@ Value | Area number | Appears in | Layer 2 background
 `1F` | `63` | W3-4 | Castle w/ pillars
 `20` | `64` | W7-4 | Castle w/ pillars and doors
 `21` | `65` | W8-4 | Castle w/ windows and thunder/lightning
+
+## Area data format
+Now that we know how to get the area data, we can finally document how it is formatted
+
+### Area sprite data
+We'll start with the sprite data because it is less complicated. Every sprite that is inserted into an area requires two bytes (except area exit pointers; discussed later). Data is continuously loaded into the game until the terminating byte `0xFF` is read for the sprite's first byte. Below is a breakdown of their two byte format.
+
+Byte 1 | Byte 2
+--- | ---
+`X X X X Y Y Y Y` | `P H E E E E E E`
+
+**X**: 4 bits determining the X-coordinate of the sprite relative to the current page (in 16 pixel increments).
+
+**Y**: 4 bits determiinng the Y-coordinate of the sprite relative to the current page (in 16 pixel increments).
+
+**P**: Page flag. If this is set, the sprite is moved to the next page.
+
+**H**: Hard mode flag. The sprite will only spawn after W5-3.
+
+**E**: Enemy data
+
+Below is a table that comprehensively describes each **sprite** in SMB1.
+
+E bit value | Sprite Description
+--- | ---
+`00` | Green Koopa Troopa (walks off floors)
+`01` | Red Koops Troopa (walks off floors)
+`02` | Buzzy Beetle
+`03` | Red Koopa Troopa (stays on floors
+`04` | Green Koops Troopa (animates, but doesn't move)
+`05` | Hammer Bros.
+`06` | Goomba
+`07` | Blooper/Squid
+`08` | Bullet Bill
+`09` | Yellow Koopa Paratroopa (animates, but doesn't move)
+`0A` | Green cheep-cheep (slow)
+`0B` | Red cheep-cheep (fast)
+`0C` | Podoboo (jumps up to height specified)
+`0D` | Pirhana Plant (add 8 pixels to X-coordinate to center around pipes)
+`0E` | Green Koopa Paratratroopa (Leaping)
+`0F` | Red Koopa Paratroopa (Vertical flying)
+`10` | Green Koopa Paratroopa (Horizontal flying)
+`11` | Lakitu
+`12` | Spiny (Not intended for use)
+`13` | Undefined
+`14` | Red Flying cheep-cheeps (generator)
+`15` | Bowser's fire (generator)
+`16` | Fireworks (generator)
+`17` | Bullet Bills/Cheep-cheeps (generator)
+`18-1A` | Undefined
+`1B` | Fire bar (clockwise)
+`1C` | Fast fire bar (clockwise)
+`1D` | Fire bar (counter-clockwise)
+`1E` | Fast fire bar (counter-clockwise)
+`1F` | Long fire bar (clockwise)
+`20-23` | Undefined
+`24` | Lift for balance ropes
+`25` | Lift (moves down then back up)
+`26` | Lift (moves up)
+`27` | Lift (moves down)
+`28` | Lift (moves left then back right)
+`29` | Lift (falls)
+`2A` | Lift (moves right)
+`2B` | Short lift (moves up)
+`2C` | Short lift (moved down)
+`2D` | Bowser
+`2E-33` | Undefined
+`34` | Warp zone command
+`35` | Toad or princess (depends on world)
+`36` | Undefined
+`37` | 2 Goombas seperated horizontally by 8 pixels (Y = 10)
+`38` | 3 Goombas separated horizontally by 8 pixels (Y= 10)
+`39` | 2 Goombas seperated horizontally by 8 pixels (Y = 6)
+`3A` | 3 Goombas separated horizontally by 8 pixels (Y= 6)
+`3B` | 2 Green Koopa Troopas seperated horizontally by 8 pixels (Y = 10)
+`3C` | 3 Green Koopa Troopas separated horizontally by 8 pixels (Y= 10)
+`3D` | 2 Green Koopa Troopas seperated horizontally by 8 pixels (Y = 6)
+`3E` | 3 Green Koopa Troopas separated horizontally by 8 pixels (Y= 6)
+`3F` | Undefined
+
+#### Area pointers
+Area pointers are special sprite commands that actually use three bytes to describe them instead of two. The game engine knows the sprite will be a 3 byte area pointer if the Y coordinat it read is `0x0E`. Below is the format for area pointer sprite commands
+
+Byte 1 | Byte 2 | Byte 3
+--- | --- | ---
+`X X X X 1 1 1 0` | `P A A A A A A A` | `W W W S S S S`
+
+**X**: 4 bits determining the X-coordinate of the sprite relative to the current page (in 16 pixel increments).
+
+**P**: Page flag. If this is set, the sprite is moved to the next page.
+
+**A**: Area number. Note that this is why the area number only goes from `0x00-0x7F`. Numbers higher than this can be passed if the page flag is set, but the game engine just ignores that bit.
+
+**W**: Defines which world to start accepting this area pointer. For example if the W bits are 4 (World 5) and the current world is World 1, then this area pointer is ignored
+
+**S**: Determines which screen/page to start the player on when entering the new area.
+
+### Area object data
+The area object data first starts with a 2 byte area header that defines its layout.
