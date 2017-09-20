@@ -5,7 +5,7 @@ Most people are familiar with how Super Mario Bros. 1 (SMB1) works. There are ei
 
 ![W1-1 Example](images/screen1.png)
 
-Some of us might also imagine the bonus room being part of W1-1:
+Some of us might also imagine the bonus area being part of W1-1:
 
 ![W1-1 Bonus Room](images/screen2.png)
 
@@ -23,13 +23,16 @@ We will define **area** as how it was described above Areas can also be called *
 Every area is defined by a single byte, used as a pointer index for getting the area data (blocks, pipes, bricks, etc.) and sprite data (enemies, commands, etc.). For the images shown above, the area numbers are 0x25 for W1-1, 0xC2 for its bonus room, and 0x26 for both W1-3 and W5-3.
 
 There are two ways the game engine determines which area number to use next:
+
 **Current world and level number**: By starting the game or beating the level, the internal world and level number are appropriately set and these determine which area number to use.
+
 **Exit the level**: By entering a pipe or climbing a vine, you exit the level. Using a sprite command (discussed later), the game knows which area to load if you exit the level.
 
 We will first discuss how we get the area number. Then we will discuss how get the area data from the area number. Finally, we will document the area data format; we annotate how it is interpreted as a full level.
 
 ## Area number determined by current world and level
 There are several constants, addresses, and byte tables that determine the area number when given the world and level numbers.
+
 **`$04:C00B`**: Full routine for getting area number from world and level numbers.
 
 **`$7E:0750`**: Stores the current area number.
@@ -97,12 +100,14 @@ Now that we know how to get the area number, we need to get the area data. The *
 **`$04:C041`**: The complete routine for getting the area data.
 
 **`$7E:00BA`**: Stores the NES-style palette and music data of the area.
+
 Value | Description
 --- | ---
 0 | Light blue background with underwater music
 1 | Light blue background with above ground music
 2 | Black background with underground music
 3 | Black backgorund with castle music
+
 - **Note**: This variable will always have the same value as `$7E:005C`, the area type.
 
 **`$7E:074F`**: Area _index_. This is determined by the lower five bits of `$7E:0750`, the area _number_. The difference can be confusing at first, but will be analyzed shortly.
