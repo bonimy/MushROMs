@@ -22,7 +22,7 @@ This is a comprehensive guide for understanding the Super Mario All-Stars (SMAS)
   - [Area header data format](#area-header-data-format)
   - [Area object commands and subcommands](#area-object-commands-and-subcommands)
     - [Standard object commands](#standard-object-commands)
-      - [Standard static object](#standard-static-object]
+      - [Standard static object](#standard-static-object)
       - [Extendable objects](#extendable-objects)
       - [Pipe subcommand](#pipe-subcommand)
     - [Miscellaneous object command C](#miscellaneous-object-command-c)
