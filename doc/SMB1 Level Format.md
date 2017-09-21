@@ -1,5 +1,5 @@
 # Super Mario All-Stars: Super Mario Bros. 1 Level Data
-This is a comprehensive guide for understanding the SMAS SMB1 level data.
+This is a comprehensive guide for understanding the Super Mario All-Stars (SMAS) Super Mario Bros. 1 (SMB1) level data.
 
 ## Table of Contents
 - [Introduction and Terminology](#introduction-and-terminology)
@@ -23,13 +23,17 @@ This is a comprehensive guide for understanding the SMAS SMB1 level data.
   - [Area object data](#area-object-data)
 
 ## Introduction and Terminology
-Most people are familiar with how Super Mario Bros. 1 (SMB1) works. There are eight worlds, and each world has four levels. When we imagine a full level in SMB1, we imagine this:
+Super Mario Bros. 1 was released for the Nintendo Entertainment System (NES) in Japan and North America in the year 1985, and in Europe and Australia two years later. Super Mario All-Stars was compilation game featuring the four NES Super Mario Bros. Titles (1, 2 (Japan), 2 (USA), and 3) released in 1993 for the Super NES (SNES). There are eight worlds, and each world has four levels. A screen of the first level of SMAS SMB1 (referred to simply as SMB1 from now on), known as W1-1 (world 1, level 1), is shown below
+
+###### Figure 1: W1-1 example
 
 ![W1-1 Example](images/screen1.png)
 
-Some of us might also imagine the bonus area being part of W1-1:
+Part of W1-1 is an underground bonus area accessed early in the level by entering a pipe.
 
-![W1-1 Bonus Room](images/screen2.png)
+###### Figure 2: W1-1 bonus area
+
+![W1-1 Bonus Area](images/screen2.png)
 
 These are part of the same level, but are considered different "areas".
 
