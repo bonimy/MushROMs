@@ -123,13 +123,13 @@ World | Table Offset | Area Number per level
 7 | 1B | 33 29 01 27 64
 8 | 20 | 30 32 21 65
 
-For example, W4-3 goes 0x0E bytes down this table according to table $04:C11C (starts at the fourth row of this table). W4-3 is actually this world's _fourth_ level because of the preview level, so the area number for W4-3 is 0x2C.
+For example, W4-3 goes 0x0E bytes down this table according to table $04:C11C (starts at the fourth row of this table). W4-3 is actually this world's _fourth_ level because of the W4-2 preview level, so the area number for W4-3 is 0x2C.
 
 ### Special cases of getting area number
 
 This method for getting the area number can lead to consequences that the original game may not have considered. For example, if there were an axe in W1-1 and the player used that to beat the level, the game would start the player at W2-1, not W1-2.
 
-Conversely, if there were a flag pole in W1-4 and the player used that to beat the level, the player would be take to W1-5, not W2-1. Using table $04:C124, the area for W1-5 would be 0x28. This is still W2-1, but under a different name.
+Conversely, if there were a flag pole in W1-4 and the player used that to beat the level, the player would be taken to W1-5, not W2-1. Using table $04:C124, the area for W1-5 would be 0x28. This is still W2-1, but under a different name.
   
 However, if the player made it to W1-8 (W2-4 under normal condtions) and beat the level by axe, the game would increment the world number and reset the level number. So the player is taken back to W2-1 and will have to repeat the world. [Acmlm's Strange Mario Bros.](https://youtu.be/CkOTA15jFic?t=204) uses this oddity a lot.
     
