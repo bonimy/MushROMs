@@ -143,7 +143,7 @@ The area number uniquely determines the area data to load. The **area object dat
 
 ### Area palette and area index
 
-**`$7E:00BA`**: Stores the NES-style palette and music data of the area. This variable always has the same value as $7E:005C, the area type.
+**$7E:00BA**: Stores the NES-style palette and music data of the area. This variable always has the same value as $7E:005C, the area type.
 
 Value | Description
 --- | ---
@@ -178,7 +178,7 @@ Above Ground | 0x06 | C1 E6 03 11 38 69 87 A4 B9 E3 E4 08 11 36 59 62 63 9D C8 F
 Underground | 0x1C | 40 6D 9B
 Underwater | 0x1F | C8 D9 03
 
-**`$04:C16E`**: A table of the high bytes of the current area's pointer to its sprite data (called at $04:C06C). The start position is first determined by table $04:C148, then the table is indexed further by the area index.
+**$04:C16E**: A table of the high bytes of the current area's pointer to its sprite data (called at $04:C06C). The start position is first determined by table $04:C148, then the table is indexed further by the area index.
 
 Area Type | Table Offset | Table Values
 --- | --- | ---
@@ -187,7 +187,7 @@ Above Ground | 0x06 | C2 C2 C3 C3 C3 C3 C3 C3 C3 C3 C3 C4 C4 C4 C4 C4 C4 C4 C4 C
 Underground | 0x1C | C5 C5 C5
 Underwater | 0x1F | C5 C5 C6
 
-**$04:C06C**: Hardcodes the bank byte of the area sprite data pointer to `0x04`.
+**$04:C06C**: Hardcodes the bank byte of the area sprite data pointer to 0x04.
 
 According to table $04:C124, the area number of W1-1 is 0x25. The area type is therefore _above ground_ and the area index is 0x05. The table's start positions for the sprite data pointer's high and low bytes are both 0x06 according to table $04:C148. Therefore, the sprite data pointer for W1-1 is $04:C369.
 
@@ -204,7 +204,7 @@ Area Type | Table Offset | Table Values
 
 **$7E:00FA**: A three byte pointer to the current area's object data.
 
-**$04:C194**: A table of the low bytes of the current area's pointer to its object data (called at `$04:C092`). The start position is first determined by table $04:C148, then the table is indexed further by the area index.
+**$04:C194**: A table of the low bytes of the current area's pointer to its object data (called at $04:C092). The start position is first determined by table $04:C148, then the table is indexed further by the area index.
 
 Area Type | Table Offset | Table Values
 --- | --- | ---
@@ -213,16 +213,16 @@ Above Ground | 0x03 | 0B 74 C3 1B B0 2F 9A F1 7A E7 F1 35 4A BB 28 A3 D5 6D EB 6
 Underground | 0x19 | 2D D2 76
 Castle | 0x1C | 17 D2 FA D8 D4 01
 
-**`$04:C1B6`**: A table of the low bytes of the current area's pointer to its object data (called at `$04:C097`). The start position is first determined by table $04:C148, then the table is indexed further by the area index.
+**$04:C1B6**: A table of the low bytes of the current area's pointer to its object data (called at $04:C097). The start position is first determined by table $04:C148, then the table is indexed further by the area index.
 
 Area Type | Table Offset | Table Values
 --- | --- | ---
-Underwater | `00` | `D6 D6 D7`
-Above Ground | `03` | `CC CC CC CD CD CE CE CE CF CF CF D0 D0 D0 D1 D1 D1 D2 D2 D3 D3 D3`
-Underground | `19` | `D4 D4 D5`
-Castle | `1C` | `C6 C6 C7 C8 C9 CB`
+Underwater | 0x00 | D6 D6 D7
+Above Ground | 0x03 | CC CC CC CD CD CE CE CE CF CF CF D0 D0 D0 D1 D1 D1 D2 D2 D3 D3 D3
+Underground | 0x19 | D4 D4 D5
+Castle | 0x1C | C6 C6 C7 C8 C9 CB
 
-**`$04:C09C`**: Hardcodes the bank byte of the area object data pointer to `0x04`.
+**$04:C09C**: Hardcodes the bank byte of the area object data pointer to 0x04.
 
 For example, the area object data pointer for W1-1 is $04:CE2F.
 
@@ -284,7 +284,7 @@ The game engine iteratively reads **sprite commands** until the terminating spri
 
 Byte 1 | Byte 2
 --- | ---
-`X X X X Y Y Y Y` | `P H C C C C C C`
+X X X X Y Y Y Y | P H C C C C C C
 
 **X**: 4 bits determining the X-coordinate of the sprite relative to the current page (in 16 pixel increments).
 
