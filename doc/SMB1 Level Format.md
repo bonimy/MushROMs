@@ -40,11 +40,11 @@ More interestingly, we have W1-3 and W5-3.
 
 These, conversely, are different levels but the same "areas".
 
-We will define **area** as how it was described above Areas can also be called **maps** or **rooms**. For our purpose, we will stick to _area_. Areas are distinct from **levels** in that levels can have multiple areas (the main area, a bonus area, or a miscellaneous area). A **world** is defined as every level until a Bowser is encountered. Internally, the game increments you to the next world after beating a Bowser (more precisely after stepping on his bridge-destroying axe).
+We will define **area** as how it was described above. Areas can also be called **maps** or **rooms**. For our purpose, we will stick to _area_. Areas are distinct from **levels** in that levels can have multiple areas (the main area, a bonus area, or a miscellaneous area). A **world** is defined as every level until a Bowser is encountered. Internally, the game increments you to the next world after beating a Bowser (more precisely after stepping on his bridge-destroying axe).
 
 - **Note**: For simplicity, when we refer to the main area of the level, we will simply refer to the level. So instead of saying "the main area of W1-1", we'll simply say "W1-1".
 
-Every area is defined by a single byte, used as a pointer index for getting the area data (blocks, pipes, bricks, etc.) and sprite data (enemies, commands, etc.). For the images shown above, the area numbers are 0x25 for W1-1, 0xC2 for its bonus room, and 0x26 for both W1-3 and W5-3.
+Every area is defined by a single byte, used as a pointer index for getting the area data (blocks, pipes, bricks, etc.) and sprite data (enemies, commands, etc.). For the images shown above, the area numbers are 0x25 for W1-1, 0x42 for its bonus room, and 0x26 for both W1-3 and W5-3.
 
 ## Getting area number
 
@@ -65,9 +65,9 @@ There are several constants, addresses, and byte tables that determine the area 
 
 **`$7E:075C`**: "Hard mode" flag. This flag changes sprite properties starting at W5-3 (e.g. bullet bills in W5-3 but not W1-3, fire bars in W6-4 but not W1-4, shorter moving platforms, etc.)
 
-**`$7E:075F`**: Stores the current world number as a zero-based value (W1 is `00`, W2 is `01`, etc.
+**`$7E:075F`**: Stores the current world number as a zero-based value (W1 is `00`, W2 is `01`, etc.)
 
-**`$7E:0760`**: Stores the current level number as a zero-based value (W1-1 is `00`, W8-2 is `01`, etc.
+**`$7E:0760`**: Stores the current level number as a zero-based value (W1-1 is `00`, W8-2 is `01`, etc.)
 
 **`$7E:005C`**: Stores the area "type". This is a 2-bit value determined by bits 5 and 6 of the area number.
 
@@ -99,7 +99,7 @@ World | Offset | Levels per world
       
   ![W1-2 autowalk](images/screen5.png)
       
-  This, while being shown as W1-2 along with the underground area that follows, is actually a separate level. So when the player enters the pipe, the game internally increments the level number (but doesn't display it on the screen). So technically, the underground area is level 3, the green trees area is level 4, and the castle is level 5. But the game still displays the level number we're all used to seeing. The reasoning behind this being that if you die in, say, the undergorund area of W1-2, you respawn in the underground area, and not the autowalk pipe entrance every time.
+  This, while being shown as W1-2 along with the underground area that follows, is actually a separate level. So when the player enters the pipe, the game internally increments the level number (but doesn't display it on the screen). So technically, the underground area is level 3, the green trees area is level 4, and the castle is level 5. But the game still displays the level number we're all used to seeing. The reasoning behind this being that if you die in, say, the underground area of W1-2, you respawn in the underground area, and not the autowalk pipe entrance every time.
   
 ### Indexing by level
     
@@ -152,7 +152,7 @@ Value | Description
 
 **`$04:C148`**: Table of relative indices to area sprite data pointer tables (called at `$04:C05A`). This table is indexed by area type. Much like how we used the world number to determine the start offset for getting the area number per level, we're using the area type to get the pointer to the sprite data per area index (an example will be provided afterward to try to clear any confusion).
 
-Index | Area Type | Table Value
+Index | Area Type | Table Offset
 --- | --- | ---
 0 | Underwater | `1F`
 1 | Above ground | `06`
@@ -183,7 +183,7 @@ Underwater | `1F` | `C5 C5 C6`
 
 **`$04:C06C`**: Hardcodes the bank byte of the area sprite data pointer to `0x04`.
 
-As an example, we will get the sprite data pointer for the first area of W1-1. It's area number is `0x25`. Its area type is _Above ground_ and its area index is `0x05`. The table offset for _above ground_ is `0x06`, so we move 6 bytes down the low and high byte pointers (2nd row of tables). Then from the second row, we move 5 bytes down the list. So the low byte of the sprite pointer is `0x38` and the high byte is `0xC3`. The bank byte is always `0x04`, so the sprite data pointer for area 0x25 is `$04:C369`.
+As an example, we will get the sprite data pointer for the first area of W1-1. It's area number is `0x25`. Its area type is _Above ground_ and its area index is `0x05`. The table offset for _above ground_ is `0x06`, so we move 6 bytes down the low and high byte pointer table (starting us at the second row). Then from the second row, we move 5 bytes down the list. So the low byte of the sprite pointer is `0x38` and the high byte is `0xC3`. The bank byte is always `0x04`, so the sprite data pointer for area 0x25 is `$04:C369`.
 
 ### Area object data pointers
 
@@ -222,17 +222,17 @@ Castle | `1C` | `C6 C6 C7 C8 C9 CB`
 
 **`$04:C09C`**: Hardcodes the bank byte of the area object data pointer to `0x04`.
 
-So the area object data pointer for area `0x25` is `$04:CE2F`. Another point of interest is that an area index can exceed its bounds. For example, if we had area number `0x08` (not an area in the game), it would have area type _underwater_ and area index `0x08`. So we would go 8 bytes down the pointer tables starting at the underwater offset. For the area object data, this pointer would `$04:CE2F`. This is the same as area `0x25` (W1-1). So what we would get is an underwater version of this area.
+So the area object data pointer for area `0x25` is `$04:CE2F`. Another point of interest is that an area index can exceed its bounds. For example, if we had area number `0x08` (not an area in the game), it would have area type _underwater_ and area index `0x08`. So we would go 8 bytes down the pointer tables starting at the underwater offset. For the area object data, this pointer would be `$04:CE2F`. This is the same as area `0x25` (W1-1). So what we would get is an underwater version of this area.
 
 The sprites data however, would be undefined, as it exceeds the table size when starting at the underwater offset.
 
 ### Layer 2 background index
 
-**`$7E:00DB`**: Stores the area's layer 2 background. This value is determined by table `$04:C190` and the area index. More precisely, the value that the aforementioned table returns when given the area type, is added to the area index, and the result is stored as the layer 2 background.
+**`$7E:00DB`**: Stores the area's layer 2 background. This value is determined by table `$04:C190` and the area index. More precisely, the value that the aforementioned table returns when given the area type is added to the area index, and the result is stored as the layer 2 background.
 
 Value | Area number | Appears in | Layer 2 background
 --- | --- | --- | ---
-`00` | `00` | Various |  Underwater bonus area
+`00` | `00` | Various | Underwater bonus area
 `01` | `01` | W1-2 & W7-2 | Underwater
 `02` | `02` | W8-4 underwater | Underwater
 `03` | `20` | W3-3 | Night sky w/o mountains
@@ -249,7 +249,7 @@ Value | Area number | Appears in | Layer 2 background
 `0E` | `2B` | Sky bonus area | Mario/Luigi bonus area (day)
 `0F` | `2C` | W4-3 | Mushrooms
 `10` | `2D` | W6-3 | Night sky w/o mountains
-`11` | `2E` | W6-1 | Nigh sky w/ mountains
+`11` | `2E` | W6-1 | Night sky w/ mountains
 `12` | `2F` | W4-2 Warp zone | Mushrooms
 `13` | `30` | W8-1 | Mountains
 `14` | `31` | W5-2 | Narrow hills w/ snow
@@ -279,7 +279,7 @@ Byte 1 | Byte 2
 
 **X**: 4 bits determining the X-coordinate of the sprite relative to the current page (in 16 pixel increments).
 
-**Y**: 4 bits determiinng the Y-coordinate of the sprite relative to the current page (in 16 pixel increments).
+**Y**: 4 bits determining the Y-coordinate of the sprite relative to the current page (in 16 pixel increments).
 
 **P**: Page flag. If this is set, the sprite is moved to the next page.
 
@@ -292,10 +292,10 @@ Below is a table that comprehensively describes each **sprite** in SMB1.
 E bit value | Sprite Description
 --- | ---
 `00` | Green Koopa Troopa (walks off floors)
-`01` | Red Koops Troopa (walks off floors)
+`01` | Red Koopa Troopa (walks off floors)
 `02` | Buzzy Beetle
 `03` | Red Koopa Troopa (stays on floors
-`04` | Green Koops Troopa (animates, but doesn't move)
+`04` | Green Koopa Troopa (animates, but doesn't move)
 `05` | Hammer Bros.
 `06` | Goomba
 `07` | Blooper/Squid
@@ -304,8 +304,8 @@ E bit value | Sprite Description
 `0A` | Green cheep-cheep (slow)
 `0B` | Red cheep-cheep (fast)
 `0C` | Podoboo (jumps up to height specified)
-`0D` | Pirhana Plant (add 8 pixels to X-coordinate to center around pipes)
-`0E` | Green Koopa Paratratroopa (Leaping)
+`0D` | Piranha Plant (add 8 pixels to X-coordinate to center around pipes)
+`0E` | Green Koopa Paratroopa (Leaping)
 `0F` | Red Koopa Paratroopa (Vertical flying)
 `10` | Green Koopa Paratroopa (Horizontal flying)
 `11` | Lakitu
@@ -336,22 +336,22 @@ E bit value | Sprite Description
 `34` | Warp zone command
 `35` | Toad or princess (depends on world)
 `36` | Undefined
-`37` | 2 Goombas seperated horizontally by 8 pixels (Y = 10)
+`37` | 2 Goombas separated horizontally by 8 pixels (Y = 10)
 `38` | 3 Goombas separated horizontally by 8 pixels (Y= 10)
-`39` | 2 Goombas seperated horizontally by 8 pixels (Y = 6)
+`39` | 2 Goombas separated horizontally by 8 pixels (Y = 6)
 `3A` | 3 Goombas separated horizontally by 8 pixels (Y= 6)
-`3B` | 2 Green Koopa Troopas seperated horizontally by 8 pixels (Y = 10)
+`3B` | 2 Green Koopa Troopas separated horizontally by 8 pixels (Y = 10)
 `3C` | 3 Green Koopa Troopas separated horizontally by 8 pixels (Y= 10)
-`3D` | 2 Green Koopa Troopas seperated horizontally by 8 pixels (Y = 6)
+`3D` | 2 Green Koopa Troopas separated horizontally by 8 pixels (Y = 6)
 `3E` | 3 Green Koopa Troopas separated horizontally by 8 pixels (Y= 6)
 `3F` | Undefined
 
 #### Area pointers
-Area pointers are special sprite commands that actually use three bytes to describe them instead of two. The game engine knows the sprite will be a 3 byte area pointer if the Y coordinat it read is `0x0E`. Below is the format for area pointer sprite commands
+Area pointers are special sprite commands that actually use three bytes to describe them instead of two. The game engine knows the sprite will be a 3 byte area pointer if the Y coordinate it reads is `0x0E`. Below is the format for area pointer sprite commands
 
 Byte 1 | Byte 2 | Byte 3
 --- | --- | ---
-`X X X X 1 1 1 0` | `P A A A A A A A` | `W W W S S S S`
+`X X X X 1 1 1 0` | `P A A A A A A A` | `W W W S S S S S`
 
 **X**: 4 bits determining the X-coordinate of the sprite relative to the current page (in 16 pixel increments).
 
