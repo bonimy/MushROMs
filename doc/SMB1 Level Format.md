@@ -48,7 +48,7 @@ Two different levels can also have the same _areas_, as demonstrated by W1-3 and
 
 An **area** is defined as one of the individual sections of a level as just previously described. Areas can also be called **maps** or **rooms**. However, _map_ can be misintepreted as an SNES map16 tile, and _room_ is a misnomer because several areas are outside. Areas are distinct from **levels** in that levels can have multiple areas (the main area, a bonus area, or a miscellaneous area). A **world** is defined as every level until a Bowser is encountered. Internally, the game increments the player to the next world after the player steps on the bridge-destroying Axe in a Bowser's castles.
 
-- **Note**: Because many levels can have different areas, it is proper to say "the main area of W*X*-*Y*" and "the bonus area of W*X*-*Y*". However, since every level is guaranteed to have a main area accessed simply by starting the level, it will be referred to as just "WX-Y".
+- **Note**: Because many levels can have different areas, it is proper to say "the main area of W*X*-*Y*" and "the bonus area of W*X*-*Y*". However, since every level is guaranteed to have a main area accessed simply by starting the level, it will be referred to as just "W*X*-*Y*".
 
 ## Getting area number
 
@@ -377,6 +377,6 @@ The first two bytes of the area object data define the area's header.
 #### Area header data format
 The header data is formatted using the first two bytes of the area object data.
 
-byte 1 | byte 2
+Byte 1 | Byte 2
 --- | ---
 T T Y Y Y B B B | S S G G F F F F
