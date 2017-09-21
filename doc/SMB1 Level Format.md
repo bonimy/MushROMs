@@ -236,7 +236,7 @@ The sprite data would be undefined, as it exceeds the sprite data pointer's tabl
 
 ### Layer 2 background number
 
-**$7E:00DB**: Stores the area's **layer 2 background number**. This value corresponds to area's object data pointer's table index, starting from its base.
+**$7E:00DB**: Stores the area's **layer 2 background number**. This value corresponds to the area's object data pointer's table index, starting from its base.
 
 Value | Area number | Appears in | Layer 2 background
 --- | --- | --- | ---
