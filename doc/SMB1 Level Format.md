@@ -15,11 +15,20 @@ This is a comprehensive guide for understanding the Super Mario All-Stars (SMAS)
   - [Area sprite data pointers](#area-sprite-data-pointers)
   - [Area object data pointers](#area-object-data-pointers)
   - [Layer 2 background number](#layer-2-background-number)
-- [Area data format](#area-data-format)
-  - [Area sprite data](#area-sprite-data)
-    - [Two-byte sprite commands](#two-byte-sprite-commands)
-    - [Area pointers](#area-pointers)
-  - [Area object data](#area-object-data)
+- [Area sprite data format](#area-sprite-data-format)
+  - [Two-byte sprite commands](#two-byte-sprite-commands)
+  - [Area pointers](#area-pointers)
+- [Area object data-format](#area-object-data-format)
+  - [Area header data format](#area-header-data-format)
+  - [Area object commands and subcommands](#area-object-commands-and-subcommands)
+    - [Standard object commands](#standard-object-commands)
+      - [Standard static object](#standard-static-object]
+      - [Extendable objects](#extendable-objects)
+      - [Pipe subcommand](#pipe-subcommand)
+    - [Miscellaneous object command C](#miscellaneous-object-command-c)
+    - [Miscellaneous object command D](#miscellaneous-object-command-d)
+    - [Miscellaneous object command E](#miscellaneous-object-command-e)
+    - [Miscellaneous object command F](#miscellaneous-object-command-f)
 
 ## Introduction and Terminology
 
@@ -275,13 +284,10 @@ Value | Area number | Appears in | Layer 2 background
 0x20 | 0x64 | W7-4 | Castle w/ pillars and doors
 0x21 | 0x65 | W8-4 | Castle w/ windows and thunder/lightning
 
-## Area data format
-The area sprite data poiner and area object data pointer both point to a string of bytes that define their data.
-
-### Area sprite data
+## Area sprite data format
 The game engine iteratively reads **sprite commands** until the terminating sprite command is read. If the first byte of the sprite command is 0xFF, this is the termination sprite command and the read routine is ended. If the low four bits of the first byte of the sprite command are 0x0E, then it is a three-byte area pointer sprite command. Every other case is a two-byte sprite command.
 
-#### Two-byte sprite commands
+### Two-byte sprite commands
 
 Byte 1 | Byte 2
 --- | ---
@@ -354,7 +360,7 @@ Code value | Description
 0x3E | 3 Green Koopa Troopas separated horizontally by 8 pixels (Y = 6)
 0x3F | Undefined
 
-#### Area pointers
+### Area pointers
 Area pointers are special sprite commands that actually use three bytes to describe them instead of two. The game engine knows the sprite will be a 3 byte area pointer if the lower 4 bits of the first byte are 0x0E.
 
 Byte 1 | Byte 2 | Byte 3
@@ -371,13 +377,161 @@ X X X X 1 1 1 0 | P A A A A A A A | W W W S S S S S
 
 **S**: Determines which screen/page to start the player on when entering the new area.
 
-### Area object data
+## Area object data format
 
 The first two bytes of the area object data define the area's header. 
 
-#### Area header data format
+### Area header data format
 The header data is formatted using the first two bytes of the area object data.
 
 Byte 1 | Byte 2
 --- | ---
-T T Y Y Y B B B | S S G G F F F F
+T T Y Y Y B B B | P P G G F F F F
+
+**T**: Determines the start time of the level.
+
+Value | Start time
+--- | ---
+0 | Not Set
+1 | 400
+2 | 300
+3 | 200
+
+_Not Set_ start times are chosen for bonus areas and preview levels.
+
+**Y**: Player's starting Y position when entering the area. The X-position is always 24-pixels (X = 1.5) to the right of the page.
+
+Value | Y-Position
+--- | ---
+0x00 | Y = -1
+0x01 | Y = -1 entering from another area
+0x02 | Y = 10
+0x03 | Y = 4
+0x04 | Y = -1
+0x05 | Y = -1
+0x06 | Y = 10 (autowalk)
+0x07 | Y = 10 (autowalk)
+
+**B**: The NES-style layer 1 background. Most of these did not carry over to the SNES
+
+Value | Layer 1 background
+--- | ---
+0x00 | Nothing
+0x01 | Underwater tileset
+0x02 | W8-3 wall (unused)
+0x03 | Ground above water/lava
+0x04 | Night (unused)
+0x05 | Snow (unused)
+0x06 | Night and snow (unused)
+0x07 | Castle palette (unused)
+
+**S**: Layer 1 foreground scenery
+
+Value | Layer 1 foreground scenery
+--- | ---
+0x00 | None
+0x01 | Clouds
+0x02 | Mountains
+0x03 | Fence
+
+**P**: Platform type
+
+Value | Platform type
+--- | ---
+0x00 | Green tree platforms
+0x01 | Orange mushroom platforms
+0x02 | Bullet bill shooters (vertical)
+0x03 | Cloud platforms
+
+**F**: Floor fill pattern
+
+Value | Floor fill pattern
+--- | ---
+0x00 | None
+0x01 | 2 block floor
+0x02 | 2 block floor and 1 block ceiling
+0x03 | 2 block floor and 3 block ceiling
+0x04 | 2 block floor and 4 block ceiling
+0x05 | 2 block floor and 8 block ceiling
+0x06 | 5 block floor and 1 block ceiling
+0x07 | 5 block floor and 3 block ceiling
+0x08 | 5 block floor and 4 block ceiling
+0x09 | 6 block floor and 1 block ceiling
+0x0A | 1 block ceiling
+0x0B | 6 block floor and 4 block ceiling
+0x0C | 9 block floor and 1 block ceiling
+0x0D | 2 block floor, 3 block gap, 5 block layer, 2 block gap, 1 block ceiling
+0x0E | 2 block floor, 3 block gap, 4 block layer, 3 block gap, 1 block ceiling
+0x0F | Filled
+
+### Area object commands and subcommands
+
+The game engine iteratively reads **object commands** until the terminating object command is read. If the first byte of the object command is 0xFD, this is the termination object command and the read routine is ended. If the low four bits of the first byte of the object command are 0x0C, 0x0D, 0x0E, or 0x0F, then it is termed a **miscellaneous object command *X*** where 0x0*X* is the bit result. Everything else is a **standard object command**. Misc. object commands 0x0F are three-byte object commands. Everything else is a two-byte object command.
+
+#### Standard object commands
+
+Byte 1 | Byte 2
+--- | ---
+X X X X Y Y Y Y | P S S S V V V V
+
+**X**: 4 bits determining the X-coordinate of the object relative to the current page (in 16 pixel increments).
+
+**Y**: 4 bits determining the Y-coordinate of the object relative to the current page (in 16 pixel increments).
+
+**P**: Page flag. If this is set, the object is moved to the next page.
+
+**S**: Subcommand
+
+Value | Description
+--- | ---
+0 | Standard static object
+1 | Extendable platform
+2 | Row of bricks
+3 | Row of blocks
+4 | Row of coins
+5 | Column of bricks
+6 | Column of blocks
+7 | Pipe subcommand
+
+##### Standard static object
+
+An object with a predefined size. The object itself is determined by the _V_ bits.
+
+V bits | standard static object value
+--- | ---
+0x00 | Question block (powerup)
+0x01 | Question block (coin)
+0x02 | Hidden block (coin)
+0x03 | Hidden block (1UP mushroom)
+0x04 | Brick (powerup)
+0x05 | Brick (growing beanstalk)
+0x06 | Brick (star)
+0x07 | Brick (multiple coins)
+0x08 | Brick (1UP mushroom)
+0x09 | Sideways pipe
+0x0A | Used question block
+0x0B | Trampoline (spawns sprite too)
+0x0C | Reverse L pipe
+0x0D | Flag pole
+0x0E | Bowser's bridge
+0x0F | Nothing
+
+##### Extendable objects
+
+**Extendable platform**: The exact platform is specified by the _P_ bits of the area's level header. Depending on the platform type, it is either a horizontal row or a vertical column.
+
+**Horizontal objects**: A horizontally extendable object expands rightward, creating a row of 1 to 16 blocks wide. The size is determined by the _V_ bits.
+
+**Vertical objects**: A vertically extendable object expands downward, creating a column of 1 to 16 blocks high. The size is determined by the _V_ bits.
+
+##### Pipe Subcommand
+
+The pipe subcommand bits are further broken down as E H H H. If _E_ is set, then the pipe is enterable. Otherwise, it is not. _H_ specifies the height of the pipe, moving downward. The width of the pipe is 2 blocks.
+
+#### Miscellaneous object command C
+
+#### Miscellaneous object command D
+
+#### Miscellaneous object command E
+
+#### Miscellaneous object command F
