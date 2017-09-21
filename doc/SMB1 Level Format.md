@@ -242,7 +242,7 @@ Value | Area number | Appears in | Layer 2 background
 --- | --- | --- | ---
 0x00 | 0x00 | Underwater bonus area | Underwater
 0x01 | 0x01 | W1-2 & W7-2 | Underwater
-0x02 | 0x02 | W8-4 underwater | Underwater
+0x02 | 0x02 | W8-4 underwater area | Underwater
 0x03 | 0x20 | W3-3 | Night sky w/o mountains
 0x04 | 0x21 | W8-3 | Outside castle
 0x05 | 0x22 | W4-1 | Mountains and trees
@@ -252,13 +252,13 @@ Value | Area number | Appears in | Layer 2 background
 0x09 | 0x26 | W1-3 & W5-3 | Waterfall
 0x0A | 0x27 | W2-3 & W7-3 | Goomba statues/pillars
 0x0B | 0x28 | W2-1 | Narrow green hills
-0x0C | 0x29 | Autowalk | One big mountain
+0x0C | 0x29 | Preview level | One big mountain
 0x0D | 0x2A | W5-1 | Narrow hills w/ snow
 0x0E | 0x2B | Sky bonus area | Mario/Luigi bonus area (day)
 0x0F | 0x2C | W4-3 | Mushrooms
 0x10 | 0x2D | W6-3 | Night sky w/o mountains
 0x11 | 0x2E | W6-1 | Night sky w/ mountains
-0x12 | 0x2F | W4-2 Warp zone | Mushrooms
+0x12 | 0x2F | W4-2 Warp zone area | Mushrooms
 0x13 | 0x30 | W8-1 | Mountains
 0x14 | 0x31 | W5-2 | Narrow hills w/ snow
 0x15 | 0x32 | W8-2 | Narrow orange hills
