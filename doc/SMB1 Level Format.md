@@ -1,5 +1,27 @@
 # Super Mario All-Stars: Super Mario Bros. 1 Level Data
 This is a comprehensive guide for understanding the SMAS SMB1 level data.
+
+## Table of Contents
+- [Introduction and Terminology](#introduction-and-terminology)
+- [Getting area number](#getting-area-number)
+- [Area number determined by current world and level](#area-number-determined-by-current-world-and-level)
+  - [Indexing by world](#indexing-by-world)
+  - [Indexing by level](#indexing-by-level)
+  - [Special cases of getting area number](#special-cases-of-getting-area-number)
+- [Area data from area number](#area-data-from-area-number)
+  - [Area palette and area index](#area-palette-and-area-index)
+  - [Area sprite data pointers](#area-sprite-data-pointers)
+    - [Indexing by area type](#indexing-by-area-type)
+    - [Indexing by area type and area pointer](#indexing-by-area-type-and-area-pointer)
+  - [Area object data pointers](#area-object-data-pointers)
+    - [Indexing by area type](#indexing-by-area-type-1)
+    - [Indexing by area type and area pointer](#indexing-by-area-type-and-area-pointer-1)
+  - [Layer 2 background index](#layer-2-background-index)
+- [Area data format](#area-data-format)
+  - [Area sprite data](#area-sprite-data)
+    - [Area pointers](#area-pointers)
+  - [Area object data](#area-object-data)
+
 ## Introduction and Terminology
 Most people are familiar with how Super Mario Bros. 1 (SMB1) works. There are eight worlds, and each world has four levels. When we imagine a full level in SMB1, we imagine this:
 
@@ -23,6 +45,8 @@ We will define **area** as how it was described above Areas can also be called *
 - **Note**: For simplicity, when we refer to the main area of the level, we will simply refer to the level. So instead of saying "the main area of W1-1", we'll simply say "W1-1".
 
 Every area is defined by a single byte, used as a pointer index for getting the area data (blocks, pipes, bricks, etc.) and sprite data (enemies, commands, etc.). For the images shown above, the area numbers are 0x25 for W1-1, 0xC2 for its bonus room, and 0x26 for both W1-3 and W5-3.
+
+## Getting area number
 
 There are two ways the game engine determines which area number to use next:
 
@@ -53,6 +77,8 @@ Bits | Value | Area type
 01 | 1 | Normal ground
 10 | 2 | Underground
 11 | 3 | Castle
+
+### Indexing by world
   
 **`$04:C026`**: Max world number, `08`. When the player exceeds this, the game state is set back to W1-1.
 
@@ -74,6 +100,8 @@ World | Offset | Levels per world
   ![W1-2 autowalk](images/screen5.png)
       
   This, while being shown as W1-2 along with the underground area that follows, is actually a separate level. So when the player enters the pipe, the game internally increments the level number (but doesn't display it on the screen). So technically, the underground area is level 3, the green trees area is level 4, and the castle is level 5. But the game still displays the level number we're all used to seeing. The reasoning behind this being that if you die in, say, the undergorund area of W1-2, you respawn in the underground area, and not the autowalk pipe entrance every time.
+  
+### Indexing by level
     
 **`$04:C124`**: Table of area numbers (called at `$04:C03C`). The world start index determined by table `$04:C11C` is added to the current level number, and this indexes the table to get the current area number.
   
@@ -89,17 +117,21 @@ World | Table Offset | Area Number per level
 8 | `20` | `30 32 21 65`
 
 For example, W4-3 would have world offset `0x0E`. We go four values down the list because we add an extra level number for the autowalk sequence of W4-2. Thus, the area number of W4-3 is `0x2C`.
-  
-- **Note**: There are interesting cases that can occur when the player does or doesn't complete a world. For example, if we put an Axe in W1-1 and the player used that to beat the level, the game would start the player at world 2, so our next level loaded would be W2-1, not W1-2.
 
-  Even more interestingly, if we put a flag pole in W1-4 and the player used that to beat the level, the level number would increment to level 5, but the world number would still be W1. So the next level we'd go to is W1-5. To determine the area number for this, we'd move 5 bytes off of the area number table starting at index `00` for world 1. This would be area `0x28`. So we'd still be in W2-1, but the game will show us W1-5.
+### Special cases of getting area number
   
-  Further, if the player made it to W1-8 (W2-4 normally) and beat the level by the axe, we wouldn't be taken to W3-1. The game will increment the world number to W2 and would reset us to level 1. Hence, we'd be taken back to area `0x28` under the standard W2-1. We would have to do this whole world again to get back on track. Acmlm's Strange Mario Bros. uses this oddity a lot.
+There are interesting cases that can occur when the player does or doesn't complete a world. For example, if we put an Axe in W1-1 and the player used that to beat the level, the game would start the player at world 2, so our next level loaded would be W2-1, not W1-2.
+
+Even more interestingly, if we put a flag pole in W1-4 and the player used that to beat the level, the level number would increment to level 5, but the world number would still be W1. So the next level we'd go to is W1-5. To determine the area number for this, we'd move 5 bytes off of the area number table starting at index `00` for world 1. This would be area `0x28`. So we'd still be in W2-1, but the game will show us W1-5.
+  
+Further, if the player made it to W1-8 (W2-4 normally) and beat the level by the axe, we wouldn't be taken to W3-1. The game will increment the world number to W2 and would reset us to level 1. Hence, we'd be taken back to area `0x28` under the standard W2-1. We would have to do this whole world again to get back on track. Acmlm's Strange Mario Bros. uses this oddity a lot.
     
 ## Area data from area number
 Now that we know how to get the area number, we need to get the area data. The **area object data** (or **object data**) is a string of bytes that determines how to place objects in the level. We loosely define **objects** as things such as question blocks, bricks, spring boards, pipes, etc. This definition is weak because it doesn't comprehensively cover everything. There are oddities like page skips, scenery changes, pipe pointers, loop commands, and warp zone specifies, which can either be classified as object data or sprite data. A comprehensive dissection of area data vs sprite data will be given later in this document. But on this same token, we will define **area sprite data** (or **sprite data**) as the string of bytes determining how to place sprites in the level, and we equally give a loose definition of **sprites** as things such Goombas, Koopas, Lakitus, etc. We define **area data** itself as the object data, sprite data, and other area-specific information we will discuss in this section.
 
 **`$04:C041`**: The complete routine for getting the area data.
+
+### Area palette and area index
 
 **`$7E:00BA`**: Stores the NES-style palette and music data of the area.
 
@@ -114,6 +146,10 @@ Value | Description
 
 **`$7E:074F`**: Area _index_. This is determined by the lower five bits of `$7E:0750`, the area _number_. The difference can be confusing at first, but will be analyzed shortly.
 
+### Area sprite data pointers
+
+#### Indexing by area type
+
 **`$04:C148`**: Table of relative indices to area sprite data pointer tables (called at `$04:C05A`). This table is indexed by area type. Much like how we used the world number to determine the start offset for getting the area number per level, we're using the area type to get the pointer to the sprite data per area index (an example will be provided afterward to try to clear any confusion).
 
 Index | Area Type | Table Value
@@ -122,6 +158,8 @@ Index | Area Type | Table Value
 1 | Above ground | `06`
 2 | Underground | `1C`
 3 | Castle | `00`
+
+#### Indexing by area type and area index
 
 **`$7E:00FD`**: A three byte pointer to the current area's sprite data.
 
@@ -147,6 +185,10 @@ Underwater | `1F` | `C5 C5 C6`
 
 As an example, we will get the sprite data pointer for the first area of W1-1. It's area number is `0x25`. Its area type is _Above ground_ and its area index is `0x05`. The table offset for _above ground_ is `0x06`, so we move 6 bytes down the low and high byte pointers (2nd row of tables). Then from the second row, we move 5 bytes down the list. So the low byte of the sprite pointer is `0x38` and the high byte is `0xC3`. The bank byte is always `0x04`, so the sprite data pointer for area 0x25 is `$04:C369`.
 
+### Area object data pointers
+
+#### Indexing by area type
+
 **`$04:C190`**: Table of relative indices to area object data pointer tables (called at `$04:C072`). This table is like table `$04:C148`.
 
 Area Type | Table Offset | Table Values
@@ -155,6 +197,8 @@ Area Type | Table Offset | Table Values
 1 | Above ground | `03`
 2 | Underground | `19`
 3 | Castle | `1C`
+
+#### Indexing by area type and area index
 
 **`$7E:00FA`**: A three byte pointer to the current area's object data.
 
@@ -181,6 +225,8 @@ Castle | `1C` | `C6 C6 C7 C8 C9 CB`
 So the area object data pointer for area `0x25` is `$04:CE2F`. Another point of interest is that an area index can exceed its bounds. For example, if we had area number `0x08` (not an area in the game), it would have area type _underwater_ and area index `0x08`. So we would go 8 bytes down the pointer tables starting at the underwater offset. For the area object data, this pointer would `$04:CE2F`. This is the same as area `0x25` (W1-1). So what we would get is an underwater version of this area.
 
 The sprites data however, would be undefined, as it exceeds the table size when starting at the underwater offset.
+
+### Layer 2 background index
 
 **`$7E:00DB`**: Stores the area's layer 2 background. This value is determined by table `$04:C190` and the area index. More precisely, the value that the aforementioned table returns when given the area type, is added to the area index, and the result is stored as the layer 2 background.
 
