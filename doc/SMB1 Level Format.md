@@ -169,7 +169,7 @@ Index | Area Type | Table Offset
 
 **$7E:00FD**: A three byte pointer to the current area's sprite data.
 
-**$04:C14C**: A table of the low bytes of the current area's pointer to its sprite data (called at $04:C062). The start position is first determined by table $04:C148, then the table is index further by the area index.
+**$04:C14C**: A table of the low bytes of the current area's pointer to its sprite data (called at $04:C062). The start position is first determined by table $04:C148, then the table is indexed further by the area index.
 
 Area Type | Table Offset | Table Values
 --- | --- | ---
@@ -178,7 +178,7 @@ Above Ground | 0x06 | C1 E6 03 11 38 69 87 A4 B9 E3 E4 08 11 36 59 62 63 9D C8 F
 Underground | 0x1C | 40 6D 9B
 Underwater | 0x1F | C8 D9 03
 
-**`$04:C16E`**: A table of the high bytes of the current area's pointer to its sprite data (called at $04:C06C). The start position is first determined by table $04:C148, then the table is index further by the area index.
+**`$04:C16E`**: A table of the high bytes of the current area's pointer to its sprite data (called at $04:C06C). The start position is first determined by table $04:C148, then the table is indexed further by the area index.
 
 Area Type | Table Offset | Table Values
 --- | --- | ---
@@ -204,7 +204,7 @@ Area Type | Table Offset | Table Values
 
 **$7E:00FA**: A three byte pointer to the current area's object data.
 
-**$04:C194**: A table of the low bytes of the current area's pointer to its object data (called at `$04:C092`). The start position is first determined by table $04:C148, then the table is index further by the area index.
+**$04:C194**: A table of the low bytes of the current area's pointer to its object data (called at `$04:C092`). The start position is first determined by table $04:C148, then the table is indexed further by the area index.
 
 Area Type | Table Offset | Table Values
 --- | --- | ---
@@ -213,7 +213,7 @@ Above Ground | 0x03 | 0B 74 C3 1B B0 2F 9A F1 7A E7 F1 35 4A BB 28 A3 D5 6D EB 6
 Underground | 0x19 | 2D D2 76
 Castle | 0x1C | 17 D2 FA D8 D4 01
 
-**`$04:C1B6`**: A table of the low bytes of the current area's pointer to its object data (called at `$04:C097`). The start position is first determined by table $04:C148, then the table is index further by the area index.
+**`$04:C1B6`**: A table of the low bytes of the current area's pointer to its object data (called at `$04:C097`). The start position is first determined by table $04:C148, then the table is indexed further by the area index.
 
 Area Type | Table Offset | Table Values
 --- | --- | ---
