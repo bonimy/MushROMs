@@ -52,7 +52,7 @@ An **area** is defined as one of the individual sections of a level as just prev
 
 ## Getting area number
 
-Every area is defined by a single byte, the **area number**. The area number in [Figure 1](#figure-1-w1-1-main-area) is 0x25. The area number in [Figure 2](#figure-2-W1-1-bonus-area) is 0x42. And the area numbers in [Figure 3](#figure-3-two-levels-using-the-same-area-data) are both 0x26.
+Every area is defined by a single byte, the **area number**. The area number in [Figure 1](#figure-1-w1-1-main-area) is 0x25. The area number in [Figure 2](#figure-2-w1-1-bonus-area) is 0x42. And the area numbers in [Figure 3](#figure-3-two-levels-using-the-same-area-data) are both 0x26.
 
 There are two ways the game engine determines which area number to use next:
 
