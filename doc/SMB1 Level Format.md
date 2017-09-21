@@ -240,7 +240,7 @@ The sprite data would be undefined, as it exceeds the sprite data pointer's tabl
 
 Value | Area number | Appears in | Layer 2 background
 --- | --- | --- | ---
-0x00 | 0x00 | Various | Underwater bonus area
+0x00 | 0x00 | Underwater bonus area | Underwater
 0x01 | 0x01 | W1-2 & W7-2 | Underwater
 0x02 | 0x02 | W8-4 underwater | Underwater
 0x03 | 0x20 | W3-3 | Night sky w/o mountains
