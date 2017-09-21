@@ -64,11 +64,11 @@ There are two ways the game engine determines which area number to use next:
 
 There are several constants, addresses, and byte tables that determine the area number when given the world and level numbers.
 
-**$04:C00B**: Full routine for getting area number from world and level numbers.
+**$04:C00B**: Full ASM routine for getting area number from world and level numbers.
 
 **$7E:0750**: Stores the current area number. The range goes from 0x00-0x7F; the highest bit is ignored. The highest bit can be set if the area number is loaded by a sprite command (covered later)
 
-**$7E:075C**: A flag that sets the games **hard mode**. This flag changes sprite properties starting at W5-3 in the original game. Refer to [Figure 3](#figure-3-two-levels-using-the-same-area-data) where W5-3 has the bullet bill generator sprite, but W1-3 does not.
+**$7E:075C**: A flag that sets the game's **hard mode**. This flag changes sprite properties starting at W5-3 in the original game. Refer to [Figure 3](#figure-3-two-levels-using-the-same-area-data) where W5-3 has the bullet bill generator sprite, but W1-3 does not.
 
 **$7E:075F**: Stores the current world number as a zero-based value.
 
@@ -139,7 +139,7 @@ The are number uniquely determines the area data to load. The **area object data
 
 **Area sprite data** (or **sprite data**) is the string of bytes determining how to place sprites in the level, and **sprites** are temporarily defined as things such Goombas, Koopas, Lakitus, etc. **Area data** is the collection of object data and sprite data.
 
-**$04:C041**: The complete routine for getting the area data.
+**$04:C041**: The complete ASM routine for getting the area data.
 
 ### Area palette and area index
 
