@@ -364,4 +364,10 @@ Byte 1 | Byte 2 | Byte 3
 **S**: Determines which screen/page to start the player on when entering the new area.
 
 ### Area object data
-The area object data first starts with a 2 byte area header that defines its layout.
+The first two bytes of the area object data define the area's header. After that, the game engine continues reading object data commands until the value `0xFD` is read at the object data's first byte.
+#### Aread header data format
+The header data is formatted using the first two bytes of the area object data.
+
+byte 1 | byte 2
+--- | ---
+`T T Y Y Y B B B` | `S S G G F F F F`
