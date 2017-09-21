@@ -226,7 +226,7 @@ Castle | 0x1C | C6 C6 C7 C8 C9 CB
 
 For example, the area object data pointer for W1-1 is $04:CE2F.
 
-It is possible for the area number to given an area index that is out of bounds for the given area type. If there were an area 0x08, it would have area type _underwater_ and area index 0x08. This index would exceed the three byte size of the underwater table and move into the above ground table, five bytes down. It would therefore have the same object data pointer as W1-1, resulting in an underwater version of that area.
+It is possible for the area number to give an area index that is out of bounds for the given area type. If there were an area 0x08, it would have area type _underwater_ and area index 0x08. This index would exceed the three byte size of the underwater table and move into the above ground table, five bytes down. It would therefore have the same object data pointer as W1-1, resulting in an underwater version of that area.
 
 ###### Figure 5: Loading area number 0x08
 [Area number 0x08](images/screen6.png)
