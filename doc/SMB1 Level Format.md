@@ -137,7 +137,7 @@ However, if the player made it to W1-8 (W2-4 under normal condtions) and beat th
 
 The area number uniquely determines the area data to load. The **area object data** (or **object data**) is a string of bytes that determines how to place objects in the area. Until covered later, **objects** are vaguely defined as things such as question blocks, bricks, spring boards, pipes, etc. This definition is weak because it does not comprehensively cover everything that is an object. There are cases like page skips, scenery changes, pipe pointers, loop commands, and warp zone specifiers which can either be object data or sprite data. A comprehensive dissection of area data vs sprite data is given later in this document.
 
-**Area sprite data** (or **sprite data**) is the string of bytes determining how to place sprites in the area, and **sprites** are temporarily defined as things such Goombas, Koopas, Lakitus, etc. **Area data** is the collection of object data and sprite data.
+**Area sprite data** (or **sprite data**) is the string of bytes determining how to place sprites in the area, and **sprites** are temporarily defined as enemies or moving objects such as Goombas, Koopas, Lakitus, etc. **Area data** is the collection of object data and sprite data.
 
 **$04:C041**: The complete ASM routine for getting the area data.
 
@@ -294,7 +294,7 @@ Byte 1 | Byte 2
 
 **H**: Hard mode flag. The sprite command will only be read if $7E:075C is set.
 
-**C**: Sprite code. Below is a table that comprehensively describes each **sprite** in SMB1.
+**C**: Sprite code. Below is a table that comprehensively describes each **area sprite** in SMB1. There exist other sprites like powerups that aren't spawnable by area sprite data.
 
 Code value | Description
 --- | ---
