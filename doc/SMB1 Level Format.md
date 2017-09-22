@@ -530,8 +530,55 @@ The pipe subcommand bits are further broken down as E H H H. If _E_ is set, then
 
 #### Miscellaneous object command C
 
+Byte 1 | Byte 2
+--- | ---
+X X X X 1 1 0 0 | P S S S H H H H
+
+**X**: 4 bits determining the X-coordinate of the object relative to the current page (in 16 pixel increments).
+
+**P**: Page flag. If this is set, the object is moved to the next page.
+
+**H**: The horizontal extension of the object.
+
+**S**: The subcommand that defines which object type to place in the area.
+
+_S_ bits | Description
+--- | ---
+0 | Hole (covers region with blank tiles)
+1 | Horizontal rope for pulley lifts
+2 | Bridge (Y = 7)
+3 | Bridge (Y = 8)
+4 | Bridge (Y = 10)
+5 | Hole with water/lave
+6 | Horizontal question coin blocks (Y = 3)
+7 | Horizontal question coin blocks (Y = 7)
+
 #### Miscellaneous object command D
 
 #### Miscellaneous object command E
 
 #### Miscellaneous object command F
+
+The are the only three-byte object commands.
+
+Byte 1 | Byte 2 | Byte 3
+--- | --- | ---
+X X X X 1 1 1 1 | Y Y Y Y L L L L | P S S S S S S S
+
+**X**: 4 bits determining the X-coordinate of the object relative to the current page (in 16 pixel increments).
+
+**Y**: 4 bits determining the Y-coordinate of the object relative to the current page (in 16 pixel increments).
+
+**P**: Page flag. If this is set, the object is moved to the next page.
+
+**S**: Subcommand
+
+Subcommand | Description
+--- | ---
+0x00 | Vertical rope for lift
+0x10 | Vertical rope for pulley lift
+0x20 | End-of-level castle
+0x30 | Stairs
+0x32 | End-of-level stairs
+0x34 | Square castle ceiling tiles
+0x36 | 
