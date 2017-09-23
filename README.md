@@ -1,6 +1,8 @@
 # MushROMs
 Super Nintendo game editing libraries and tools written in C# .NET.
 
+This project is still in "upload" phase. That means it has no code hosted yet. We are currently working on establishing proper documentation so that everything uploaded is understood for new contributors and old.
+
 # Table of Contents
 * [What is MushROMs?](#what-is-mushroms)
 * [Installation](#installation)
