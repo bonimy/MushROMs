@@ -19,16 +19,17 @@ This is a comprehensive guide for understanding the Super Mario All-Stars (SMAS)
   - [Two-byte sprite commands](#two-byte-sprite-commands)
   - [Area pointers](#area-pointers)
 - [Area object data-format](#area-object-data-format)
-  - [Area header data format](#area-header-data-format)
-  - [Area object commands and subcommands](#area-object-commands-and-subcommands)
-    - [Standard object commands](#standard-object-commands)
-      - [Standard static object](#standard-static-object)
-      - [Extendable objects](#extendable-objects)
-      - [Pipe subcommand](#pipe-subcommand)
-    - [Miscellaneous object command C](#miscellaneous-object-command-c)
-    - [Miscellaneous object command D](#miscellaneous-object-command-d)
-    - [Miscellaneous object command E](#miscellaneous-object-command-e)
-    - [Miscellaneous object command F](#miscellaneous-object-command-f)
+- [Area header data format](#area-header-data-format)
+- [Area object commands and subcommands](#area-object-commands-and-subcommands)
+  - [Standard object commands](#standard-object-commands)
+    - [Standard static object](#standard-static-object)
+    - [Extendable objects](#extendable-objects)
+    - [Pipe subcommand](#pipe-subcommand)
+  - [Miscellaneous object command C](#miscellaneous-object-command-c)
+  - [Miscellaneous object command D](#miscellaneous-object-command-d)
+  - [Miscellaneous object command E](#miscellaneous-object-command-e)
+  - [Miscellaneous object command F](#miscellaneous-object-command-f)
+- [Example of main area of W1-1](#example-of-main-area-of-W1-1)
 
 ## Introduction and Terminology
 
@@ -379,14 +380,14 @@ X X X X 1 1 1 0 | P A A A A A A A | W W W S S S S S
 
 ## Area object data format
 
-The first two bytes of the area object data define the area's header. 
+The first two bytes of the area object data define the area's header. Once the header has been read, the remaining string of bytes is the area's formatted object data.
 
-### Area header data format
+## Area header data format
 The header data is formatted using the first two bytes of the area object data.
 
 Byte 1 | Byte 2
 --- | ---
-T T Y Y Y B B B | P P G G F F F F
+T T Y Y Y B B B | S S P P F F F F
 
 **T**: Determines the start time of the level.
 
@@ -464,11 +465,11 @@ Value | Floor fill pattern
 0x0E | 2 block floor, 3 block gap, 4 block layer, 3 block gap, 1 block ceiling
 0x0F | Filled
 
-### Area object commands and subcommands
+## Area object commands and subcommands
 
 The game engine iteratively reads **object commands** until the terminating object command is read. If the first byte of the object command is 0xFD, this is the termination object command and the read routine is ended. If the low four bits of the first byte of the object command are 0x0C, 0x0D, 0x0E, or 0x0F, then it is termed a **miscellaneous object command *X*** where 0x0*X* is the bit result. Everything else is a **standard object command**. Misc. object commands 0x0F are three-byte object commands. Everything else is a two-byte object command.
 
-#### Standard object commands
+### Standard object commands
 
 Byte 1 | Byte 2
 --- | ---
@@ -493,7 +494,7 @@ Value | Description
 6 | Column of blocks
 7 | Pipe subcommand
 
-##### Standard static object
+#### Standard static object
 
 An object with a predefined size. The object itself is determined by the _V_ bits.
 
@@ -516,7 +517,7 @@ V bits | standard static object value
 0x0E | Bowser's bridge
 0x0F | Nothing
 
-##### Extendable objects
+#### Extendable objects
 
 **Extendable platform**: The exact platform is specified by the _P_ bits of the area's level header. Depending on the platform type, it is either a horizontal row or a vertical column.
 
@@ -524,11 +525,13 @@ V bits | standard static object value
 
 **Vertical objects**: A vertically extendable object expands downward, creating a column of 1 to 16 blocks high. The size is determined by the _V_ bits.
 
-##### Pipe Subcommand
+#### Pipe Subcommand
 
 The pipe subcommand bits are further broken down as E H H H. If _E_ is set, then the pipe is enterable. Otherwise, it is not. _H_ specifies the height of the pipe, moving downward. The width of the pipe is 2 blocks.
 
-#### Miscellaneous object command C
+### Miscellaneous object command C
+
+These objects are miscellaneous horizontally extendable objects with fixed Y position and fixed height.
 
 Byte 1 | Byte 2
 --- | ---
@@ -553,13 +556,68 @@ _S_ bits | Description
 6 | Horizontal question coin blocks (Y = 3)
 7 | Horizontal question coin blocks (Y = 7)
 
-#### Miscellaneous object command D
+### Miscellaneous object command D
 
-#### Miscellaneous object command E
+This command can either be a page setter or static object. 
 
-#### Miscellaneous object command F
+Byte 1 | Byte 2
+--- | ---
+X X X X 1 1 0 1 | P S V V V V V V
 
-The are the only three-byte object commands.
+**X**: 4 bits determining the X-coordinate of the object relative to the current page (in 16 pixel increments).
+
+**P**: Page flag. If this is set, the object is moved to the next page.
+
+**S**: If this bit is set, then the object is a page setter. The object page is set to the value of the _V_ bits (0x00-0x1F). If the values exceeds 0x1F, the fifth bit is ignored.
+
+If _S_ is not set, then the static object depends on the _V_ bits.
+
+Value | Description
+--- | ---
+0x00 | Reverse L pipe
+0x01 | Flag pole
+0x02 | Bowser's axe
+0x03 | Rope for axe
+0x04 | Bowser's bridge
+0x05 | Scroll stop for warp zone
+0x06 | Scroll stop
+0x07 | Scroll stop
+0x08 | Flying red cheep cheep generator
+0x09 | Bullet/swimming cheep cheep generator
+0x0A | Stop generator
+0x0B | Area loop command (e.g. W4-4 looping area)
+
+Values not in the above table cause undefined bahavior.
+
+### Miscellaneous object command E
+
+This command can either be an area header modifier, or a layer 1 background modifier
+
+Byte 1 | Byte 2
+--- | ---
+X X X X 1 1 1 0 | P 0 S S F F F F
+
+**X**: 4 bits determining the X-coordinate of the object relative to the current page (in 16 pixel increments).
+
+**P**: Page flag. If this is set, the object is moved to the next page.
+
+**S**: Has the same meaning as the _S_ bits in the [header](#area-header-data-format)
+
+**F**: Has the same meaning as the _F_ bits in the [header](#area-header-data-format)
+
+The command could instead be
+
+Byte 1 | Byte 2
+--- | ---
+X X X X 1 1 1 0 | P 1 ? ? ? B B B
+
+**?**: Invariant. The value of this bit is not considered.
+
+**B**: Has the same meaning as the _B_ bits in the [header](#area-header-data-format)
+
+### Miscellaneous object command F
+
+These objects are formatted with three bytes. They extend past the classic NES 2-byte format to support several SNES-specific tiles (mostly found in castle areas).
 
 Byte 1 | Byte 2 | Byte 3
 --- | --- | ---
@@ -567,18 +625,29 @@ X X X X 1 1 1 1 | Y Y Y Y L L L L | P S S S S S S S
 
 **X**: 4 bits determining the X-coordinate of the object relative to the current page (in 16 pixel increments).
 
-**Y**: 4 bits determining the Y-coordinate of the object relative to the current page (in 16 pixel increments).
+**Y**: 4 bits determining the Y-coordinate of the object relative to the current page (in 16 pixel increments). Not all subcommands support Y coordinates. 
 
 **P**: Page flag. If this is set, the object is moved to the next page.
 
-**S**: Subcommand
+**S**: Object subcommand.
 
 Subcommand | Description
 --- | ---
 0x00 | Vertical rope for lift
 0x10 | Vertical rope for pulley lift
 0x20 | End-of-level castle
-0x30 | Stairs
-0x32 | End-of-level stairs
-0x34 | Square castle ceiling tiles
-0x36 | 
+0x28 | Vertically extendable square castle ceiling tiles (caps ceiling edges)
+0x30 | End-of-level ascending block stairs
+0x32 | Descending steps at beginning of castle areas
+0x34 | Rectangular ceiling tiles in castles
+0x36 | Right edge for castle floor (recommend L = 0)
+0x38 | Left edge for castle floor (recommend L = 0)
+0x3A | Bottom left inverted corner for castle floor (recommend L = 1)
+0x3C | Bottom right inverted corner for catle floor (L > 0 renders castle floor too)
+0x3E | Vertical sea blocks for underwater areas
+0x40 | Entedable reverse L pipe
+0x50 | Vertical balls/rope/vin for climbing
+0x60 | Nothing
+0x70 | Nothing
+
+The Y-coordinate is disregarded for Subcommands whose low four bits are zero. Subcommands not included in the table cause undefined behavior.
