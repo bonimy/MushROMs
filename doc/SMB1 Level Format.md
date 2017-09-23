@@ -29,7 +29,6 @@ This is a comprehensive guide for understanding the Super Mario All-Stars (SMAS)
   - [Miscellaneous object command D](#miscellaneous-object-command-d)
   - [Miscellaneous object command E](#miscellaneous-object-command-e)
   - [Miscellaneous object command F](#miscellaneous-object-command-f)
-- [Example of main area of W1-1](#example-of-main-area-of-W1-1)
 
 ## Introduction and Terminology
 
