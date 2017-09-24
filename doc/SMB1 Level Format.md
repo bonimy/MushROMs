@@ -551,7 +551,7 @@ _S_ bits | Description
 2 | Bridge (Y = 7)
 3 | Bridge (Y = 8)
 4 | Bridge (Y = 10)
-5 | Hole with water/lave
+5 | Hole with water/lava
 6 | Horizontal question coin blocks (Y = 3)
 7 | Horizontal question coin blocks (Y = 7)
 
