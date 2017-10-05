@@ -1,7 +1,7 @@
 # Contributing
 
 ## Welcome!
-Hello. My name is Nelson and MushROMs has been a passion project of mine for many years. I currently work three jobs that I love and am working on going to graduate school for astrophysics. I therefore have very little time to commit to my little hobbie and am thus very greatful that you are interested in contributing to MushROMs. It really motivates me to know other people share my interests. Before getting started, however, I would really like you to read over this document to see how I like contributions to be submitted. It is my belief that these guidelines will help all of us best understand each other and collaborate together
+Hello. My name is Nelson and MushROMs has been a passion project of mine for many years. I currently work three jobs that I love and am working on going to graduate school for astrophysics. I therefore have very little time to commit to my little hobbies and am thus very greatful that you are interested in contributing to MushROMs. It really motivates me to know other people share my interests. Before getting started, however, I would really like you to read over this document to see how I like contributions to be submitted. It is my belief that these guidelines will help all of us best understand each other and collaborate together
 
 ## Table of Contents
 * [How to file a bug report](#how-to-file-a-bug-report)
@@ -24,7 +24,7 @@ Same as filing a bug report, open a new [Issue](https://github.com/bonimy/MushRO
 Refer to the [README](README.md#installation) on the front page for a complete setup instructions.
 
 ## The types of contributions we're looking for
-Refer to our VISION file for a better idea of what exactly MushROMs is and how I want it to get there. To summarize the points it makes, the following contributions are greatly supported:
+Refer to our [VISION](VISION.md) file for a better idea of what exactly MushROMs is and how I want it to get there. To summarize the points it makes, the following contributions are greatly supported:
 * Unit/Benchmark tests
 * Source code documentation
 * Bug fixes
