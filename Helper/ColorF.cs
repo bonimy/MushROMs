@@ -202,30 +202,21 @@ namespace Helper
         /// </summary>
         /// <seealso cref="Magenta"/>
         /// <seealso cref="Yellow"/>
-        public float Cyan
-        {
-            get => 1 - Red;
-        }
+        public float Cyan => 1 - Red;
         /// <summary>
         /// Gets the magenta component of this <see cref="ColorF"/> structure. The range of this
         /// component is 0 to 1 inclusive.
         /// </summary>
         /// <seealso cref="Cyan"/>
         /// <seealso cref="Yellow"/>
-        public float Magenta
-        {
-            get => 1 - Green;
-        }
+        public float Magenta => 1 - Green;
         /// <summary>
         /// Gets the yellow component of this <see cref="ColorF"/> structure. The range of this
         /// component is 0 to 1 inclusive.
         /// </summary>
         /// <seealso cref="Cyan"/>
         /// <seealso cref="Magenta"/>
-        public float Yellow
-        {
-            get => 1 - Blue;
-        }
+        public float Yellow => 1 - Blue;
 
 
         /// <summary>
@@ -233,19 +224,13 @@ namespace Helper
         /// of this <see cref="ColorF"/> structure.
         /// </summary>
         /// <seealso cref="Min"/>
-        public float Max
-        {
-            get => MathHelper.Max(Red, Green, Blue);
-        }
+        public float Max => MathHelper.Max(Red, Green, Blue);
         /// <summary>
         /// Gets the minimum of <see cref="Red"/>, <see cref="Green"/>, or <see cref="Blue"/>
         /// of this <see cref="ColorF"/> structure.
         /// </summary>
         /// <seealso cref="Max"/>
-        public float Min
-        {
-            get => MathHelper.Min(Red, Green, Blue);
-        }
+        public float Min => MathHelper.Min(Red, Green, Blue);
 
         /// <summary>
         /// Gets the hue of this <see cref="ColorF"/> structure.
@@ -327,10 +312,7 @@ namespace Helper
         /// <seealso href="https://en.wikipedia.org/wiki/HSL_and_HSV">
         /// Wikipedia article on HSL and HSV
         /// </seealso>
-        public float HueDegrees
-        {
-            get => 360 * Hue;
-        }
+        public float HueDegrees => 360 * Hue;
         /// <summary>
         /// Gets the saturation of this <see cref="ColorF"/> structure.
         /// Valid values range from 0 to 1 inclusive.
@@ -363,10 +345,7 @@ namespace Helper
         /// <seealso href="https://en.wikipedia.org/wiki/HSL_and_HSV">
         /// Wikipedia article on HSL and HSV
         /// </seealso>
-        public float Lightness
-        {
-            get => (Max + Min) / 2;
-        }
+        public float Lightness => (Max + Min) / 2;
         /// <summary>
         /// Gets the luma of this <see cref="ColorF"/> structure.
         /// </summary>
@@ -380,10 +359,7 @@ namespace Helper
         /// <seealso href="https://en.wikipedia.org/wiki/Luma_(video)">
         /// Wikipedia article of Luma
         /// </seealso>
-        public float Luma
-        {
-            get => LumaRed * Red + LumaGreen * Green + LumaBlue * Blue;
-        }
+        public float Luma => LumaRed * Red + LumaGreen * Green + LumaBlue * Blue;
         /// <summary>
         /// Gets the chroma of this <see cref="ColorF"/> structure.
         /// </summary>
@@ -394,10 +370,7 @@ namespace Helper
         /// <seealso href="https://en.wikipedia.org/wiki/HSL_and_HSV">
         /// Wikipedia article on HSL and HSV
         /// </seealso>
-        public float Chroma
-        {
-            get => Max - Min;
-        }
+        public float Chroma => Max - Min;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ColorF"/> struct.

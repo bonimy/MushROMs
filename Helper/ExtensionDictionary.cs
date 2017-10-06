@@ -54,7 +54,7 @@ namespace Helper
         /// </param>
         /// <inheritdoc/>
         public ExtensionDictionary(ExtensionComparer comparer) :
-            base(comparer ?? ExtensionComparer.DefaultComparer)
+            base(comparer ?? throw new ArgumentNullException(nameof(comparer)))
         {
         }
         /// <summary>
@@ -109,19 +109,24 @@ namespace Helper
         /// <inheritdoc cref="AssertDictionary{TKey, TValue}.AssertKey(TKey)"/>
         /// </param>
         /// <remarks>
-        /// When comparing extensions, <see cref="Path.GetExtension(String)"/> is called. We test now that it throws
-        /// an exception before adding it to the dictionary and causing problems down the road.
+        /// When comparing extensions, <see cref="ExtensionComparer.StringModifier(String)"/> is called.
+        /// We test now that it throws an exception before adding it to the dictionary and causing
+        /// problems down the road.
         /// </remarks>
         protected override void AssertKey(string key)
         {
+            if (key == null)
+                throw new ArgumentNullException(nameof(key));
+
+            var comparer = Comparer as ExtensionComparer;
+
             try
             {
-                Path.GetExtension(key);
+                comparer.StringModifier(key);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                throw new ArgumentException(
-                    SR.ErrorCannotGetPathExtension(nameof(key), key, ex), nameof(key), ex);
+                throw new ArgumentException(ex.Message, nameof(key), ex);
             }
         }
     }

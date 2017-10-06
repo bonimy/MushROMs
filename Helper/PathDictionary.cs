@@ -125,14 +125,18 @@ namespace Helper
         /// </exception>
         protected override void AssertKey(string key)
         {
+            if (key == null)
+                throw new ArgumentNullException(nameof(key));
+
+            var comparer = Comparer as PathComparer;
+
             try
             {
-                Path.GetFullPath(key);
+                comparer.StringModifier(key);
             }
-            catch (Exception ex)
+            catch (ArgumentException ex)
             {
-                throw new ArgumentException(
-                    SR.ErrorCannotGetFullPath(nameof(key), key, ex), nameof(key), ex);
+                throw new ArgumentException(ex.Message, nameof(key), ex);
             }
         }
     }
