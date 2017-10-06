@@ -58,6 +58,7 @@
     <Compile Include="SubstringPointerTests.cs" />
     <Compile Include="SuffixTreeTests.cs" />
     <Compile Include="ColorFTests.cs" />
+    <Compile Include="SharedArrayTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
