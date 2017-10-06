@@ -57,38 +57,38 @@ namespace Helper
         /// The number of channels that specifies a <see cref="ColorF"/> value.
         /// This field is constant.
         /// </summary>
-        private const int NumberOfChannels = 4;
+        public const int NumberOfChannels = 4;
         /// <summary>
         /// The number of channels, excluding the <see cref="Alpha"/> component.
         /// </summary>
-        private const int NumberOfColorChannels = NumberOfChannels - 1;
+        public const int NumberOfColorChannels = NumberOfChannels - 1;
 
         /// <summary>
         /// The index of the <see cref="Alpha"/> component in <see cref="this[Int32]"/>.
         /// This field is constant.
         /// </summary>
-        private const int AlphaIndex = 3;
+        public const int AlphaIndex = 3;
         /// <summary>
         /// The index of the <see cref="Red"/> component in <see cref="this[Int32]"/>.
         /// This field is constant.
         /// </summary>
-        private const int RedIndex = 2;
+        public const int RedIndex = 2;
         /// <summary>
         /// The index of the <see cref="Green"/> component in <see cref="this[Int32]"/>.
         /// This field is constant.
         /// </summary>
-        private const int GreenIndex = 1;
+        public const int GreenIndex = 1;
         /// <summary>
         /// The index of the <see cref="Blue"/> component in <see cref="this[Int32]"/>.
         /// This field is constant.
         /// </summary>
-        private const int BlueIndex = 0;
+        public const int BlueIndex = 0;
 
         /// <summary>
         /// The minimum allowable difference between two values to consider a component comparison of two
         /// <see cref="ColorF"/> channels as equal.
         /// </summary>
-        private const float Tolerance = 1e-7f;
+        public const float Tolerance = 1e-7f;
 
         /// <summary>
         /// Gets the alpha component of this <see cref="ColorF"/> structure. The range of this
@@ -153,7 +153,7 @@ namespace Helper
         /// <seealso cref="Red"/>
         /// <seealso cref="Green"/>
         /// <seealso cref="Blue"/>
-        private float this[int index]
+        public float this[int index]
         {
             get
             {
@@ -172,7 +172,7 @@ namespace Helper
                     return 0;
                 }
             }
-            set
+            private set
             {
                 switch (index)
                 {
@@ -195,7 +195,6 @@ namespace Helper
             }
         }
 
-
         /// <summary>
         /// Gets the cyan component of this <see cref="ColorF"/> structure. The range of this
         /// component is 0 to 1 inclusive.
@@ -217,7 +216,6 @@ namespace Helper
         /// <seealso cref="Cyan"/>
         /// <seealso cref="Magenta"/>
         public float Yellow => 1 - Blue;
-
 
         /// <summary>
         /// Gets the maximum of <see cref="Red"/>, <see cref="Green"/>, or <see cref="Blue"/>
@@ -254,6 +252,8 @@ namespace Helper
             {
                 var chroma = Chroma;
                 var hue = 0f;
+
+                // gray colors have no hue, but we return 0 for optimization
                 if (MathHelper.NearlyEquals(chroma, 0, Tolerance))
                     return hue;
 
@@ -328,6 +328,7 @@ namespace Helper
         {
             get
             {
+                // This number is undefined, but we return 0 for optimization.
                 if (MathHelper.NearlyEquals(Chroma, 0, Tolerance))
                     return 0;
 

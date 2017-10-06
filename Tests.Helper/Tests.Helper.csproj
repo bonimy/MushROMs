@@ -55,6 +55,7 @@
     <Compile Include="Range2DTests.cs" />
     <Compile Include="SubstringPointerTests.cs" />
     <Compile Include="SuffixTreeTests.cs" />
+    <Compile Include="ColorFTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
