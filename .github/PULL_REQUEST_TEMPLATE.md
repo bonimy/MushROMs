@@ -13,7 +13,7 @@ Please be sure the following are completed before submitting a pull request:
 - [ ] - Is there a complete description of the pull request's purpose?
 
 
-# Description
+## Description
 > Give a full description of what this Pull Request is trying to accomplish.
 
 **Example**:
