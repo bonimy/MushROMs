@@ -33,13 +33,15 @@ namespace Tests.Helper
             // is shared.
 
             // Let's create a dictionary of editor file associations.
-            var dictionary = new ExtensionDictionary<Editor>();
+            var dictionary = new ExtensionDictionary<Editor>
+            {
 
-            // Add file association for each editor.
-            dictionary.Add(".txt", Editor.TextEditor);
-            dictionary.Add(".bin", Editor.BinaryEditor);
-            dictionary.Add(".rtf", Editor.RichTextEditor);
-            dictionary.Add(".cs", Editor.SourceCodeEditor);
+                // Add file association for each editor.
+                { ".txt", Editor.TextEditor },
+                { ".bin", Editor.BinaryEditor },
+                { ".rtf", Editor.RichTextEditor },
+                { ".cs", Editor.SourceCodeEditor }
+            };
 
             // Simple sanity test.
             var editor = dictionary[".txt"];

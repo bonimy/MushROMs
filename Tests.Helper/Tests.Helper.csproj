@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtensionComparerTests.cs" />
+    <Compile Include="PathComparerTests.cs" />
+    <Compile Include="PathDictionaryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExtensionDictionaryTests.cs" />
     <Compile Include="Position2DTests.cs" />

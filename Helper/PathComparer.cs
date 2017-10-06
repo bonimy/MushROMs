@@ -13,13 +13,15 @@ namespace Helper
     /// <seealso cref="PathDictionary{TValue}"/>
     public class PathComparer : StringModifierComparer
     {
+        private static readonly PathComparer _default = new PathComparer();
+
         /// <summary>
         /// Gets a new instance of the default <see cref="PathComparer"/> class.
         /// </summary>
         /// <returns>
         /// A new <see cref="DefaultComparer"/> object.
         /// </returns>
-        public static PathComparer DefaultComparer => new PathComparer();
+        public static PathComparer DefaultComparer => _default;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PathComparer"/> class.

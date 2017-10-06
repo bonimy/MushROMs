@@ -48,7 +48,7 @@ namespace Helper
         /// </param>
         /// <inheritdoc/>
         public PathDictionary(PathComparer comparer) :
-            base(comparer ?? PathComparer.DefaultComparer)
+            base(comparer ?? throw new ArgumentNullException(nameof(comparer)))
         {
         }
         /// <summary>
