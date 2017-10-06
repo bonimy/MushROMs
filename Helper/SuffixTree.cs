@@ -243,7 +243,7 @@ namespace Helper
 
             unsafe
             {
-                fixed (byte* ptr = &data[start])
+                fixed (byte* ptr = data)
                     CreateTree(ptr, data.Length, start, size);
             }
         }
@@ -455,13 +455,13 @@ namespace Helper
         /// </returns>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <paramref name="index"/> is less than 0. -or-
-        /// <paramref name="index"/> is greater than or equal to <see cref="Size"/>.
+        /// <paramref name="index"/> is greater than or equal to <see cref="Size"/> - 1.
         /// </exception>
         public SubstringPointer GetLongestInternalSubstring(int index)
         {
-            if (index < 0 || index >= Size)
+            if (index < 0 || index >= Size - 1)
                 throw new ArgumentOutOfRangeException(nameof(index),
-                    SR.ErrorArrayBounds(nameof(index), index, Size));
+                    SR.ErrorArrayBounds(nameof(index), index, Size - 1));
 
             unsafe
             {

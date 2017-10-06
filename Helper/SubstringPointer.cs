@@ -43,7 +43,11 @@ namespace Helper
         /// If <see cref="End"/> is set to <see cref="EndOfString"/>, then <see cref="EndOfString"/> is
         /// returned.
         /// </summary>
-        public int Length => End == EndOfString ? EndOfString : (End - Start);
+        public int Length
+        {
+            get;
+            private set;
+        }
         /// <summary>
         /// Initializes a new instance of the <see cref="SubstringPointer"/> structure using the given
         /// start and end indexes.
@@ -72,6 +76,7 @@ namespace Helper
 
             Start = start;
             End = end;
+            Length = end == EndOfString ? EndOfString : (end - start);
         }
 
         /// <summary>
@@ -126,12 +131,26 @@ namespace Helper
         /// </exception>
         public static SubstringPointer FromLengthAndEnd(int length, int end)
         {
+            if (length == EndOfString)
+                return new SubstringPointer(0, end);
+
             if (length < 0)
-                throw new ArgumentOutOfRangeException(nameof(length),
-                    SR.ErrorLowerBoundExclusive(nameof(length), length, 0));
-            if (end < 0)
-                throw new ArgumentOutOfRangeException(nameof(end),
-                    SR.ErrorLowerBoundExclusive(nameof(end), end, 0));
+                throw new ArgumentException(
+                    SR.ErrorSubstringPointerLength(nameof(length), length), nameof(length));
+
+            if (end == EndOfString)
+            {
+                var result = Empty;
+                result.Start = EndOfString;
+                result.Length = length;
+                result.End = EndOfString;
+
+                return result;
+            }
+
+            if (end < length)
+                throw new ArgumentException(
+                    SR.ErrorSubstringPointerLength(nameof(end), end), nameof(end));
 
             return new SubstringPointer(end - length, end);
         }
@@ -164,6 +183,14 @@ namespace Helper
             if (End > value.Length)
                 throw new ArgumentException(
                     SR.ErrorStringSubstringSize(nameof(value), Start, Length), nameof(value));
+
+            if (Start == EndOfString)
+            {
+                if (End == EndOfString)
+                    return value.Substring(value.Length - Length);
+
+                return value.Substring(End - Length);
+            }
 
             return value.Substring(Start, Length);
         }

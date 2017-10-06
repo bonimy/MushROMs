@@ -54,6 +54,7 @@
     <Compile Include="Position2DTests.cs" />
     <Compile Include="Range2DTests.cs" />
     <Compile Include="SubstringPointerTests.cs" />
+    <Compile Include="SuffixTreeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
