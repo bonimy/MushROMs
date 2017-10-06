@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Helper", "Tests.Helpe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnesXM", "SnesXM\SnesXM.csproj", "{C931999D-43B2-48D4-9F83-362209346D05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnesXM.Emulator", "SnesXM.Emulator\SnesXM.Emulator.csproj", "{49AD6D28-5908-4D2B-A653-689D4AA63141}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C931999D-43B2-48D4-9F83-362209346D05}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C931999D-43B2-48D4-9F83-362209346D05}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C931999D-43B2-48D4-9F83-362209346D05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49AD6D28-5908-4D2B-A653-689D4AA63141}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49AD6D28-5908-4D2B-A653-689D4AA63141}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49AD6D28-5908-4D2B-A653-689D4AA63141}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49AD6D28-5908-4D2B-A653-689D4AA63141}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
