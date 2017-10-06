@@ -11,9 +11,6 @@ namespace Helper
     /// <seealso cref="StringComparer.OrdinalIgnoreCase"/>
     /// <seealso cref="ExtensionComparer"/>
     /// <seealso cref="PathDictionary{TValue}"/>
-    /// <permission cref="FileIOPermission">
-    /// for access to the path.
-    /// </permission>
     public class PathComparer : StringModifierComparer
     {
         /// <summary>

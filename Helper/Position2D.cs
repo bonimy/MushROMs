@@ -76,7 +76,7 @@ namespace Helper
         }
         public override string ToString()
         {
-            return SR.GetString("X={0}, Y={Y}", X, Y);
+            return SR.GetString("X={0}, Y={1}", X, Y);
         }
 
         public static bool operator ==(Position2D left, Position2D right)
@@ -120,12 +120,12 @@ namespace Helper
         public static Position2D operator /(Position2D left, Range2D right)
         {
             var position = new Position2D(left.X / right.Horizontal, left.Y / right.Vertical);
-
+            /*
             if (left.X < 0)
                 position.X--;
             if (left.Y < 0)
                 position.Y--;
-
+                */
             return position;
         }
     }

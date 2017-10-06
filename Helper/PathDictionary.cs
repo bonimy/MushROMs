@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Security;
 
 namespace Helper
 {
@@ -11,9 +13,6 @@ namespace Helper
     /// This dictionary uses <see cref="PathComparer"/> as its equality comparer. Keys can only be
     /// relative or full paths that the user has permission to access. When
     /// </remarks>
-    /// <permission cref="FileIOPermission">
-    /// <inheritdoc cref="PathComparer"/>
-    /// </permission>
     /// <seealso cref="Path.GetFullPath(String)"/>
     /// <seealso cref="PathComparer"/>
     /// <seealso cref="ExtensionDictionary{TValue}"/>

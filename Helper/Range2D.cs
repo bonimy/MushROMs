@@ -90,7 +90,7 @@ namespace Helper
         }
         public override string ToString()
         {
-            return SR.GetString("H={0}, V={Y}", Horizontal, Vertical);
+            return SR.GetString("H={0}, V={1}", Horizontal, Vertical);
         }
 
         public static bool operator ==(Range2D left, Range2D right)
