@@ -22,6 +22,8 @@ namespace Helper
             set => Array[Offset + index] = value;
         }
 
+        public SharedArray(int size) : this(new T[size]) { }
+
         public SharedArray(T[] array) : this(array, 0) { }
 
         public SharedArray(T[] array, int offset)
