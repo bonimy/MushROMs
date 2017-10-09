@@ -116,5 +116,31 @@ namespace Helper
 
             return -right.Offset;
         }
+
+        public static bool operator ==(SharedArray<T> left, SharedArray<T> right)
+        {
+            return (left - right) == 0;
+        }
+        public static bool operator !=(SharedArray<T> left, SharedArray<T> right)
+        {
+            return !(left == right);
+        }
+
+        public static bool operator <(SharedArray<T> left, SharedArray<T> right)
+        {
+            return (left - right) < 0;
+        }
+        public static bool operator >(SharedArray<T> left, SharedArray<T> right)
+        {
+            return (left - right) > 0;
+        }
+        public static bool operator >=(SharedArray<T> left, SharedArray<T> right)
+        {
+            return !(left < right);
+        }
+        public static bool operator <=(SharedArray<T> left, SharedArray<T> right)
+        {
+            return !(left > right);
+        }
     }
 }
