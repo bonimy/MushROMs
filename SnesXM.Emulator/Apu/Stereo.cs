@@ -1,5 +1,4 @@
 ﻿using System;
-using Helper;
 
 namespace SnesXM.Emulator.Apu
 {
@@ -137,7 +136,7 @@ namespace SnesXM.Emulator.Apu
         }
         public override string ToString()
         {
-            return SR.GetString("Left = {0}; Right = {1}", Left, Right);
+            return Helper.SR.GetString("Left = {0}; Right = {1}", Left, Right);
         }
     }
 }
