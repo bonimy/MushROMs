@@ -380,6 +380,22 @@
             set;
         }
 
+        bool ForcedPause
+        {
+            get;
+            set;
+        }
+        bool Paused
+        {
+            get;
+            set;
+        }
+        bool StopEmulation
+        {
+            get;
+            set;
+        }
+
         int SkipFrames
         {
             get;

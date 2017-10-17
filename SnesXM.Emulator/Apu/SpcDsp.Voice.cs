@@ -53,7 +53,7 @@ namespace SnesXM.Emulator.Apu
                 get;
                 set;
             }
-            internal SharedArray<byte> Registers
+            internal Pointer<byte> Registers
             {
                 get;
                 set;

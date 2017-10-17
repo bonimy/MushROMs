@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtensionComparerTests.cs" />
+    <Compile Include="Int24Tests.cs" />
     <Compile Include="PathComparerTests.cs" />
     <Compile Include="PathDictionaryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -58,7 +59,8 @@
     <Compile Include="SubstringPointerTests.cs" />
     <Compile Include="SuffixTreeTests.cs" />
     <Compile Include="ColorFTests.cs" />
-    <Compile Include="SharedArrayTests.cs" />
+    <Compile Include="ArrayPointerTests.cs" />
+    <Compile Include="UInt24Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

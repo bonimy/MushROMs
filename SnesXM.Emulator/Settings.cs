@@ -380,6 +380,23 @@
             set;
         }
 
+
+        public bool ForcedPause
+        {
+            get;
+            set;
+        }
+        public bool Paused
+        {
+            get;
+            set;
+        }
+        public bool StopEmulation
+        {
+            get;
+            set;
+        }
+
         public int SkipFrames
         {
             get;

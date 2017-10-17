@@ -111,7 +111,7 @@ namespace SnesXM.Emulator.Apu
             // Not supported
         }
 
-        private void SetOutput(SharedArray<short> output, int size)
+        private void SetOutput(Pointer<short> output, int size)
         {
             M.SetOutput(output, size);
         }

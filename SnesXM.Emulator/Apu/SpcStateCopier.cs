@@ -5,7 +5,7 @@ namespace SnesXM.Emulator.Apu
 {
     internal class SpcStateCopier
     {
-        private SharedArray<byte> Data
+        private Pointer<byte> Data
         {
             get;
             set;
@@ -16,7 +16,7 @@ namespace SnesXM.Emulator.Apu
             set;
         }
 
-        public SpcStateCopier(SharedArray<byte> data, DspCopyFunction function)
+        public SpcStateCopier(Pointer<byte> data, DspCopyFunction function)
         {
             Data = data ?? throw new ArgumentNullException(nameof(data));
             Function = function ?? throw new ArgumentNullException(nameof(function));

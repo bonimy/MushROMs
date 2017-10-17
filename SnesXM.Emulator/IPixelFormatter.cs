@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace SnesXM.Emulator
+﻿namespace SnesXM.Emulator
 {
     public interface IPixelFormatter
     {
@@ -37,6 +33,6 @@ namespace SnesXM.Emulator
 
         int BuildPixel2(int r, int g, int b);
 
-        (int r, int g, int b) DecomposePixel(int pixel);
+        //(int r, int g, int b) DecomposePixel(int pixel);
     }
 }

@@ -6,6 +6,10 @@ namespace SnesXM.Emulator
 {
     public interface ISuperFx
     {
+        bool OneLineDone { get; set; }
+
         void Initialize();
+
+        void Execute();
     }
 }

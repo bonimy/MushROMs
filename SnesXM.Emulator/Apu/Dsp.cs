@@ -3,11 +3,11 @@ using Helper;
 
 namespace SnesXM.Emulator.Apu
 {
-    public delegate void DspCopyFunction(SharedArray<byte> buffer, Array state);
+    public delegate void DspCopyFunction(Pointer<byte> buffer, Array state);
 
     public class Dsp
     {
-        internal static void FromDspToState(SharedArray<byte> buffer, Array state)
+        internal static void FromDspToState(Pointer<byte> buffer, Array state)
         {
             if (buffer == null)
                 throw new ArgumentNullException(nameof(buffer));
@@ -17,7 +17,7 @@ namespace SnesXM.Emulator.Apu
             buffer.Offset += size;
         }
 
-        internal static void ToDspFromState(SharedArray<byte> buffer, Array state)
+        internal static void ToDspFromState(Pointer<byte> buffer, Array state)
         {
             if (buffer == null)
                 throw new ArgumentNullException(nameof(buffer));

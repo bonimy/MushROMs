@@ -14,7 +14,7 @@ namespace Helper.PixelFormats
     /// if the byte pointer accurately describes 24-bit RGB pixel data.
     /// </remarks>
     /// <threadsafety static="true" instance="false"/>
-    [StructLayout(LayoutKind.Explicit)]
+    [StructLayout(LayoutKind.Explicit, Size = 3)]
     public unsafe struct Color24BppRgb
     {
         /// <summary>

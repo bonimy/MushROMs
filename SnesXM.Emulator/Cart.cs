@@ -5,7 +5,7 @@ namespace SnesXM.Emulator
 {
     public class Cart : ICart
     {
-        public int CartSize
+        public int Size
         {
             get;
             set;
@@ -20,12 +20,12 @@ namespace SnesXM.Emulator
             get;
             set;
         }
-        public int CartOffset
+        public int Offset
         {
             get;
             set;
         }
-        public SharedArray<byte> Sram
+        public Pointer<byte> Sram
         {
             get;
             set;
@@ -43,10 +43,10 @@ namespace SnesXM.Emulator
 
         public void Initialize()
         {
-            CartSize =
+            Size =
             SramSize =
             SramMask =
-            CartOffset = 0;
+            Offset = 0;
             Sram = null;
             FileName = String.Empty;
         }

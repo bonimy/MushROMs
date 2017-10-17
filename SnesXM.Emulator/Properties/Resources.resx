@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="InfoConevrtInterleavedRom" xml:space="preserve">
+    <value>ROM image is in interleaved format - converting...</value>
+  </data>
+  <data name="InfoFixingSwappedExHiRom" xml:space="preserve">
+    <value>Fixing swapped ExHiROM...</value>
+  </data>
   <data name="InfoNoRomHeader" xml:space="preserve">
     <value>No ROM file header found.</value>
   </data>
@@ -125,5 +131,14 @@
   </data>
   <data name="InfoRomHeaderMultipleIgnored" xml:space="preserve">
     <value>Found multiple ROM file headers (and ignored them).</value>
+  </data>
+  <data name="InfoRomTypeLied" xml:space="preserve">
+    <value>ROM lied about its type! Trying again.</value>
+  </data>
+  <data name="InfoTryForceNoHeader" xml:space="preserve">
+    <value>Try 'force no-header' option if the game doesn't work</value>
+  </data>
+  <data name="InvalidProActionNotHex" xml:space="preserve">
+    <value>Invalid Pro Action Replay code - should be 8 hex digits in length.</value>
   </data>
 </root>

@@ -12,5 +12,20 @@ namespace SnesXM.Emulator
 
         public static string InfoRomHeaderMultipleIgnored =>
             Resources.InfoRomHeaderMultipleIgnored;
+
+        public static string InfoTryForceNoHeader =>
+            Resources.InfoTryForceNoHeader;
+
+        public static string InfoConevrtInterleavedRom =>
+            Resources.InfoConevrtInterleavedRom;
+
+        public static string InfoRomTypeLied =>
+            Resources.InfoRomTypeLied;
+
+        public static string InfoFixingSwappedExHiRom =>
+            Resources.InfoFixingSwappedExHiRom;
+
+        public static string InvalidProActionNotHex =>
+            Resources.InvalidProActionNotHex;
     }
 }

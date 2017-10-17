@@ -62,6 +62,24 @@ namespace SnesXM.Emulator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ROM image is in interleaved format - converting....
+        /// </summary>
+        internal static string InfoConevrtInterleavedRom {
+            get {
+                return ResourceManager.GetString("InfoConevrtInterleavedRom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fixing swapped ExHiROM....
+        /// </summary>
+        internal static string InfoFixingSwappedExHiRom {
+            get {
+                return ResourceManager.GetString("InfoFixingSwappedExHiRom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No ROM file header found..
         /// </summary>
         internal static string InfoNoRomHeader {
@@ -85,6 +103,33 @@ namespace SnesXM.Emulator.Properties {
         internal static string InfoRomHeaderMultipleIgnored {
             get {
                 return ResourceManager.GetString("InfoRomHeaderMultipleIgnored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ROM lied about its type! Trying again..
+        /// </summary>
+        internal static string InfoRomTypeLied {
+            get {
+                return ResourceManager.GetString("InfoRomTypeLied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Try &apos;force no-header&apos; option if the game doesn&apos;t work.
+        /// </summary>
+        internal static string InfoTryForceNoHeader {
+            get {
+                return ResourceManager.GetString("InfoTryForceNoHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Pro Action Replay code - should be 8 hex digits in length..
+        /// </summary>
+        internal static string InvalidProActionNotHex {
+            get {
+                return ResourceManager.GetString("InvalidProActionNotHex", resourceCulture);
             }
         }
     }

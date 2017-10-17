@@ -2,7 +2,7 @@
 {
     public enum ExtendedFormat
     {
-        No,
+        Nope,
         Yeah,
         BigFirst,
         SmallFirst

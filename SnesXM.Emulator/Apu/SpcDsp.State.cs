@@ -203,7 +203,7 @@ namespace SnesXM.Emulator.Apu
                 get;
                 set;
             }
-            private SharedArray<short> Out
+            private Pointer<short> Out
             {
                 get;
                 set;
@@ -294,12 +294,12 @@ namespace SnesXM.Emulator.Apu
                 while (--clocksRemain >= 0);
             }
 
-            internal void SetOutput(SharedArray<short> output, int size)
+            internal void SetOutput(Pointer<short> output, int size)
             {
                 Debug.Assert((size & 1) == 0);
                 if (output == null)
                 {
-                    output = new SharedArray<short>(Extra);
+                    output = new Pointer<short>(Extra);
                     size = ExtraSize;
                 }
 
@@ -347,7 +347,7 @@ namespace SnesXM.Emulator.Apu
                     var v = Voices[i];
                     v.BrrIndex = 1;
                     v.Bitmask = 1 << i;
-                    v.Registers = new SharedArray<byte>(Registers, i << 4);
+                    v.Registers = new Pointer<byte>(Registers, i << 4);
                 }
 
                 NewKOn = Registers[KOn];
@@ -515,7 +515,7 @@ namespace SnesXM.Emulator.Apu
                 Out.Offset += 2;
                 if (Out.Offset >= OutEnd)
                 {
-                    Out = new SharedArray<short>(Extra);
+                    Out = new Pointer<short>(Extra);
                     OutEnd = ExtraSize;
                 }
             }
@@ -774,7 +774,7 @@ namespace SnesXM.Emulator.Apu
                 };
             }
 
-            public void CopyState(SharedArray<byte> buffer, DspCopyFunction copy)
+            public void CopyState(Pointer<byte> buffer, DspCopyFunction copy)
             {
                 var copier = new SpcStateCopier(buffer, copy);
 
