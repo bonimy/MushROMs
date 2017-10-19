@@ -9,6 +9,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helper", "Helper\Helper.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Helper", "Tests.Helper\Tests.Helper.csproj", "{7D9C71EA-F33B-4654-9163-E3E5861996C8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MushROMs.SMAS", "MushROMs.SMAS\MushROMs.SMAS.csproj", "{D80072DE-89AB-42CD-88E2-480B6162F3BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MushROMs.SMB1", "MushROMs.SMB1\MushROMs.SMB1.csproj", "{AF0B7CF5-4B99-4633-AFE8-D9FC9A6C8094}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MushROMs.NES", "MushROMs.NES\MushROMs.NES.csproj", "{7441B62D-3EC6-4742-954E-973A1FEED46D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.SMB1", "Tests.SMB1\Tests.SMB1.csproj", "{C2981E05-E2A9-478C-A2B8-11AB41A9F2F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +35,22 @@ Global
 		{7D9C71EA-F33B-4654-9163-E3E5861996C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D9C71EA-F33B-4654-9163-E3E5861996C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7D9C71EA-F33B-4654-9163-E3E5861996C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D80072DE-89AB-42CD-88E2-480B6162F3BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D80072DE-89AB-42CD-88E2-480B6162F3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D80072DE-89AB-42CD-88E2-480B6162F3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D80072DE-89AB-42CD-88E2-480B6162F3BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF0B7CF5-4B99-4633-AFE8-D9FC9A6C8094}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF0B7CF5-4B99-4633-AFE8-D9FC9A6C8094}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF0B7CF5-4B99-4633-AFE8-D9FC9A6C8094}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF0B7CF5-4B99-4633-AFE8-D9FC9A6C8094}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7441B62D-3EC6-4742-954E-973A1FEED46D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7441B62D-3EC6-4742-954E-973A1FEED46D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7441B62D-3EC6-4742-954E-973A1FEED46D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7441B62D-3EC6-4742-954E-973A1FEED46D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2981E05-E2A9-478C-A2B8-11AB41A9F2F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2981E05-E2A9-478C-A2B8-11AB41A9F2F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2981E05-E2A9-478C-A2B8-11AB41A9F2F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2981E05-E2A9-478C-A2B8-11AB41A9F2F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
