@@ -308,7 +308,7 @@ Code value | Description
 0x00 | Green Koopa Troopa (walks off floors)
 0x01 | Red Koopa Troopa (walks off floors)
 0x02 | Buzzy Beetle
-0x03 | Red Koopa Troopa (stays on floors
+0x03 | Red Koopa Troopa (stays on floors)
 0x04 | Green Koopa Troopa (walks in place)
 0x05 | Hammer Bros.
 0x06 | Goomba
