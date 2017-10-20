@@ -4,6 +4,11 @@ namespace MushROMs.SMB1
 {
     public struct AreaObjectCommand
     {
+        /// <summary>
+        /// The size, in bytes, of this <see cref="AreaObjectCommand"/>.
+        /// </summary>
+        public const int Size = 2;
+
         public byte Value1
         {
             get;

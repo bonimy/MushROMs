@@ -13,6 +13,24 @@ namespace MushROMs.SMB1
             set;
         }
 
+        public int AreaSpriteCount => AreaSprites.Count;
+
+        /// <summary>
+        /// Gets the size, in bytes, of this <see cref="AreaSpriteData"/>. This
+        /// size includes the termination code.
+        /// </summary>
+        public int DataSize
+        {
+            get
+            {
+                // We add one byte for the termination code.
+                var result = 1;
+                foreach (var obj in AreaSprites)
+                    result += obj.Size;
+                return result;
+            }
+        }
+
         public AreaSpriteCommand this[int index]
         {
             get => AreaSprites[index];
@@ -55,6 +73,11 @@ namespace MushROMs.SMB1
 
             // If we made it here, then we reached the end of the data without a termination code.
             throw new ArgumentException();
+        }
+
+        public AreaSpriteData(AreaSpriteData areaSpriteData)
+        {
+            AreaSprites = new List<AreaSpriteCommand>(areaSpriteData);
         }
 
         public IEnumerator<AreaSpriteCommand> GetEnumerator() =>

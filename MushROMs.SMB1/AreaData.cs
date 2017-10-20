@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Helper;
 using MushROMs.NES;
+using static MushROMs.NES.AddressConverter;
 
 namespace MushROMs.SMB1
 {
@@ -12,11 +13,11 @@ namespace MushROMs.SMB1
         public const int AreaListPointer = 0x9CBC;
         public const int ObjectAddressLowBytePointer = 0x9D2C;
         public const int ObjectAddressHighBytePointer = 0x9D4E;
-        public const int EnemyAddressLowBytePointer = 0x9CE4;
-        public const int EnemyAddressHighBytePointer = 0x9D06;
-        public const int AreaTypeEnemyOffsetPointer = 0x9CE0;
+        public const int SpriteAddressLowBytePointer = 0x9CE4;
+        public const int SpriteAddressHighBytePointer = 0x9D06;
+        public const int AreaTypeSpriteOffsetPointer = 0x9CE0;
         public const int AreaTypeObjectOffsetPointer = 0x9D28;
-        public const int NumberOfMaps = ObjectAddressHighBytePointer - ObjectAddressLowBytePointer;
+        public const int NumberOfAreas = ObjectAddressHighBytePointer - ObjectAddressLowBytePointer;
 
         public AreaObjectData AreaObjectData
         {
@@ -40,6 +41,12 @@ namespace MushROMs.SMB1
             get;
             set;
         }
+
+        /// <summary>
+        /// Gets the size, in bytes, of the <see cref="AreaObjectData"/> and
+        /// <see cref="AreaSpriteData"/> of this <see cref="AreaData"/>.
+        /// </summary>
+        public int DataSize => AreaObjectData.DataSize + AreaSpriteData.DataSize;
 
         public AreaData(
             AreaObjectData areaObjectData,
@@ -78,26 +85,26 @@ namespace MushROMs.SMB1
             if (areaNumber < 0)
                 throw new ArgumentOutOfRangeException(nameof(areaNumber));
 
-            var lo = AddressConverter.NesToPc(ObjectAddressLowBytePointer);
-            var hi = AddressConverter.NesToPc(ObjectAddressHighBytePointer);
-            var areas = AddressConverter.NesToPc(AreaTypeObjectOffsetPointer);
+            var lo = NesToPc(ObjectAddressLowBytePointer);
+            var hi = NesToPc(ObjectAddressHighBytePointer);
+            var areas = NesToPc(AreaTypeObjectOffsetPointer);
 
             var areaType = (AreaType)((areaNumber >> 5) & 3);
             var reducedMapNumer = areaNumber & 0x1F;
             var index = reducedMapNumer + rom[areas + (int)areaType];
             var address = rom[lo + index] | (rom[hi + index] << 8);
-            address = AddressConverter.NesToPc(address);
+            address = NesToPc(address);
 
             var areaObjectData = new AreaObjectData(rom, address);
 
-            lo = AddressConverter.NesToPc(EnemyAddressLowBytePointer);
-            hi = AddressConverter.NesToPc(EnemyAddressHighBytePointer);
-            areas = AddressConverter.NesToPc(AreaTypeEnemyOffsetPointer);
+            lo = NesToPc(SpriteAddressLowBytePointer);
+            hi = NesToPc(SpriteAddressHighBytePointer);
+            areas = NesToPc(AreaTypeSpriteOffsetPointer);
 
             index = reducedMapNumer + rom[areas + (int)areaType];
 
             address = rom[lo + index] | (rom[hi + index] << 8);
-            address = AddressConverter.NesToPc(address);
+            address = NesToPc(address);
 
             var areaSpriteData = new AreaSpriteData(rom, address);
 
@@ -106,9 +113,9 @@ namespace MushROMs.SMB1
 
         public static AreaData[] GetAllAreas(byte[] src)
         {
-            var areas = new AreaData[NumberOfMaps];
+            var areas = new AreaData[NumberOfAreas];
 
-            var areaPointers = AddressConverter.NesToPc(AreaTypeObjectOffsetPointer);
+            var areaPointers = NesToPc(AreaTypeObjectOffsetPointer);
             var ws = src[areaPointers + (int)AreaType.Water];
             var gs = src[areaPointers + (int)AreaType.Grassland];
             var us = src[areaPointers + (int)AreaType.Underground];
@@ -121,7 +128,7 @@ namespace MushROMs.SMB1
                 new AreaIndex(Int32.MaxValue, (AreaType)(-1))});
             list.Sort((x, y) => x.Index - y.Index);
 
-            for (var i = 0; i < NumberOfMaps; i++)
+            for (var i = 0; i < NumberOfAreas; i++)
             {
                 var map = i;
                 for (var j = 0; j < 4; j++)

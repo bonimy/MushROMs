@@ -13,6 +13,11 @@
     public struct AreaHeader
     {
         /// <summary>
+        /// The size, in bytes, of this <see cref="AreaHeader"/>.
+        /// </summary>
+        public const int SizeOf = sizeof(ushort);
+
+        /// <summary>
         /// Gets or sets the first byte of the area data.
         /// </summary>
         public byte Value1

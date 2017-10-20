@@ -23,6 +23,28 @@ namespace MushROMs.SMB1
             set;
         }
 
+        public int AreaObjectCount => AreaObjects.Count;
+
+        /// <summary>
+        /// Gets the size, in bytes, of this <see cref="AreaObjectData"/>. This
+        /// size includes the <see cref="AreaHeader"/> and the termination code.
+        /// </summary>
+        public int DataSize
+        {
+            get
+            {
+                // We add one byte for the termination code.
+                var result = 1;
+
+                // We add two bytes for the area header.
+                result += AreaHeader.SizeOf;
+
+                foreach (var obj in AreaObjects)
+                    result += AreaObjectCommand.Size;
+                return result;
+            }
+        }
+
         public AreaObjectCommand this[int index]
         {
             get => AreaObjects[index];

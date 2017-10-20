@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MushROMs.NES", "MushROMs.NE
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.SMB1", "Tests.SMB1\Tests.SMB1.csproj", "{C2981E05-E2A9-478C-A2B8-11AB41A9F2F6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MushROMs.SNES", "MushROMs.SNES\MushROMs.SNES.csproj", "{87AE3AA3-F4D5-4CA6-A500-D6D335406A3A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{C2981E05-E2A9-478C-A2B8-11AB41A9F2F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C2981E05-E2A9-478C-A2B8-11AB41A9F2F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C2981E05-E2A9-478C-A2B8-11AB41A9F2F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87AE3AA3-F4D5-4CA6-A500-D6D335406A3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87AE3AA3-F4D5-4CA6-A500-D6D335406A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87AE3AA3-F4D5-4CA6-A500-D6D335406A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87AE3AA3-F4D5-4CA6-A500-D6D335406A3A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -6,8 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Helper\Helper.csproj" />
-    <ProjectReference Include="..\MushROMs.SMB1\MushROMs.SMB1.csproj" />
-    <ProjectReference Include="..\MushROMs.SNES\MushROMs.SNES.csproj" />
+    <ProjectReference Include="..\MushROMs\MushROMs.csproj" />
   </ItemGroup>
 
 </Project>
