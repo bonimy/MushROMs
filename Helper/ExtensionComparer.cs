@@ -44,9 +44,8 @@ namespace Helper
         public ExtensionComparer(StringComparer baseComparer) : base(baseComparer)
         { }
 
-        public override string StringModifier(string value)
-        {
-            return Path.GetExtension(value) ?? throw new ArgumentNullException(nameof(BaseComparer));
-        }
+        public override string StringModifier(string value) =>
+            Path.GetExtension(value) ??
+                throw new ArgumentNullException(nameof(BaseComparer));
     }
 }

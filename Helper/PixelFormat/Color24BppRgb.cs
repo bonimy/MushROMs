@@ -356,10 +356,8 @@ namespace Helper.PixelFormats
         /// <returns>
         /// An integer value that specifies a hash value for this <see cref="Color24BppRgb"/>.
         /// </returns>
-        public override int GetHashCode()
-        {
-            return Value;
-        }
+        public override int GetHashCode() => Value;
+
         /// <summary>
         /// Converts this <see cref="Color24BppRgb"/> to a human-readable <see cref="String"/>.
         /// </summary>

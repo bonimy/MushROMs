@@ -21,10 +21,7 @@ namespace Helper
                     _defaultComparer = StringComparer.OrdinalIgnoreCase;
                 return _defaultComparer;
             }
-            set
-            {
-                _defaultComparer = value;
-            }
+            set => _defaultComparer = value;
         }
 
         private Dictionary<string, Entry> Entries
@@ -85,10 +82,7 @@ namespace Helper
             AlphaSort = true;
         }
 
-        public void Clear()
-        {
-            Entries.Clear();
-        }
+        public void Clear() => Entries.Clear();
 
         public void Load(string path)
         {
@@ -118,7 +112,7 @@ namespace Helper
             var line1 = 0;
             var line2 = 0;
 
-            for (int i = 0; i < lines.Length; i++)
+            for (var i = 0; i < lines.Length; i++)
             {
                 var line = lines[i];
                 line1 = line2++;
@@ -179,10 +173,8 @@ namespace Helper
             Console.WriteLine("Config file successfully loaded.");
         }
 
-        public void Save()
-        {
-            Save(CurrentPath);
-        }
+        public void Save() => Save(CurrentPath);
+
         public void Save(string path)
         {
             Console.WriteLine("Saving config file: '{0}'", path);
@@ -199,7 +191,7 @@ namespace Helper
 
             int maxKeyLen = 0, maxValLen = 0, maxLeftDiv = 0, maxRightDiv = 1, size = 0;
 
-            for (int i = 0; i < keys.Count; i++)
+            for (var i = 0; i < keys.Count; i++)
             {
                 var entry = Entries[keys[i]];
                 if (entry.Section != section)
@@ -215,7 +207,7 @@ namespace Helper
                         maxLeftDiv = 0;
                         maxRightDiv = -1;
 
-                        for (int j = i; j < keys.Count; j++)
+                        for (var j = i; j < keys.Count; j++)
                         {
                             entry = Entries[keys[j]];
                             if (entry.Section != section)
@@ -233,7 +225,7 @@ namespace Helper
                             {
                                 var value = entry.Value.Trim();
                                 size = value.Length;
-                                for (int k = size; --k >= 0;)
+                                for (var k = size; --k >= 0;)
                                     if (value[k] == '#')
                                         size++;
 
@@ -264,16 +256,16 @@ namespace Helper
                             var sub = 0;
                             if (size < maxRightDiv)
                             {
-                                for (int j = size; j < maxRightDiv; j++)
+                                for (var j = size; j < maxRightDiv; j++)
                                     sb.Append(' ');
                                 sub = maxRightDiv - size;
                                 size = maxRightDiv;
                             }
                             size += maxLeftDiv - entry.Key.Length;
-                            for (int j = entry.Key.Length + size + 3; j < maxKeyLen; j++)
+                            for (var j = entry.Key.Length + size + 3; j < maxKeyLen; j++)
                                 sb.Append(' ');
                             sb.Append(entry.Key);
-                            for (int j = 0; j < size - sub; j++)
+                            for (var j = 0; j < size - sub; j++)
                                 sb.Append(' ');
                             sb.Append(" = ");
                             sb.Append(value);
@@ -289,7 +281,7 @@ namespace Helper
                         {
                             if (NiceAlignment)
                             {
-                                for (int j = value.Length; j < maxValLen; j++)
+                                for (var j = value.Length; j < maxValLen; j++)
                                     sb.Append(' ');
                             }
                             sb.Append("  # ");
@@ -316,10 +308,8 @@ namespace Helper
             Console.WriteLine("Config file saved successfully.");
         }
 
-        private static bool IsCommentChar(char x)
-        {
-            return x == CommentChar || x == AltCommentChar;
-        }
+        private static bool IsCommentChar(char x) =>
+            x == CommentChar || x == AltCommentChar;
 
         public string GetString(string key, string fallback)
         {
@@ -327,48 +317,40 @@ namespace Helper
                 return fallback;
             return Entries[key].Value;
         }
-        public void SetString(string key, string value)
-        {
+        public void SetString(string key, string value) =>
             SetString(key, value, String.Empty);
-        }
-        public void SetString(string key, string value, string comment)
-        {
+
+        public void SetString(string key, string value, string comment) =>
             Entries[key] = new Entry(key, value, comment);
-        }
+
         public int GetInt(string key, int fallback)
         {
             if (!Entries.ContainsKey(key))
                 return fallback;
-            int result = 0;
-            if (!int.TryParse(Entries[key].Value, out result))
+            if (!Int32.TryParse(Entries[key].Value, out int result))
                 return fallback;
             return result;
         }
-        public void SetInt(string key, int value)
-        {
+        public void SetInt(string key, int value) =>
             SetInt(key, value, String.Empty);
-        }
-        public void SetInt(string key, int value, string comment)
-        {
+
+        public void SetInt(string key, int value, string comment) =>
             Entries[key] = new Entry(key, value.ToString(), comment);
-        }
+
         public bool GetBool(string key, bool fallback)
         {
             if (!Entries.ContainsKey(key))
                 return fallback;
-            var result = false;
-            if (!bool.TryParse(Entries[key].Value, out result))
+            if (!Boolean.TryParse(Entries[key].Value, out bool result))
                 return fallback;
             return result;
         }
-        public void SetBool(string key, bool value)
-        {
+        public void SetBool(string key, bool value) =>
             SetBool(key, value, String.Empty);
-        }
-        public void SetBool(string key, bool value, string comment)
-        {
+
+        public void SetBool(string key, bool value, string comment) =>
             Entries[key] = new Entry(key, value.ToString(), comment);
-        }
+
         public object GetEnum(string key, Enum fallback, Type type)
         {
             if (!Entries.ContainsKey(key))
@@ -385,19 +367,16 @@ namespace Helper
                 return fallback;
             return (T)Enum.Parse(typeof(T), Entries[key].Value);
         }
-        public void SetEnum(string key, Enum value)
-        {
+        public void SetEnum(string key, Enum value) =>
             SetEnum(key, value, String.Empty);
-        }
-        public void SetEnum(string key, Enum value, string comment)
-        {
-            Entries[key] = new Entry(key, value.ToString(), comment);
-        }
 
-        private int SectionThenKeyComparer(string x, string y)
-        {
-            return SectionThenKeyComparer(Entries[x], Entries[y]);
-        }
+        public void SetEnum(string key, Enum value, string comment) =>
+            Entries[key] = new Entry(key, value.ToString(), comment);
+
+
+        private int SectionThenKeyComparer(string x, string y) =>
+            SectionThenKeyComparer(Entries[x], Entries[y]);
+
         private int SectionThenKeyComparer(Entry x, Entry y)
         {
             if (x.Section != y.Section)
@@ -411,10 +390,9 @@ namespace Helper
             return DefaultComparer.Compare(x.Key, y.Key);
         }
 
-        private int KeyComparer(string x, string y)
-        {
-            return KeyComparer(Entries[x], Entries[y]);
-        }
+        private int KeyComparer(string x, string y) =>
+            KeyComparer(Entries[x], Entries[y]);
+
         private int KeyComparer(Entry x, Entry y)
         {
             if (x.Section != y.Section)
@@ -422,10 +400,9 @@ namespace Helper
             return DefaultComparer.Compare(x.Key, y.Key);
         }
 
-        private int LineComparer(string x, string y)
-        {
-            return LineComparer(Entries[x], Entries[y]);
-        }
+        private int LineComparer(string x, string y) =>
+            LineComparer(Entries[x], Entries[y]);
+
         private int LineComparer(Entry x, Entry y)
         {
             if (x.Line == y.Line)
@@ -442,9 +419,9 @@ namespace Helper
             var comment = String.Empty;
             value = value.Trim();
 
-            for (int start = 0; true;)
+            for (var start = 0; true;)
             {
-                int i = value.IndexOf('#', start);
+                var i = value.IndexOf('#', start);
                 if (i != -1)
                 {
                     if (value.Length > i + 1 && value[i + 1] == '#')
@@ -482,10 +459,9 @@ namespace Helper
                 get;
                 private set;
             }
-            public string FullKey
-            {
-                get { return Section + "::" + Key; }
-            }
+            public string FullKey =>
+                SR.GetString("{0}::{1}", Section, Key);
+
             public string Value
             {
                 get;
@@ -544,10 +520,7 @@ namespace Helper
                     return Compare(this, (Entry)obj);
                 return +1;
             }
-            public int CompareTo(Entry other)
-            {
-                return Compare(this, other);
-            }
+            public int CompareTo(Entry other) => Compare(this, other);
 
             public int Compare(Entry x, Entry y)
             {
@@ -605,10 +578,7 @@ namespace Helper
                 return count;
             }
 
-            public void Clear()
-            {
-                Sections.Clear();
-            }
+            public void Clear() => Sections.Clear();
 
             private static string GetBaseSectionName(string section)
             {

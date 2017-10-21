@@ -339,7 +339,7 @@ namespace Helper
             Initialize(size);
 
             data += start;
-            for (int i = 0; i < size; i++)
+            for (var i = 0; i < size; i++)
                 Add(data[i]);
             Add(TerminationValue);
             Position++;
@@ -473,7 +473,7 @@ namespace Helper
                     for (int i = index, length = 0; i < Size;)
                     {
                         // update to current node.
-                        int value = ptr[i];
+                        var value = ptr[i];
                         node = node[value];
 
                         // If no node specifies the current value, then our substring has reached max.
@@ -676,7 +676,7 @@ namespace Helper
 
                 // Dereference every child node that we have set. A much smarter alternative
                 // than iterating through every single child and seeing if null.
-                for (int i = ActiveSize; --i >= 0;)
+                for (var i = ActiveSize; --i >= 0;)
                     this[Active[i]] = null;
                 ActiveSize = 0;
 
@@ -689,10 +689,7 @@ namespace Helper
             /// <returns>
             /// A <see cref="String"/> the represent this <see cref="Node"/>.
             /// </returns>
-            public override string ToString()
-            {
-                return SubstringPointer.ToString();
-            }
+            public override string ToString() => SubstringPointer.ToString();
         }
 
         /// <summary>
@@ -713,18 +710,13 @@ namespace Helper
             }
 
             // Remove public access to this method.
-            private new void Reset(int start, int end)
-            {
+            private new void Reset(int start, int end) =>
                 base.Reset(start, end);
-            }
 
             /// <summary>
             /// Dereferences <see cref="Node.Link"/> and children in <see cref="Node.Children"/>.
             /// </summary>
-            public void Reset()
-            {
-                Reset(-1, -1);
-            }
+            public void Reset() => Reset(-1, -1);
 
             /// <summary>
             /// Converts this <see cref="RootNode"/> to a human-readable <see cref="String"/>.
@@ -732,10 +724,7 @@ namespace Helper
             /// <returns>
             /// A <see cref="String"/> the represent this <see cref="RootNode"/>.
             /// </returns>
-            public override string ToString()
-            {
-                return "Root";
-            }
+            public override string ToString() => "Root";
         }
 
         /// <summary>
@@ -790,7 +779,7 @@ namespace Helper
             {
                 Tree = tree;
 
-                for (int i = capacity; --i >= 0;)
+                for (var i = capacity; --i >= 0;)
                     Add(-1);
                 Clear();
             }
@@ -811,10 +800,7 @@ namespace Helper
             /// <remarks>
             /// <see cref="Node.End"/> is set to <see cref="EndOfData"/>.
             /// </remarks>
-            public Node Add(int position)
-            {
-                return Add(position, EndOfData);
-            }
+            public Node Add(int position) => Add(position, EndOfData);
 
             /// <summary>
             /// Adds a <see cref="Node"/> with <see cref="Node.Start"/> set to

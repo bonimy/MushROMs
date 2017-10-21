@@ -251,16 +251,15 @@ namespace Helper
 
             return (SubstringPointer)obj == this;
         }
+
         /// <summary>
         /// Returns a hash code for this <see cref="SubstringPointer"/>.
         /// </summary>
         /// <returns>
         /// An integer value that specifies a hash value for this <see cref="SubstringPointer"/>.
         /// </returns>
-        public override int GetHashCode()
-        {
-            return Start ^ End;
-        }
+        public override int GetHashCode() => Start ^ End;
+
         /// <summary>
         /// Converts this <see cref="SubstringPointer"/> to a human-readable <see cref="String"/>.
         /// </summary>

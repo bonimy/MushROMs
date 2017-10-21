@@ -481,7 +481,7 @@ namespace Helper
 
             var result = Empty;
             result.Alpha = Alpha + bottom.Alpha * (1 - Alpha);
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
             {
                 result[i] = this[i] * Alpha + bottom[i] * bottom.Alpha * (1 - Alpha);
                 result[i] /= result.Alpha;
@@ -506,7 +506,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
                 color[i] = this[i] * bottom[i];
             return color & bottom;
         }
@@ -515,7 +515,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
             {
                 if (this[i] == 0)
                     color[i] = 1;
@@ -529,7 +529,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
                 color[i] = 1 - (1 - this[i]) * (1 - bottom[i]);
             return color & bottom;
         }
@@ -538,7 +538,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
             {
                 if (bottom[i] < 0.5f)
                     color[i] = 2 * bottom[i] * this[i];
@@ -552,7 +552,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
             {
                 if (bottom[i] > 0.5f)
                     color[i] = 2 * bottom[i] * this[i];
@@ -566,7 +566,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
             {
                 if (bottom[i] < 0.5f)
                     color[i] = (2 * bottom[i] * this[i]) + (bottom[i] * bottom[i] * (1 - 2 * this[i]));
@@ -580,7 +580,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
             {
                 if (this[i] < 1)
                     color[i] = Math.Min(bottom[i] / (1 - this[i]), 1);
@@ -594,7 +594,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
                 color[i] = Math.Min(this[i] + bottom[i], 1);
             return color & bottom;
         }
@@ -603,7 +603,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
             {
                 if (this[i] > 0)
                     color[i] = Math.Max(1 - ((1 - bottom[i]) / this[i]), 0);
@@ -617,7 +617,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
                 color[i] = Math.Max(this[i] + bottom[i] - 1, 0);
             return color & bottom;
         }
@@ -626,7 +626,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
             {
                 if (this[i] > bottom[i])
                     color[i] = this[i] - bottom[i];
@@ -640,7 +640,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
                 color[i] = Math.Min(this[i], bottom[i]);
             return color & bottom;
         }
@@ -649,7 +649,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
                 color[i] = Math.Max(this[i], bottom[i]);
             return color & bottom;
         }
@@ -658,7 +658,7 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
             {
                 if (this[i] > 0.5f)
                 {
@@ -679,22 +679,19 @@ namespace Helper
         {
             var color = Empty;
             color.Alpha = Alpha;
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
             {
                 color[i] = MathHelper.Clamp(2 * this[i] + bottom[i] - 1, 0, 1);
             }
             return color & bottom;
         }
 
-        public ColorF DarkerColorBlend(ColorF bottom)
-        {
-            return Luma < bottom.Luma ? this : bottom;
-        }
+        public ColorF DarkerColorBlend(ColorF bottom) =>
+            Luma < bottom.Luma ? this : bottom;
 
-        public ColorF LighterColorBlend(ColorF bottom)
-        {
-            return Luma > bottom.Luma ? this : bottom;
-        }
+        public ColorF LighterColorBlend(ColorF bottom) =>
+            Luma > bottom.Luma ? this : bottom;
+
 
         public ColorF RotateHue(ColorF bottom)
         {
@@ -732,10 +729,9 @@ namespace Helper
         /// A <see cref="ColorF"/> structure with the same alpha component as this <see cref="ColorF"/>,
         /// but with inverted red, green, and blue values.
         /// </returns>
-        public ColorF Invert()
-        {
-            return new ColorF(Alpha, 1 - Red, 1 - Green, 1 - Blue);
-        }
+        public ColorF Invert() =>
+            new ColorF(Alpha, 1 - Red, 1 - Green, 1 - Blue);
+
 
         /// <summary>
         /// Creates a <see cref="ColorF"/> structure from the specified color values (red, green,
@@ -767,10 +763,9 @@ namespace Helper
         /// <overloads>
         /// Initializes a new instance of the <see cref="ColorF"/> structure.
         /// </overloads>
-        public static ColorF FromArgb(float red, float green, float blue)
-        {
-            return FromArgb(1, red, green, blue);
-        }
+        public static ColorF FromArgb(float red, float green, float blue) =>
+            FromArgb(1, red, green, blue);
+
         /// <summary>
         /// Creates a <see cref="ColorF"/> structure from the specified <see cref="ColorF"/> and a
         /// new alpha value
@@ -782,10 +777,9 @@ namespace Helper
         /// The base <see cref="ColorF"/> value.
         /// </param>
         /// <inheritdoc cref="FromArgb(Single, Single, Single)" select="returns|exception|remarks"/>
-        public static ColorF FromArgb(float alpha, ColorF color)
-        {
-            return FromArgb(alpha, color.Red, color.Green, color.Green);
-        }
+        public static ColorF FromArgb(float alpha, ColorF color) =>
+            FromArgb(alpha, color.Red, color.Green, color.Green);
+
         /// <summary>
         /// Creates a <see cref="ColorF"/> structure from the specified color values (alpha, red, green,
         /// and blue)
@@ -838,10 +832,9 @@ namespace Helper
         /// <overloads>
         /// Initializes a new instance of the <see cref="ColorF"/> structure.
         /// </overloads>
-        public static ColorF FromCmy(float cyan, float magenta, float yellow)
-        {
-            return FromCmy(1, cyan, magenta, yellow);
-        }
+        public static ColorF FromCmy(float cyan, float magenta, float yellow) =>
+            FromCmy(1, cyan, magenta, yellow);
+
         /// <summary>
         /// Creates a <see cref="ColorF"/> structure from the specified color values (alpha, cyan, magenta,
         /// and yellow).
@@ -901,10 +894,9 @@ namespace Helper
         /// <overloads>
         /// Initializes a new instance of the <see cref="ColorF"/> structure.
         /// </overloads>
-        public static ColorF FromCmyk(float cyan, float magenta, float yellow, float black)
-        {
-            return FromCmyk(1, cyan, magenta, yellow, black);
-        }
+        public static ColorF FromCmyk(float cyan, float magenta, float yellow, float black) =>
+            FromCmyk(1, cyan, magenta, yellow, black);
+
         /// <summary>
         /// Creates a <see cref="ColorF"/> structure from the specified color values (alpha, cyan, magenta,
         /// yellow, and black).
@@ -972,10 +964,9 @@ namespace Helper
         /// <seealso href="https://en.wikipedia.org/wiki/HSL_and_HSV">
         /// Wikipedia article on HSL and HSV
         /// </seealso>
-        public static ColorF FromHcy(float hue, float chroma, float luma)
-        {
-            return FromHcy(1, hue, chroma, luma);
-        }
+        public static ColorF FromHcy(float hue, float chroma, float luma) =>
+            FromHcy(1, hue, chroma, luma);
+
         /// <summary>
         /// Creates a <see cref="ColorF"/> structure from the specified color values (alpha, hue, chroma,
         /// and luma).
@@ -1076,10 +1067,9 @@ namespace Helper
         /// <seealso href="https://en.wikipedia.org/wiki/HSL_and_HSV">
         /// Wikipedia article on HSL and HSV
         /// </seealso>
-        public static ColorF FromHsl(float hue, float saturation, float lightness)
-        {
-            return FromHsl(1, hue, saturation, lightness);
-        }
+        public static ColorF FromHsl(float hue, float saturation, float lightness) =>
+            FromHsl(1, hue, saturation, lightness);
+
         /// <summary>
         /// Creates a <see cref="ColorF"/> structure from the specified color values (alpha, hue, chroma,
         /// and luma).
@@ -1183,7 +1173,7 @@ namespace Helper
 
             var result = Empty;
             result.Alpha = left.Alpha + right.Alpha * (1 - left.Alpha);
-            for (int i = NumberOfColorChannels; --i >= 0;)
+            for (var i = NumberOfColorChannels; --i >= 0;)
             {
                 result[i] = left[i] * left.Alpha + right[i] * right.Alpha * (1 - left.Alpha);
                 result[i] /= result.Alpha;
@@ -1209,7 +1199,7 @@ namespace Helper
         /// </returns>
         public static bool operator ==(ColorF left, ColorF right)
         {
-            for (int i = NumberOfChannels; --i >= 0;)
+            for (var i = NumberOfChannels; --i >= 0;)
                 if (!MathHelper.NearlyEquals(left[i], right[i], Tolerance))
                     return false;
             return true;
@@ -1265,7 +1255,16 @@ namespace Helper
         /// </remarks>
         public override int GetHashCode()
         {
-            throw new NotImplementedException();
+            var result = 0;
+
+            for (var i = 0; i < NumberOfChannels; i++)
+            {
+                var channel = (int)Math.Round(this[i] * Byte.MaxValue);
+
+                result |= channel << (8 << i);
+            }
+
+            return result;
         }
         /// <summary>
         /// Converts this <see cref="ColorF"/> to a human-readable <see cref="String"/>.

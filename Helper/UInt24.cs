@@ -21,13 +21,10 @@ namespace Helper
         [FieldOffset(2)]
         private byte _x2;
 
-        private int Value
-        {
-            get =>
+        private int Value =>
                 (_x0 << 0x00) |
                 (_x1 << 0x08) |
                 (_x2 << 0x10);
-        }
 
         private UInt24(int value)
         {

@@ -35,26 +35,11 @@ namespace Helper
                 position.Y >= 0 && position.Y < Vertical;
         }
 
-        public Range2D Add(Range2D value)
-        {
-            return this + value;
-        }
-        public Range2D Subtract(Range2D value)
-        {
-            return this - value;
-        }
-        public Range2D Negate()
-        {
-            return -this;
-        }
-        public Range2D Multiply(Range2D value)
-        {
-            return this * value;
-        }
-        public Range2D Divide(Range2D value)
-        {
-            return this / value;
-        }
+        public Range2D Add(Range2D value)      => this + value;
+        public Range2D Subtract(Range2D value) => this - value;
+        public Range2D Negate()                => -this;
+        public Range2D Multiply(Range2D value) => this * value;
+        public Range2D Divide(Range2D value)   => this / value;
 
         public static Range2D TopLeft(Range2D value1, Range2D value2)
         {
@@ -79,19 +64,15 @@ namespace Helper
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Range2D))
-                return false;
+            if (obj is Range2D value)
+                return value == this;
 
-            return (Range2D)obj == this;
+            return false;
         }
-        public override int GetHashCode()
-        {
-            return Horizontal ^ Vertical;
-        }
-        public override string ToString()
-        {
-            return SR.GetString("H={0}, V={1}", Horizontal, Vertical);
-        }
+        public override int GetHashCode() => Horizontal ^ Vertical;
+
+        public override string ToString() =>
+            SR.GetString("H={0}, V={1}", Horizontal, Vertical);
 
         public static bool operator ==(Range2D left, Range2D right)
         {

@@ -42,9 +42,8 @@ namespace Helper
         public PathComparer(StringComparer baseComparer) : base(baseComparer)
         { }
 
-        public override string StringModifier(string value)
-        {
-            return Path.GetFullPath(value) ?? throw new ArgumentNullException(nameof(BaseComparer));
-        }
+        public override string StringModifier(string value) =>
+            Path.GetFullPath(value) ??
+                throw new ArgumentNullException(nameof(BaseComparer));
     }
 }

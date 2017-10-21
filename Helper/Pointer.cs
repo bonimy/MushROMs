@@ -44,10 +44,7 @@ namespace Helper
             Offset = offset;
         }
 
-        public Pointer<T> Clone()
-        {
-            return new Pointer<T>(Array, Offset);
-        }
+        public Pointer<T> Clone() => new Pointer<T>(Array, Offset);
 
         public void Clear(int length) =>
             Clear(0, length);

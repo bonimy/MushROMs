@@ -1,4 +1,5 @@
 ﻿using System;
+using static System.Math;
 
 namespace Helper
 {
@@ -10,24 +11,19 @@ namespace Helper
     {
         public const float DefaultTolerance = 1e-7f;
 
-        public static bool NearlyEquals(float left, float right)
-        {
-            return NearlyEquals(left, right, DefaultTolerance);
-        }
-        public static bool NearlyEquals(float left, float right, float tolerance)
-        {
-            return Math.Abs(left - right) <= tolerance;
-        }
+        public static bool NearlyEquals(float left, float right) =>
+            NearlyEquals(left, right, DefaultTolerance);
 
-        public static float SnapToLimit(float value, float limit, float tolerance)
-        {
-            return NearlyEquals(value, limit, tolerance) ? limit : value;
-        }
+        public static bool NearlyEquals(float left, float right, float tolerance) =>
+            Abs(left - right) <= tolerance;
 
-        public static float Clamp(float value, float min, float max)
-        {
-            return Clamp(value, min, max, 0);
-        }
+        public static float SnapToLimit(float value, float limit, float tolerance) =>
+            NearlyEquals(value, limit, tolerance) ? limit : value;
+
+
+        public static float Clamp(float value, float min, float max) =>
+            Clamp(value, min, max, 0);
+
         public static float Clamp(float value, float min, float max, float tolerance)
         {
             // NaN cannot be clamped to a range.
@@ -38,7 +34,7 @@ namespace Helper
             if (NearlyEquals(max, min, tolerance))
                 return (max + min) / 2;
 
-            // No number can be clamped to this range.
+            // If max is less than min, then we have a null range.
             if (max < min)
                 return Single.NaN;
 
@@ -58,8 +54,10 @@ namespace Helper
         {
             var max = Math.Max(value1, value2);
             if (values != null)
-                foreach (float value in values)
+            {
+                foreach (var value in values)
                     max = Math.Max(max, value);
+            }
             return max;
         }
         public static float Max(float[] values)
@@ -73,16 +71,20 @@ namespace Helper
 
             var max = values[0];
             foreach (var value in values)
+            {
                 if (max < value)
                     max = value;
+            }
             return max;
         }
         public static float Min(float value1, float value2, params float[] values)
         {
             var min = Math.Min(value1, value2);
             if (values != null)
-                foreach (float value in values)
+            {
+                foreach (var value in values)
                     min = Math.Min(min, value);
+            }
             return min;
         }
         public static float Min(float[] values)
@@ -96,8 +98,10 @@ namespace Helper
 
             var min = values[0];
             foreach (var value in values)
+            {
                 if (min > value)
                     min = value;
+            }
             return min;
         }
     }

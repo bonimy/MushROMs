@@ -22,40 +22,27 @@ namespace Helper
         /// Returns <see cref="CultureInfo.CurrentCulture"/>.
         /// </summary>
         public static CultureInfo CurrentCulture => CultureInfo.CurrentCulture;
-        public static string ErrorLowerBoundInclusive(string paramName, object value, object valid)
-        {
-            return GetString(Resources.ErrorLowerBoundInclusive, paramName, value, valid);
-        }
 
-        public static string ErrorUpperBoundInclusive(string paramName, object value, object valid)
-        {
-            return GetString(Resources.ErrorUpperBoundInclusive, paramName, value, valid);
-        }
+        public static string ErrorLowerBoundInclusive(string paramName, object value, object valid) =>
+            GetString(Resources.ErrorLowerBoundInclusive, paramName, value, valid);
 
-        public static string ErrorLowerBoundExclusive(string paramName, object value, object valid)
-        {
-            return GetString(Resources.ErrorLowerBoundExclusive, paramName, value, valid);
-        }
+        public static string ErrorUpperBoundInclusive(string paramName, object value, object valid) =>
+            GetString(Resources.ErrorUpperBoundInclusive, paramName, value, valid);
 
-        public static string ErrorUpperBoundExclusive(string paramName, object value, object valid)
-        {
-            return GetString(Resources.ErrorUpperBoundExclusive, paramName, value, valid);
-        }
+        public static string ErrorLowerBoundExclusive(string paramName, object value, object valid) =>
+            GetString(Resources.ErrorLowerBoundExclusive, paramName, value, valid);
 
-        public static string ErrorArrayBounds(string paramName, int value, int valid)
-        {
-            return GetString(Resources.ErrorArrayBounds, paramName, value, valid);
-        }
+        public static string ErrorUpperBoundExclusive(string paramName, object value, object valid) =>
+            GetString(Resources.ErrorUpperBoundExclusive, paramName, value, valid);
 
-        public static string ErrorArrayRange(string paramName, int value, string arrayName, int arrayLength, int startIndex)
-        {
-            return GetString(Resources.ErrorArrayRange, paramName, value, arrayName, arrayLength, startIndex);
-        }
+        public static string ErrorArrayBounds(string paramName, int value, int valid) =>
+            GetString(Resources.ErrorArrayBounds, paramName, value, valid);
 
-        public static string ErrorEmptyOrNullArray(string paramName)
-        {
-            return GetString(Resources.ErrorEmptyOrNullArray, paramName);
-        }
+        public static string ErrorArrayRange(string paramName, int value, string arrayName, int arrayLength, int startIndex) =>
+            GetString(Resources.ErrorArrayRange, paramName, value, arrayName, arrayLength, startIndex);
+
+        public static string ErrorEmptyOrNullArray(string paramName) =>
+            GetString(Resources.ErrorEmptyOrNullArray, paramName);
 
         public static string ErrorFileFormat(string path)
         {
@@ -66,25 +53,17 @@ namespace Helper
             return GetString(Resources.ErrorFileFormat, name);
         }
 
-        internal static string ErrorStringSubstringSize(string paramName, int startIndex, int length)
-        {
-            return GetString(Resources.ErrorStringSubstringSize, paramName, startIndex, length);
-        }
+        internal static string ErrorStringSubstringSize(string paramName, int startIndex, int length) =>
+            GetString(Resources.ErrorStringSubstringSize, paramName, startIndex, length);
 
-        internal static string ErrorSubstringPointerLength(string paramName, int value)
-        {
-            return GetString(Resources.ErrorSubstringPointerLength, paramName, value);
-        }
+        internal static string ErrorSubstringPointerLength(string paramName, int value) =>
+            GetString(Resources.ErrorSubstringPointerLength, paramName, value);
 
-        public static string ErrorValueIsNaN(string paramName)
-        {
-            return GetString(Resources.ErrorValueIsNaN, paramName);
-        }
+        public static string ErrorValueIsNaN(string paramName) =>
+            GetString(Resources.ErrorValueIsNaN, paramName);
 
-        public static string ErrorValueIsInfinite(string paramName)
-        {
-            return GetString(Resources.ErrorValueIsInfinity, paramName);
-        }
+        public static string ErrorValueIsInfinite(string paramName) =>
+            GetString(Resources.ErrorValueIsInfinity, paramName);
 
         public static string ErrorCannotGetPathExtension(string paramName, string value, Exception innerException)
         {
@@ -102,15 +81,11 @@ namespace Helper
             return GetString(Resources.ErrorCannotGetFullPath, paramName, value, innerException.Message, innerException.GetType());
         }
 
-        public static string ErrorInvalidExtensionName(string ext)
-        {
-            return GetString(Resources.ErrorInvalidExtensionName, ext);
-        }
+        public static string ErrorInvalidExtensionName(string ext) =>
+            GetString(Resources.ErrorInvalidExtensionName, ext);
 
-        public static string ErrorInvalidPathName(string path)
-        {
-            return GetString(Resources.ErrorInvalidPathName, path);
-        }
+        public static string ErrorInvalidPathName(string path) =>
+            GetString(Resources.ErrorInvalidPathName, path);
 
         public static string GetUntitledName(int number, string ext)
         {
@@ -120,15 +95,11 @@ namespace Helper
             return GetString(Resources.UntitledName, GetString(number)) + ext;
         }
 
-        public static string GetString(string format, params object[] args)
-        {
-            return String.Format(CurrentCulture, format, args);
-        }
+        public static string GetString(string format, params object[] args) =>
+            String.Format(CurrentCulture, format, args);
 
-        public static string GetString(IFormattable value)
-        {
-            return GetString(value, null);
-        }
+        public static string GetString(IFormattable value) =>
+            GetString(value, null);
 
         public static string GetString(IFormattable value, string format)
         {

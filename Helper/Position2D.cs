@@ -25,59 +25,36 @@ namespace Helper
             Y = y;
         }
 
-        public Position2D Add(Position2D value)
-        {
-            return this + value;
-        }
-        public Position2D Subtract(Position2D value)
-        {
-            return this - value;
-        }
-        public Position2D Negate()
-        {
-            return -this;
-        }
-        public Position2D Multiply(Range2D value)
-        {
-            return this * value;
-        }
-        public Position2D Divide(Range2D value)
-        {
-            return this / value;
-        }
+        public Position2D Add(Position2D value)      => this + value;
+        public Position2D Subtract(Position2D value) => this - value;
+        public Position2D Negate()                   => -this;
+        public Position2D Multiply(Range2D value)    => this * value;
+        public Position2D Divide(Range2D value)      => this / value;
 
-        public static Position2D TopLeft(Position2D left, Position2D right)
-        {
-            return new Position2D(Math.Min(left.X, right.X), Math.Min(left.Y, right.Y));
-        }
-        public static Position2D TopRight(Position2D left, Position2D right)
-        {
-            return new Position2D(Math.Max(left.X, right.X), Math.Min(left.Y, right.Y));
-        }
-        public static Position2D BottomLeft(Position2D left, Position2D right)
-        {
-            return new Position2D(Math.Min(left.X, right.X), Math.Max(left.Y, right.Y));
-        }
-        public static Position2D BottomRight(Position2D left, Position2D right)
-        {
-            return new Position2D(Math.Max(left.X, right.X), Math.Max(left.Y, right.Y));
-        }
+        public static Position2D TopLeft(Position2D left, Position2D right) =>
+            new Position2D(Math.Min(left.X, right.X), Math.Min(left.Y, right.Y));
+
+        public static Position2D TopRight(Position2D left, Position2D right) =>
+            new Position2D(Math.Max(left.X, right.X), Math.Min(left.Y, right.Y));
+
+        public static Position2D BottomLeft(Position2D left, Position2D right) =>
+            new Position2D(Math.Min(left.X, right.X), Math.Max(left.Y, right.Y));
+
+        public static Position2D BottomRight(Position2D left, Position2D right) =>
+            new Position2D(Math.Max(left.X, right.X), Math.Max(left.Y, right.Y));
+
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Position2D))
-                return false;
+            if (obj is Position2D value)
+                return value == this;
 
-            return (Position2D)obj == this;
+            return false;
         }
-        public override int GetHashCode()
-        {
-            return X ^ Y;
-        }
-        public override string ToString()
-        {
-            return SR.GetString("X={0}, Y={1}", X, Y);
-        }
+
+        public override int GetHashCode() => X ^ Y;
+
+        public override string ToString() => SR.GetString("X={0}, Y={1}", X, Y);
 
         public static bool operator ==(Position2D left, Position2D right)
         {

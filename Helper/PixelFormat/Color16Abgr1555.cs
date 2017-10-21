@@ -471,11 +471,10 @@ namespace Helper.PixelFormats
         /// <returns>
         /// An integer value that specifies a hash value for this <see cref="Color15BppAbgr1555"/>.
         /// </returns>
-        public override int GetHashCode()
-        {
+        public override int GetHashCode() =>
             // The hash code should not contain the most significant bit.
-            return PreservedValue;
-        }
+            PreservedValue;
+
         /// <summary>
         /// Converts this <see cref="Color15BppAbgr1555"/> to a human-readable <see cref="String"/>.
         /// </summary>
