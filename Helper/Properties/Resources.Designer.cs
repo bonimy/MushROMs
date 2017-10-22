@@ -1,5 +1,5 @@
-﻿// <copyright file="Resources.Designer.cs>
-//     Copyright (c) 2017 Nelson Garcia
+﻿// <copyright file="Resources.Designer.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
 // </copyright>
 
 //------------------------------------------------------------------------------

@@ -1,5 +1,5 @@
-﻿// <copyright file="AssertDictionary.cs>
-//     Copyright (c) 2017 Nelson Garcia
+﻿// <copyright file="AssertDictionary.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
 // </copyright>
 
 using System.Collections.Generic;
@@ -7,13 +7,11 @@ using System.Collections.Generic;
 namespace Helper
 {
     /// <summary>
-    /// A dictionary class that runs an assert method on keys before using them.
+    /// Represents a dictionary class that can throw exceptions for keys that do not fit a given rule.
     /// </summary>
     /// <inheritdoc/>
     /// <remarks>
-    /// The <see cref="AssertDictionary{TKey, TValue}"/> class overrides the <see cref="this[TKey]"/>, <see cref="Add(TKey, TValue)"/>,
-    /// <see cref="ContainsKey(TKey)"/>, <see cref="Remove(TKey)"/>, <see cref="TryGetValue(TKey, out TValue)"/> methods with
-    /// a prophylactic call to the abstract <see cref="AssertKey(TKey)"/> method. When overridden, <see cref="AssertKey(TKey)"/>
+    /// The <see cref="AssertDictionary{TKey, TValue}"/> class overrides <see cref="this[TKey]"/>, <see cref="Add(TKey, TValue)"/>, <see cref="ContainsKey(TKey)"/>, <see cref="Remove(TKey)"/>, and <see cref="TryGetValue(TKey, out TValue)"/> with a preparatory call to the abstract <see cref="AssertKey(TKey)"/> method. When overridden, <see cref="AssertKey(TKey)"/>
     /// serves to test that the passed key value is a well-formatted key. This prevents keys that, while of the type <typeparamref name="TKey"/>,
     /// do not enter the <see cref="AssertDictionary{TKey, TValue}"/> collection if they are not well-formed.
     /// <para/><para/>
@@ -147,6 +145,7 @@ namespace Helper
                 AssertKey(key);
                 return base[key];
             }
+
             set
             {
                 AssertKey(key);
