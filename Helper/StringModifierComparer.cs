@@ -33,10 +33,9 @@ namespace Helper
         /// <exception cref="ArgumentNullException">
         /// <paramref name="baseComparer"/> is <see langword="null"/>.
         /// </exception>
-        protected StringModifierComparer(StringComparer baseComparer)
-        {
-            _baseComparer = baseComparer ?? throw new ArgumentNullException(nameof(baseComparer));
-        }
+        protected StringModifierComparer(StringComparer baseComparer) =>
+            _baseComparer = baseComparer ??
+                throw new ArgumentNullException(nameof(baseComparer));
 
         public override int Compare(string x, string y)
         {

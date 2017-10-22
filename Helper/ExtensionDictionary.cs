@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace Helper
 {
@@ -35,6 +33,7 @@ namespace Helper
             base(ExtensionComparer.DefaultComparer)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionDictionary{TValue}"/> class. This constructor uses
         /// <see cref="AssertDictionary{TKey, TValue}(Int32, IEqualityComparer{TKey})"/> as its base and passes
@@ -45,6 +44,7 @@ namespace Helper
             base(capacity, ExtensionComparer.DefaultComparer)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionDictionary{TValue}"/> class. This constructor uses
         /// <see cref="AssertDictionary{TKey, TValue}(IEqualityComparer{TKey})"/> as its base.
@@ -58,6 +58,7 @@ namespace Helper
             base(comparer ?? throw new ArgumentNullException(nameof(comparer)))
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionDictionary{TValue}"/> class. This constructor uses
         /// <see cref="AssertDictionary{TKey, TValue}(AssertDictionary{TKey, TValue}, IEqualityComparer{TKey})"/>
@@ -71,6 +72,7 @@ namespace Helper
             base(dictionary, ExtensionComparer.DefaultComparer)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionDictionary{TValue}"/> class. This constructor uses
         /// <see cref="AssertDictionary{TKey, TValue}(Int32, IEqualityComparer{TKey})"/> as its base.
@@ -86,6 +88,7 @@ namespace Helper
             base(capacity, comparer ?? ExtensionComparer.DefaultComparer)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="ExtensionDictionary{TValue}"/> class. This constructor uses
         /// <see cref="AssertDictionary{TKey, TValue}(AssertDictionary{TKey, TValue}, IEqualityComparer{TKey})"/>

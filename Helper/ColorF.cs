@@ -40,10 +40,12 @@ namespace Helper
         /// all set to zero.
         /// </summary>
         public static readonly ColorF Empty = new ColorF();
+
         /// <summary>
         /// Represents a <see cref="ColorF"/> whose RGB components are equal and sum to unity.
         /// </summary>
         private static readonly ColorF BalancedWeight = FromArgb(0, 1 / 3f, 1 / 3f, 1 / 3f);
+
         /// <summary>
         /// Represents a <see cref="Color"/> whose RGB components are luma scaled and sum to unity.
         /// </summary>
@@ -58,6 +60,7 @@ namespace Helper
         /// This field is constant.
         /// </summary>
         public const int NumberOfChannels = 4;
+
         /// <summary>
         /// The number of channels, excluding the <see cref="Alpha"/> component.
         /// </summary>
@@ -68,16 +71,19 @@ namespace Helper
         /// This field is constant.
         /// </summary>
         public const int AlphaIndex = 3;
+
         /// <summary>
         /// The index of the <see cref="Red"/> component in <see cref="this[Int32]"/>.
         /// This field is constant.
         /// </summary>
         public const int RedIndex = 2;
+
         /// <summary>
         /// The index of the <see cref="Green"/> component in <see cref="this[Int32]"/>.
         /// This field is constant.
         /// </summary>
         public const int GreenIndex = 1;
+
         /// <summary>
         /// The index of the <see cref="Blue"/> component in <see cref="this[Int32]"/>.
         /// This field is constant.
@@ -100,6 +106,7 @@ namespace Helper
             get;
             private set;
         }
+
         /// <summary>
         /// Gets the red component of this <see cref="ColorF"/> structure. The range of this
         /// component is 0 to 1 inclusive.
@@ -112,6 +119,7 @@ namespace Helper
             get;
             private set;
         }
+
         /// <summary>
         /// Gets the green component of this <see cref="ColorF"/> structure. The range of this
         /// component is 0 to 1 inclusive.
@@ -124,6 +132,7 @@ namespace Helper
             get;
             private set;
         }
+
         /// <summary>
         /// Gets the blue component of this <see cref="ColorF"/> structure. The range of this
         /// component is 0 to 1 inclusive.
@@ -160,16 +169,20 @@ namespace Helper
                 switch (index)
                 {
                 case AlphaIndex:
-                    return Alpha;
+                return Alpha;
+
                 case RedIndex:
-                    return Red;
+                return Red;
+
                 case GreenIndex:
-                    return Green;
+                return Green;
+
                 case BlueIndex:
-                    return Blue;
+                return Blue;
+
                 default:
-                    Debug.Assert(false);
-                    return 0;
+                Debug.Assert(false);
+                return 0;
                 }
             }
             private set
@@ -177,20 +190,24 @@ namespace Helper
                 switch (index)
                 {
                 case AlphaIndex:
-                    Alpha = value;
-                    return;
+                Alpha = value;
+                return;
+
                 case RedIndex:
-                    Red = value;
-                    return;
+                Red = value;
+                return;
+
                 case GreenIndex:
-                    Green = value;
-                    return;
+                Green = value;
+                return;
+
                 case BlueIndex:
-                    Blue = value;
-                    return;
+                Blue = value;
+                return;
+
                 default:
-                    Debug.Assert(false);
-                    return;
+                Debug.Assert(false);
+                return;
                 }
             }
         }
@@ -202,6 +219,7 @@ namespace Helper
         /// <seealso cref="Magenta"/>
         /// <seealso cref="Yellow"/>
         public float Cyan => 1 - Red;
+
         /// <summary>
         /// Gets the magenta component of this <see cref="ColorF"/> structure. The range of this
         /// component is 0 to 1 inclusive.
@@ -209,6 +227,7 @@ namespace Helper
         /// <seealso cref="Cyan"/>
         /// <seealso cref="Yellow"/>
         public float Magenta => 1 - Green;
+
         /// <summary>
         /// Gets the yellow component of this <see cref="ColorF"/> structure. The range of this
         /// component is 0 to 1 inclusive.
@@ -223,6 +242,7 @@ namespace Helper
         /// </summary>
         /// <seealso cref="Min"/>
         public float Max => MathHelper.Max(Red, Green, Blue);
+
         /// <summary>
         /// Gets the minimum of <see cref="Red"/>, <see cref="Green"/>, or <see cref="Blue"/>
         /// of this <see cref="ColorF"/> structure.
@@ -270,6 +290,7 @@ namespace Helper
                 return hue / 6;
             }
         }
+
         /// <summary>
         /// Gets <see cref="Hue"/> scaled from 0 to 360.
         /// </summary>
@@ -313,6 +334,7 @@ namespace Helper
         /// Wikipedia article on HSL and HSV
         /// </seealso>
         public float HueDegrees => 360 * Hue;
+
         /// <summary>
         /// Gets the saturation of this <see cref="ColorF"/> structure.
         /// Valid values range from 0 to 1 inclusive.
@@ -335,6 +357,7 @@ namespace Helper
                 return Chroma / (1 - Math.Abs(2 * Lightness - 1));
             }
         }
+
         /// <summary>
         /// Gets the lightness of this <see cref="ColorF"/> structure.
         /// </summary>
@@ -347,6 +370,7 @@ namespace Helper
         /// Wikipedia article on HSL and HSV
         /// </seealso>
         public float Lightness => (Max + Min) / 2;
+
         /// <summary>
         /// Gets the luma of this <see cref="ColorF"/> structure.
         /// </summary>
@@ -361,6 +385,7 @@ namespace Helper
         /// Wikipedia article of Luma
         /// </seealso>
         public float Luma => LumaRed * Red + LumaGreen * Green + LumaBlue * Blue;
+
         /// <summary>
         /// Gets the chroma of this <see cref="ColorF"/> structure.
         /// </summary>
@@ -417,49 +442,70 @@ namespace Helper
             switch (blendMode)
             {
             case BlendMode.Alpha:
-                return AlphaBlend(bottom);
+            return AlphaBlend(bottom);
+
             case BlendMode.Multiply:
-                return Multiply(bottom);
+            return Multiply(bottom);
+
             case BlendMode.Divide:
-                return Divide(bottom);
+            return Divide(bottom);
+
             case BlendMode.Screen:
-                return ScreenBlend(bottom);
+            return ScreenBlend(bottom);
+
             case BlendMode.Overlay:
-                return Overlay(bottom);
+            return Overlay(bottom);
+
             case BlendMode.HardLight:
-                return HardLightBlend(bottom);
+            return HardLightBlend(bottom);
+
             case BlendMode.SoftLight:
-                return SoftLightBlend(bottom);
+            return SoftLightBlend(bottom);
+
             case BlendMode.ColorDodge:
-                return ColorDodge(bottom);
+            return ColorDodge(bottom);
+
             case BlendMode.LinearDodge:
-                return LinearDodge(bottom);
+            return LinearDodge(bottom);
+
             case BlendMode.ColorBurn:
-                return ColorBurn(bottom);
+            return ColorBurn(bottom);
+
             case BlendMode.LinearBurn:
-                return LinearBurn(bottom);
+            return LinearBurn(bottom);
+
             case BlendMode.Difference:
-                return Difference(bottom);
+            return Difference(bottom);
+
             case BlendMode.Darken:
-                return Darken(bottom);
+            return Darken(bottom);
+
             case BlendMode.Lighten:
-                return Lighten(bottom);
+            return Lighten(bottom);
+
             case BlendMode.VividLight:
-                return VividLightBlend(bottom);
+            return VividLightBlend(bottom);
+
             case BlendMode.LinearLight:
-                return LinearLightBlend(bottom);
+            return LinearLightBlend(bottom);
+
             case BlendMode.DarkerColor:
-                return DarkerColorBlend(bottom);
+            return DarkerColorBlend(bottom);
+
             case BlendMode.LighterColor:
-                return LighterColorBlend(bottom);
+            return LighterColorBlend(bottom);
+
             case BlendMode.Hue:
-                return HueBlend(bottom);
+            return HueBlend(bottom);
+
             case BlendMode.Saturation:
-                return SaturationBlend(bottom);
+            return SaturationBlend(bottom);
+
             case BlendMode.Luminosity:
-                return LuminosityBlend(bottom);
+            return LuminosityBlend(bottom);
+
             default:
-                return Empty;
+            return Empty;
             }
         }
 
@@ -692,7 +738,6 @@ namespace Helper
         public ColorF LighterColorBlend(ColorF bottom) =>
             Luma > bottom.Luma ? this : bottom;
 
-
         public ColorF RotateHue(ColorF bottom)
         {
             var hue = Hue + bottom.Hue;
@@ -731,7 +776,6 @@ namespace Helper
         /// </returns>
         public ColorF Invert() =>
             new ColorF(Alpha, 1 - Red, 1 - Green, 1 - Blue);
-
 
         /// <summary>
         /// Creates a <see cref="ColorF"/> structure from the specified color values (red, green,
@@ -815,6 +859,7 @@ namespace Helper
 
             return new ColorF(alpha, red, green, blue);
         }
+
         /// <summary>
         /// Creates a <see cref="ColorF"/> structure from the specified color values (cyan, magenta,
         /// and yellow). The alpha value is implicitly 1 (fully opaque).
@@ -874,6 +919,7 @@ namespace Helper
 
             return new ColorF(alpha, red, green, blue);
         }
+
         /// <summary>
         /// Creates a <see cref="ColorF"/> structure from the specified color values (cyan, magenta,
         /// yellow, and black). The alpha value is implicitly 1 (fully opaque).
@@ -1154,15 +1200,11 @@ namespace Helper
         }
 
         /// <inheritdoc cref="Invert"/>
-        public static ColorF operator ~(ColorF color)
-        {
-            return color.Invert();
-        }
+        public static ColorF operator ~(ColorF color) =>
+            color.Invert();
 
-        public static ColorF operator *(ColorF left, ColorF right)
-        {
-            return left.Multiply(right);
-        }
+        public static ColorF operator *(ColorF left, ColorF right) =>
+            left.Multiply(right);
 
         public static ColorF operator &(ColorF left, ColorF right)
         {
@@ -1204,6 +1246,7 @@ namespace Helper
                     return false;
             return true;
         }
+
         /// <summary>
         /// Compares two <see cref="ColorF"/> objects. The result specifies whether
         /// the <see cref="Alpha"/>, <see cref="Red"/>, <see cref="Green"/>, and
@@ -1220,10 +1263,8 @@ namespace Helper
         /// <see cref="Alpha"/>, <see cref="Red"/>, <see cref="Green"/>, and
         /// <see cref="Blue"/> channels within <see cref="Tolerance"/>; otherwise false.
         /// </returns>
-        public static bool operator !=(ColorF left, ColorF right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(ColorF left, ColorF right) =>
+            !(left == right);
 
         /// <summary>
         /// Specifies whether this <see cref="ColorF"/> is the same color as
@@ -1243,6 +1284,7 @@ namespace Helper
 
             return (ColorF)obj == this;
         }
+
         /// <summary>
         /// Returns a hash code for this <see cref="ColorF"/>.
         /// </summary>
@@ -1266,6 +1308,7 @@ namespace Helper
 
             return result;
         }
+
         /// <summary>
         /// Converts this <see cref="ColorF"/> to a human-readable <see cref="String"/>.
         /// </summary>

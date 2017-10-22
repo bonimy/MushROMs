@@ -1,6 +1,6 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Helper;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Helper
 {
@@ -41,7 +41,6 @@ namespace Tests.Helper
             var list2 = new string[list1.Length];
             for (var i = 0; i < list2.Length; i++)
                 list2[i] = list1[list1.Length - 1 - i];
-
 
             var shared = (Pointer<string>)list1;
             shared += 0x200;

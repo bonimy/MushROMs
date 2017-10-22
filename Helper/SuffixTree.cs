@@ -36,11 +36,13 @@ namespace Helper
         /// This field is constant.
         /// </summary>
         public const int TerminationValue = AlphabetSize;
+
         /// <summary>
         /// The total size of the alphabet, including <see cref="TerminationValue"/>.
         /// This field is constant.
         /// </summary>
         public const int AlphabetSize = Byte.MaxValue + 1;
+
         /// <summary>
         /// Specifies an index that extends to <see cref="Position"/>.
         /// This field is constant.
@@ -146,6 +148,7 @@ namespace Helper
         /// The value of <see cref="Data"/> at <paramref name="index"/>.
         /// </returns>
         public int this[int index] => Data[index];
+
         /// <summary>
         /// The size of the data passed to this <see cref="SuffixTree"/>, including
         /// <see cref="TerminationValue"/>.
@@ -523,6 +526,7 @@ namespace Helper
                 get;
                 set;
             }
+
             /// <summary>
             /// Gets or sets the end index of the substring that describes this <see cref="Node"/>.
             /// </summary>
@@ -531,13 +535,16 @@ namespace Helper
                 get;
                 set;
             }
+
             /// <summary>
             /// Gets the length of the substring that describes this <see cref="Node"/>.
             /// </summary>
             public int Length => (End == -1 ? Tree.Position : End) - Start;             /// <summary>
-                                                                                        /// Gets the <see cref="SubstringPointer"/> that describes this <see cref="Node"/>.
-                                                                                        /// </summary>
+
+            /// Gets the <see cref="SubstringPointer"/> that describes this <see cref="Node"/>.
+            /// </summary>
             public SubstringPointer SubstringPointer => SubstringPointer.FromStartAndLength(Start, Length);
+
             /// <summary>
             /// The <see cref="Node"/> that links to this <see cref="Node"/>
             /// </summary>

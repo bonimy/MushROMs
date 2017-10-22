@@ -20,7 +20,6 @@ namespace Helper
         public static float SnapToLimit(float value, float limit, float tolerance) =>
             NearlyEquals(value, limit, tolerance) ? limit : value;
 
-
         public static float Clamp(float value, float min, float max) =>
             Clamp(value, min, max, 0);
 
@@ -60,6 +59,7 @@ namespace Helper
             }
             return max;
         }
+
         public static float Max(float[] values)
         {
             if (values == null)
@@ -77,6 +77,7 @@ namespace Helper
             }
             return max;
         }
+
         public static float Min(float value1, float value2, params float[] values)
         {
             var min = Math.Min(value1, value2);
@@ -87,6 +88,7 @@ namespace Helper
             }
             return min;
         }
+
         public static float Min(float[] values)
         {
             if (values == null)

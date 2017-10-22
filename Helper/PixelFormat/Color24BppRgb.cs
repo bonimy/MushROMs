@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using static System.Math;
 
 namespace Helper.PixelFormats
 {
@@ -34,11 +35,13 @@ namespace Helper.PixelFormats
         /// This field is constant.
         /// </summary>
         public const int RedIndex = 2;
+
         /// <summary>
         /// The index of <see cref="Green"/> in the components array.
         /// This field is constant.
         /// </summary>
         public const int GreenIndex = 1;
+
         /// <summary>
         /// The index of <see cref="Blue"/> in the components array.
         /// This field is constant.
@@ -50,16 +53,19 @@ namespace Helper.PixelFormats
         /// This field is constant.
         /// </summary>
         private const int BitsPerChannel = 8;
+
         /// <summary>
         /// The number of bits the red component consumes.
         /// This field is constant.
         /// </summary>
         internal const int BitsPerRed = BitsPerChannel;
+
         /// <summary>
         /// The number of bits the green component consumes.
         /// This field is constant.
         /// </summary>
         internal const int BitsPerGreen = BitsPerChannel;
+
         /// <summary>
         /// The number of bits the blue component consumes.
         /// This field is constant.
@@ -71,11 +77,13 @@ namespace Helper.PixelFormats
         /// This field is constant.
         /// </summary>
         private const int RedShift = BitsPerChannel * RedIndex;
+
         /// <summary>
         /// The number of bits the <see cref="Green"/> component is shifted by.
         /// This field is constant.
         /// </summary>
         private const int GreenShift = BitsPerChannel * GreenIndex;
+
         /// <summary>
         /// The number of bits the <see cref="Blue"/> component is shifted by.
         /// This field is constant.
@@ -90,16 +98,19 @@ namespace Helper.PixelFormats
         /// </remarks>
         [FieldOffset(0)]
         private fixed byte _components[SizeOf];
+
         /// <summary>
         /// The red component of this <see cref="Color24BppRgb"/> structure.
         /// </summary>
         [FieldOffset(RedIndex)]
         private byte _red;
+
         /// <summary>
         /// The green component of this <see cref="Color24BppRgb"/> structure.
         /// </summary>
         [FieldOffset(GreenIndex)]
         private byte _green;
+
         /// <summary>
         /// The blue component of this <see cref="Color24BppRgb"/> structure.
         /// </summary>
@@ -114,6 +125,7 @@ namespace Helper.PixelFormats
             get => _red;
             set => _red = value;
         }
+
         /// <summary>
         /// Gets or sets the green component of this <see cref="Color24BppRgb"/> structure.
         /// </summary>
@@ -122,6 +134,7 @@ namespace Helper.PixelFormats
             get => _green;
             set => _green = value;
         }
+
         /// <summary>
         /// Gets or sets the blue component of this <see cref="Color24BppRgb"/> structure.
         /// </summary>
@@ -130,6 +143,7 @@ namespace Helper.PixelFormats
             get => _blue;
             set => _blue = value;
         }
+
         /// <summary>
         /// Gets or sets the component of this <see cref="Color24BppRgb"/> structure at the
         /// specified index.
@@ -192,6 +206,7 @@ namespace Helper.PixelFormats
                 value >> BlueShift)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Color24BppRgb"/> struct using the specified
         /// red, green, and blue values.
@@ -225,10 +240,9 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Color24BppRgb"/> that results from the conversion.
         /// </returns>
-        public static explicit operator Color24BppRgb(int value)
-        {
-            return new Color24BppRgb(value);
-        }
+        public static explicit operator Color24BppRgb(int value) =>
+            new Color24BppRgb(value);
+
         /// <summary>
         /// Converts a <see cref="Color24BppRgb"/> structure to an <see cref="Int32"/>
         /// data type.
@@ -239,10 +253,8 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Int32"/> that results from the conversion.
         /// </returns>
-        public static implicit operator int(Color24BppRgb color24)
-        {
-            return color24.Value;
-        }
+        public static implicit operator int(Color24BppRgb color24) =>
+            color24.Value;
 
         /// <summary>
         /// Converts a <see cref="Color32BppArgb"/> structure to a <see cref="Color24BppRgb"/>
@@ -254,10 +266,9 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Color24BppRgb"/> that results from the conversion.
         /// </returns>
-        public static explicit operator Color24BppRgb(Color32BppArgb color32)
-        {
-            return new Color24BppRgb(color32.Value);
-        }
+        public static explicit operator Color24BppRgb(Color32BppArgb color32) =>
+            new Color24BppRgb(color32.Value);
+
         /// <summary>
         /// Converts a <see cref="Color24BppRgb"/> structure to a <see cref="Color32BppArgb"/>
         /// structure.
@@ -268,26 +279,20 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Color32BppArgb"/> that results from the conversion.
         /// </returns>
-        public static implicit operator Color32BppArgb(Color24BppRgb color24)
-        {
-            return color24.Value;
-        }
+        public static implicit operator Color32BppArgb(Color24BppRgb color24) =>
+            color24.Value;
 
+        public static explicit operator Color24BppRgb(ColorF color) =>
+            new Color24BppRgb(
+                (int)Round(color.Red * Byte.MaxValue),
+                (int)Round(color.Green * Byte.MaxValue),
+                (int)Round(color.Blue * Byte.MaxValue));
 
-        public static explicit operator Color24BppRgb(ColorF color)
-        {
-            return new Color24BppRgb(
-                (int)(color.Red * Byte.MaxValue + 0.5f),
-                (int)(color.Green * Byte.MaxValue + 0.5f),
-                (int)(color.Blue * Byte.MaxValue + 0.5f));
-        }
-        public static implicit operator ColorF(Color24BppRgb pixel)
-        {
-            return ColorF.FromArgb(
+        public static implicit operator ColorF(Color24BppRgb pixel) =>
+            ColorF.FromArgb(
                 pixel.Red / (float)Byte.MaxValue,
                 pixel.Green / (float)Byte.MaxValue,
                 pixel.Blue / (float)Byte.MaxValue);
-        }
 
         /// <summary>
         /// Compares two <see cref="Color24BppRgb"/> objects. The result specifies whether
@@ -305,10 +310,9 @@ namespace Helper.PixelFormats
         /// equal <see cref="Red"/>, <see cref="Green"/>, and
         /// <see cref="Blue"/> components; otherwise <see langword="false"/>.
         /// </returns>
-        public static bool operator ==(Color24BppRgb left, Color24BppRgb right)
-        {
-            return left.Value == right.Value;
-        }
+        public static bool operator ==(Color24BppRgb left, Color24BppRgb right) =>
+            left.Value == right.Value;
+
         /// <summary>
         /// Compares two <see cref="Color24BppRgb"/> objects. The result specifies whether
         /// the <see cref="Red"/>, <see cref="Green"/>, or
@@ -325,10 +329,8 @@ namespace Helper.PixelFormats
         /// unequal <see cref="Red"/>, <see cref="Green"/>, or
         /// <see cref="Blue"/> components; otherwise <see langword="false"/>.
         /// </returns>
-        public static bool operator !=(Color24BppRgb left, Color24BppRgb right)
-        {
-            return !(left.Value == right.Value);
-        }
+        public static bool operator !=(Color24BppRgb left, Color24BppRgb right) =>
+            !(left == right);
 
         /// <summary>
         /// Specifies whether this <see cref="Color24BppRgb"/> is the same color as
@@ -350,6 +352,7 @@ namespace Helper.PixelFormats
 
             return (Color24BppRgb)obj == this;
         }
+
         /// <summary>
         /// Returns a hash code for this <see cref="Color24BppRgb"/>.
         /// </summary>

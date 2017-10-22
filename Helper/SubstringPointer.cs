@@ -30,6 +30,7 @@ namespace Helper
             get;
             private set;
         }
+
         /// <summary>
         /// Gets the end index to be used for specifying a substring.
         /// </summary>
@@ -38,6 +39,7 @@ namespace Helper
             get;
             private set;
         }
+
         /// <summary>
         /// Gets the length of the resulting substring described by this <see cref="SubstringPointer"/>.
         /// If <see cref="End"/> is set to <see cref="EndOfString"/>, then <see cref="EndOfString"/> is
@@ -48,6 +50,7 @@ namespace Helper
             get;
             private set;
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SubstringPointer"/> structure using the given
         /// start and end indexes.
@@ -210,10 +213,10 @@ namespace Helper
         /// true if <see cref="Start"/> and <see cref="End"/> of <paramref name="left"/> and
         /// <paramref name="right"/> are unequal; otherwise false.
         /// </returns>
-        public static bool operator ==(SubstringPointer left, SubstringPointer right)
-        {
-            return left.Start == right.Start && left.End == right.End;
-        }
+        public static bool operator ==(SubstringPointer left, SubstringPointer right) =>
+            left.Start == right.Start &&
+            left.End == right.End;
+
         /// <summary>
         /// Compares two <see cref="SubstringPointer"/> objects. The result specifies
         /// whether <see cref="Start"/> and <see cref="End"/> of the two <see cref="SubstringPointer"/>
@@ -229,10 +232,8 @@ namespace Helper
         /// true if <see cref="Start"/> and <see cref="End"/> of <paramref name="left"/> and
         /// <paramref name="right"/> are equal; otherwise false.
         /// </returns>
-        public static bool operator !=(SubstringPointer left, SubstringPointer right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(SubstringPointer left, SubstringPointer right) =>
+            !(left == right);
 
         /// <summary>
         /// Specifies whether this <see cref="SubstringPointer"/> has the same start and end index as
@@ -246,10 +247,10 @@ namespace Helper
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is SubstringPointer))
-                return false;
+            if (obj is SubstringPointer value)
+                return value == this;
 
-            return (SubstringPointer)obj == this;
+            return false;
         }
 
         /// <summary>

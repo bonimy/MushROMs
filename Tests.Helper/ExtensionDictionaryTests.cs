@@ -1,6 +1,6 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Helper;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Helper
 {
@@ -35,7 +35,6 @@ namespace Tests.Helper
             // Let's create a dictionary of editor file associations.
             var dictionary = new ExtensionDictionary<Editor>
             {
-
                 // Add file association for each editor.
                 { ".txt", Editor.TextEditor },
                 { ".bin", Editor.BinaryEditor },

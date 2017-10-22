@@ -1,6 +1,6 @@
-﻿using System;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
+using static System.Math;
 
 namespace Helper.PixelFormats
 {
@@ -34,11 +34,13 @@ namespace Helper.PixelFormats
         /// This field is constant.
         /// </summary>
         internal const int BitsPerRed = 5;
+
         /// <summary>
         /// The number of bits the green channel consumes.
         /// This field is constant.
         /// </summary>
         internal const int BitsPerGreen = 6;
+
         /// <summary>
         /// The number of bits the blue channel consumes.
         /// This field is constant.
@@ -50,11 +52,13 @@ namespace Helper.PixelFormats
         /// This field is constant.
         /// </summary>
         private const int RedShift = 0;
+
         /// <summary>
         /// The number of bits the <see cref="Green"/> channel is shifted by in the component mask.
         /// This field is constant.
         /// </summary>
         private const int GreenShift = BitsPerRed;
+
         /// <summary>
         /// The number of bits the <see cref="Blue"/> channel is shifted by in the component mask.
         /// This field is constant.
@@ -66,11 +70,13 @@ namespace Helper.PixelFormats
         /// This field is constant.
         /// </summary>
         private const int RedChannelMask = (1 << BitsPerRed) - 1;
+
         /// <summary>
         /// The bit-mask for the <see cref="Green"/> channel.
         /// This field is constant.
         /// </summary>
         private const int GreenChannelMask = (1 << BitsPerGreen) - 1;
+
         /// <summary>
         /// The bit-mask for the <see cref="Blue"/> channel.
         /// This field is constant.
@@ -82,16 +88,19 @@ namespace Helper.PixelFormats
         /// This field is constant.
         /// </summary>
         private const int RedComponentMask = RedChannelMask << RedShift;
+
         /// <summary>
         /// The bit-mask of the <see cref="Green"/> component.
         /// This field is constant.
         /// </summary>
         private const int GreenComponentMask = GreenChannelMask << GreenShift;
+
         /// <summary>
         /// The bit-mask of the <see cref="Blue"/> component.
         /// This field is constant.
         /// </summary>
         private const int BlueComponentMask = BlueChannelMask << BlueShift;
+
         /// <summary>
         /// The bit-mask for the color.
         /// This field is constant.
@@ -106,11 +115,13 @@ namespace Helper.PixelFormats
         /// </remarks>
         [FieldOffset(0)]
         private ushort _value;
+
         /// <summary>
         /// The high <see cref="Byte"/> of <see cref="_value"/>.
         /// </summary>
         [FieldOffset(0)]
         private byte _high;
+
         /// <summary>
         /// The low <see cref="Byte"/> of <see cref="_value"/>.
         /// </summary>
@@ -154,6 +165,7 @@ namespace Helper.PixelFormats
             get => _high;
             set => _high = value;
         }
+
         /// <summary>
         /// Gets or sets the low <see cref="Byte"/> of <see cref="Value"/>.
         /// </summary>
@@ -179,6 +191,7 @@ namespace Helper.PixelFormats
                 Value |= (ushort)((value & RedChannelMask) << RedShift);
             }
         }
+
         /// <summary>
         /// Gets or sets the green component of this <see cref="Color15BppBgr565"/> structure.
         /// </summary>
@@ -192,6 +205,7 @@ namespace Helper.PixelFormats
                 Value |= (ushort)((value & GreenChannelMask) << GreenShift);
             }
         }
+
         /// <summary>
         /// Gets or sets the blue component of this <see cref="Color15BppBgr565"/> structure.
         /// </summary>
@@ -221,10 +235,9 @@ namespace Helper.PixelFormats
         /// Initializes a new instance of the <see cref="Color15BppBgr565"/> struct.
         /// </summary>
         /// </overloads>
-        private Color15BppBgr565(ushort value) : this()
-        {
+        private Color15BppBgr565(ushort value) : this() =>
             Value = value;
-        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Color15BppBgr565"/> structure using the
         /// given color values. Only the lowest 5 bits of each value are used.
@@ -244,8 +257,7 @@ namespace Helper.PixelFormats
                 ((red & RedChannelMask) << RedShift) |
                 ((green & GreenChannelMask) << GreenShift) |
                 ((blue & BlueChannelMask) << BlueShift)))
-        {
-        }
+        { }
 
         /// <summary>
         /// Converts an <see cref="Int32"/> data type to a <see cref="Color15BppBgr565"/>
@@ -257,10 +269,9 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Color15BppBgr565"/> that results from the conversion.
         /// </returns>
-        public static implicit operator Color15BppBgr565(int value)
-        {
-            return new Color15BppBgr565((ushort)value);
-        }
+        public static implicit operator Color15BppBgr565(int value) =>
+            new Color15BppBgr565((ushort)value);
+
         /// <summary>
         /// Converts a <see cref="Color15BppBgr565"/> structure to an <see cref="Int32"/>
         /// data type.
@@ -271,10 +282,8 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Int32"/> that results from the conversion.
         /// </returns>
-        public static implicit operator int(Color15BppBgr565 color15)
-        {
-            return color15.Value;
-        }
+        public static implicit operator int(Color15BppBgr565 color15) =>
+            color15.Value;
 
         /// <summary>
         /// Converts a <see cref="Color24BppRgb"/> structure to a <see cref="Color15BppBgr565"/>
@@ -286,15 +295,14 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Color15BppBgr565"/> that results from the conversion.
         /// </returns>
-        public static explicit operator Color15BppBgr565(Color24BppRgb color24)
-        {
+        public static explicit operator Color15BppBgr565(Color24BppRgb color24) =>
             // Each component goes from 8 bits of sensitivity to 5
             // So we shift right 3 bytes for the conversion.
-            return new Color15BppBgr565(
+            new Color15BppBgr565(
                 color24.Red >> (Color24BppRgb.BitsPerRed - BitsPerRed),
                 color24.Green >> (Color24BppRgb.BitsPerGreen - BitsPerGreen),
                 color24.Blue >> (Color24BppRgb.BitsPerBlue - BitsPerBlue));
-        }
+
         /// <summary>
         /// Converts a <see cref="Color15BppBgr565"/> structure to a <see cref="Color24BppRgb"/>
         /// structure.
@@ -305,15 +313,13 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Color24BppRgb"/> that results from the conversion.
         /// </returns>
-        public static implicit operator Color24BppRgb(Color15BppBgr565 color15)
-        {
+        public static implicit operator Color24BppRgb(Color15BppBgr565 color15) =>
             // Each component goes from 5 bits of sensitivity to 8
             // So we shift left 3 bytes for the conversion.
-            return new Color24BppRgb(
+            new Color24BppRgb(
                 color15.Red << (Color24BppRgb.BitsPerRed - BitsPerRed),
                 color15.Green << (Color24BppRgb.BitsPerGreen - BitsPerGreen),
                 color15.Blue << (Color24BppRgb.BitsPerBlue - BitsPerBlue));
-        }
 
         /// <summary>
         /// Converts a <see cref="Color32BppArgb"/> structure to a <see cref="Color15BppBgr565"/>
@@ -325,14 +331,13 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Color15BppBgr565"/> that results from the conversion.
         /// </returns>
-        public static explicit operator Color15BppBgr565(Color32BppArgb color32)
-        {
+        public static explicit operator Color15BppBgr565(Color32BppArgb color32) =>
             // Same as the 24-bit color conversion; we ignore the alpha component.
-            return new Color15BppBgr565(
+            new Color15BppBgr565(
                 color32.Red >> (Color32BppArgb.BitsPerRed - BitsPerRed),
                 color32.Green >> (Color32BppArgb.BitsPerGreen - BitsPerGreen),
                 color32.Blue >> (Color32BppArgb.BitsPerBlue - BitsPerBlue));
-        }
+
         /// <summary>
         /// Converts a <see cref="Color15BppBgr565"/> structure to a <see cref="Color32BppArgb"/>
         /// structure.
@@ -343,14 +348,12 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Color32BppArgb"/> that results from the conversion.
         /// </returns>
-        public static implicit operator Color32BppArgb(Color15BppBgr565 color15)
-        {
+        public static implicit operator Color32BppArgb(Color15BppBgr565 color15) =>
             // Same as the 24-bit color conversion; we ignore the alpha component.
-            return new Color32BppArgb(
+            new Color32BppArgb(
                 color15.Red << (Color32BppArgb.BitsPerRed - BitsPerRed),
                 color15.Green << (Color32BppArgb.BitsPerGreen - BitsPerGreen),
                 color15.Blue << (Color32BppArgb.BitsPerBlue - BitsPerBlue));
-        }
 
         /// <summary>
         /// Compares two <see cref="Color15BppBgr565"/> objects. The result specifies whether
@@ -368,12 +371,11 @@ namespace Helper.PixelFormats
         /// equal <see cref="Red"/>, <see cref="Green"/>, and
         /// <see cref="Blue"/> components; otherwise <see langword="false"/>.
         /// </returns>
-        public static bool operator ==(Color15BppBgr565 left, Color15BppBgr565 right)
-        {
+        public static bool operator ==(Color15BppBgr565 left, Color15BppBgr565 right) =>
             // We compare the preserved values because we do not care about
             // the most significant bit.
-            return left.PreservedValue == right.PreservedValue;
-        }
+            left.PreservedValue == right.PreservedValue;
+
         /// <summary>
         /// Compares two <see cref="Color15BppBgr565"/> objects. The result specifies whether
         /// the <see cref="Red"/>, <see cref="Green"/>, or
@@ -390,25 +392,20 @@ namespace Helper.PixelFormats
         /// unequal <see cref="Red"/>, <see cref="Green"/>, or
         /// <see cref="Blue"/> components; otherwise <see langword="false"/>.
         /// </returns>
-        public static bool operator !=(Color15BppBgr565 left, Color15BppBgr565 right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(Color15BppBgr565 left, Color15BppBgr565 right) =>
+            !(left == right);
 
-        public static explicit operator Color15BppBgr565(ColorF color)
-        {
-            return new Color15BppBgr565(
-                (int)Math.Round(color.Red * RedChannelMask),
-                (int)Math.Round(color.Green * GreenChannelMask),
-                (int)Math.Round(color.Blue * BlueChannelMask));
-        }
-        public static implicit operator ColorF(Color15BppBgr565 pixel)
-        {
-            return ColorF.FromArgb(
+        public static explicit operator Color15BppBgr565(ColorF color) =>
+            new Color15BppBgr565(
+                (int)Round(color.Red * RedChannelMask),
+                (int)Round(color.Green * GreenChannelMask),
+                (int)Round(color.Blue * BlueChannelMask));
+
+        public static implicit operator ColorF(Color15BppBgr565 pixel) =>
+            ColorF.FromArgb(
                 pixel.Red / (float)RedChannelMask,
                 pixel.Green / (float)GreenChannelMask,
                 pixel.Blue / (float)BlueChannelMask);
-        }
 
         /// <summary>
         /// Specifies whether this <see cref="Color15BppBgr565"/> is the same color as
@@ -423,11 +420,12 @@ namespace Helper.PixelFormats
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is Color15BppBgr565))
-                return false;
+            if (obj is Color15BppBgr565 value)
+                return value == this;
 
-            return (Color15BppBgr565)obj == this;
+            return false;
         }
+
         /// <summary>
         /// Returns a hash code for this <see cref="Color15BppBgr565"/>.
         /// </summary>

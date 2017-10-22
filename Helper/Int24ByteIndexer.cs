@@ -16,10 +16,9 @@ namespace Helper
             set => SetInt24Internal(Pointer, index, value);
         }
 
-        public Int24ByteIndexer(Pointer<byte> pointer)
-        {
-            Pointer = pointer ?? throw new ArgumentNullException(nameof(pointer));
-        }
+        public Int24ByteIndexer(Pointer<byte> pointer) =>
+            Pointer = pointer ??
+                throw new ArgumentNullException(nameof(pointer));
 
         public static Int24 GetInt24(Pointer<byte> pointer, int offset)
         {
@@ -28,6 +27,7 @@ namespace Helper
 
             return GetInt24Internal(pointer, offset);
         }
+
         private static Int24 GetInt24Internal(Pointer<byte> pointer, int index)
         {
             return
@@ -43,6 +43,7 @@ namespace Helper
 
             SetInt24Internal(pointer, index, value);
         }
+
         private static void SetInt24Internal(Pointer<byte> pointer, int index, int value)
         {
             pointer[index + 0] = (byte)(value >> 0x00);

@@ -34,16 +34,19 @@ namespace Helper.PixelFormats
         /// This field is constant.
         /// </summary>
         public const int AlphaIndex = 3;
+
         /// <summary>
         /// The index of <see cref="Red"/> in the components array.
         /// This field is constant.
         /// </summary>
         public const int RedIndex = 2;
+
         /// <summary>
         /// The index of <see cref="Green"/> in the components array.
         /// This field is constant.
         /// </summary>
         public const int GreenIndex = 1;
+
         /// <summary>
         /// The index of <see cref="Blue"/> in the components array.
         /// This field is constant.
@@ -55,21 +58,25 @@ namespace Helper.PixelFormats
         /// This field is constant.
         /// </summary>
         private const int BitsPerChannel = 8;
+
         /// <summary>
         /// The number of bits the alpha component consumes.
         /// This field is constant.
         /// </summary>
         internal const int BitsPerAlpha = BitsPerChannel;
+
         /// <summary>
         /// The number of bits the red component consumes.
         /// This field is constant.
         /// </summary>
         internal const int BitsPerRed = BitsPerChannel;
+
         /// <summary>
         /// The number of bits the green component consumes.
         /// This field is constant.
         /// </summary>
         internal const int BitsPerGreen = BitsPerChannel;
+
         /// <summary>
         /// The number of bits the blue component consumes.
         /// This field is constant.
@@ -84,26 +91,31 @@ namespace Helper.PixelFormats
         /// </remarks>
         [FieldOffset(0)]
         private int _value;
+
         /// <summary>
         /// The color component array of this <see cref="Color32BppArgb"/> structure.
         /// </summary>
         [FieldOffset(0)]
         private fixed byte _components[SizeOf];
+
         /// <summary>
         /// The alpha component of this <see cref="Color32BppArgb"/> structure.
         /// </summary>
         [FieldOffset(AlphaIndex)]
         private byte _alpha;
+
         /// <summary>
         /// The red component of this <see cref="Color32BppArgb"/> structure.
         /// </summary>
         [FieldOffset(RedIndex)]
         private byte _red;
+
         /// <summary>
         /// The green component of this <see cref="Color32BppArgb"/> structure.
         /// </summary>
         [FieldOffset(GreenIndex)]
         private byte _green;
+
         /// <summary>
         /// The blue component of this <see cref="Color32BppArgb"/> structure.
         /// </summary>
@@ -121,6 +133,7 @@ namespace Helper.PixelFormats
             get => _value;
             set => _value = value;
         }
+
         /// <summary>
         /// Gets or sets the alpha component of this <see cref="Color32BppArgb"/> structure.
         /// </summary>
@@ -129,6 +142,7 @@ namespace Helper.PixelFormats
             get => _alpha;
             set => _alpha = value;
         }
+
         /// <summary>
         /// Gets or sets the red component of this <see cref="Color32BppArgb"/> structure.
         /// </summary>
@@ -137,6 +151,7 @@ namespace Helper.PixelFormats
             get => _red;
             set => _red = value;
         }
+
         /// <summary>
         /// Gets or sets the green component of this <see cref="Color32BppArgb"/> structure.
         /// </summary>
@@ -145,6 +160,7 @@ namespace Helper.PixelFormats
             get => _green;
             set => _green = value;
         }
+
         /// <summary>
         /// Gets or sets the blue component of this <see cref="Color32BppArgb"/> structure.
         /// </summary>
@@ -199,10 +215,9 @@ namespace Helper.PixelFormats
         /// Initializes a new instance of the <see cref="Color32BppArgb"/> struct.
         /// </summary>
         private Color32BppArgb(int value)
-            : this()
-        {
+            : this() =>
             _value = value;
-        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Color32BppArgb"/> struct using the specified
         /// red, green, and blue values.
@@ -224,6 +239,7 @@ namespace Helper.PixelFormats
         public Color32BppArgb(int red, int green, int blue) : this(Byte.MaxValue, red, green, blue)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Color32BppArgb"/> struct using the specified
         /// alpha, red, green, and blue values.
@@ -262,10 +278,9 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Color32BppArgb"/> that results from the conversion.
         /// </returns>
-        public static implicit operator Color32BppArgb(int value)
-        {
-            return new Color32BppArgb(value);
-        }
+        public static implicit operator Color32BppArgb(int value) =>
+            new Color32BppArgb(value);
+
         /// <summary>
         /// Converts a <see cref="Color32BppArgb"/> structure to an <see cref="Int32"/>
         /// data type.
@@ -276,27 +291,22 @@ namespace Helper.PixelFormats
         /// <returns>
         /// The <see cref="Int32"/> that results from the conversion.
         /// </returns>
-        public static implicit operator int(Color32BppArgb color32)
-        {
-            return color32.Value;
-        }
+        public static implicit operator int(Color32BppArgb color32) =>
+            color32.Value;
 
-        public static implicit operator Color32BppArgb(ColorF color)
-        {
-            return new Color32BppArgb(
+        public static implicit operator Color32BppArgb(ColorF color) =>
+            new Color32BppArgb(
                 (int)(color.Alpha * Byte.MaxValue + 0.5f),
                 (int)(color.Red * Byte.MaxValue + 0.5f),
                 (int)(color.Green * Byte.MaxValue + 0.5f),
                 (int)(color.Blue * Byte.MaxValue + 0.5f));
-        }
-        public static implicit operator ColorF(Color32BppArgb pixel)
-        {
-            return ColorF.FromArgb(
+
+        public static implicit operator ColorF(Color32BppArgb pixel) =>
+            ColorF.FromArgb(
                 pixel.Alpha / (float)Byte.MaxValue,
                 pixel.Red / (float)Byte.MaxValue,
                 pixel.Green / (float)Byte.MaxValue,
                 pixel.Blue / (float)Byte.MaxValue);
-        }
 
         /// <summary>
         /// Compares two <see cref="Color32BppArgb"/> objects. The result specifies whether
@@ -314,10 +324,9 @@ namespace Helper.PixelFormats
         /// equal <see cref="Alpha"/>, <see cref="Red"/>, <see cref="Green"/>, and
         /// <see cref="Blue"/> components; otherwise <see langword="false"/>.
         /// </returns>
-        public static bool operator ==(Color32BppArgb left, Color32BppArgb right)
-        {
-            return left.Value == right.Value;
-        }
+        public static bool operator ==(Color32BppArgb left, Color32BppArgb right) =>
+            left.Value == right.Value;
+
         /// <summary>
         /// Compares two <see cref="Color32BppArgb"/> objects. The result specifies whether
         /// the <see cref="Red"/>, <see cref="Green"/>, or
@@ -334,10 +343,8 @@ namespace Helper.PixelFormats
         /// unequal <see cref="Alpha"/>, <see cref="Red"/>, <see cref="Green"/>, or
         /// <see cref="Blue"/> components; otherwise <see langword="false"/>.
         /// </returns>
-        public static bool operator !=(Color32BppArgb left, Color32BppArgb right)
-        {
-            return !(left == right);
-        }
+        public static bool operator !=(Color32BppArgb left, Color32BppArgb right) =>
+            !(left == right);
 
         /// <summary>
         /// Specifies whether this <see cref="Color32BppArgb"/> is the same color as
@@ -352,13 +359,12 @@ namespace Helper.PixelFormats
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj == null)
-                return false;
-            if (!(obj is Color32BppArgb))
-                return false;
+            if (obj is Color32BppArgb value)
+                return value == this;
 
-            return (Color32BppArgb)obj == this;
+            return false;
         }
+
         /// <summary>
         /// Returns a hash code for this <see cref="Color32BppArgb"/>.
         /// </summary>

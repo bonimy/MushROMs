@@ -1,6 +1,5 @@
-﻿using System;
+﻿using Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Helper;
 
 namespace Tests.Helper
 {

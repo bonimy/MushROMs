@@ -26,8 +26,14 @@ namespace Helper
             set => Array[Offset + index] = value;
         }
 
-        public Pointer(int size) : this(new T[size]) { }
-        public Pointer(Pointer<T> pointer) : this(pointer, 0) { }
+        public Pointer(int size) : this(new T[size])
+        {
+        }
+
+        public Pointer(Pointer<T> pointer) : this(pointer, 0)
+        {
+        }
+
         public Pointer(Pointer<T> pointer, int offset)
         {
             if (pointer == null)
@@ -37,7 +43,10 @@ namespace Helper
             Offset = pointer.Offset + offset;
         }
 
-        public Pointer(T[] pointer) : this(pointer, 0) { }
+        public Pointer(T[] pointer) : this(pointer, 0)
+        {
+        }
+
         public Pointer(T[] pointer, int offset)
         {
             Array = pointer ?? throw new ArgumentNullException(nameof(pointer));
@@ -76,7 +85,6 @@ namespace Helper
         public void CopyTo(int sourceOffset, Array dest, int destOffset, int length) =>
             System.Array.Copy(Array, sourceOffset, dest, destOffset, length);
 
-
         public void BlockCopy<U>(Pointer<U> source, int count)
         {
             var src = source.Array;
@@ -108,31 +116,24 @@ namespace Helper
 
             return new Pointer<T>(array, 0);
         }
-        public static Pointer<T> operator +(Pointer<T> sharedArray, int offset)
-        {
-            return new Pointer<T>(sharedArray.Array, sharedArray.Offset + offset);
-        }
-        public static Pointer<T> operator +(int offset, Pointer<T> sharedArray)
-        {
-            return sharedArray + offset;
-        }
-        public static Pointer<T> operator -(Pointer<T> sharedArray, int offset)
-        {
-            return sharedArray + (-offset);
-        }
-        public static Pointer<T> operator -(int offset, Pointer<T> sharedArray)
-        {
-            return sharedArray - offset;
-        }
 
-        public static Pointer<T> operator ++(Pointer<T> sharedArray)
-        {
-            return sharedArray + 1;
-        }
-        public static Pointer<T> operator --(Pointer<T> sharedArray)
-        {
-            return sharedArray - 1;
-        }
+        public static Pointer<T> operator +(Pointer<T> sharedArray, int offset) =>
+            new Pointer<T>(sharedArray.Array, sharedArray.Offset + offset);
+
+        public static Pointer<T> operator +(int offset, Pointer<T> sharedArray) =>
+            sharedArray + offset;
+
+        public static Pointer<T> operator -(Pointer<T> sharedArray, int offset) =>
+            sharedArray + (-offset);
+
+        public static Pointer<T> operator -(int offset, Pointer<T> sharedArray) =>
+            sharedArray - offset;
+
+        public static Pointer<T> operator ++(Pointer<T> sharedArray) =>
+            sharedArray + 1;
+
+        public static Pointer<T> operator --(Pointer<T> sharedArray) =>
+            sharedArray - 1;
 
         public static int operator -(Pointer<T> left, Pointer<T> right)
         {
@@ -160,10 +161,9 @@ namespace Helper
 
             return left.Offset == right.Offset;
         }
-        public static bool operator !=(Pointer<T> left, Pointer<T> right)
-        {
-            return !(left == right);
-        }
+
+        public static bool operator !=(Pointer<T> left, Pointer<T> right) =>
+            !(left == right);
 
         public static bool operator <(Pointer<T> left, Pointer<T> right)
         {
@@ -178,6 +178,7 @@ namespace Helper
 
             return left.Offset < right.Offset;
         }
+
         public static bool operator >(Pointer<T> left, Pointer<T> right)
         {
             if (left == null && right == null)
@@ -191,6 +192,7 @@ namespace Helper
 
             return left.Offset > right.Offset;
         }
+
         public static bool operator >=(Pointer<T> left, Pointer<T> right)
         {
             if (left == null && right == null)
@@ -204,6 +206,7 @@ namespace Helper
 
             return left.Offset >= right.Offset;
         }
+
         public static bool operator <=(Pointer<T> left, Pointer<T> right)
         {
             if (left == null && right == null)

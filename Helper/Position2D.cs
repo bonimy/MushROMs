@@ -13,6 +13,7 @@ namespace Helper
             get;
             set;
         }
+
         public int Y
         {
             get;
@@ -25,11 +26,15 @@ namespace Helper
             Y = y;
         }
 
-        public Position2D Add(Position2D value)      => this + value;
+        public Position2D Add(Position2D value) => this + value;
+
         public Position2D Subtract(Position2D value) => this - value;
-        public Position2D Negate()                   => -this;
-        public Position2D Multiply(Range2D value)    => this * value;
-        public Position2D Divide(Range2D value)      => this / value;
+
+        public Position2D Negate() => -this;
+
+        public Position2D Multiply(Range2D value) => this * value;
+
+        public Position2D Divide(Range2D value) => this / value;
 
         public static Position2D TopLeft(Position2D left, Position2D right) =>
             new Position2D(Math.Min(left.X, right.X), Math.Min(left.Y, right.Y));
@@ -43,7 +48,6 @@ namespace Helper
         public static Position2D BottomRight(Position2D left, Position2D right) =>
             new Position2D(Math.Max(left.X, right.X), Math.Max(left.Y, right.Y));
 
-
         public override bool Equals(object obj)
         {
             if (obj is Position2D value)
@@ -56,43 +60,33 @@ namespace Helper
 
         public override string ToString() => SR.GetString("X={0}, Y={1}", X, Y);
 
-        public static bool operator ==(Position2D left, Position2D right)
-        {
-            return left.X == right.X && left.Y == right.Y;
-        }
-        public static bool operator !=(Position2D left, Position2D right)
-        {
-            return !(left == right);
-        }
-        public static implicit operator Range2D(Position2D position)
-        {
-            return new Range2D(position.X, position.Y);
-        }
-        public static implicit operator Position2D(Range2D range)
-        {
-            return new Position2D(range.Horizontal, range.Vertical);
-        }
+        public static bool operator ==(Position2D left, Position2D right) =>
+            left.X == right.X &&
+            left.Y == right.Y;
 
-        public static Position2D operator +(Position2D left, Position2D right)
-        {
-            return new Position2D(left.X + right.X, left.Y + right.Y);
-        }
-        public static Position2D operator -(Position2D left, Position2D right)
-        {
-            return new Position2D(left.X - right.X, left.Y - right.Y);
-        }
-        public static Position2D operator -(Position2D right)
-        {
-            return Empty - right;
-        }
-        public static Position2D operator *(Position2D left, Range2D right)
-        {
-            return new Position2D(left.X * right.Horizontal, left.Y * right.Vertical);
-        }
-        public static Position2D operator *(Range2D left, Position2D right)
-        {
-            return new Position2D(left.Horizontal * right.X, left.Vertical * right.Y);
-        }
+        public static bool operator !=(Position2D left, Position2D right) =>
+            !(left == right);
+
+        public static implicit operator Range2D(Position2D position) =>
+            new Range2D(position.X, position.Y);
+
+        public static implicit operator Position2D(Range2D range) =>
+            new Position2D(range.Horizontal, range.Vertical);
+
+        public static Position2D operator +(Position2D left, Position2D right) =>
+            new Position2D(left.X + right.X, left.Y + right.Y);
+
+        public static Position2D operator -(Position2D left, Position2D right) =>
+            new Position2D(left.X - right.X, left.Y - right.Y);
+
+        public static Position2D operator -(Position2D right) =>
+            new Position2D(-right.X, -right.Y);
+
+        public static Position2D operator *(Position2D left, Range2D right) =>
+            new Position2D(left.X * right.Horizontal, left.Y * right.Vertical);
+
+        public static Position2D operator *(Range2D left, Position2D right) =>
+            new Position2D(left.Horizontal * right.X, left.Vertical * right.Y);
 
         public static Position2D operator /(Position2D left, Range2D right)
         {

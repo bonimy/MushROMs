@@ -16,10 +16,9 @@ namespace Helper
             set => SetUInt16Internal(Pointer, index, value);
         }
 
-        public UInt16ByteIndexer(Pointer<byte> pointer)
-        {
-            Pointer = pointer ?? throw new ArgumentNullException(nameof(pointer));
-        }
+        public UInt16ByteIndexer(Pointer<byte> pointer) =>
+            Pointer = pointer ??
+                throw new ArgumentNullException(nameof(pointer));
 
         public static ushort GetUInt16(Pointer<byte> pointer, int offset)
         {
@@ -28,6 +27,7 @@ namespace Helper
 
             return GetUInt16Internal(pointer, offset);
         }
+
         private static ushort GetUInt16Internal(Pointer<byte> pointer, int index) =>
             BitConverter.ToUInt16(pointer.GetArray(), pointer.Offset + index);
 
@@ -38,6 +38,7 @@ namespace Helper
 
             SetUInt16Internal(pointer, index, value);
         }
+
         private static void SetUInt16Internal(Pointer<byte> pointer, int index, int value)
         {
             pointer[index + 0] = (byte)(value >> 0x00);

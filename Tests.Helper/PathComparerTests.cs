@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Helper;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Helper
 {
@@ -147,6 +147,7 @@ namespace Tests.Helper
                 get;
                 private set;
             }
+
             public string Right
             {
                 get;

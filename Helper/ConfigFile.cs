@@ -13,6 +13,7 @@ namespace Helper
         private const char AltCommentChar = ';';
 
         private static StringComparer _defaultComparer;
+
         private static StringComparer DefaultComparer
         {
             get
@@ -317,6 +318,7 @@ namespace Helper
                 return fallback;
             return Entries[key].Value;
         }
+
         public void SetString(string key, string value) =>
             SetString(key, value, String.Empty);
 
@@ -331,6 +333,7 @@ namespace Helper
                 return fallback;
             return result;
         }
+
         public void SetInt(string key, int value) =>
             SetInt(key, value, String.Empty);
 
@@ -345,6 +348,7 @@ namespace Helper
                 return fallback;
             return result;
         }
+
         public void SetBool(string key, bool value) =>
             SetBool(key, value, String.Empty);
 
@@ -359,6 +363,7 @@ namespace Helper
                 return fallback;
             return Enum.Parse(type, Entries[key].Value);
         }
+
         public T GetEnum<T>(string key, T fallback)
         {
             if (!Entries.ContainsKey(key))
@@ -367,12 +372,12 @@ namespace Helper
                 return fallback;
             return (T)Enum.Parse(typeof(T), Entries[key].Value);
         }
+
         public void SetEnum(string key, Enum value) =>
             SetEnum(key, value, String.Empty);
 
         public void SetEnum(string key, Enum value, string comment) =>
             Entries[key] = new Entry(key, value.ToString(), comment);
-
 
         private int SectionThenKeyComparer(string x, string y) =>
             SectionThenKeyComparer(Entries[x], Entries[y]);
@@ -449,16 +454,19 @@ namespace Helper
                 get;
                 private set;
             }
+
             public string Section
             {
                 get;
                 private set;
             }
+
             public string Key
             {
                 get;
                 private set;
             }
+
             public string FullKey =>
                 SR.GetString("{0}::{1}", Section, Key);
 
@@ -467,11 +475,13 @@ namespace Helper
                 get;
                 private set;
             }
+
             public string Comment
             {
                 get;
                 private set;
             }
+
             public bool Used
             {
                 get;
@@ -487,11 +497,13 @@ namespace Helper
                 Comment = String.IsNullOrEmpty(value) ? String.Empty : comment;
                 Used = false;
             }
+
             public Entry(string key)
             {
                 Key = String.IsNullOrEmpty(key) ? String.Empty : key;
                 ParseKey();
             }
+
             public Entry(string key, string value, string comment)
             {
                 Line = -1;
@@ -511,7 +523,6 @@ namespace Helper
                 }
                 else
                     Section = Uncategorized;
-
             }
 
             public int CompareTo(object obj)
@@ -520,6 +531,7 @@ namespace Helper
                     return Compare(this, (Entry)obj);
                 return +1;
             }
+
             public int CompareTo(Entry other) => Compare(this, other);
 
             public int Compare(Entry x, Entry y)
@@ -557,10 +569,8 @@ namespace Helper
                 }
             }
 
-            public SectionSizeManager()
-            {
+            public SectionSizeManager() =>
                 Sections = new Dictionary<string, int>(DefaultComparer);
-            }
 
             public int GetSectionSize(string section)
             {

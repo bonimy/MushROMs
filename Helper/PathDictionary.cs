@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Security;
 
 namespace Helper
 {
@@ -28,6 +25,7 @@ namespace Helper
             base(PathComparer.DefaultComparer)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PathDictionary{TValue}"/> class. This constructor uses
         /// <see cref="AssertDictionary{TKey, TValue}(Int32, IEqualityComparer{TKey})"/> as its base and passes
@@ -38,6 +36,7 @@ namespace Helper
             base(capacity, PathComparer.DefaultComparer)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PathDictionary{TValue}"/> class. This constructor uses
         /// <see cref="AssertDictionary{TKey, TValue}(IEqualityComparer{TKey})"/> as its base.
@@ -51,6 +50,7 @@ namespace Helper
             base(comparer ?? throw new ArgumentNullException(nameof(comparer)))
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PathDictionary{TValue}"/> class. This constructor uses
         /// <see cref="AssertDictionary{TKey, TValue}(AssertDictionary{TKey, TValue}, IEqualityComparer{TKey})"/>
@@ -64,6 +64,7 @@ namespace Helper
             base(dictionary, PathComparer.DefaultComparer)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PathDictionary{TValue}"/> class. This constructor uses
         /// <see cref="AssertDictionary{TKey, TValue}(Int32, IEqualityComparer{TKey})"/> as its base.
@@ -79,6 +80,7 @@ namespace Helper
             base(capacity, comparer ?? PathComparer.DefaultComparer)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="PathDictionary{TValue}"/> class. This constructor uses
         /// <see cref="AssertDictionary{TKey, TValue}(AssertDictionary{TKey, TValue}, IEqualityComparer{TKey})"/>

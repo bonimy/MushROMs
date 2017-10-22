@@ -37,6 +37,7 @@ namespace Helper
             base()
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AssertDictionary{TKey, TValue}"/> class. This constructor calls
         /// <see cref="Dictionary{TKey, TValue}(Int32)"/> as its base constructor.
@@ -50,6 +51,7 @@ namespace Helper
             base(capacity)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AssertDictionary{TKey, TValue}"/> class. This constructor calls
         /// <see cref="Dictionary{TKey, TValue}(IEqualityComparer{TKey})"/> as its base constructor.
@@ -63,6 +65,7 @@ namespace Helper
             base(comparer)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AssertDictionary{TKey, TValue}"/> class. This constructor calls
         /// <see cref="Dictionary{TKey, TValue}(IDictionary{TKey, TValue})"/> as its base constructor.
@@ -92,6 +95,7 @@ namespace Helper
             base(dictionary)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AssertDictionary{TKey, TValue}"/> class. This constructor calls
         /// <see cref="Dictionary{TKey, TValue}(Int32, IEqualityComparer{TKey})"/> as its base constructor.
@@ -105,6 +109,7 @@ namespace Helper
             base(capacity, comparer)
         {
         }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AssertDictionary{TKey, TValue}"/> class. This constructor calls
         /// <see cref="Dictionary{TKey, TValue}(IDictionary{TKey, TValue}, IEqualityComparer{TKey})"/> as its base constructor.
@@ -164,6 +169,7 @@ namespace Helper
             AssertKey(key);
             base.Add(key, value);
         }
+
         /// <inheritdoc cref="Dictionary{TKey, TValue}.ContainsKey(TKey)"/>
         /// <remarks>
         /// <inheritdoc cref="this[TKey]"/>
@@ -179,6 +185,7 @@ namespace Helper
             AssertKey(key);
             return base.ContainsKey(key);
         }
+
         /// <inheritdoc cref="Dictionary{TKey, TValue}.Remove(TKey)"/>
         /// <remarks>
         /// <inheritdoc cref="this[TKey]"/>
