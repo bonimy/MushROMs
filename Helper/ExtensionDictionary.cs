@@ -24,16 +24,20 @@ namespace Helper
         {
         }
 
-        public ExtensionDictionary(ExtensionDictionary<TValue> dictionary) =>
+        public ExtensionDictionary(ExtensionDictionary<TValue> dictionary)
+        {
             BaseDictionary = new Dictionary<string, TValue>(dictionary, ExtensionComparer.DefaultComparer);
+        }
 
         public ExtensionDictionary(int capacity, ExtensionComparer comparer) :
             base(capacity, comparer ?? ExtensionComparer.DefaultComparer)
         {
         }
 
-        public ExtensionDictionary(ExtensionDictionary<TValue> dictionary, ExtensionComparer comparer) =>
+        public ExtensionDictionary(ExtensionDictionary<TValue> dictionary, ExtensionComparer comparer)
+        {
             BaseDictionary = new Dictionary<string, TValue>(dictionary, comparer);
+        }
 
         protected override void AssertKey(string key)
         {

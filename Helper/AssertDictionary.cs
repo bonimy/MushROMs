@@ -22,13 +22,37 @@ namespace Helper
             set;
         }
 
-        public int Count => BaseDictionary.Count;
+        public int Count
+        {
+            get
+            {
+                return BaseDictionary.Count;
+            }
+        }
 
-        public Dictionary<TKey, TValue>.KeyCollection Keys => BaseDictionary.Keys;
+        public Dictionary<TKey, TValue>.KeyCollection Keys
+        {
+            get
+            {
+                return BaseDictionary.Keys;
+            }
+        }
 
-        public Dictionary<TKey, TValue>.ValueCollection Values => BaseDictionary.Values;
+        public Dictionary<TKey, TValue>.ValueCollection Values
+        {
+            get
+            {
+                return BaseDictionary.Values;
+            }
+        }
 
-        public IEqualityComparer<TKey> Comparer => BaseDictionary.Comparer;
+        public IEqualityComparer<TKey> Comparer
+        {
+            get
+            {
+                return BaseDictionary.Comparer;
+            }
+        }
 
         public TValue this[TKey key]
         {
@@ -45,17 +69,25 @@ namespace Helper
             }
         }
 
-        protected AssertDictionary() =>
+        protected AssertDictionary()
+        {
             BaseDictionary = new Dictionary<TKey, TValue>();
+        }
 
-        protected AssertDictionary(int capacity) =>
+        protected AssertDictionary(int capacity)
+        {
             BaseDictionary = new Dictionary<TKey, TValue>(capacity);
+        }
 
-        protected AssertDictionary(IEqualityComparer<TKey> comparer) =>
+        protected AssertDictionary(IEqualityComparer<TKey> comparer)
+        {
             BaseDictionary = new Dictionary<TKey, TValue>(comparer);
+        }
 
-        protected AssertDictionary(int capacity, IEqualityComparer<TKey> comparer) =>
+        protected AssertDictionary(int capacity, IEqualityComparer<TKey> comparer)
+        {
             BaseDictionary = new Dictionary<TKey, TValue>(capacity, comparer);
+        }
 
         public bool ContainsKey(TKey key)
         {
@@ -63,8 +95,10 @@ namespace Helper
             return BaseDictionary.ContainsKey(key);
         }
 
-        public bool ContainsValue(TValue value) =>
-            BaseDictionary.ContainsValue(value);
+        public bool ContainsValue(TValue value)
+        {
+            return BaseDictionary.ContainsValue(value);
+        }
 
         public void Add(TKey key, TValue value)
         {
@@ -78,7 +112,10 @@ namespace Helper
             return BaseDictionary.Remove(key);
         }
 
-        public void Clear() => BaseDictionary.Clear();
+        public void Clear()
+        {
+            BaseDictionary.Clear();
+        }
 
         public bool TryGetValue(TKey key, out TValue value)
         {
@@ -86,40 +123,124 @@ namespace Helper
             return BaseDictionary.TryGetValue(key, out value);
         }
 
-        public Dictionary<TKey, TValue>.Enumerator GetEnumerator() =>
-            BaseDictionary.GetEnumerator();
+        public Dictionary<TKey, TValue>.Enumerator GetEnumerator()
+        {
+            return BaseDictionary.GetEnumerator();
+        }
 
         protected abstract void AssertKey(TKey key);
 
-        private IDictionary<TKey, TValue> IGenericDictionary =>
-            BaseDictionary;
+        private IDictionary<TKey, TValue> IGenericDictionary
+        {
+            get
+            {
+                return BaseDictionary;
+            }
+        }
 
-        private IDictionary IDictionary => BaseDictionary;
+        private IDictionary IDictionary
+        {
+            get
+            {
+                return BaseDictionary;
+            }
+        }
 
-        private ICollection ICollection => BaseDictionary;
+        private ICollection ICollection
+        {
+            get
+            {
+                return BaseDictionary;
+            }
+        }
 
-        bool IDictionary.IsReadOnly => IDictionary.IsReadOnly;
+        bool IDictionary.IsReadOnly
+        {
+            get
+            {
+                return IDictionary.IsReadOnly;
+            }
+        }
 
-        bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly =>
-            IGenericDictionary.IsReadOnly;
+        bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
+        {
+            get
+            {
+                return IGenericDictionary.IsReadOnly;
+            }
+        }
 
-        bool IDictionary.IsFixedSize => IDictionary.IsFixedSize;
+        bool IDictionary.IsFixedSize
+        {
+            get
+            {
+                return IDictionary.IsFixedSize;
+            }
+        }
 
-        bool ICollection.IsSynchronized => ICollection.IsSynchronized;
+        bool ICollection.IsSynchronized
+        {
+            get
+            {
+                return ICollection.IsSynchronized;
+            }
+        }
 
-        object ICollection.SyncRoot => ICollection.SyncRoot;
+        object ICollection.SyncRoot
+        {
+            get
+            {
+                return ICollection.SyncRoot;
+            }
+        }
 
-        ICollection IDictionary.Keys => Keys;
+        ICollection IDictionary.Keys
+        {
+            get
+            {
+                return Keys;
+            }
+        }
 
-        ICollection<TKey> IDictionary<TKey, TValue>.Keys => Keys;
+        ICollection<TKey> IDictionary<TKey, TValue>.Keys
+        {
+            get
+            {
+                return Keys;
+            }
+        }
 
-        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys => Keys;
+        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys
+        {
+            get
+            {
+                return Keys;
+            }
+        }
 
-        ICollection IDictionary.Values => Values;
+        ICollection IDictionary.Values
+        {
+            get
+            {
+                return Values;
+            }
+        }
 
-        ICollection<TValue> IDictionary<TKey, TValue>.Values => Values;
+        ICollection<TValue> IDictionary<TKey, TValue>.Values
+        {
+            get
+            {
+                return Values;
+            }
+        }
 
-        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values => Values;
+        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values
+        {
+            get
+            {
+                return Values;
+            }
+        }
 
         object IDictionary.this[object key]
         {
@@ -176,11 +297,15 @@ namespace Helper
             return IGenericDictionary.Contains(item);
         }
 
-        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) =>
+        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
+        {
             IGenericDictionary.CopyTo(array, arrayIndex);
+        }
 
-        void ICollection.CopyTo(Array array, int index) =>
+        void ICollection.CopyTo(Array array, int index)
+        {
             ICollection.CopyTo(array, index);
+        }
 
         void IDictionary.Remove(object key)
         {
@@ -198,11 +323,19 @@ namespace Helper
             return IGenericDictionary.Remove(item);
         }
 
-        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() =>
-            GetEnumerator();
+        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
 
-        IDictionaryEnumerator IDictionary.GetEnumerator() => GetEnumerator();
+        IDictionaryEnumerator IDictionary.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 }

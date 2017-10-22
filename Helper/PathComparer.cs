@@ -11,7 +11,13 @@ namespace Helper
     {
         private static readonly PathComparer Default = new PathComparer();
 
-        public static PathComparer DefaultComparer => Default;
+        public static PathComparer DefaultComparer
+        {
+            get
+            {
+                return Default;
+            }
+        }
 
         private PathComparer() : this(OrdinalIgnoreCase)
         {
@@ -21,8 +27,10 @@ namespace Helper
         {
         }
 
-        public override string StringModifier(string value) =>
-            Path.GetFullPath(value) ??
-                throw new ArgumentNullException(nameof(BaseComparer));
+        public override string StringModifier(string value)
+        {
+            return Path.GetFullPath(value) ??
+throw new ArgumentNullException(nameof(BaseComparer));
+        }
     }
 }

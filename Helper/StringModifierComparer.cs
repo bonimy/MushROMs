@@ -10,11 +10,19 @@ namespace Helper
     {
         private StringComparer _baseComparer;
 
-        public virtual StringComparer BaseComparer => _baseComparer;
+        public virtual StringComparer BaseComparer
+        {
+            get
+            {
+                return _baseComparer;
+            }
+        }
 
-        protected StringModifierComparer(StringComparer baseComparer) =>
+        protected StringModifierComparer(StringComparer baseComparer)
+        {
             _baseComparer = baseComparer ??
-                throw new ArgumentNullException(nameof(baseComparer));
+throw new ArgumentNullException(nameof(baseComparer));
+        }
 
         public override sealed int Compare(string x, string y)
         {

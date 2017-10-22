@@ -11,7 +11,13 @@ namespace Helper
     {
         private static readonly ExtensionComparer Default = new ExtensionComparer();
 
-        public static ExtensionComparer DefaultComparer => Default;
+        public static ExtensionComparer DefaultComparer
+        {
+            get
+            {
+                return Default;
+            }
+        }
 
         private ExtensionComparer() : this(OrdinalIgnoreCase)
         {
@@ -21,8 +27,10 @@ namespace Helper
         {
         }
 
-        public override string StringModifier(string value) =>
-            Path.GetExtension(value) ??
-                throw new ArgumentNullException(nameof(BaseComparer));
+        public override string StringModifier(string value)
+        {
+            return Path.GetExtension(value) ??
+throw new ArgumentNullException(nameof(BaseComparer));
+        }
     }
 }

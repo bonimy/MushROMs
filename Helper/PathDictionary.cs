@@ -24,16 +24,20 @@ namespace Helper
         {
         }
 
-        public PathDictionary(PathDictionary<TValue> dictionary) =>
+        public PathDictionary(PathDictionary<TValue> dictionary)
+        {
             BaseDictionary = new Dictionary<string, TValue>(dictionary, PathComparer.DefaultComparer);
+        }
 
         public PathDictionary(int capacity, PathComparer comparer) :
             base(capacity, comparer ?? PathComparer.DefaultComparer)
         {
         }
 
-        public PathDictionary(PathDictionary<TValue> dictionary, ExtensionComparer comparer) =>
+        public PathDictionary(PathDictionary<TValue> dictionary, ExtensionComparer comparer)
+        {
             BaseDictionary = new Dictionary<string, TValue>(dictionary, comparer);
+        }
 
         protected override void AssertKey(string key)
         {
