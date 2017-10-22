@@ -1,6 +1,11 @@
 ﻿using System;
+<<<<<<< HEAD
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Helper;
+=======
+using Helper;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+>>>>>>> refs/remotes/origin/master
 
 namespace Tests.Helper
 {
@@ -142,18 +147,30 @@ namespace Tests.Helper
         {
             // Test empty color.
             var color = ColorF.Empty;
+<<<<<<< HEAD
             AssertAcmy(color, 0, 1, 1, 1);
 
             // Test some colors
             color = ColorF.FromCmy(1, 0, 0);
             AssertAcmy(color, 1, 1, 0, 0);
+=======
+            assertAcmy(0, 1, 1, 1);
+
+            // Test some colors
+            color = ColorF.FromCmy(1, 0, 0);
+            assertAcmy(1, 1, 0, 0);
+>>>>>>> refs/remotes/origin/master
             Assert.AreEqual(color.Hue, 0.5f);
             Assert.AreEqual(color.HueDegrees, 180);
             Assert.AreEqual(color.Saturation, 1);
 
             // Test FromArgb with defined alpha
             color = ColorF.FromCmy(0.75f, 0, 1, 0);
+<<<<<<< HEAD
             AssertAcmy(color, 0.75f, 0, 1, 0);
+=======
+            assertAcmy(0.75f, 0, 1, 0);
+>>>>>>> refs/remotes/origin/master
             Assert.AreEqual(color.Hue, (5 / 6f));
             Assert.AreEqual(color.HueDegrees, 300f);
 
@@ -185,11 +202,19 @@ namespace Tests.Helper
             {
                 ColorF.FromCmy(0, 0, 0, Single.NaN);
             });
+<<<<<<< HEAD
         }
 
         private void AssertAcmy(ColorF color, float alpha, float cyan, float magenta, float yellow)
         {
             AssertArgb(color, alpha, 1 - cyan, 1 - magenta, 1 - yellow);
+=======
+
+            void assertAcmy(float alpha, float cyan, float magenta, float yellow)
+            {
+                AssertArgb(color, alpha, 1 - cyan, 1 - magenta, 1 - yellow);
+            }
+>>>>>>> refs/remotes/origin/master
         }
     }
 }

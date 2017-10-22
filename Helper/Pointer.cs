@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Pointer.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+using System;
 
 namespace Helper
 {
@@ -10,7 +14,10 @@ namespace Helper
             set;
         }
 
-        public T[] GetArray() => Array;
+        public T[] GetArray()
+        {
+            return Array;
+        }
 
         public int Offset
         {
@@ -18,26 +25,50 @@ namespace Helper
             set;
         }
 
-        public int Length => Array.Length - Offset;
+        public int Length
+        {
+            get
+            {
+                return Array.Length - Offset;
+            }
+        }
 
         public T this[int index]
         {
-            get => Array[Offset + index];
-            set => Array[Offset + index] = value;
+            get
+            {
+                return Array[Offset + index];
+            }
+
+            set
+            {
+                Array[Offset + index] = value;
+            }
         }
 
-        public Pointer(int size) : this(new T[size]) { }
-        public Pointer(Pointer<T> pointer) : this(pointer, 0) { }
+        public Pointer(int size) : this(new T[size])
+        {
+        }
+
+        public Pointer(Pointer<T> pointer) : this(pointer, 0)
+        {
+        }
+
         public Pointer(Pointer<T> pointer, int offset)
         {
             if (pointer == null)
+            {
                 throw new ArgumentNullException(nameof(pointer));
+            }
 
             Array = pointer.Array;
             Offset = pointer.Offset + offset;
         }
 
-        public Pointer(T[] pointer) : this(pointer, 0) { }
+        public Pointer(T[] pointer) : this(pointer, 0)
+        {
+        }
+
         public Pointer(T[] pointer, int offset)
         {
             Array = pointer ?? throw new ArgumentNullException(nameof(pointer));
@@ -49,36 +80,55 @@ namespace Helper
             return new Pointer<T>(Array, Offset);
         }
 
-        public void Clear(int length) =>
+        public void Clear(int length)
+        {
             Clear(0, length);
+        }
 
-        public void Clear(int offset, int length) =>
+        public void Clear(int offset, int length)
+        {
             System.Array.Clear(Array, Offset + offset, length);
+        }
 
-        public void Copy(Pointer<T> source, int length) =>
+        public void Copy(Pointer<T> source, int length)
+        {
             Copy(0, source, 0, length);
+        }
 
-        public void Copy(int destOffset, Pointer<T> source, int length) =>
+        public void Copy(int destOffset, Pointer<T> source, int length)
+        {
             Copy(destOffset, source, 0, length);
+        }
 
-        public void Copy(Pointer<T> source, int sourceOffset, int length) =>
+        public void Copy(Pointer<T> source, int sourceOffset, int length)
+        {
             Copy(0, source, sourceOffset, length);
+        }
 
-        public void Copy(int destOffset, Pointer<T> source, int sourceOffset, int length) =>
+        public void Copy(int destOffset, Pointer<T> source, int sourceOffset, int length)
+        {
             System.Array.Copy(source.Array, sourceOffset, Array, Offset + destOffset, length);
+        }
 
-        public void CopyTo(Array dest, int length) =>
+        public void CopyTo(Array dest, int length)
+        {
             CopyTo(0, dest, 0, length);
+        }
 
-        public void CopyTo(Array dest, int destOffset, int length) =>
+        public void CopyTo(Array dest, int destOffset, int length)
+        {
             CopyTo(0, dest, destOffset, length);
+        }
 
-        public void CopyTo(int sourceOffset, Array dest, int length) =>
+        public void CopyTo(int sourceOffset, Array dest, int length)
+        {
             CopyTo(sourceOffset, dest, 0, length);
+        }
 
-        public void CopyTo(int sourceOffset, Array dest, int destOffset, int length) =>
+        public void CopyTo(int sourceOffset, Array dest, int destOffset, int length)
+        {
             System.Array.Copy(Array, sourceOffset, dest, destOffset, length);
-
+        }
 
         public void BlockCopy<U>(Pointer<U> source, int count)
         {
@@ -107,22 +157,28 @@ namespace Helper
         public static implicit operator Pointer<T>(T[] array)
         {
             if (array == null)
+            {
                 return null;
+            }
 
             return new Pointer<T>(array, 0);
         }
+
         public static Pointer<T> operator +(Pointer<T> sharedArray, int offset)
         {
             return new Pointer<T>(sharedArray.Array, sharedArray.Offset + offset);
         }
+
         public static Pointer<T> operator +(int offset, Pointer<T> sharedArray)
         {
             return sharedArray + offset;
         }
+
         public static Pointer<T> operator -(Pointer<T> sharedArray, int offset)
         {
             return sharedArray + (-offset);
         }
+
         public static Pointer<T> operator -(int offset, Pointer<T> sharedArray)
         {
             return sharedArray - offset;
@@ -132,6 +188,7 @@ namespace Helper
         {
             return sharedArray + 1;
         }
+
         public static Pointer<T> operator --(Pointer<T> sharedArray)
         {
             return sharedArray - 1;
@@ -140,12 +197,19 @@ namespace Helper
         public static int operator -(Pointer<T> left, Pointer<T> right)
         {
             if (left == null)
+            {
                 throw new ArgumentNullException(nameof(left));
+            }
+
             if (right == null)
+            {
                 throw new ArgumentNullException(nameof(right));
+            }
 
             if (left.Array != right.Array)
+            {
                 throw new ArgumentException();
+            }
 
             return left.Offset - right.Offset;
         }
@@ -153,16 +217,23 @@ namespace Helper
         public static bool operator ==(Pointer<T> left, Pointer<T> right)
         {
             if (ReferenceEquals(left, right))
+            {
                 return true;
+            }
 
             if (ReferenceEquals(left, null) || ReferenceEquals(right, null))
+            {
                 return false;
+            }
 
             if (left.Array != right.Array)
+            {
                 return false;
+            }
 
             return left.Offset == right.Offset;
         }
+
         public static bool operator !=(Pointer<T> left, Pointer<T> right)
         {
             return !(left == right);
@@ -171,52 +242,79 @@ namespace Helper
         public static bool operator <(Pointer<T> left, Pointer<T> right)
         {
             if (left == null && right == null)
+            {
                 return true;
+            }
 
             if (left == null || right == null)
+            {
                 return false;
+            }
 
             if (left.Array != right.Array)
+            {
                 return false;
+            }
 
             return left.Offset < right.Offset;
         }
+
         public static bool operator >(Pointer<T> left, Pointer<T> right)
         {
             if (left == null && right == null)
+            {
                 return true;
+            }
 
             if (left == null || right == null)
+            {
                 return false;
+            }
 
             if (left.Array != right.Array)
+            {
                 return false;
+            }
 
             return left.Offset > right.Offset;
         }
+
         public static bool operator >=(Pointer<T> left, Pointer<T> right)
         {
             if (left == null && right == null)
+            {
                 return true;
+            }
 
             if (left == null || right == null)
+            {
                 return false;
+            }
 
             if (left.Array != right.Array)
+            {
                 return false;
+            }
 
             return left.Offset >= right.Offset;
         }
+
         public static bool operator <=(Pointer<T> left, Pointer<T> right)
         {
             if (left == null && right == null)
+            {
                 return true;
+            }
 
             if (left == null || right == null)
+            {
                 return false;
+            }
 
             if (left.Array != right.Array)
+            {
                 return false;
+            }
 
             return left.Offset <= right.Offset;
         }
@@ -224,11 +322,16 @@ namespace Helper
         public override bool Equals(object obj)
         {
             if (obj is Pointer<T> ap)
+            {
                 return ap == this;
+            }
+
             return false;
         }
 
-        public override int GetHashCode() =>
-            Array.GetHashCode() ^ Offset.GetHashCode();
+        public override int GetHashCode()
+        {
+            return Array.GetHashCode() ^ Offset.GetHashCode();
+        }
     }
 }
