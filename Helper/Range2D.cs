@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Range2D.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 using System.Diagnostics;
 
 namespace Helper

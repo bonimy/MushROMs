@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ExtensionDictionary.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 
 namespace Helper
 {

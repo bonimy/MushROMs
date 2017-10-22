@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="SR.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 using System.Globalization;
 using System.IO;
 using Helper.Properties;

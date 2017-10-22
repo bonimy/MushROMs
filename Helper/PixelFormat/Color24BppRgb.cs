@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Color24BppRgb.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 using System.Runtime.InteropServices;
 using System.Text;
 using static System.Math;

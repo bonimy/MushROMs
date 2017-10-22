@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿// <copyright file="AssertDictionary.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System.Collections.Generic;
 
 namespace Helper
 {

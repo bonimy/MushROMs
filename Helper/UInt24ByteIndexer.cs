@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="UInt24ByteIndexer.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 
 namespace Helper
 {

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ExtensionComparer.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 using System.IO;
 
 namespace Helper
@@ -32,8 +36,7 @@ namespace Helper
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ExtensionComparer"/> using the given
-        /// base comparer for the string extenions.
+        /// Initializes a new instance of the <see cref="ExtensionComparer"/> class using the supplied <see cref="StringComparer"/> to compare the extensions of each string.
         /// </summary>
         /// <param name="baseComparer">
         /// The <see cref="StringComparer"/> to use when comparing extensions.

@@ -1,4 +1,8 @@
-﻿namespace Helper
+﻿// <copyright file="IReadOnlyIndexer.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+namespace Helper
 {
     public interface IReadOnlyIndexer<T>
     {

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="PathComparer.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 using System.IO;
 
 namespace Helper
@@ -30,8 +34,7 @@ namespace Helper
         { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PathComparer"/> using the given
-        /// base comparer for the string extenions.
+        /// Initializes a new instance of the <see cref="PathComparer"/> class using the supplied <see cref="StringComparer"/> to compare between the paths of each string.
         /// </summary>
         /// <param name="baseComparer">
         /// The <see cref="StringComparer"/> to use when comparing extensions.

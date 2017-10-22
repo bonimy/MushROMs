@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Color32BppArgb.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
@@ -123,7 +127,7 @@ namespace Helper.PixelFormats
         private byte _blue;
 
         /// <summary>
-        /// gets or sets the color value, as a 32-bit integer.
+        /// Gets or sets the color value, as a 32-bit integer.
         /// </summary>
         /// <remarks>
         /// This is the fundamental type of this <see cref="Color32BppArgb"/>.

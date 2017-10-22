@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="MathHelper.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 using static System.Math;
 
 namespace Helper

@@ -1,4 +1,8 @@
-﻿/* Blend modes provided were taken from the blend options in Adobe Photoshop. A reference to where
+﻿// <copyright file="BlendMode.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+/* Blend modes provided were taken from the blend options in Adobe Photoshop. A reference to where
 * each algorithm was obtained is provided in the method that implements them.
 *
 * Refer to https://en.wikipedia.org/wiki/Blend_modes for information on all of the blend algorithms.
@@ -42,7 +46,7 @@ namespace Helper
         HardLight,
 
         /// <summary>
-        ///A softer version of <see cref="HardLight"/>.
+        /// A softer version of <see cref="HardLight"/>.
         /// </summary>
         SoftLight,
 

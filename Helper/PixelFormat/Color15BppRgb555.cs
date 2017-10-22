@@ -1,4 +1,8 @@
-﻿using System.Runtime.InteropServices;
+﻿// <copyright file="Color15BppRgb555.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System.Runtime.InteropServices;
 using System.Text;
 using static System.Math;
 

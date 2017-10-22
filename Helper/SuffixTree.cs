@@ -1,18 +1,15 @@
-﻿/* A suffix tree based on Ukkonen's algorithm for byte values. I followed the ideas based
-* in this helpful article:
+﻿// <copyright file="SuffixTree.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+/* A suffix tree based on Ukkonen's algorithm for byte values. I followed the ideas based in this helpful article:
 * http://stackoverflow.com/questions/9452701/ukkonens-suffix-tree-algorithm-in-plain-english/9513423#9513423
 *
 * The code written here is based on a C++ implementation given here:
 * http://pastie.org/5925809
 *
 * A note on memory management:
-* Try creating as few new suffix tree classes as possible. Every time a new node is created, it has to
-* initialize an array of child nodes of size equal to the alphabet size (257). For large sets of data, this
-* operation becomes expensive and time-consuming. To counter the performance hit, the SuffixTree class
-* can be reused. The class keeps a list of every used node. When the class is reset to implement a new tree
-* structure, it simply erases all of the nodes information and reference data without letting the class itself
-* be erased from memory. This way, the next tree creation (if another one will be made) does not lose time
-* on allocating new memory. The performance gains are very significant.
+* Try creating as few new suffix tree classes as possible. Every time a new node is created, it has to initialize an array of child nodes of size equal to the alphabet size (257). For large sets of data, this operation becomes expensive and time-consuming. To counter the performance hit, the SuffixTree class can be reused. The class keeps a list of every used node. When the class is reset to implement a new tree structure, it simply erases all of the nodes information and reference data without letting the class itself be erased from memory. This way, the next tree creation (if another one will be made) does not lose time on allocating new memory. The performance gains are very significant.
 */
 
 using System;
@@ -55,7 +52,7 @@ namespace Helper
         private const int FallbakNodeCollectionSize = 0x1000;
 
         /// <summary>
-        /// The <see cref="Node"/> containing the beginning of each suffix string.
+        /// Gets or sets the <see cref="Node"/> containing the beginning of each suffix string.
         /// </summary>
         private RootNode Root
         {
@@ -64,7 +61,7 @@ namespace Helper
         }
 
         /// <summary>
-        /// Container for every <see cref="Node"/> created in <see cref="SuffixTree"/>.
+        /// Gets or sets a container for every <see cref="Node"/> created in <see cref="SuffixTree"/>.
         /// Used for recycling purposes.
         /// </summary>
         private NodeCollection Nodes
@@ -74,7 +71,7 @@ namespace Helper
         }
 
         /// <summary>
-        /// Current position in <see cref="Data"/>.
+        /// Gets or sets the current position in <see cref="Data"/>.
         /// </summary>
         private int Position
         {
@@ -83,7 +80,7 @@ namespace Helper
         }
 
         /// <summary>
-        /// The <see cref="Node"/> that <see cref="ActiveNode"/> links to.
+        /// Gets or sets the <see cref="Node"/> that <see cref="ActiveNode"/> links to.
         /// </summary>
         private Node ActiveLinkNode
         {
@@ -92,7 +89,7 @@ namespace Helper
         }
 
         /// <summary>
-        /// The number of <see cref="Node"/>s left to add.
+        /// Gets or sets the number of <see cref="Node"/>s left to add.
         /// </summary>
         private int Remainder
         {
@@ -101,7 +98,7 @@ namespace Helper
         }
 
         /// <summary>
-        /// Is <see cref="Root"/> if we are doing a direct insertion.
+        /// Gets or sets <see cref="Root"/> if we are doing a direct insertion.
         /// Otherwise, it is the branch of a child node where a matching substring
         /// pattern exists.
         /// </summary>
@@ -112,7 +109,7 @@ namespace Helper
         }
 
         /// <summary>
-        /// The data position of <see cref="ActiveNode"/>.
+        /// Gets or sets the data position of <see cref="ActiveNode"/>.
         /// </summary>
         private int ActivePosition
         {
@@ -121,7 +118,7 @@ namespace Helper
         }
 
         /// <summary>
-        /// Substring length at <see cref="ActivePosition"/>.
+        /// Gets or sets a substring length at <see cref="ActivePosition"/>.
         /// </summary>
         private int ActiveLength
         {
@@ -130,7 +127,7 @@ namespace Helper
         }
 
         /// <summary>
-        /// A copy of all the data of the tree.
+        /// Gets or sets a copy of all the data of the tree.
         /// </summary>
         private int[] Data
         {
@@ -150,7 +147,7 @@ namespace Helper
         public int this[int index] => Data[index];
 
         /// <summary>
-        /// The size of the data passed to this <see cref="SuffixTree"/>, including
+        /// Gets the size of the data passed to this <see cref="SuffixTree"/>, including
         /// <see cref="TerminationValue"/>.
         /// </summary>
         public int Size
@@ -160,11 +157,11 @@ namespace Helper
         }
 
         /// <summary>
-        /// Initialize a new instance of the <see cref="SuffixTree"/> class.
+        /// Initializes a new instance of the <see cref="SuffixTree"/> class.
         /// </summary>
         public SuffixTree()
         {
-            //Create a large node collection now to save time in the future.
+            // Create a large node collection now to save time in the future.
             Nodes = new NodeCollection(this, FallbakNodeCollectionSize);
 
             Root = new RootNode(this);
@@ -510,7 +507,7 @@ namespace Helper
             private const int AllocationSize = AlphabetSize + 1;
 
             /// <summary>
-            /// The <see cref="SuffixTree"/> that owns this <see cref="Node"/>.
+            /// Gets the <see cref="SuffixTree"/> that owns this <see cref="Node"/>.
             /// </summary>
             public SuffixTree Tree
             {
@@ -546,7 +543,7 @@ namespace Helper
             public SubstringPointer SubstringPointer => SubstringPointer.FromStartAndLength(Start, Length);
 
             /// <summary>
-            /// The <see cref="Node"/> that links to this <see cref="Node"/>
+            /// Gets or sets the <see cref="Node"/> that links to this <see cref="Node"/>
             /// </summary>
             /// <remarks>
             /// Link nodes are necessary when we split off of a non-root node to help
@@ -559,7 +556,7 @@ namespace Helper
             }
 
             /// <summary>
-            /// The children of this <see cref="Node"/>.
+            /// Gets or sets the children of this <see cref="Node"/>.
             /// </summary>
             /// <remarks>
             /// This array has a constant size of <see cref="AllocationSize"/>, and is indexed by the
@@ -572,7 +569,7 @@ namespace Helper
             }
 
             /// <summary>
-            /// Collection of index of every active child node.
+            /// Gets or sets a collection of indexes of every active child node.
             /// </summary>
             /// <remarks>
             /// When resetting the node, we remove the reference to every child
@@ -587,7 +584,7 @@ namespace Helper
             }
 
             /// <summary>
-            /// The number of index values in <see cref="Active"/>.
+            /// Gets or sets the number of index values in <see cref="Active"/>.
             /// </summary>
             private int ActiveSize
             {
@@ -747,7 +744,7 @@ namespace Helper
         private class NodeCollection : List<Node>
         {
             /// <summary>
-            /// The <see cref="SuffixTree"/> that this <see cref="NodeCollection"/> belongs to.
+            /// Gets the <see cref="SuffixTree"/> that this <see cref="NodeCollection"/> belongs to.
             /// </summary>
             public SuffixTree Tree
             {
@@ -765,7 +762,7 @@ namespace Helper
             }
 
             /// <summary>
-            /// Initialize a new instance of the <see cref="NodeCollection"/> with the given
+            /// Initializes a new instance of the <see cref="NodeCollection"/> with the given
             /// <see cref="SuffixTree"/> as its owner and has the specified initial capacity.
             /// </summary>
             /// <param name="tree">

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ColorF.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 using System.Text;
 using Debug = System.Diagnostics.Debug;
 
@@ -282,7 +286,7 @@ namespace Helper
                     hue = (Green - Blue) / chroma;
                 else if (max == Green)
                     hue = (Blue - Red) / chroma + 2;
-                else //if (max == color.Blue)
+                else // if (max == color.Blue)
                     hue = (Red - Green) / chroma + 4;
 
                 if (hue < 0)
@@ -1079,7 +1083,7 @@ namespace Helper
                     color.Red = chroma * (hue - 4);
                     color.Blue = chroma;
                 }
-                else //if (hue >= 5 && hue < 6)
+                else // if (hue >= 5 && hue < 6)
                 {
                     color.Red = chroma;
                     color.Blue = chroma * (6 - hue);
@@ -1188,7 +1192,7 @@ namespace Helper
                     red = chroma * (hue - 4);
                     blue = chroma;
                 }
-                else //if (hue >= 5 && hue < 6)
+                else // if (hue >= 5 && hue < 6)
                 {
                     red = chroma;
                     blue = chroma * (6 - hue);

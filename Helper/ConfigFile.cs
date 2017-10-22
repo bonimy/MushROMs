@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ConfigFile.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;

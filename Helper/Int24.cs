@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Int24.cs>
+//     Copyright (c) 2017 Nelson Garcia
+// </copyright>
+
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
