@@ -247,15 +247,14 @@ namespace Helper
             {
                 i = UInt32.Parse(s, style, info);
             }
-            catch (OverflowException e)
+            catch (OverflowException ex)
             {
-                // ToDo: Add message for exception.
-                throw new OverflowException();
+                throw new OverflowException(SR.ErrorInt24Overflow, ex);
             }
 
             if (i > MaxValue)
             {
-                throw new OverflowException();
+                throw new OverflowException(SR.ErrorInt24Overflow);
             }
 
             return (int)i;

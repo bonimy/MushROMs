@@ -63,7 +63,7 @@ namespace Tests.Helper
             // File types are not implied.
             Assert.AreNotEqual(dictionary[".doc"], dictionary[".rtf"]);
 
-            // But we can explictly define them again.
+            // But we can explicitly define them again.
             dictionary[".doc"] = Editor.RichTextEditor;
             Assert.AreEqual(dictionary[file], Editor.RichTextEditor);
 

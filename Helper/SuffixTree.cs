@@ -2,21 +2,15 @@
 //     Copyright (c) 2017 Nelson Garcia.
 // </copyright>
 
-/* A suffix tree based on Ukkonen's algorithm for byte values. I followed the ideas based
-* in this helpful article:
-* http://stackoverflow.com/questions/9452701/ukkonens-suffix-tree-algorithm-in-plain-english/9513423#9513423
-*
-* The code written here is based on a C++ implementation given here:
-* http://pastie.org/5925809
-*
-* A note on memory management:
-* Try creating as few new suffix tree classes as possible. Every time a new node is created, it has to
-* initialize an array of child nodes of size equal to the alphabet size (257). For large sets of data, this
-* operation becomes expensive and time-consuming. To counter the performance hit, the SuffixTree class
-* can be reused. The class keeps a list of every used node. When the class is reset to implement a new tree
-* structure, it simply erases all of the nodes information and reference data without letting the class itself
-* be erased from memory. This way, the next tree creation (if another one will be made) does not lose time
-* on allocating new memory. The performance gains are very significant.
+/*
+A suffix tree based on Ukkonen's algorithm for byte values. I followed the ideas based in this helpful article:
+http://stackoverflow.com/questions/9452701/ukkonens-suffix-tree-algorithm-in-plain-english/9513423#9513423
+
+The code written here is based on a C++ implementation given here:
+http://pastie.org/5925809
+
+A note on memory management:
+Try creating as few new suffix tree classes as possible. Every time a new node is created, it has to initialize an array of child nodes of size equal to the alphabet size (257). For large sets of data, this operation becomes expensive and time-consuming. To counter the performance hit, the SuffixTree class can be reused. The class keeps a list of every used node. When the class is reset to implement a new tree structure, it simply erases all of the nodes information and reference data without letting the class itself be erased from memory. This way, the next tree creation (if another one will be made) does not lose time on allocating new memory. The performance gains are very significant.
 */
 
 using System;

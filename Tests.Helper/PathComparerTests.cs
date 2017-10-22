@@ -14,7 +14,7 @@ namespace Tests.Helper
             // Default constructor should never throw.
             var comparer = PathComparer.DefaultComparer;
 
-            // Ensure we are using our expected base compater.
+            // Ensure we are using our expected base comparer.
             Assert.AreEqual(comparer.BaseComparer, StringComparer.OrdinalIgnoreCase);
 
             // Ensure the base comparer is accepted by the constructor.
@@ -58,7 +58,7 @@ namespace Tests.Helper
                 var comparison = comparer.Compare(left, right);
 
                 Assert.AreEqual(0, comparison, SR.GetString(
-                    "Path comparision of \"{0}\" and \"{1}\" returned {2} (expected 0).",
+                    "Path comparison of \"{0}\" and \"{1}\" returned {2} (expected 0).",
                     left, right, comparison)
                     );
 

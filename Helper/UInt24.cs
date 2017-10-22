@@ -243,14 +243,14 @@ left._x2 == right._x2;
             {
                 i = UInt32.Parse(s, style, info);
             }
-            catch (OverflowException e)
+            catch (OverflowException ex)
             {
-                throw new OverflowException();
+                throw new OverflowException(SR.ErrorUInt24Overflow, ex);
             }
 
             if (i > MaxValue)
             {
-                throw new OverflowException();
+                throw new OverflowException(SR.ErrorUInt24Overflow);
             }
 
             return (int)i;

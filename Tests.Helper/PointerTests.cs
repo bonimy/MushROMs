@@ -5,14 +5,16 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Tests.Helper
 {
     [TestClass]
-    public class ArrayPointerTests
+    public class PointerTests
     {
         [TestMethod]
         public void ConstructorTests()
         {
             var list = new int[0x1000];
             for (var i = 0; i < list.Length; i++)
+            {
                 list[i] = i;
+            }
 
             var pointer = (Pointer<int>)list;
             pointer += 0x800;
@@ -36,11 +38,15 @@ namespace Tests.Helper
         {
             var list1 = new string[0x1000];
             for (var i = 0; i < 0x1000; i++)
+            {
                 list1[i] = "0x" + i.ToString("X4");
+            }
 
             var list2 = new string[list1.Length];
             for (var i = 0; i < list2.Length; i++)
+            {
                 list2[i] = list1[list1.Length - 1 - i];
+            }
 
             var shared = (Pointer<string>)list1;
             shared += 0x200;

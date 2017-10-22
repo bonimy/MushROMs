@@ -19,6 +19,22 @@ namespace Helper
             }
         }
 
+        public static string ErrorInt24Overflow
+        {
+            get
+            {
+                return Resources.ErrorInt24Overflow;
+            }
+        }
+
+        public static string ErrorUInt24Overflow
+        {
+            get
+            {
+                return Resources.ErrorUInt24Overflow;
+            }
+        }
+
         public static string ErrorLowerBoundInclusive(string paramName, object value, object valid)
         {
             return GetString(Resources.ErrorLowerBoundInclusive, paramName, value, valid);

@@ -59,7 +59,7 @@
     <Compile Include="SubstringPointerTests.cs" />
     <Compile Include="SuffixTreeTests.cs" />
     <Compile Include="ColorFTests.cs" />
-    <Compile Include="ArrayPointerTests.cs" />
+    <Compile Include="PointerTests.cs" />
     <Compile Include="UInt24Tests.cs" />
   </ItemGroup>
   <ItemGroup>
