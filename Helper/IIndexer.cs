@@ -1,5 +1,5 @@
-﻿// <copyright file="IIndexer.cs>
-//     Copyright (c) 2017 Nelson Garcia
+﻿// <copyright file="IIndexer.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
 // </copyright>
 
 namespace Helper

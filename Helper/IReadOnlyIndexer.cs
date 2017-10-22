@@ -1,5 +1,5 @@
-﻿// <copyright file="IReadOnlyIndexer.cs>
-//     Copyright (c) 2017 Nelson Garcia
+﻿// <copyright file="IReadOnlyIndexer.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
 // </copyright>
 
 namespace Helper

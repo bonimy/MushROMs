@@ -154,7 +154,10 @@ namespace Tests.Helper
                 private set;
             }
 
-            public MockEditor(string path) => Path = path;
+            public MockEditor(string path)
+            {
+                Path = path;
+            }
         }
     }
 }

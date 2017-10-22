@@ -76,15 +76,17 @@ namespace Tests.Helper
                 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
             };
 
-            // Create tree after constructoed.
+            // Create tree after constructed.
             tree.CreateTree(data);
 
             // Tree size should be 1 extra due to termination value.
             Assert.AreEqual(tree.Size, data.Length + 1);
 
-            // All data in stree should match its array.
+            // All data in tree should match its array.
             for (var i = 0; i < data.Length; i++)
+            {
                 Assert.AreEqual(data[i], tree[i]);
+            }
 
             // Tree should end with termination value.
             Assert.AreEqual(tree[data.Length], SuffixTree.TerminationValue);
@@ -97,7 +99,10 @@ namespace Tests.Helper
             tree.CreateTree(data, start, size);
             Assert.AreEqual(tree.Size, size + 1);
             for (var i = 0; i < size; i++)
+            {
                 Assert.AreEqual(data[start + i], tree[i]);
+            }
+
             Assert.AreEqual(tree[size], SuffixTree.TerminationValue);
 
             // Use full data for testing.
@@ -107,7 +112,7 @@ namespace Tests.Helper
             var index = tree.GetLongestInternalSubstring(0);
             Assert.AreEqual(index, SubstringPointer.Empty);
 
-            // Just do some simple checkswith expected longest substrings.
+            // Just do some simple checks with expected longest substrings.
 
             index = tree.GetLongestInternalSubstring(20);
             Assert.AreEqual(index, SubstringPointer.FromStartAndLength(0, 6));

@@ -1,5 +1,5 @@
-﻿// <copyright file="Resources.Designer.cs>
-//     Copyright (c) 2017 Nelson Garcia
+﻿// <copyright file="Resources.Designer.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
 // </copyright>
 
 //------------------------------------------------------------------------------
@@ -129,6 +129,15 @@ namespace Helper.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value was either too large or too small for an Int24..
+        /// </summary>
+        internal static string ErrorInt24Overflow {
+            get {
+                return ResourceManager.GetString("ErrorInt24Overflow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; is an invalid extension name..
         /// </summary>
         internal static string ErrorInvalidExtensionName {
@@ -188,6 +197,15 @@ namespace Helper.Properties {
         internal static string ErrorSubstringPointerLength {
             get {
                 return ResourceManager.GetString("ErrorSubstringPointerLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value was either too large or too small for a UInt24..
+        /// </summary>
+        internal static string ErrorUInt24Overflow {
+            get {
+                return ResourceManager.GetString("ErrorUInt24Overflow", resourceCulture);
             }
         }
         

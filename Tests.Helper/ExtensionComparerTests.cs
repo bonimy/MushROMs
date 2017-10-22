@@ -13,7 +13,7 @@ namespace Tests.Helper
             // Default constructor should never throw.
             var comparer = ExtensionComparer.DefaultComparer;
 
-            // Ensure we are using our expected base compater.
+            // Ensure we are using our expected base comparer.
             Assert.AreEqual(comparer.BaseComparer, StringComparer.OrdinalIgnoreCase);
 
             // Ensure the base comparer is accepted by the constructor.
@@ -52,7 +52,7 @@ namespace Tests.Helper
                 var comparison = comparer.Compare(left, right);
 
                 Assert.AreEqual(0, comparison, SR.GetString(
-                    "Comparision of \"{0}\" and \"{1}\" returned {2} (expected 0).",
+                    "Comparison of \"{0}\" and \"{1}\" returned {2} (expected 0).",
                     left, right, comparison)
                     );
 
@@ -98,7 +98,7 @@ namespace Tests.Helper
                 var comparison = comparer.Compare(left, right);
 
                 Assert.AreNotEqual(0, comparison, SR.GetString(
-                    "Extension comparision of \"{0}\" and \"{1}\" returned 0 (expected nonzero).",
+                    "Extension comparison of \"{0}\" and \"{1}\" returned 0 (expected nonzero).",
                     left, right)
                     );
 
