@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Int24.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -16,8 +20,10 @@ namespace Helper
 
         [FieldOffset(0)]
         private byte _x0;
+
         [FieldOffset(1)]
         private byte _x1;
+
         [FieldOffset(2)]
         private byte _x2;
 
@@ -44,22 +50,33 @@ namespace Helper
         public int CompareTo(object value)
         {
             if (value == null)
+            {
                 return 1;
+            }
 
             if (value is Int24 m)
+            {
                 return Value - m.Value;
+            }
 
             throw new ArgumentException();
         }
 
-        public int CompareTo(Int24 value) => this - value;
+        public int CompareTo(Int24 value)
+        {
+            return this - value;
+        }
 
-        public bool Equals(Int24 obj) => this == obj;
+        public bool Equals(Int24 obj)
+        {
+            return this == obj;
+        }
 
         public static implicit operator int(Int24 value)
         {
             return value.Value;
         }
+
         public static implicit operator Int24(int value)
         {
             return new Int24(value);
@@ -67,64 +84,72 @@ namespace Helper
 
         public static Int24 operator +(Int24 left, Int24 right)
         {
-            return (Int24)(left.Value + right.Value);
+            return left.Value + right.Value;
         }
+
         public static Int24 operator -(Int24 left, Int24 right)
         {
-            return (Int24)(left.Value - right.Value);
+            return left.Value - right.Value;
         }
 
         public static Int24 operator ++(Int24 value)
         {
-            return (Int24)(value.Value + 1);
+            return value.Value + 1;
         }
+
         public static Int24 operator --(Int24 value)
         {
-            return (Int24)(value.Value - 1);
+            return value.Value - 1;
         }
 
         public static Int24 operator *(Int24 left, Int24 right)
         {
-            return (Int24)(left.Value * right.Value);
+            return left.Value * right.Value;
         }
+
         public static Int24 operator /(Int24 left, Int24 right)
         {
-            return (Int24)(left.Value / right.Value);
+            return left.Value / right.Value;
         }
+
         public static Int24 operator %(Int24 left, Int24 right)
         {
-            return (Int24)(left.Value % right.Value);
+            return left.Value % right.Value;
         }
 
         public static Int24 operator &(Int24 left, Int24 right)
         {
-            return (Int24)(left.Value & right.Value);
+            return left.Value & right.Value;
         }
+
         public static Int24 operator |(Int24 left, Int24 right)
         {
-            return (Int24)(left.Value | right.Value);
+            return left.Value | right.Value;
         }
+
         public static Int24 operator ^(Int24 left, Int24 right)
         {
-            return (Int24)(left.Value ^ right.Value);
+            return left.Value ^ right.Value;
         }
 
         public static Int24 operator >>(Int24 left, int right)
         {
-            return (Int24)(left.Value >> right);
+            return left.Value >> right;
         }
+
         public static Int24 operator <<(Int24 left, int right)
         {
-            return (Int24)(left.Value << right);
+            return left.Value << right;
         }
 
         public static Int24 operator +(Int24 value)
         {
-            return (Int24)(+value.Value);
+            return +value.Value;
         }
+
         public static Int24 operator -(Int24 value)
         {
-            return (Int24)(-value.Value);
+            return -value.Value;
         }
 
         public static bool operator ==(Int24 left, Int24 right)
@@ -134,6 +159,7 @@ namespace Helper
                 left._x1 == right._x1 &&
                 left._x2 == right._x2;
         }
+
         public static bool operator !=(Int24 left, Int24 right)
         {
             return !(left == right);
@@ -143,14 +169,17 @@ namespace Helper
         {
             return left.Value > right.Value;
         }
+
         public static bool operator <=(Int24 left, Int24 right)
         {
             return left.Value <= right.Value;
         }
+
         public static bool operator <(Int24 left, Int24 right)
         {
             return left.Value < right.Value;
         }
+
         public static bool operator >(Int24 left, Int24 right)
         {
             return right.Value > left.Value;
@@ -159,29 +188,57 @@ namespace Helper
         public override bool Equals(object obj)
         {
             if (obj is Int24 uint24)
+            {
                 return uint24 == this;
+            }
 
             return false;
         }
-        public override int GetHashCode() => Value.GetHashCode();
 
-        public override string ToString() =>
-            Value.ToString();
-        public string ToString(IFormatProvider provider) =>
-            Value.ToString(provider);
-        public string ToString(string format) =>
-            Value.ToString(format);
-        public string ToString(string format, IFormatProvider provider) =>
-            Value.ToString(format, provider);
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
 
-        public static Int24 Parse(string s) =>
-            Parse(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo);
-        public static Int24 Parse(string s, NumberStyles style) =>
-            Parse(s, style, NumberFormatInfo.CurrentInfo);
-        public static Int24 Parse(string s, IFormatProvider provider) =>
-            Parse(s, NumberStyles.Integer, NumberFormatInfo.GetInstance(provider));
-        public static Int24 Parse(string s, NumberStyles style, IFormatProvider provider) =>
-            Parse(s, style, NumberFormatInfo.GetInstance(provider));
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
+
+        public string ToString(IFormatProvider provider)
+        {
+            return Value.ToString(provider);
+        }
+
+        public string ToString(string format)
+        {
+            return Value.ToString(format);
+        }
+
+        public string ToString(string format, IFormatProvider provider)
+        {
+            return Value.ToString(format, provider);
+        }
+
+        public static Int24 Parse(string s)
+        {
+            return Parse(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo);
+        }
+
+        public static Int24 Parse(string s, NumberStyles style)
+        {
+            return Parse(s, style, NumberFormatInfo.CurrentInfo);
+        }
+
+        public static Int24 Parse(string s, IFormatProvider provider)
+        {
+            return Parse(s, NumberStyles.Integer, NumberFormatInfo.GetInstance(provider));
+        }
+
+        public static Int24 Parse(string s, NumberStyles style, IFormatProvider provider)
+        {
+            return Parse(s, style, NumberFormatInfo.GetInstance(provider));
+        }
 
         private static Int24 Parse(string s, NumberStyles style, NumberFormatInfo info)
         {
@@ -190,55 +247,134 @@ namespace Helper
             {
                 i = UInt32.Parse(s, style, info);
             }
-            catch (OverflowException e)
+            catch (OverflowException ex)
             {
-                throw new OverflowException();
+                throw new OverflowException(SR.ErrorInt24Overflow, ex);
             }
 
             if (i > MaxValue)
-                throw new OverflowException();
+            {
+                throw new OverflowException(SR.ErrorInt24Overflow);
+            }
 
-            return (Int24)(int)i;
+            return (int)i;
         }
 
-        public static bool TryParse(string s, out Int24 result) =>
-            TryParse(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo, out result);
-        public static bool TryParse(string s, NumberStyles style, out Int24 result) =>
-            TryParse(s, style, NumberFormatInfo.CurrentInfo, out result);
-        public static bool TryParse(string s, IFormatProvider provider, out Int24 result) =>
-            TryParse(s, NumberStyles.Integer, NumberFormatInfo.GetInstance(provider), out result);
-        public static bool TryParse(string s, NumberStyles style, IFormatProvider provider, out Int24 result) =>
-            TryParse(s, style, NumberFormatInfo.GetInstance(provider), out result);
+        public static bool TryParse(string s, out Int24 result)
+        {
+            return TryParse(s, NumberStyles.Integer, NumberFormatInfo.CurrentInfo, out result);
+        }
+
+        public static bool TryParse(string s, NumberStyles style, out Int24 result)
+        {
+            return TryParse(s, style, NumberFormatInfo.CurrentInfo, out result);
+        }
+
+        public static bool TryParse(string s, IFormatProvider provider, out Int24 result)
+        {
+            return TryParse(s, NumberStyles.Integer, NumberFormatInfo.GetInstance(provider), out result);
+        }
+
+        public static bool TryParse(string s, NumberStyles style, IFormatProvider provider, out Int24 result)
+        {
+            return TryParse(s, style, NumberFormatInfo.GetInstance(provider), out result);
+        }
 
         private static bool TryParse(string s, NumberStyles style, NumberFormatInfo info, out Int24 result)
         {
-            result = (Int24)0;
+            result = 0;
             if (!UInt32.TryParse(s, style, info, out var i))
+            {
                 return false;
+            }
 
             if (i > MaxValue)
+            {
                 return false;
-            result = (Int24)(int)i;
+            }
+
+            result = (int)i;
             return true;
         }
 
-        TypeCode IConvertible.GetTypeCode() => ((IConvertible)Value).GetTypeCode();
-        bool IConvertible.ToBoolean(IFormatProvider provider) => Convert.ToBoolean(Value);
-        char IConvertible.ToChar(IFormatProvider provider) => Convert.ToChar(Value);
-        sbyte IConvertible.ToSByte(IFormatProvider provider) => Convert.ToSByte(Value);
-        byte IConvertible.ToByte(IFormatProvider provider) => Convert.ToByte(Value);
-        short IConvertible.ToInt16(IFormatProvider provider) => Convert.ToInt16(Value);
-        ushort IConvertible.ToUInt16(IFormatProvider provider) => Convert.ToUInt16(Value);
-        int IConvertible.ToInt32(IFormatProvider provider) => Convert.ToInt32(Value);
-        uint IConvertible.ToUInt32(IFormatProvider provider) => Convert.ToUInt32(Value);
-        long IConvertible.ToInt64(IFormatProvider provider) => Convert.ToInt64(Value);
-        ulong IConvertible.ToUInt64(IFormatProvider provider) => Convert.ToUInt64(Value);
-        float IConvertible.ToSingle(IFormatProvider provider) => Convert.ToSingle(Value);
-        double IConvertible.ToDouble(IFormatProvider provider) => Convert.ToDouble(Value);
-        decimal IConvertible.ToDecimal(IFormatProvider provider) => Convert.ToDecimal(Value);
-        DateTime IConvertible.ToDateTime(IFormatProvider provider) => Convert.ToDateTime(Value);
-        object IConvertible.ToType(Type conversionType, IFormatProvider provider) =>
-            ((IConvertible)Value).ToType(conversionType, provider);
+        TypeCode IConvertible.GetTypeCode()
+        {
+            return ((IConvertible)Value).GetTypeCode();
+        }
 
+        bool IConvertible.ToBoolean(IFormatProvider provider)
+        {
+            return Convert.ToBoolean(Value);
+        }
+
+        char IConvertible.ToChar(IFormatProvider provider)
+        {
+            return Convert.ToChar(Value);
+        }
+
+        sbyte IConvertible.ToSByte(IFormatProvider provider)
+        {
+            return Convert.ToSByte(Value);
+        }
+
+        byte IConvertible.ToByte(IFormatProvider provider)
+        {
+            return Convert.ToByte(Value);
+        }
+
+        short IConvertible.ToInt16(IFormatProvider provider)
+        {
+            return Convert.ToInt16(Value);
+        }
+
+        ushort IConvertible.ToUInt16(IFormatProvider provider)
+        {
+            return Convert.ToUInt16(Value);
+        }
+
+        int IConvertible.ToInt32(IFormatProvider provider)
+        {
+            return Convert.ToInt32(Value);
+        }
+
+        uint IConvertible.ToUInt32(IFormatProvider provider)
+        {
+            return Convert.ToUInt32(Value);
+        }
+
+        long IConvertible.ToInt64(IFormatProvider provider)
+        {
+            return Convert.ToInt64(Value);
+        }
+
+        ulong IConvertible.ToUInt64(IFormatProvider provider)
+        {
+            return Convert.ToUInt64(Value);
+        }
+
+        float IConvertible.ToSingle(IFormatProvider provider)
+        {
+            return Convert.ToSingle(Value);
+        }
+
+        double IConvertible.ToDouble(IFormatProvider provider)
+        {
+            return Convert.ToDouble(Value);
+        }
+
+        decimal IConvertible.ToDecimal(IFormatProvider provider)
+        {
+            return Convert.ToDecimal(Value);
+        }
+
+        DateTime IConvertible.ToDateTime(IFormatProvider provider)
+        {
+            return Convert.ToDateTime(Value);
+        }
+
+        object IConvertible.ToType(Type conversionType, IFormatProvider provider)
+        {
+            return ((IConvertible)Value).ToType(conversionType, provider);
+        }
     }
 }

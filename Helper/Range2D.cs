@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Range2D.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.Diagnostics;
 
 namespace Helper
@@ -13,16 +17,25 @@ namespace Helper
             get;
             private set;
         }
+
         public int Vertical
         {
             get;
             private set;
         }
 
-        public int Area => Horizontal * Vertical;
+        public int Area
+        {
+            get
+            {
+                return Horizontal * Vertical;
+            }
+        }
+
         public Range2D(int value) : this(value, value)
         {
         }
+
         public Range2D(int horizontal, int vertical)
         {
             Horizontal = horizontal;
@@ -39,18 +52,22 @@ namespace Helper
         {
             return this + value;
         }
+
         public Range2D Subtract(Range2D value)
         {
             return this - value;
         }
+
         public Range2D Negate()
         {
             return -this;
         }
+
         public Range2D Multiply(Range2D value)
         {
             return this * value;
         }
+
         public Range2D Divide(Range2D value)
         {
             return this / value;
@@ -58,36 +75,47 @@ namespace Helper
 
         public static Range2D TopLeft(Range2D value1, Range2D value2)
         {
-            return new Range2D(Math.Min(value1.Horizontal, value2.Horizontal),
+            return new Range2D(
+                Math.Min(value1.Horizontal, value2.Horizontal),
                 Math.Min(value1.Vertical, value2.Vertical));
         }
+
         public static Range2D TopRight(Range2D value1, Range2D value2)
         {
-            return new Range2D(Math.Max(value1.Horizontal, value2.Horizontal),
+            return new Range2D(
+                Math.Max(value1.Horizontal, value2.Horizontal),
                 Math.Min(value1.Vertical, value2.Vertical));
         }
+
         public static Range2D BottomLeft(Range2D value1, Range2D value2)
         {
-            return new Range2D(Math.Min(value1.Horizontal, value2.Horizontal),
+            return new Range2D(
+                Math.Min(value1.Horizontal, value2.Horizontal),
                 Math.Max(value1.Vertical, value2.Vertical));
         }
+
         public static Range2D BottomRight(Range2D value1, Range2D value2)
         {
-            return new Range2D(Math.Max(value1.Horizontal, value2.Horizontal),
+            return new Range2D(
+                Math.Max(value1.Horizontal, value2.Horizontal),
                 Math.Max(value1.Vertical, value2.Vertical));
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is Range2D))
-                return false;
+            if (obj is Range2D value)
+            {
+                return value == this;
+            }
 
-            return (Range2D)obj == this;
+            return false;
         }
+
         public override int GetHashCode()
         {
             return Horizontal ^ Vertical;
         }
+
         public override string ToString()
         {
             return SR.GetString("H={0}, V={1}", Horizontal, Vertical);
@@ -96,8 +124,9 @@ namespace Helper
         public static bool operator ==(Range2D left, Range2D right)
         {
             return left.Horizontal == right.Horizontal &&
-                left.Vertical == right.Vertical;
+left.Vertical == right.Vertical;
         }
+
         public static bool operator !=(Range2D left, Range2D right)
         {
             return !(left == right);
@@ -107,18 +136,22 @@ namespace Helper
         {
             return new Range2D(left.Horizontal + right.Horizontal, left.Vertical + right.Vertical);
         }
+
         public static Range2D operator -(Range2D left, Range2D right)
         {
             return new Range2D(left.Horizontal - right.Horizontal, left.Vertical - right.Vertical);
         }
+
         public static Range2D operator -(Range2D right)
         {
             return new Range2D(-right.Horizontal, -right.Vertical);
         }
+
         public static Range2D operator *(Range2D left, Range2D right)
         {
             return new Range2D(left.Horizontal * right.Horizontal, left.Vertical * right.Vertical);
         }
+
         public static Range2D operator /(Range2D left, Range2D right)
         {
             return new Range2D(left.Horizontal / right.Horizontal, left.Vertical / right.Vertical);

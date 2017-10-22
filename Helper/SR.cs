@@ -1,27 +1,40 @@
-﻿using System;
-using System.IO;
+﻿// <copyright file="SR.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.Globalization;
+using System.IO;
 using Helper.Properties;
 
 namespace Helper
 {
-    /// <summary>
-    /// Provides static methods for creating localized strings specifying common
-    /// errors and messages.
-    /// </summary>
-    /// <remarks>
-    /// This class is meant to serve as public access to the Helper Library's localized
-    /// resources. All localized strings are given as static methods with parameters to
-    /// fill in, allowing programmers to generate messages without having to worry about
-    /// the culture of their user.
-    /// </remarks>
-    /// <threadsafety static="true" instance="false"/>
     public static class SR
     {
-        /// <summary>
-        /// Returns <see cref="CultureInfo.CurrentCulture"/>.
-        /// </summary>
-        public static CultureInfo CurrentCulture => CultureInfo.CurrentCulture;
+        public static CultureInfo CurrentCulture
+        {
+            get
+            {
+                return CultureInfo.CurrentCulture;
+            }
+        }
+
+        public static string ErrorInt24Overflow
+        {
+            get
+            {
+                return Resources.ErrorInt24Overflow;
+            }
+        }
+
+        public static string ErrorUInt24Overflow
+        {
+            get
+            {
+                return Resources.ErrorUInt24Overflow;
+            }
+        }
+
         public static string ErrorLowerBoundInclusive(string paramName, object value, object valid)
         {
             return GetString(Resources.ErrorLowerBoundInclusive, paramName, value, valid);
@@ -61,7 +74,9 @@ namespace Helper
         {
             var name = Path.GetFileName(path);
             if (String.IsNullOrEmpty(name))
+            {
                 name = Resources.ErrorFileFormatName;
+            }
 
             return GetString(Resources.ErrorFileFormat, name);
         }
@@ -89,7 +104,9 @@ namespace Helper
         public static string ErrorCannotGetPathExtension(string paramName, string value, Exception innerException)
         {
             if (innerException == null)
+            {
                 throw new ArgumentNullException(nameof(innerException));
+            }
 
             return GetString(Resources.ErrorCannotGetPathExtension, paramName, value, innerException.Message, innerException.GetType());
         }
@@ -97,7 +114,9 @@ namespace Helper
         public static string ErrorCannotGetFullPath(string paramName, string value, Exception innerException)
         {
             if (innerException == null)
+            {
                 throw new ArgumentNullException(nameof(innerException));
+            }
 
             return GetString(Resources.ErrorCannotGetFullPath, paramName, value, innerException.Message, innerException.GetType());
         }
@@ -115,7 +134,9 @@ namespace Helper
         public static string GetUntitledName(int number, string ext)
         {
             if (ext == null)
+            {
                 ext = String.Empty;
+            }
 
             return GetString(Resources.UntitledName, GetString(number)) + ext;
         }
@@ -133,7 +154,9 @@ namespace Helper
         public static string GetString(IFormattable value, string format)
         {
             if (value == null)
+            {
                 return null;
+            }
 
             return value.ToString(format, CurrentCulture);
         }

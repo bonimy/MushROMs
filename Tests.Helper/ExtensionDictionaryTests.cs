@@ -1,6 +1,11 @@
 ﻿using System;
+<<<<<<< HEAD
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Helper;
+=======
+using Helper;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+>>>>>>> refs/remotes/origin/master
 
 namespace Tests.Helper
 {
@@ -35,7 +40,10 @@ namespace Tests.Helper
             // Let's create a dictionary of editor file associations.
             var dictionary = new ExtensionDictionary<Editor>
             {
+<<<<<<< HEAD
 
+=======
+>>>>>>> refs/remotes/origin/master
                 // Add file association for each editor.
                 { ".txt", Editor.TextEditor },
                 { ".bin", Editor.BinaryEditor },
@@ -64,7 +72,11 @@ namespace Tests.Helper
             // File types are not implied.
             Assert.AreNotEqual(dictionary[".doc"], dictionary[".rtf"]);
 
+<<<<<<< HEAD
             // But we can explictly define them again.
+=======
+            // But we can explicitly define them again.
+>>>>>>> refs/remotes/origin/master
             dictionary[".doc"] = Editor.RichTextEditor;
             Assert.AreEqual(dictionary[file], Editor.RichTextEditor);
 

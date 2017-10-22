@@ -1,6 +1,11 @@
 ﻿using System;
+<<<<<<< HEAD
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Helper;
+=======
+using Helper;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+>>>>>>> refs/remotes/origin/master
 
 namespace Tests.Helper
 {
@@ -76,15 +81,27 @@ namespace Tests.Helper
                 9, 8, 7, 6, 5, 4, 3, 2, 1, 0,
             };
 
+<<<<<<< HEAD
             // Create tree after constructoed.
+=======
+            // Create tree after constructed.
+>>>>>>> refs/remotes/origin/master
             tree.CreateTree(data);
 
             // Tree size should be 1 extra due to termination value.
             Assert.AreEqual(tree.Size, data.Length + 1);
 
+<<<<<<< HEAD
             // All data in stree should match its array.
             for (var i = 0; i < data.Length; i++)
                 Assert.AreEqual(data[i], tree[i]);
+=======
+            // All data in tree should match its array.
+            for (var i = 0; i < data.Length; i++)
+            {
+                Assert.AreEqual(data[i], tree[i]);
+            }
+>>>>>>> refs/remotes/origin/master
 
             // Tree should end with termination value.
             Assert.AreEqual(tree[data.Length], SuffixTree.TerminationValue);
@@ -97,7 +114,14 @@ namespace Tests.Helper
             tree.CreateTree(data, start, size);
             Assert.AreEqual(tree.Size, size + 1);
             for (var i = 0; i < size; i++)
+<<<<<<< HEAD
                 Assert.AreEqual(data[start + i], tree[i]);
+=======
+            {
+                Assert.AreEqual(data[start + i], tree[i]);
+            }
+
+>>>>>>> refs/remotes/origin/master
             Assert.AreEqual(tree[size], SuffixTree.TerminationValue);
 
             // Use full data for testing.
@@ -107,7 +131,11 @@ namespace Tests.Helper
             var index = tree.GetLongestInternalSubstring(0);
             Assert.AreEqual(index, SubstringPointer.Empty);
 
+<<<<<<< HEAD
             // Just do some simple checkswith expected longest substrings.
+=======
+            // Just do some simple checks with expected longest substrings.
+>>>>>>> refs/remotes/origin/master
 
             index = tree.GetLongestInternalSubstring(20);
             Assert.AreEqual(index, SubstringPointer.FromStartAndLength(0, 6));
