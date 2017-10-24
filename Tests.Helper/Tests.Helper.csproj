@@ -61,6 +61,7 @@
     <Compile Include="ColorFTests.cs" />
     <Compile Include="PointerTests.cs" />
     <Compile Include="UInt24Tests.cs" />
+    <Compile Include="SelectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
