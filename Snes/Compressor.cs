@@ -11,12 +11,20 @@ namespace Snes
     {
         private const int BitsPerByte = 8;
 
-        // A static compressor class to use if operating on a single thread.
+        /// <summary>
+        /// The default <see cref="Compressor"/>. Use this instance for decompressing only when operating in a single thread.
+        /// </summary>
         public static readonly Compressor Default = new Compressor();
 
         private static readonly int[] CommandSizes = { -1, 1, 2, 1, 2 };
 
         private SuffixTree Tree
+        {
+            get;
+            set;
+        }
+
+        private Dictionary<CompressCommand, Action> DecompressCommands
         {
             get;
             set;
@@ -28,105 +36,117 @@ namespace Snes
             set;
         }
 
+        private unsafe byte* Uncompressed
+        {
+            get;
+            set;
+        }
+
+        private unsafe byte CurrentUncompressed
+        {
+            get
+            {
+                return Uncompressed[UncompressedIndex];
+            }
+            set
+            {
+                Uncompressed[UncompressedIndex] = value;
+            }
+        }
+
+        private unsafe byte NextUncompressed
+        {
+            get
+            {
+                return Uncompressed[++UncompressedIndex];
+            }
+            set
+            {
+                Uncompressed[++UncompressedIndex] = value;
+            }
+        }
+
+        private int UncompressedIndex
+        {
+            get;
+            set;
+        }
+
+        private int UncompressedLength
+        {
+            get;
+            set;
+        }
+
+        private unsafe byte* Compressed
+        {
+            get;
+            set;
+        }
+
+        private unsafe byte CurrentCompressed
+        {
+            get
+            {
+                return Compressed[CompressedIndex];
+            }
+            set
+            {
+                Compressed[CompressedIndex] = value;
+            }
+        }
+
+        private unsafe byte NextCompressed
+        {
+            get
+            {
+                return Compressed[++CompressedIndex];
+            }
+            set
+            {
+                Compressed[++CompressedIndex] = value;
+            }
+        }
+
+        private int CompressedIndex
+        {
+            get;
+            set;
+        }
+
+        private int CompressedLength
+        {
+            get;
+            set;
+        }
+
+        private int CommandLength
+        {
+            get;
+            set;
+        }
+
         public Compressor()
         {
             Tree = new SuffixTree();
             Commands = new List<CompressInfo>(0x100);
-        }
 
-        public static unsafe List<CompressInfo> GetCompressList(byte* src, int slen)
-        {
-            var list = new List<CompressInfo>();
-
-            int sindex = 0, dindex = 0, clen;
-
-            while (sindex < slen)
+            DecompressCommands = new Dictionary<CompressCommand, Action>()
             {
-                if (src[sindex] == 0xFF)
-                {
-                    return list;
-                }
-
-                // Command is three most significant bits
-                var command = (CompressCommand)(src[sindex] >> 5);
-
-                // Signifies extended length copy.
-                if (command == CompressCommand.LongCommand)
-                {
-                    // Get new command
-                    command = (CompressCommand)((src[sindex] >> 2) & 0x07);
-                    if (command == CompressCommand.LongCommand)
-                    {
-                        return null;
-                    }
-
-                    // Length is ten least significant bits.
-                    clen = ((src[sindex] & 0x03) << BitsPerByte);
-                    clen |= src[++sindex];
-                }
-                else
-                {
-                    clen = src[sindex] & 0x1F;
-                }
-
-                clen++;
-                sindex++;
-
-                var value = 0;
-                switch (command)
-                {
-                case CompressCommand.RepeatedByte:
-                case CompressCommand.IncrementingByte:
-                value = src[sindex];
-                break;
-
-                case CompressCommand.RepeatedWord:
-                case CompressCommand.CopySection:
-                value = src[sindex] | (src[sindex + 1] << 8);
-                break;
-                }
-
-                list.Add(new CompressInfo(command, value, dindex, clen));
-
-                switch (command)
-                {
-                case CompressCommand.DirectCopy: // Direct byte copy
-                dindex += clen;
-                sindex += clen;
-                continue;
-                case CompressCommand.RepeatedByte: // Fill with one byte repeated
-                dindex += clen;
-                sindex++;
-                continue;
-                case CompressCommand.RepeatedWord: // Fill with two alternating bytes
-                dindex += clen;
-                sindex += 2;
-                continue;
-                case CompressCommand.IncrementingByte: // Fill with incrementing byte value
-                dindex += clen;
-                sindex++;
-                continue;
-                case CompressCommand.CopySection: // Copy data from previous section
-                dindex += clen;
-                sindex += 2;
-                continue;
-                case (CompressCommand)5:
-                case (CompressCommand)6:
-                return null;
-
-                default:
-                throw new ArgumentException();
-                }
-            }
-            return null;
+                { CompressCommand.DirectCopy, AddDirectCopy },
+                { CompressCommand.RepeatedByte, AddRepeatedByte },
+                { CompressCommand.RepeatedWord, AddRepeatedWord },
+                { CompressCommand.IncrementingByte, AddIncrementingByte },
+                { CompressCommand.CopySection, AddCopySection }
+            };
         }
 
-        public static int GetDecompressLength(byte[] compressedData)
+        public int GetDecompressLength(byte[] compressedData)
         {
             return GetDecompressLength(compressedData, 0, compressedData.Length);
         }
 
-        public static int GetDecompressLength(byte[] compressedData, int startIndex, int length)
+        public int GetDecompressLength(byte[] compressedData, int startIndex, int length)
         {
             if (startIndex < 0)
             {
@@ -145,12 +165,198 @@ namespace Snes
             }
         }
 
-        public static byte[] Decompress(byte[] compressedData)
+        private void AssertSufficientSpace(int padding)
+        {
+            if (UncompressedIndex + CommandLength > UncompressedLength)
+            {
+                throw new InvalidOperationException();
+            }
+
+            if (CompressedIndex + padding >= CompressedLength)
+            {
+                throw new InvalidOperationException();
+            }
+        }
+
+        private unsafe void AddDirectCopy()
+        {
+            CommandLength = (CurrentCompressed & 0x1F) + 1;
+
+            if (Uncompressed != null)
+            {
+                AssertSufficientSpace(CommandLength);
+
+                Buffer.MemoryCopy(
+                    Compressed + CompressedIndex,
+                    Uncompressed + UncompressedIndex,
+                    UncompressedLength - UncompressedIndex,
+                    CompressedLength);
+            }
+
+            UncompressedIndex += CommandLength;
+            CompressedIndex += CommandLength;
+        }
+
+        private unsafe void AddRepeatedByte()
+        {
+            CommandLength = (CurrentCompressed & 0x1F) + 1;
+
+            if (Uncompressed != null)
+            {
+                AssertSufficientSpace(0);
+
+                var dst = Uncompressed + UncompressedIndex;
+                var value = Compressed[CompressedIndex];
+
+                // We know CommandLength > 0, so a do-while loop is (one check) faster.
+                var i = CommandLength;
+                do
+                {
+                    dst[--i] = value;
+                }
+                while (i > 0);
+            }
+
+            UncompressedIndex += CommandLength;
+            CompressedIndex++;
+        }
+
+        private unsafe void AddRepeatedWord()
+        {
+            CommandLength = (CurrentCompressed & 0x1F) + 1;
+
+            if (Uncompressed != null)
+            {
+                AssertSufficientSpace(1);
+
+                var dst = Uncompressed + UncompressedIndex;
+                var value1 = Compressed[CompressedIndex];
+                var value2 = Compressed[CompressedIndex + 1];
+
+                // Get the largest even number not greater than CommandLength.
+                var i = CommandLength & ~1;
+
+                // Determine whether CommandLength is even or odd.
+                if ((CommandLength & 1) == 0)
+                {
+                    // Command length is even.
+
+                    // We're guaranteed CommandLength > 0 and therefore >= 2 since it is also even.
+                    do
+                    {
+                        dst[--i] = value2;
+                        dst[--i] = value1;
+                    }
+                    while (i > 0);
+                }
+                else
+                {
+                    // Command length is odd.
+
+                    // Write the last odd value first.
+                    dst[--i] = value1;
+
+                    // We're not guaranteed CommandLength > 1. Consider the compression command 40 00 FF. It's a 1 byte word copy. Inefficient, but it can exist.
+                    while (i > 0)
+                    {
+                        dst[--i] = value2;
+                        dst[--i] = value1;
+                    }
+                }
+            }
+
+            UncompressedIndex += CommandLength;
+            CompressedIndex += 2;
+        }
+
+        private unsafe void AddIncrementingByte()
+        {
+            CommandLength = (CurrentCompressed & 0x1F) + 1;
+
+            if (Uncompressed != null)
+            {
+                AssertSufficientSpace(0);
+
+                var dst = Uncompressed + UncompressedIndex;
+                var value = Compressed[CompressedIndex];
+
+                // Offset value to last incremented.
+                value += (byte)CommandLength;
+
+                // We know CommandLength > 0, so a do-while loop is (one check) faster.
+                var i = CommandLength;
+                do
+                {
+                    dst[--i] = --value;
+                }
+                while (i > 0);
+            }
+
+            UncompressedIndex += CommandLength;
+            CompressedIndex++;
+        }
+
+        private unsafe void AddCopySection()
+        {
+            CommandLength = (CurrentCompressed & 0x1F) + 1;
+
+            if (Uncompressed != null)
+            {
+                AssertSufficientSpace(1);
+
+                var dst = Uncompressed + UncompressedIndex;
+                var value1 = Compressed[CompressedIndex];
+                var value2 = Compressed[CompressedIndex + 1];
+                var src = Uncompressed + (value1 | (value2 << BitsPerByte));
+
+                var i = CommandLength;
+                do
+                {
+                    dst[i] = src[i];
+                } while (i > 0);
+            }
+
+            UncompressedIndex += CommandLength;
+            CompressedIndex += 2;
+        }
+
+        private CompressCommand InitCommandData()
+        {
+            // Command is three most significant bits
+            var command = (CompressCommand)(CurrentCompressed >> 5);
+            int clen;
+
+            // Signifies extended length copy.
+            if (command == CompressCommand.LongCommand)
+            {
+                // Get new command
+                command = (CompressCommand)((CurrentCompressed >> 2) & 0x07);
+                if (command == CompressCommand.LongCommand)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                // Length is ten least significant bits.
+                clen = ((CurrentCompressed & 0x03) << BitsPerByte);
+                clen |= NextCompressed;
+            }
+            else
+            {
+                clen = CurrentCompressed & 0x1F;
+            }
+
+            CommandLength = clen + 1;
+            CompressedIndex++;
+
+            return command;
+        }
+
+        public byte[] Decompress(byte[] compressedData)
         {
             return Decompress(compressedData, 0, compressedData.Length);
         }
 
-        public static byte[] Decompress(byte[] compressedData, int startIndex, int length)
+        public byte[] Decompress(byte[] compressedData, int startIndex, int length)
         {
             var dlen = GetDecompressLength(compressedData);
             if (dlen == 0)
@@ -161,12 +367,12 @@ namespace Snes
             return Decompress(dlen, compressedData, startIndex, length);
         }
 
-        public static byte[] Decompress(int decompressLength, byte[] compressedData)
+        public byte[] Decompress(int decompressLength, byte[] compressedData)
         {
             return Decompress(decompressLength, compressedData, 0, compressedData.Length);
         }
 
-        public static byte[] Decompress(int decompressLength, byte[] compressedData, int startIndex, int length)
+        public byte[] Decompress(int decompressLength, byte[] compressedData, int startIndex, int length)
         {
             if (startIndex < 0)
             {
@@ -198,166 +404,26 @@ namespace Snes
             return dest;
         }
 
-        public static unsafe int Decompress(byte* dest, int dlen, byte* src, int slen)
+        private unsafe int Decompress(byte* dest, int dlen, byte* src, int slen)
         {
-            int sindex = 0, dindex = 0, clen;
+            CompressedIndex = 0;
+            UncompressedIndex = 0;
 
-            while (sindex < slen)
+            while (CompressedIndex < slen)
             {
-                if (src[sindex] == 0xFF)
+                if (src[CompressedIndex] == 0xFF)
                 {
-                    return dindex;
+                    return UncompressedIndex;
                 }
 
-                // Command is three most significant bits
-                var command = (CompressCommand)(src[sindex] >> 5);
+                var command = InitCommandData();
 
-                // Signifies extended length copy.
-                if (command == CompressCommand.LongCommand)
+                if (!DecompressCommands.ContainsKey(command))
                 {
-                    // Get new command
-                    command = (CompressCommand)((src[sindex] >> 2) & 0x07);
-                    if (command == CompressCommand.LongCommand)
-                    {
-                        return 0;
-                    }
-
-                    // Length is ten least significant bits.
-                    clen = ((src[sindex] & 0x03) << BitsPerByte);
-                    clen |= src[++sindex];
-                }
-                else
-                {
-                    clen = src[sindex] & 0x1F;
+                    throw new InvalidOperationException();
                 }
 
-                clen++;
-                sindex++;
-
-                switch (command)
-                {
-                case CompressCommand.DirectCopy: // Direct byte copy
-                if (dest != null)
-                {
-                    if (dindex + clen > dlen)
-                    {
-                        return 0;
-                    }
-
-                    if (sindex + clen > slen)
-                    {
-                        return 0;
-                    }
-
-                    Buffer.MemoryCopy(src + sindex, dest + dindex, dlen - dindex, clen);
-                }
-                dindex += clen;
-                sindex += clen;
-                continue;
-                case CompressCommand.RepeatedByte: // Fill with one byte repeated
-                if (dest != null)
-                {
-                    if (dindex + clen > dlen)
-                    {
-                        return 0;
-                    }
-
-                    if (sindex >= slen)
-                    {
-                        return 0;
-                    }
-
-                    var to = dest + dindex;
-                    var val = src[sindex];
-                    for (var i = 0; i < clen; i++)
-                    {
-                        to[i] = val;
-                    }
-                }
-                dindex += clen;
-                sindex++;
-                continue;
-                case CompressCommand.RepeatedWord: // Fill with two alternating bytes
-                if (dest != null)
-                {
-                    if (dindex + clen > dlen)
-                    {
-                        return 0;
-                    }
-
-                    if (sindex + 1 >= slen)
-                    {
-                        return 0;
-                    }
-
-                    var to = dest + dindex;
-                    var val = src[sindex];
-                    for (var i = 0; i < clen; i += 2)
-                    {
-                        to[i] = val;
-                    }
-
-                    val = src[sindex + 1];
-                    for (var i = 1; i < clen; i += 2)
-                    {
-                        to[i] = val;
-                    }
-                }
-                dindex += clen;
-                sindex += 2;
-                continue;
-                case CompressCommand.IncrementingByte: // Fill with incrementing byte value
-                if (dest != null)
-                {
-                    if (dindex + clen > dlen)
-                    {
-                        return 0;
-                    }
-
-                    if (sindex >= slen)
-                    {
-                        return 0;
-                    }
-
-                    for (int i = 0, j = src[sindex]; i < clen; i++, j++)
-                    {
-                        dest[dindex + i] = (byte)j;
-                    }
-                }
-                dindex += clen;
-                sindex++;
-                continue;
-                case CompressCommand.CopySection: // Copy data from previous section
-                if (dest != null)
-                {
-                    if (dindex + clen > dlen)
-                    {
-                        return 0;
-                    }
-
-                    if (sindex + 1 >= slen)
-                    {
-                        return 0;
-                    }
-
-                    // We have to manually do this copy in case of overlapping regions
-                    var write = dest + dindex;
-                    var read = dest + ((src[sindex + 1] << BitsPerByte) | src[sindex]);
-                    for (var i = 0; i < clen; i++)
-                    {
-                        write[i] = read[i];
-                    }
-                }
-                dindex += clen;
-                sindex += 2;
-                continue;
-                case (CompressCommand)5:
-                case (CompressCommand)6:
-                return 0;
-
-                default:
-                throw new ArgumentException();
-                }
+                DecompressCommands[command]();
             }
             return 0;
         }
@@ -386,7 +452,7 @@ namespace Snes
             }
         }
 
-        public unsafe int GetCompressLength(byte* data, int length)
+        private unsafe int GetCompressLength(byte* data, int length)
         {
             return Compress(null, 0, data, length, true);
         }
@@ -462,7 +528,7 @@ namespace Snes
             return dest;
         }
 
-        public unsafe int Compress(byte* dst, int dstLength, byte* src, int slen, bool init)
+        private unsafe int Compress(byte* dst, int dstLength, byte* src, int slen, bool init)
         {
             /*
              * To maximize compressed data space and decompression time, we need to examine
