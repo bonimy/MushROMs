@@ -471,7 +471,7 @@ namespace Snes
              *
              * data:     00 00 00
              * compress: 12 00       - Using repeating byte compression
-             * altcomp:  02 00 00    - Direct copy costs space
+             * altcomp:  02 00 00 00 - Direct copy costs space
              *
              * However, if there is an uncompressable byte before and after the data, we get
              *
@@ -699,8 +699,12 @@ namespace Snes
             CompressInfo current, next;
             var previous = new CompressInfo((CompressCommand)(-1), 0, 0, 0);
 
+            // This is for when we're at the last command, we can still read the "next" one.
+            // Note we add this *after* getting the count
+            Commands.Add(new CompressInfo((CompressCommand)(-1), 0, 0, 0));
+
             _loop:
-            while (i < count - 1)
+            while (i < count)
             {
                 current = Commands[i];
                 next = Commands[i + 1];
@@ -752,48 +756,13 @@ namespace Snes
 
                 goto _write;
             }
-            if (i < count)
-            {
-                current = Commands[i];
-
-                if (previous.Command == CompressCommand.DirectCopy)
-                {
-                    switch (current.Command)
-                    {
-                    case CompressCommand.RepeatedByte:
-                    case CompressCommand.IncrementingByte:
-                    if (current.Length == 3)
-                    {
-                        current = new CompressInfo(
-                            CompressCommand.DirectCopy,
-                            0,
-                            previous.Index,
-                            current.End - previous.Index);
-                        dstIndex = lastDestIndex;
-                        break;
-                    }
-                    break;
-
-                    case CompressCommand.RepeatedWord:
-                    case CompressCommand.CopySection:
-                    if (current.Length == 4)
-                    {
-                        current = new CompressInfo(
-                            CompressCommand.DirectCopy,
-                            0,
-                            previous.Index,
-                            current.End - previous.Index);
-                        dstIndex = lastDestIndex;
-                        break;
-                    }
-                    break;
-                    }
-                }
-                goto _write;
-            }
             goto _end;
 
             _write:
+
+            // We use this to account for 0x400 byte sections of section copies and direct copies.
+            srcIndex = 0;
+
             var command = current.Command;
             for (length = current.Length; length > 0;)
             {
@@ -849,16 +818,18 @@ namespace Snes
 
                     case CompressCommand.CopySection:
                     dst[dstIndex++] = (byte)current.Value;
-                    dst[dstIndex++] = (byte)(current.Value >> BitsPerByte);
+                    dst[dstIndex++] = (byte)((current.Value + srcIndex) >> BitsPerByte);
+                    srcIndex += subLength;
                     break;
 
                     case CompressCommand.DirectCopy:
                     Buffer.MemoryCopy(
-                        src + current.Index,
+                        src + srcIndex + current.Index,
                         dst + dstIndex,
                         dstLength - dstIndex,
                         subLength);
                     dstIndex += subLength;
+                    srcIndex += subLength;
                     break;
 
                     default:
