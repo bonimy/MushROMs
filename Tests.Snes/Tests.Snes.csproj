@@ -93,8 +93,8 @@
       <Project>{6e9940f3-99d2-4f1f-b476-f3b9964d1c76}</Project>
       <Name>Helper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Snes.cs\Snes.csproj">
-      <Project>{ac2924ce-1ab9-4877-bb10-1edd425a4c73}</Project>
+    <ProjectReference Include="..\Snes\Snes.csproj">
+      <Project>{9dddbd59-43f9-42c7-abcb-5db784143cbe}</Project>
       <Name>Snes</Name>
     </ProjectReference>
   </ItemGroup>
