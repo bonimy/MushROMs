@@ -180,8 +180,6 @@ namespace Snes
 
         private unsafe void AddDirectCopy()
         {
-            CommandLength = (CurrentCompressed & 0x1F) + 1;
-
             if (Uncompressed != null)
             {
                 AssertSufficientSpace(CommandLength);
@@ -190,7 +188,7 @@ namespace Snes
                     Compressed + CompressedIndex,
                     Uncompressed + UncompressedIndex,
                     UncompressedLength - UncompressedIndex,
-                    CompressedLength);
+                    CommandLength);
             }
 
             UncompressedIndex += CommandLength;
@@ -199,8 +197,6 @@ namespace Snes
 
         private unsafe void AddRepeatedByte()
         {
-            CommandLength = (CurrentCompressed & 0x1F) + 1;
-
             if (Uncompressed != null)
             {
                 AssertSufficientSpace(0);
@@ -223,8 +219,6 @@ namespace Snes
 
         private unsafe void AddRepeatedWord()
         {
-            CommandLength = (CurrentCompressed & 0x1F) + 1;
-
             if (Uncompressed != null)
             {
                 AssertSufficientSpace(1);
@@ -233,8 +227,7 @@ namespace Snes
                 var value1 = Compressed[CompressedIndex];
                 var value2 = Compressed[CompressedIndex + 1];
 
-                // Get the largest even number not greater than CommandLength.
-                var i = CommandLength & ~1;
+                var i = CommandLength;
 
                 // Determine whether CommandLength is even or odd.
                 if ((CommandLength & 1) == 0)
@@ -271,8 +264,6 @@ namespace Snes
 
         private unsafe void AddIncrementingByte()
         {
-            CommandLength = (CurrentCompressed & 0x1F) + 1;
-
             if (Uncompressed != null)
             {
                 AssertSufficientSpace(0);
@@ -298,8 +289,6 @@ namespace Snes
 
         private unsafe void AddCopySection()
         {
-            CommandLength = (CurrentCompressed & 0x1F) + 1;
-
             if (Uncompressed != null)
             {
                 AssertSufficientSpace(1);
@@ -309,11 +298,12 @@ namespace Snes
                 var value2 = Compressed[CompressedIndex + 1];
                 var src = Uncompressed + (value1 | (value2 << BitsPerByte));
 
-                var i = CommandLength;
+                // We have to go in forward order because the section can overlap itself.
+                var i = 0;
                 do
                 {
                     dst[i] = src[i];
-                } while (i > 0);
+                } while (++i < CommandLength);
             }
 
             UncompressedIndex += CommandLength;
@@ -406,10 +396,14 @@ namespace Snes
 
         private unsafe int Decompress(byte* dest, int dlen, byte* src, int slen)
         {
+            Compressed = src;
+            Uncompressed = dest;
             CompressedIndex = 0;
             UncompressedIndex = 0;
+            CompressedLength = slen;
+            UncompressedLength = dlen;
 
-            while (CompressedIndex < slen)
+            while (CompressedIndex < CompressedLength)
             {
                 if (src[CompressedIndex] == 0xFF)
                 {

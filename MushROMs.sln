@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Helper", "Tests.Helpe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Snes", "Tests.Snes\Tests.Snes.csproj", "{64B699CE-7740-4F3A-A8F6-174FF0838B98}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snes", "Snes\Snes.csproj", "{9DDDBD59-43F9-42C7-ABCB-5DB784143CBE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snes", "Snes\Snes.csproj", "{6AAF947F-C2FB-48DD-9078-FFAB60CF7E97}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{64B699CE-7740-4F3A-A8F6-174FF0838B98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64B699CE-7740-4F3A-A8F6-174FF0838B98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64B699CE-7740-4F3A-A8F6-174FF0838B98}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9DDDBD59-43F9-42C7-ABCB-5DB784143CBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9DDDBD59-43F9-42C7-ABCB-5DB784143CBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9DDDBD59-43F9-42C7-ABCB-5DB784143CBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9DDDBD59-43F9-42C7-ABCB-5DB784143CBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AAF947F-C2FB-48DD-9078-FFAB60CF7E97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AAF947F-C2FB-48DD-9078-FFAB60CF7E97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AAF947F-C2FB-48DD-9078-FFAB60CF7E97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AAF947F-C2FB-48DD-9078-FFAB60CF7E97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
