@@ -12,34 +12,34 @@ namespace Controls
 {
     public static class WinAPIMethods
     {
-        private const int GWL_EXSTYLE = -20;
-        private const int GWL_STYLE = -16;
+        private const int GwlExStyle = -20;
+        private const int GwlStyle = -16;
 
-        private const int WS_BORDER = 0x800000;
-        private const int WS_EX_CLIENTEDGE = 0x200;
+        private const int WsBorder = 0x800000;
+        private const int WsExClientEdge = 0x200;
 
-        private const uint SWP_NOSIZE = 0x0001;
-        private const uint SWP_NOMOVE = 0x0002;
-        private const uint SWP_NOZORDER = 0x0004;
-        private const uint SWP_NOREDRAW = 0x0008;
-        private const uint SWP_NOACTIVATE = 0x0010;
-        private const uint SWP_FRAMECHANGED = 0x0020;
-        private const uint SWP_SHOWWINDOW = 0x0040;
-        private const uint SWP_HIDEWINDOW = 0x0080;
-        private const uint SWP_NOCOPYBITS = 0x0100;
-        private const uint SWP_NOOWNERZORDER = 0x0200;
-        private const uint SWP_NOSENDCHANGING = 0x0400;
+        private const uint SwpNoSize = 0x0001;
+        private const uint SwpNoMove = 0x0002;
+        private const uint SwpNoZOrder = 0x0004;
+        private const uint SwpNoRedraw = 0x0008;
+        private const uint SwpNoActivate = 0x0010;
+        private const uint SwpFrameChanged = 0x0020;
+        private const uint SwpShowWindow = 0x0040;
+        private const uint SwpHideWindow = 0x0080;
+        private const uint SwpNoCopyBits = 0x0100;
+        private const uint SwpNoOwnerZOrder = 0x0200;
+        private const uint SwpNoSendChanging = 0x0400;
 
-        private const int SM_CXPADDEDBORDER = 92;
+        private const int SmCenterXPaddedBorder = 92;
 
         [DllImport("user32.dll")]
-        private static extern int GetSystemMetrics(int nIndex);
+        private static extern int GetSystemMetrics(int index);
 
         public static int PaddedBorderWidth
         {
             get
             {
-                return GetSystemMetrics(SM_CXPADDEDBORDER);
+                return GetSystemMetrics(SmCenterXPaddedBorder);
             }
         }
 
@@ -53,12 +53,12 @@ namespace Controls
 
         public static BorderStyle GetBorderStyle(IWin32Window window)
         {
-            if ((GetWindowLong(window, GWL_EXSTYLE) & WS_EX_CLIENTEDGE) != 0)
+            if ((GetWindowLong(window, GwlExStyle) & WsExClientEdge) != 0)
             {
                 return BorderStyle.Fixed3D;
             }
 
-            if ((GetWindowLong(window, GWL_STYLE) & WS_BORDER) != 0)
+            if ((GetWindowLong(window, GwlStyle) & WsBorder) != 0)
             {
                 return BorderStyle.FixedSingle;
             }
@@ -68,24 +68,24 @@ namespace Controls
 
         public static void SetBorderStyle(IWin32Window window, BorderStyle value)
         {
-            var style = GetWindowLong(window, GWL_STYLE) & ~WS_BORDER;
-            var exstyle = GetWindowLong(window, GWL_EXSTYLE) & ~WS_EX_CLIENTEDGE;
+            var style = GetWindowLong(window, GwlStyle) & ~WsBorder;
+            var exstyle = GetWindowLong(window, GwlExStyle) & ~WsExClientEdge;
 
             switch (value)
             {
             case BorderStyle.Fixed3D:
-            SetWindowLong(window, GWL_STYLE, style);
-            SetWindowLong(window, GWL_EXSTYLE, exstyle | WS_EX_CLIENTEDGE);
+            SetWindowLong(window, GwlStyle, style);
+            SetWindowLong(window, GwlExStyle, exstyle | WsExClientEdge);
             return;
 
             case BorderStyle.FixedSingle:
-            SetWindowLong(window, GWL_STYLE, style | WS_BORDER);
-            SetWindowLong(window, GWL_EXSTYLE, exstyle);
+            SetWindowLong(window, GwlStyle, style | WsBorder);
+            SetWindowLong(window, GwlExStyle, exstyle);
             return;
 
             case BorderStyle.None:
-            SetWindowLong(window, GWL_STYLE, style);
-            SetWindowLong(window, GWL_EXSTYLE, exstyle);
+            SetWindowLong(window, GwlStyle, style);
+            SetWindowLong(window, GwlExStyle, exstyle);
             return;
 
             default:
