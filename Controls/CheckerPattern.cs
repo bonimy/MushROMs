@@ -6,7 +6,7 @@ using System;
 using System.Drawing;
 using Helper;
 
-namespace MushROMs.Controls
+namespace Controls
 {
     public class CheckerPattern
     {
@@ -30,6 +30,7 @@ namespace MushROMs.Controls
             {
                 return _size;
             }
+
             set
             {
                 if (value.Width <= 0 || value.Height <= 0)

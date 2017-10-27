@@ -2,7 +2,7 @@
 //     Copyright (c) 2017 Nelson Garcia.
 // </copyright>
 
-namespace MushROMs.Controls
+namespace Controls
 {
     internal static class WindowMessages
     {

@@ -12,7 +12,7 @@ using System.Windows.Forms;
 using Helper.PixelFormats;
 using static Controls.DrawHelper;
 
-namespace MushROMs.Controls
+namespace Controls
 {
     [DefaultEvent("Paint")]
     [Description("Provides a control to be used for design purposes.")]
@@ -20,12 +20,10 @@ namespace MushROMs.Controls
     {
         public static readonly Point MouseOutOfRange = new Point(-1, -1);
 
-        private static readonly CheckerPattern FallbackCheckerPattern = new CheckerPattern
-        (
+        private static readonly CheckerPattern FallbackCheckerPattern = new CheckerPattern(
             SystemColors.ControlLightLight,
             SystemColors.ControlDarkDark,
-            new Size(4, 4)
-        );
+            new Size(4, 4));
 
         internal static readonly ICollection<Keys> FallbackOverrideInputKeys = new HashSet<Keys>
         {
@@ -268,13 +266,11 @@ namespace MushROMs.Controls
                 case BorderStyle.Fixed3D:
                 return SystemInformation.Border3DSize;
 
-                default:    //This should never occur.
-                throw new InvalidEnumArgumentException
-                (
+                default:
+                throw new InvalidEnumArgumentException(
                     nameof(BorderStyle),
                     (int)BorderStyle,
-                    typeof(BorderStyle)
-                );
+                    typeof(BorderStyle));
                 }
             }
         }
@@ -373,6 +369,7 @@ namespace MushROMs.Controls
             MouseHovering = PreviousMousePosition == CurrentMousePosition;
             break;
             }
+
             base.DefWndProc(ref m);
         }
 

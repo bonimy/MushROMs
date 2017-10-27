@@ -11,13 +11,11 @@ namespace Controls
     {
         public static Color ColorFromColor32BppArgb(Color32BppArgb color)
         {
-            return Color.FromArgb
-            (
+            return Color.FromArgb(
                 color.Alpha,
                 color.Red,
                 color.Green,
-                color.Blue
-            );
+                color.Blue);
         }
 
         public static Color32BppArgb Color32BppArgbFromColor(Color color)

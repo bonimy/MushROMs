@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Helper;
 
-namespace MushROMs.Controls
+namespace Controls
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct WinAPIRectangle
@@ -104,7 +104,11 @@ namespace MushROMs.Controls
                 return new Point(X, Y);
             }
 
-            set { X = value.X; Y = value.Y; }
+            set
+            {
+                X = value.X;
+                Y = value.Y;
+            }
         }
 
         public int Width
