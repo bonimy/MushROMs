@@ -302,7 +302,7 @@ namespace Controls
 
         public void SetTiledBackground(CheckerPattern pattern)
         {
-            if (pattern == null)
+            if (pattern.IsEmpty)
             {
                 throw new ArgumentNullException(nameof(pattern));
             }
