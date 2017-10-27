@@ -55,6 +55,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="RtlAwareMessageBox.cs" />
     <Compile Include="UnsafeNativeMethods.cs" />
     <Compile Include="WinApiMethods.cs" />
     <Compile Include="WinApiRectangle.cs" />
