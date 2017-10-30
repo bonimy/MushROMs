@@ -6,7 +6,7 @@ namespace Helper
 {
     public interface ITileMap
     {
-        Range2D View
+        Range2D ViewSize
         {
             get;
             set;

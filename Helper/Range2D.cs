@@ -15,13 +15,13 @@ namespace Helper
         public int Width
         {
             get;
-            private set;
+            set;
         }
 
         public int Height
         {
             get;
-            private set;
+            set;
         }
 
         public int Area
