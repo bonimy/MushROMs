@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Snes
 {
-    public interface IGfxSelection : IReadOnlyCollection<int>
+    public interface IGfxSelection : IReadOnlyList<int>
     {
         int StartAddress
         {

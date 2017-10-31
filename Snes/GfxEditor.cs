@@ -42,10 +42,15 @@ namespace Snes
             }
 
             var tiles = new GfxTile[selection.Count];
+            var format = selection.GraphicsFormat;
+            var size = GfxTile.DataSizePerTile(format);
 
-            foreach (var index in selection)
+            for (var i = selection.Count; --i >= 0;)
             {
-                //tiles[index].GetTileData(Data, index, selection.GraphicsFormat);
+                var tile = selection[i];
+                var address = selection.StartAddress + tile * size;
+
+                tiles[i] = new GfxTile(Data, address, format);
             }
 
             return new Gfx(tiles);
