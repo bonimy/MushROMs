@@ -23,6 +23,14 @@ namespace Helper
             }
         }
 
+        public override int this[int index]
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public EnumerableSelection(IEnumerable<int> collection)
         {
             if (collection == null)

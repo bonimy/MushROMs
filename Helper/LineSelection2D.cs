@@ -30,6 +30,24 @@ namespace Helper
             }
         }
 
+        public override Position2D this[int index]
+        {
+            get
+            {
+                if ((uint)index >= (uint)Length)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                var start = (StartPosition.Y * RegionWidth) + StartPosition.X;
+                start += index;
+
+                return new Position2D(
+                    index % RegionWidth,
+                    index / RegionWidth);
+            }
+        }
+
         public LineSelection2D(Position2D startPosition, int regionWidth, int length)
         {
             if (length < 0)
