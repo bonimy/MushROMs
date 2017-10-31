@@ -1,6 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// <copyright file="GfxEditor.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+using System;
 using Helper;
 
 namespace Snes
@@ -41,25 +43,12 @@ namespace Snes
 
             var tiles = new GfxTile[selection.Count];
 
+            foreach (var index in selection)
+            {
+                //tiles[index].GetTileData(Data, index, selection.GraphicsFormat);
+            }
+
             return new Gfx(tiles);
-        }
-
-        private interface IGfxSelection
-        {
-            int StartAddress
-            {
-                get;
-            }
-
-            GraphicsFormat GraphicsFormat
-            {
-                get;
-            }
-
-            int Count
-            {
-                get;
-            }
         }
     }
 }

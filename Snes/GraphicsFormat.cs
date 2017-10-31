@@ -1,4 +1,8 @@
-﻿namespace Snes
+﻿// <copyright file="GraphicsFormat.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+namespace Snes
 {
     public enum GraphicsFormat
     {

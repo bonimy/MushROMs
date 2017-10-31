@@ -1,323 +1,464 @@
-﻿using System;
+﻿// <copyright file="GfxTile.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.ComponentModel;
-using System.Text;
-using Helper;
+using System.Collections.Generic;
 
 namespace Snes
 {
-    public unsafe struct GfxTile
+    public struct GfxTile
     {
         public const int DotsPerPlane = 8;
         public const int PlanesPerTile = DotsPerPlane;
         public const int DotsPerTile = DotsPerPlane * PlanesPerTile;
-        public const int Size = DotsPerTile;
+        public const int SizeOf = DotsPerTile * sizeof(byte);
 
-        private fixed byte _components[Size];
+        private unsafe fixed byte Components[DotsPerTile];
 
         public byte this[int index]
         {
             get
             {
-                if (index < 0 || index > Size)
+                unsafe
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index),
-                        SR.ErrorArrayBounds(nameof(index), index, Size));
+                    fixed (byte* ptr = Components)
+                    {
+                        return ptr[index];
+                    }
                 }
-
-                return UnsafeData[index];
             }
+
             set
             {
-                if (index < 0 || index > Size)
+                unsafe
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index),
-                        SR.ErrorArrayBounds(nameof(index), index, Size));
-                }
-
-                UnsafeData[index] = value;
-            }
-        }
-
-        internal byte* UnsafeData
-        {
-            get
-            {
-                fixed (byte* data = _components)
-                    return data;
-            }
-        }
-
-        public IntPtr Data
-        {
-            get { return new IntPtr(UnsafeData); }
-        }
-
-        public void FlipX()
-        {
-            for (var y = PlanesPerTile; --y >= 0;)
-            {
-                var plane = UnsafeData + y * DotsPerPlane;
-                var i = 0;
-                var j = DotsPerPlane;
-                for (var x = DotsPerPlane / 2; --x >= 0; i++)
-                {
-                    j--;
-                    var dummy = plane[i];
-                    plane[i] = plane[--j];
-                    plane[j] = dummy;
+                    fixed (byte* ptr = Components)
+                    {
+                        ptr[index] = value;
+                    }
                 }
             }
         }
 
-        public void FlipY()
-        {
-            for (var x = DotsPerPlane; --x >= 0;)
-            {
-                var plane = UnsafeData + x;
-                var i = 0;
-                var j = Size;
-                for (var y = PlanesPerTile / 2; --y >= 0; i += DotsPerTile)
-                {
-                    var dummy = plane[i];
-                    plane[i] = plane[j -= DotsPerTile];
-                    plane[j] = dummy;
-                }
-            }
-        }
-
-        public void Rotate90()
-        {
-            var data = UnsafeData;
-            var i = 0;
-            var j = Size;
-            var k = PlanesPerTile;
-            for (var y = 0; y < PlanesPerTile / 2; y++, i += DotsPerPlane)
-            {
-                k--;
-                j -= DotsPerPlane;
-
-                var n = 0;
-                var m = Size;
-                var o = DotsPerPlane;
-                for (var x = 0; x < DotsPerPlane / 2; x++, n += DotsPerPlane)
-                {
-                    o--;
-                    m -= DotsPerPlane;
-
-                    var dummy = this[i + x];
-                    this[i + x] = this[m + y];
-                    this[m + y] = this[j + o];
-                    this[j + o] = this[n + k];
-                    this[n + k] = dummy;
-                }
-            }
-        }
-
-        public void Rotate180()
-        {
-            var data = UnsafeData;
-            var i = 0;
-            var j = Size;
-            for (var y = 0; y < PlanesPerTile / 2; y++, i += DotsPerPlane)
-            {
-                j -= DotsPerPlane;
-
-                var n = 0;
-                var o = DotsPerPlane;
-                for (var x = 0; x < DotsPerPlane; x++, n += DotsPerPlane)
-                {
-                    o--;
-
-                    var dummy = data[i + x];
-                    data[i + x] = data[j + o];
-                    data[j + o] = dummy;
-                }
-            }
-        }
-
-        public void Rotate270()
-        {
-            var data = UnsafeData;
-            var i = 0;
-            var j = Size;
-            var k = PlanesPerTile;
-            for (var y = 0; y < PlanesPerTile / 2; y++, i += DotsPerPlane)
-            {
-                k--;
-                j -= DotsPerPlane;
-
-                var n = 0;
-                var m = Size;
-                var o = DotsPerPlane;
-                for (var x = 0; x < DotsPerPlane / 2; x++, n += DotsPerPlane)
-                {
-                    o--;
-                    m -= DotsPerPlane;
-
-                    var dummy = data[i + x];
-                    data[i + x] = data[n + k];
-                    data[n + k] = data[j + o];
-                    data[j + o] = data[m + y];
-                    data[m + y] = dummy;
-                }
-            }
-        }
-
-        public void GetTileData(byte[] data, int tile, GraphicsFormat format)
+        public GfxTile(byte[] data, int index, GraphicsFormat format)
         {
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
 
-            var index = GetStartAddress(tile, format);
-            if (!IsValidSize(index, data.Length, format))
+            if (index < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(tile));
+                throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            fixed (byte* ptr = &data[tile])
-                GetTileData(ptr, format);
-        }
-
-        public void GetTileData(IntPtr data, int tile, int length, GraphicsFormat format)
-        {
-            var index = GetStartAddress(tile, format);
-            if (!IsValidSize(index, length, format))
+            if (data.Length - index < DataSizePerTile(format))
             {
-                throw new ArgumentOutOfRangeException(nameof(tile));
+                throw new ArgumentException();
             }
 
-            GetTileData((byte*)data + tile, format);
-        }
-
-        public static bool IsValidSize(int index, int length, GraphicsFormat format)
-        {
-            return IsValidSize(length - index, format);
-        }
-
-        public static bool IsValidSize(int length, GraphicsFormat format)
-        {
-            switch (format)
+            unsafe
             {
-            default:
-            return GetTileDataSize(format) <= length;
+                fixed (byte* src = data)
+                fixed (byte* dst = Components)
+                {
+                    TileFromData(src, dst, format);
+                }
             }
         }
 
-        public static int GetStartAddress(int tile, GraphicsFormat format)
+        public byte[] ToFormattedData(GraphicsFormat format)
         {
-            return tile * GetTileDataSize(format);
+            var data = new byte[DataSizePerTile(format)];
+
+            unsafe
+            {
+                fixed (byte* src = Components)
+                fixed (byte* dst = data)
+                {
+                    TileToData(src, dst, format);
+                }
+            }
+
+            return data;
         }
 
-        public static int GetBitsPerPixel(GraphicsFormat format)
+        public GfxTile FlipX()
+        {
+            var result = new GfxTile();
+
+            unsafe
+            {
+                fixed (byte* src = Components)
+                {
+                    var dst = result.Components;
+
+                    for (var y = PlanesPerTile; --y >= 0;)
+                    {
+                        var srcRow = src + (y * DotsPerPlane);
+                        var dstRow = dst + (y * DotsPerPlane);
+
+                        var i = 0;
+                        for (var x = DotsPerPlane / 2; --x >= 0; i++)
+                        {
+                            dstRow[i] = srcRow[x];
+                            dstRow[x] = srcRow[i];
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public GfxTile FlipY()
+        {
+            var result = new GfxTile();
+
+            unsafe
+            {
+                fixed (byte* src = Components)
+                {
+                    var dst = result.Components;
+
+                    for (var x = DotsPerPlane; --x >= 0;)
+                    {
+                        var srcPlane = src + x;
+                        var dstPlane = dst + x;
+
+                        var i = 0;
+                        for (var j = DotsPerTile / 2; (j -= DotsPerPlane) >= 0; i += DotsPerPlane)
+                        {
+                            dstPlane[i] = srcPlane[j];
+                            dstPlane[j] = srcPlane[i];
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public GfxTile Rotate90()
+        {
+            var result = new GfxTile();
+
+            unsafe
+            {
+                fixed (byte* src = Components)
+                {
+                    var dst = result.Components;
+
+                    var i = 0;
+                    var j = DotsPerTile;
+                    var k = PlanesPerTile;
+
+                    for (var y = 0; y < (PlanesPerTile / 2); y++, i += DotsPerPlane)
+                    {
+                        k--;
+                        j -= DotsPerPlane;
+
+                        var n = 0;
+                        var m = DotsPerTile;
+                        var o = DotsPerPlane;
+
+                        for (var x = 0; x < (DotsPerPlane / 2); x++, n += DotsPerPlane)
+                        {
+                            o--;
+                            m -= DotsPerPlane;
+
+                            dst[i + x] = src[m + y];
+                            dst[m + y] = src[j + o];
+                            dst[j + o] = src[n + k];
+                            dst[n + k] = src[i + x];
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public GfxTile Rotate180()
+        {
+            var result = new GfxTile();
+
+            unsafe
+            {
+                fixed (byte* src = Components)
+                {
+                    var dst = result.Components;
+
+                    var i = 0;
+                    var j = DotsPerTile;
+
+                    for (var y = 0; y < (PlanesPerTile / 2); y++, i += DotsPerPlane)
+                    {
+                        j -= DotsPerPlane;
+
+                        var n = 0;
+                        var o = DotsPerPlane;
+
+                        for (var x = 0; x < (DotsPerPlane / 2); x++, n += DotsPerPlane)
+                        {
+                            o--;
+
+                            dst[j + o] = src[i + x];
+                            dst[i + x] = src[j + o];
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public GfxTile Rotate270()
+        {
+            var result = new GfxTile();
+
+            unsafe
+            {
+                fixed (byte* src = Components)
+                {
+                    var dst = result.Components;
+
+                    var i = 0;
+                    var j = DotsPerTile;
+                    var k = PlanesPerTile;
+
+                    for (var y = 0; y < (PlanesPerTile / 2); y++, i += DotsPerPlane)
+                    {
+                        k--;
+                        j -= DotsPerPlane;
+
+                        var n = 0;
+                        var m = DotsPerTile;
+                        var o = DotsPerPlane;
+
+                        for (var x = 0; x < (DotsPerPlane / 2); x++, n += DotsPerPlane)
+                        {
+                            o--;
+                            m -= DotsPerPlane;
+
+                            dst[m + y] = src[i + x];
+                            dst[j + o] = src[m + y];
+                            dst[n + k] = src[j + o];
+                            dst[i + x] = src[n + k];
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public GfxTile ReplaceColor(byte original, byte replaced)
+        {
+            var result = new GfxTile();
+
+            unsafe
+            {
+                fixed (byte* src = Components)
+                {
+                    var dst = result.Components;
+
+                    for (var i = DotsPerTile; --i >= 0;)
+                    {
+                        var value = src[i];
+
+                        if (value == original)
+                        {
+                            dst[i] = replaced;
+                        }
+                        else
+                        {
+                            dst[i] = value;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public GfxTile SwapColors(byte index1, byte index2)
+        {
+            var result = new GfxTile();
+
+            unsafe
+            {
+                fixed (byte* src = Components)
+                {
+                    var dst = result.Components;
+
+                    for (var i = DotsPerTile; --i >= 0;)
+                    {
+                        var value = src[i];
+
+                        if (value == index1)
+                        {
+                            dst[i] = index2;
+                        }
+                        else if (value == index2)
+                        {
+                            dst[i] = index1;
+                        }
+                        else
+                        {
+                            dst[i] = value;
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public GfxTile RotateColors(byte first, byte last, byte shift)
+        {
+            var result = new GfxTile();
+            var length = (byte)(last - first + 1);
+
+            unsafe
+            {
+                fixed (byte* src = Components)
+                {
+                    var dst = result.Components;
+
+                    for (var i = DotsPerTile; --i >= 0;)
+                    {
+                        var value = src[i];
+
+                        if (value >= first && value <= last)
+                        {
+                            value -= first;
+                            value += shift;
+                            if (length != 0)
+                            {
+                                value %= length;
+                            }
+                            value += first;
+                        }
+
+                        dst[i] = value;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static int BitsPerPixel(GraphicsFormat format)
         {
             var bpp = (int)format & 0x0F;
             if (bpp == 0)
             {
-                throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(GraphicsFormat));
+                throw new InvalidEnumArgumentException(
+                    nameof(format),
+                    (int)format,
+                    typeof(GraphicsFormat));
             }
 
             return bpp;
         }
 
-        public static int GetColorsPerPixel(GraphicsFormat format)
+        public static int BytesPerPlane(GraphicsFormat format)
         {
-            return 1 << GetBitsPerPixel(format);
+            return BitsPerPixel(format);
         }
 
-        public static int GetTileDataSize(GraphicsFormat format)
+        public static int ColorsPerPixel(GraphicsFormat format)
         {
-            return GetBitsPerPixel(format) * PlanesPerTile;
+            return 1 << BitsPerPixel(format);
         }
 
-        internal void GetTileData(byte* data, int tile, GraphicsFormat format)
+        public static int DataSizePerTile(GraphicsFormat format)
         {
-            GetTileData(data + GetStartAddress(tile, format), format);
+            return BytesPerPlane(format) * PlanesPerTile;
         }
 
-        internal void GetTileData(byte* data, GraphicsFormat format)
+        private static unsafe void TileFromData(byte* src, byte* dst, GraphicsFormat format)
         {
-            switch (format)
+            if (TileFromDataDictionary.TryGetValue(format, out var getTileData))
             {
-            case GraphicsFormat.Format1Bpp8x8:
-            GetTileData1Bpp(data);
-            return;
-
-            case GraphicsFormat.Format2BppNes:
-            GetTileData2BppNes(data);
-            return;
-
-            case GraphicsFormat.Format2BppGb:
-            GetTileData2BppGb(data);
-            return;
-
-            case GraphicsFormat.Format2BppNgp:
-            GetTileData2BppNgp(data);
-            return;
-
-            case GraphicsFormat.Format2BppVb:
-            GetTileData2BppVb(data);
-            return;
-
-            case GraphicsFormat.Format3BppSnes:
-            GetTileData3BppSnes(data);
-            return;
-
-            case GraphicsFormat.Format3Bpp8x8:
-            GetTileData3Bpp8x8(data);
-            return;
-
-            case GraphicsFormat.Format4BppSnes:
-            GetTileData4BppSnes(data);
-            return;
-
-            case GraphicsFormat.Format4BppGba:
-            GetTileData4BppGba(data);
-            return;
-
-            case GraphicsFormat.Format4BppSms:
-            GetTileData4BppSms(data);
-            return;
-
-            case GraphicsFormat.Format4BppMsx2:
-            GetTileData4BppMsx2(data);
-            return;
-
-            case GraphicsFormat.Format4Bpp8x8:
-            GetTileData4Bpp8x8(data);
-            return;
-
-            case GraphicsFormat.Format8BppSnes:
-            GetTileData8BppSnes(data);
-            return;
-
-            case GraphicsFormat.Format8BppMode7:
-            GetTileData8BppMode7(data);
-            return;
-
-            default:
-            throw new InvalidEnumArgumentException(nameof(format), (int)format, typeof(GraphicsFormat));
+                throw new InvalidEnumArgumentException(
+                    nameof(format),
+                    (int)format,
+                    typeof(GraphicsFormat));
             }
+
+            getTileData(src, dst);
         }
 
-        private void GetTileData1Bpp(byte* src)
+        private static unsafe void TileToData(byte* src, byte* dst, GraphicsFormat format)
         {
-            var dest = UnsafeData;
+            if (TileToDataDictionary.TryGetValue(format, out var getFormatData))
+            {
+                throw new InvalidEnumArgumentException(
+                    nameof(format),
+                    (int)format,
+                    typeof(GraphicsFormat));
+            }
+
+            getFormatData(src, dst);
+        }
+
+        private unsafe delegate void DataConverter(byte* src, byte* dst);
+
+        private static unsafe readonly IReadOnlyDictionary<GraphicsFormat, DataConverter> TileFromDataDictionary = new Dictionary<GraphicsFormat, DataConverter>()
+        {
+            { GraphicsFormat.Format1Bpp8x8  , TileFromData1Bpp },
+            { GraphicsFormat.Format2BppNes  , TileFromData2BppNes },
+            { GraphicsFormat.Format2BppGb   , TileFromData2BppGb },
+            { GraphicsFormat.Format2BppNgp  , TileFromData2BppNgp },
+            { GraphicsFormat.Format2BppVb   , TileFromData2BppVb },
+            { GraphicsFormat.Format3BppSnes , TileFromData3BppSnes },
+            { GraphicsFormat.Format3Bpp8x8  , TileFromData3Bpp8x8 },
+            { GraphicsFormat.Format4BppSnes , TileFromData4BppSnes },
+            { GraphicsFormat.Format4BppGba  , TileFromData4BppGba },
+            { GraphicsFormat.Format4BppSms  , TileFromData4BppSms },
+            { GraphicsFormat.Format4BppMsx2 , TileFromData4BppMsx2 },
+            { GraphicsFormat.Format4Bpp8x8  , TileFromData4Bpp8x8 },
+            { GraphicsFormat.Format8BppSnes , TileFromData8BppSnes },
+            { GraphicsFormat.Format8BppMode7, TileFromData8BppMode7 }
+        };
+
+        private static unsafe readonly IReadOnlyDictionary<GraphicsFormat, DataConverter> TileToDataDictionary = new Dictionary<GraphicsFormat, DataConverter>()
+        {
+            { GraphicsFormat.Format1Bpp8x8  , TileToData1Bpp },
+            { GraphicsFormat.Format2BppNes  , TileToData2BppNes },
+            { GraphicsFormat.Format2BppGb   , TileToData2BppGb },
+            { GraphicsFormat.Format2BppNgp  , TileToData2BppNgp },
+            { GraphicsFormat.Format2BppVb   , TileToData2BppVb },
+            { GraphicsFormat.Format3BppSnes , TileToData3BppSnes },
+            { GraphicsFormat.Format3Bpp8x8  , TileToData3Bpp8x8 },
+            { GraphicsFormat.Format4BppSnes , TileToData4BppSnes },
+            { GraphicsFormat.Format4BppGba  , TileToData4BppGba },
+            { GraphicsFormat.Format4BppSms  , TileToData4BppSms },
+            { GraphicsFormat.Format4BppMsx2 , TileToData4BppMsx2 },
+            { GraphicsFormat.Format4Bpp8x8  , TileToData4Bpp8x8 },
+            { GraphicsFormat.Format8BppSnes , TileToData8BppSnes },
+            { GraphicsFormat.Format8BppMode7, TileToData8BppMode7 }
+        };
+
+        private static unsafe void TileFromData1Bpp(byte* src, byte* dst)
+        {
             for (var y = PlanesPerTile; --y >= 0; src++)
             {
                 var val = *src;
-                for (var x = DotsPerPlane; --x >= 0; dest++)
+                for (var x = DotsPerPlane; --x >= 0; dst++)
                 {
-                    *dest = (byte)((val >> x) & 1);
+                    *dst = (byte)((val >> x) & 1);
                 }
             }
         }
 
-        private void GetFormatData1Bpp(byte* dest)
+        private static unsafe void TileToData1Bpp(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest++)
+            for (var y = PlanesPerTile; --y >= 0; dst++)
             {
                 var val = 0;
                 for (var x = DotsPerPlane; --x >= 0; src++)
@@ -328,29 +469,27 @@ namespace Snes
                     }
                 }
 
-                *dest = (byte)val;
+                *dst = (byte)val;
             }
         }
 
-        private void GetTileData2BppNes(byte* src)
+        private static unsafe void TileFromData2BppNes(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
             for (var y = PlanesPerTile; --y >= 0; src++)
             {
                 var val1 = src[0];
                 var val2 = src[PlanesPerTile];
-                for (var x = DotsPerPlane; --x >= 0; dest++)
+                for (var x = DotsPerPlane; --x >= 0; dst++)
                 {
-                    *dest = (byte)(((val1 >> x) & 1) |
+                    *dst = (byte)(((val1 >> x) & 1) |
                         ((val2 >> x) & 1) << 1);
                 }
             }
         }
 
-        private void GetFormatData2BppNes(byte* dest)
+        private static unsafe void TileToData2BppNes(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest++)
+            for (var y = PlanesPerTile; --y >= 0; dst++)
             {
                 var val1 = 0;
                 var val2 = 0;
@@ -366,30 +505,28 @@ namespace Snes
                         val2 |= 1 << x;
                     }
                 }
-                dest[0] = (byte)val1;
-                dest[PlanesPerTile] = (byte)val2;
+                dst[0] = (byte)val1;
+                dst[PlanesPerTile] = (byte)val2;
             }
         }
 
-        private void GetTileData2BppGb(byte* src)
+        private static unsafe void TileFromData2BppGb(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
             for (var y = PlanesPerTile; --y >= 0; src += 2)
             {
                 var val1 = src[0];
                 var val2 = src[1];
-                for (var x = DotsPerPlane; --x >= 0; dest++)
+                for (var x = DotsPerPlane; --x >= 0; dst++)
                 {
-                    *dest = (byte)(((val1 >> x) & 1) |
+                    *dst = (byte)(((val1 >> x) & 1) |
                         ((val2 >> x) & 1) << 1);
                 }
             }
         }
 
-        private void GetFormatData2BppGb(byte* dest)
+        private static unsafe void TileToData2BppGb(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest += 2)
+            for (var y = PlanesPerTile; --y >= 0; dst += 2)
             {
                 var val1 = 0;
                 var val2 = 0;
@@ -405,28 +542,26 @@ namespace Snes
                         val2 |= 1 << x;
                     }
                 }
-                dest[0] = (byte)val1;
-                dest[1] = (byte)val2;
+                dst[0] = (byte)val1;
+                dst[1] = (byte)val2;
             }
         }
 
-        private void GetTileData2BppNgp(byte* src)
+        private static unsafe void TileFromData2BppNgp(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
             for (var y = PlanesPerTile; --y >= 0; src += sizeof(ushort))
             {
                 var val = *(ushort*)src;
-                for (var x = DotsPerPlane; --x >= 0; dest++)
+                for (var x = DotsPerPlane; --x >= 0; dst++)
                 {
-                    *dest = (byte)((val >> (x << 1)) & 3);
+                    *dst = (byte)((val >> (x << 1)) & 3);
                 }
             }
         }
 
-        private void GetFormatData2BppNgp(byte* dest)
+        private static unsafe void TileToData2BppNgp(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest += sizeof(ushort))
+            for (var y = PlanesPerTile; --y >= 0; dst += sizeof(ushort))
             {
                 var val = 0;
                 for (var x = DotsPerPlane; --x >= 0; src++)
@@ -434,27 +569,25 @@ namespace Snes
                     val |= (*src & 3) << (x << 1);
                 }
 
-                *(ushort*)dest = (ushort)val;
+                *(ushort*)dst = (ushort)val;
             }
         }
 
-        private void GetTileData2BppVb(byte* src)
+        private static unsafe void TileFromData2BppVb(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest += DotsPerPlane, src += sizeof(ushort))
+            for (var y = PlanesPerTile; --y >= 0; dst += DotsPerPlane, src += sizeof(ushort))
             {
                 var val = *(ushort*)src;
                 for (var x = DotsPerPlane; --x >= 0;)
                 {
-                    dest[x] = (byte)((val >> (x << 1)) & 3);
+                    dst[x] = (byte)((val >> (x << 1)) & 3);
                 }
             }
         }
 
-        private void GetFormatData2BppVb(byte* dest)
+        private static unsafe void TileToData2BppVb(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest += sizeof(ushort))
+            for (var y = PlanesPerTile; --y >= 0; dst += sizeof(ushort))
             {
                 var val = 0;
                 for (var x = DotsPerPlane; --x >= 0;)
@@ -462,30 +595,28 @@ namespace Snes
                     val |= (src[x] & 3) << (x << 1);
                 }
 
-                *(ushort*)dest = (ushort)val;
+                *(ushort*)dst = (ushort)val;
             }
         }
 
-        private void GetTileData3BppSnes(byte* src)
+        private static unsafe void TileFromData3BppSnes(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
             for (var y = 0; y < PlanesPerTile; y++)
             {
                 var val1 = src[y << 1];
                 var val2 = src[(y << 1) + 1];
                 var val3 = src[y + (PlanesPerTile << 1)];
-                for (var x = DotsPerPlane; --x >= 0; dest++)
+                for (var x = DotsPerPlane; --x >= 0; dst++)
                 {
-                    *dest = (byte)(((val1 >> x) & 1) |
+                    *dst = (byte)(((val1 >> x) & 1) |
                         (((val2 >> x) & 1) << 1) |
                         (((val3 >> x) & 1) << 2));
                 }
             }
         }
 
-        private void GetFormatData3BppSnes(byte* dest)
+        private static unsafe void TileToData3BppSnes(byte* src, byte* dst)
         {
-            var src = UnsafeData;
             for (var y = 0; y < PlanesPerTile; y++)
             {
                 var val1 = 0;
@@ -508,33 +639,31 @@ namespace Snes
                         val3 |= 1 << x;
                     }
                 }
-                dest[y << 1] = (byte)val1;
-                dest[(y << 1) + 1] = (byte)val2;
-                dest[y + (PlanesPerTile << 1)] = (byte)val3;
+                dst[y << 1] = (byte)val1;
+                dst[(y << 1) + 1] = (byte)val2;
+                dst[y + (PlanesPerTile << 1)] = (byte)val3;
             }
         }
 
-        private void GetTileData3Bpp8x8(byte* src)
+        private static unsafe void TileFromData3Bpp8x8(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
             for (var y = PlanesPerTile; --y >= 0; src++)
             {
                 var val1 = src[0 * PlanesPerTile];
                 var val2 = src[1 * PlanesPerTile];
                 var val3 = src[2 * PlanesPerTile];
-                for (var x = DotsPerPlane; --x >= 0; dest++)
+                for (var x = DotsPerPlane; --x >= 0; dst++)
                 {
-                    *dest = (byte)(((val1 >> x) & 1) |
+                    *dst = (byte)(((val1 >> x) & 1) |
                         (((val2 >> x) & 1) << 1) |
                         (((val3 >> x) & 1) << 2));
                 }
             }
         }
 
-        private void GetFormatData3Bpp8x8(byte* dest)
+        private static unsafe void TileToData3Bpp8x8(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest++)
+            for (var y = PlanesPerTile; --y >= 0; dst++)
             {
                 var val1 = 0;
                 var val2 = 0;
@@ -556,24 +685,23 @@ namespace Snes
                         val3 |= 1 << x;
                     }
                 }
-                dest[0 * PlanesPerTile] = (byte)val1;
-                dest[1 * PlanesPerTile] = (byte)val2;
-                dest[2 * PlanesPerTile] = (byte)val3;
+                dst[0 * PlanesPerTile] = (byte)val1;
+                dst[1 * PlanesPerTile] = (byte)val2;
+                dst[2 * PlanesPerTile] = (byte)val3;
             }
         }
 
-        private void GetTileData4BppSnes(byte* src)
+        private static unsafe void TileFromData4BppSnes(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
             for (var y = PlanesPerTile; --y >= 0; src += 2)
             {
                 var val1 = src[0];
                 var val2 = src[1];
                 var val3 = src[0 + (2 * PlanesPerTile)];
                 var val4 = src[1 + (2 * PlanesPerTile)];
-                for (var x = DotsPerPlane; --x >= 0; dest++)
+                for (var x = DotsPerPlane; --x >= 0; dst++)
                 {
-                    *dest = (byte)(((val1 >> x) & 1) |
+                    *dst = (byte)(((val1 >> x) & 1) |
                         (((val2 >> x) & 1) << 1) |
                         (((val3 >> x) & 1) << 2) |
                         (((val4 >> x) & 1) << 3));
@@ -581,10 +709,9 @@ namespace Snes
             }
         }
 
-        private void GetFormatData4BppSnes(byte* dest)
+        private static unsafe void TileToData4BppSnes(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest += 2)
+            for (var y = PlanesPerTile; --y >= 0; dst += 2)
             {
                 var val1 = 0;
                 var val2 = 0;
@@ -612,30 +739,28 @@ namespace Snes
                         val4 |= 1 << x;
                     }
                 }
-                dest[0] = (byte)val1;
-                dest[1] = (byte)val2;
-                dest[0 + (2 * PlanesPerTile)] = (byte)val3;
-                dest[1 + (2 * PlanesPerTile)] = (byte)val4;
+                dst[0] = (byte)val1;
+                dst[1] = (byte)val2;
+                dst[0 + (2 * PlanesPerTile)] = (byte)val3;
+                dst[1 + (2 * PlanesPerTile)] = (byte)val4;
             }
         }
 
-        private void GetTileData4BppGba(byte* src)
+        private static unsafe void TileFromData4BppGba(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; src += sizeof(uint), dest += PlanesPerTile)
+            for (var y = PlanesPerTile; --y >= 0; src += sizeof(uint), dst += PlanesPerTile)
             {
                 var val = *(uint*)src;
                 for (var x = DotsPerPlane; --x >= 0;)
                 {
-                    dest[x] = (byte)((val >> (x << 2)) & 0x0F);
+                    dst[x] = (byte)((val >> (x << 2)) & 0x0F);
                 }
             }
         }
 
-        private void GetFormatData4BppGba(byte* dest)
+        private static unsafe void TileToData4BppGba(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest += sizeof(uint), src += PlanesPerTile)
+            for (var y = PlanesPerTile; --y >= 0; dst += sizeof(uint), src += PlanesPerTile)
             {
                 var val = 0u;
                 for (var x = DotsPerPlane; --x >= 0;)
@@ -643,22 +768,21 @@ namespace Snes
                     val |= (uint)((src[x] & 3) << (x << 2));
                 }
 
-                *(uint*)dest = val;
+                *(uint*)dst = val;
             }
         }
 
-        private void GetTileData4BppSms(byte* src)
+        private static unsafe void TileFromData4BppSms(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
             for (var y = PlanesPerTile; --y >= 0; src += 4)
             {
                 var val1 = src[0];
                 var val2 = src[1];
                 var val3 = src[2];
                 var val4 = src[3];
-                for (var x = DotsPerPlane; --x >= 0; dest++)
+                for (var x = DotsPerPlane; --x >= 0; dst++)
                 {
-                    *dest = (byte)(((val1 >> x) & 1) |
+                    *dst = (byte)(((val1 >> x) & 1) |
                         (((val2 >> x) & 1) << 1) |
                         (((val3 >> x) & 1) << 2) |
                         (((val4 >> x) & 1) << 3));
@@ -666,10 +790,9 @@ namespace Snes
             }
         }
 
-        private void GetFormatData4BppSms(byte* dest)
+        private static unsafe void TileToData4BppSms(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest += 4)
+            for (var y = PlanesPerTile; --y >= 0; dst += 4)
             {
                 var val1 = 0;
                 var val2 = 0;
@@ -697,46 +820,43 @@ namespace Snes
                         val4 |= 1 << x;
                     }
                 }
-                dest[0] = (byte)val1;
-                dest[1] = (byte)val2;
-                dest[2] = (byte)val3;
-                dest[3] = (byte)val4;
+                dst[0] = (byte)val1;
+                dst[1] = (byte)val2;
+                dst[2] = (byte)val3;
+                dst[3] = (byte)val4;
             }
         }
 
-        private void GetTileData4BppMsx2(byte* src)
+        private static unsafe void TileFromData4BppMsx2(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
-            for (var i = 0; i < Size; i += 2, src++)
+            for (var i = 0; i < DotsPerTile; i += 2, src++)
             {
-                dest[i] = (byte)((*src >> 4) & 0x0F);
-                dest[i + 1] = (byte)(*src & 0x0F);
+                dst[i] = (byte)((*src >> 4) & 0x0F);
+                dst[i + 1] = (byte)(*src & 0x0F);
             }
         }
 
-        private void GetFormatData4BppMsx2(byte* dest)
+        private static unsafe void TileToData4BppMsx2(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var i = 0; i < Size; i += 2, dest++)
+            for (var i = 0; i < DotsPerTile; i += 2, dst++)
             {
                 var val1 = src[i] & 0x0F;
                 var val2 = src[i + 1] & 0x0F;
-                *dest = (byte)((val1 << 4) | val2);
+                *dst = (byte)((val1 << 4) | val2);
             }
         }
 
-        private void GetTileData4Bpp8x8(byte* src)
+        private static unsafe void TileFromData4Bpp8x8(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
             for (var y = PlanesPerTile; --y >= 0; src++)
             {
                 var val1 = src[0 * PlanesPerTile];
                 var val2 = src[1 * PlanesPerTile];
                 var val3 = src[2 * PlanesPerTile];
                 var val4 = src[3 * PlanesPerTile];
-                for (var x = DotsPerPlane; --x >= 0; dest++)
+                for (var x = DotsPerPlane; --x >= 0; dst++)
                 {
-                    *dest = (byte)(((val1 >> x) & 1) |
+                    *dst = (byte)(((val1 >> x) & 1) |
                         (((val2 >> x) & 1) << 1) |
                         (((val3 >> x) & 1) << 2) |
                         (((val4 >> x) & 1) << 3));
@@ -744,10 +864,9 @@ namespace Snes
             }
         }
 
-        private void GetFormatData4Bpp8x8(byte* dest)
+        private static unsafe void TileToData4Bpp8x8(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest++)
+            for (var y = PlanesPerTile; --y >= 0; dst++)
             {
                 var val1 = 0;
                 var val2 = 0;
@@ -775,16 +894,15 @@ namespace Snes
                         val4 |= 1 << x;
                     }
                 }
-                dest[0 * PlanesPerTile] = (byte)val1;
-                dest[1 * PlanesPerTile] = (byte)val2;
-                dest[2 * PlanesPerTile] = (byte)val3;
-                dest[3 * PlanesPerTile] = (byte)val4;
+                dst[0 * PlanesPerTile] = (byte)val1;
+                dst[1 * PlanesPerTile] = (byte)val2;
+                dst[2 * PlanesPerTile] = (byte)val3;
+                dst[3 * PlanesPerTile] = (byte)val4;
             }
         }
 
-        private void GetTileData8BppSnes(byte* src)
+        private static unsafe void TileFromData8BppSnes(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
             for (var y = PlanesPerTile; --y >= 0; src += 2)
             {
                 var val1 = src[0 + (0 * PlanesPerTile)];
@@ -795,9 +913,9 @@ namespace Snes
                 var val6 = src[1 + (4 * PlanesPerTile)];
                 var val7 = src[0 + (6 * PlanesPerTile)];
                 var val8 = src[1 + (6 * PlanesPerTile)];
-                for (var x = DotsPerPlane; --x >= 0; dest++)
+                for (var x = DotsPerPlane; --x >= 0; dst++)
                 {
-                    *dest = (byte)(((val1 >> x) & 1) |
+                    *dst = (byte)(((val1 >> x) & 1) |
                         (((val2 >> x) & 1) << 1) |
                         (((val3 >> x) & 1) << 2) |
                         (((val2 >> x) & 1) << 3) |
@@ -809,10 +927,9 @@ namespace Snes
             }
         }
 
-        private void GetFormatData8BppSnes(byte* dest)
+        private static unsafe void TileToData8BppSnes(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var y = PlanesPerTile; --y >= 0; dest += 2)
+            for (var y = PlanesPerTile; --y >= 0; dst += 2)
             {
                 var val1 = 0;
                 var val2 = 0;
@@ -864,92 +981,31 @@ namespace Snes
                         val8 |= 1 << x;
                     }
                 }
-                dest[0 + (0 * PlanesPerTile)] = (byte)val1;
-                dest[1 + (0 * PlanesPerTile)] = (byte)val2;
-                dest[0 + (2 * PlanesPerTile)] = (byte)val3;
-                dest[1 + (2 * PlanesPerTile)] = (byte)val4;
-                dest[0 + (4 * PlanesPerTile)] = (byte)val5;
-                dest[1 + (4 * PlanesPerTile)] = (byte)val6;
-                dest[0 + (6 * PlanesPerTile)] = (byte)val7;
-                dest[1 + (6 * PlanesPerTile)] = (byte)val8;
+                dst[0 + (0 * PlanesPerTile)] = (byte)val1;
+                dst[1 + (0 * PlanesPerTile)] = (byte)val2;
+                dst[0 + (2 * PlanesPerTile)] = (byte)val3;
+                dst[1 + (2 * PlanesPerTile)] = (byte)val4;
+                dst[0 + (4 * PlanesPerTile)] = (byte)val5;
+                dst[1 + (4 * PlanesPerTile)] = (byte)val6;
+                dst[0 + (6 * PlanesPerTile)] = (byte)val7;
+                dst[1 + (6 * PlanesPerTile)] = (byte)val8;
             }
         }
 
-        private void GetTileData8BppMode7(byte* src)
+        private static unsafe void TileFromData8BppMode7(byte* src, byte* dst)
         {
-            var dest = UnsafeData;
-            for (var i = Size; --i >= 0;)
+            for (var i = DotsPerTile; --i >= 0;)
             {
-                dest[i] = src[i];
+                dst[i] = src[i];
             }
         }
 
-        private void GetFormatData8BppMode7(byte* dest)
+        private static unsafe void TileToData8BppMode7(byte* src, byte* dst)
         {
-            var src = UnsafeData;
-            for (var i = Size; --i >= 0;)
+            for (var i = DotsPerTile; --i >= 0;)
             {
-                dest[i] = src[i];
+                dst[i] = src[i];
             }
-        }
-
-        public static bool operator ==(GfxTile left, GfxTile right)
-        {
-            for (var i = Size; --i >= 0;)
-            {
-                if (left[i] != right[i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public static bool operator !=(GfxTile left, GfxTile right)
-        {
-            return !(left == right);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            if (!(obj is GfxTile))
-            {
-                return false;
-            }
-
-            return (GfxTile)obj == this;
-        }
-
-        public override int GetHashCode()
-        {
-            var code = 0;
-            for (var i = Size; --i >= 0;)
-            {
-                code ^= (this[i] << (i & 0x1F));
-            }
-
-            return code;
-        }
-
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            for (var j = 0; j < PlanesPerTile; j++)
-            {
-                for (var i = 0; i < DotsPerPlane; i++)
-                {
-                    sb.Append(this[(j * 8) + i]);
-                    sb.Append(' ');
-                }
-                sb.AppendLine();
-            }
-            return sb.ToString();
         }
     }
 }
