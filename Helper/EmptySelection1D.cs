@@ -18,6 +18,14 @@ namespace Helper
             }
         }
 
+        public override int this[int index]
+        {
+            get
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+        }
+
         internal EmptySelection1D()
         {
         }

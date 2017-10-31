@@ -18,6 +18,14 @@ namespace Helper
             }
         }
 
+        public override Position2D this[int index]
+        {
+            get
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+        }
+
         internal EmptySelection2D()
         {
         }

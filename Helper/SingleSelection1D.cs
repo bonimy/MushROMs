@@ -18,6 +18,19 @@ namespace Helper
             }
         }
 
+        public override int this[int index]
+        {
+            get
+            {
+                if (index != 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                return StartIndex;
+            }
+        }
+
         public SingleSelection1D(int index)
         {
             StartIndex = index;

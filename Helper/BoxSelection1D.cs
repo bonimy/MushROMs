@@ -30,6 +30,23 @@ namespace Helper
             }
         }
 
+        public override int this[int index]
+        {
+            get
+            {
+                if ((uint)index >= (uint)Count)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                var result = StartIndex;
+                result += index % Range.Width;
+                result += (index / Range.Width) + RegionWidth;
+
+                return result;
+            }
+        }
+
         public BoxSelection1D(int startIndex, int regionWidth, Range2D range)
         {
             if (regionWidth <= 0)
