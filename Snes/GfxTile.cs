@@ -21,6 +21,11 @@ namespace Snes
         {
             get
             {
+                if ((uint)index >= (uint)DotsPerTile)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
                 unsafe
                 {
                     fixed (byte* ptr = Components)
@@ -32,6 +37,11 @@ namespace Snes
 
             set
             {
+                if ((uint)index >= (uint)DotsPerTile)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
                 unsafe
                 {
                     fixed (byte* ptr = Components)
