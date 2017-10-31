@@ -27,7 +27,7 @@ namespace Helper
             set;
         }
 
-        private List<Position2D> SelectedIndexes
+        private IReadOnlyList<Position2D> SelectedIndexes
         {
             get;
             set;
@@ -38,6 +38,14 @@ namespace Helper
             get
             {
                 return SelectedIndexes.Count;
+            }
+        }
+
+        public override Position2D this[int index]
+        {
+            get
+            {
+                return SelectedIndexes[index];
             }
         }
 

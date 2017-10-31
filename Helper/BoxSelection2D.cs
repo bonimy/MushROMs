@@ -24,6 +24,23 @@ namespace Helper
             }
         }
 
+        public override Position2D this[int index]
+        {
+            get
+            {
+                if ((uint)index >= (uint)Count)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                var result = StartPosition;
+                result.X += index % Range.Width;
+                result.Y += index / Range.Width;
+
+                return result;
+            }
+        }
+
         public BoxSelection2D(Position2D startPosition, Range2D range)
         {
             if (range.Width <= 0 || range.Height <= 0)

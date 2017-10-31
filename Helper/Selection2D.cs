@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Helper
 {
-    public abstract class Selection2D : IEnumerable<Position2D>
+    public abstract class Selection2D : IReadOnlyList<Position2D>
     {
         public static readonly Selection1D Empty = new EmptySelection1D();
 
@@ -29,6 +29,11 @@ namespace Helper
             {
                 return Count == 0;
             }
+        }
+
+        public abstract Position2D this[int index]
+        {
+            get;
         }
 
         protected Selection2D()

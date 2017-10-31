@@ -29,7 +29,7 @@ namespace Helper
             set;
         }
 
-        private List<int> SelectedIndexes
+        private IReadOnlyList<int> SelectedIndexes
         {
             get;
             set;
@@ -40,6 +40,14 @@ namespace Helper
             get
             {
                 return SelectedIndexes.Count;
+            }
+        }
+
+        public override int this[int index]
+        {
+            get
+            {
+                return SelectedIndexes[index];
             }
         }
 
