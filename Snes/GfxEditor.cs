@@ -28,6 +28,8 @@ namespace Snes
         public GfxEditor(byte[] data)
         {
             Data = data ?? throw new ArgumentNullException(nameof(data));
+
+            UndoFactory = new UndoFactory();
         }
 
         public Gfx CreateGfxFromSelection(IGfxSelection selection)
