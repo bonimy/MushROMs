@@ -22,6 +22,7 @@ namespace Snes
             {
                 return Tiles[index];
             }
+
             set
             {
                 Tiles[index] = value;

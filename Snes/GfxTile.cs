@@ -3,8 +3,8 @@
 // </copyright>
 
 using System;
-using System.ComponentModel;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 namespace Snes
 {
@@ -15,7 +15,7 @@ namespace Snes
         public const int DotsPerTile = DotsPerPlane * PlanesPerTile;
         public const int SizeOf = DotsPerTile * sizeof(byte);
 
-        private unsafe fixed byte Components[DotsPerTile];
+        public unsafe fixed byte Components[DotsPerTile];
 
         public byte this[int index]
         {
@@ -340,6 +340,7 @@ namespace Snes
                             {
                                 value %= length;
                             }
+
                             value += first;
                         }
 
@@ -410,37 +411,37 @@ namespace Snes
 
         private static unsafe readonly IReadOnlyDictionary<GraphicsFormat, DataConverter> TileFromDataDictionary = new Dictionary<GraphicsFormat, DataConverter>()
         {
-            { GraphicsFormat.Format1Bpp8x8  , TileFromData1Bpp },
-            { GraphicsFormat.Format2BppNes  , TileFromData2BppNes },
-            { GraphicsFormat.Format2BppGb   , TileFromData2BppGb },
-            { GraphicsFormat.Format2BppNgp  , TileFromData2BppNgp },
-            { GraphicsFormat.Format2BppVb   , TileFromData2BppVb },
-            { GraphicsFormat.Format3BppSnes , TileFromData3BppSnes },
-            { GraphicsFormat.Format3Bpp8x8  , TileFromData3Bpp8x8 },
-            { GraphicsFormat.Format4BppSnes , TileFromData4BppSnes },
-            { GraphicsFormat.Format4BppGba  , TileFromData4BppGba },
-            { GraphicsFormat.Format4BppSms  , TileFromData4BppSms },
-            { GraphicsFormat.Format4BppMsx2 , TileFromData4BppMsx2 },
-            { GraphicsFormat.Format4Bpp8x8  , TileFromData4Bpp8x8 },
-            { GraphicsFormat.Format8BppSnes , TileFromData8BppSnes },
+            { GraphicsFormat.Format1Bpp8x8, TileFromData1Bpp },
+            { GraphicsFormat.Format2BppNes, TileFromData2BppNes },
+            { GraphicsFormat.Format2BppGb, TileFromData2BppGb },
+            { GraphicsFormat.Format2BppNgp, TileFromData2BppNgp },
+            { GraphicsFormat.Format2BppVb, TileFromData2BppVb },
+            { GraphicsFormat.Format3BppSnes, TileFromData3BppSnes },
+            { GraphicsFormat.Format3Bpp8x8, TileFromData3Bpp8x8 },
+            { GraphicsFormat.Format4BppSnes, TileFromData4BppSnes },
+            { GraphicsFormat.Format4BppGba, TileFromData4BppGba },
+            { GraphicsFormat.Format4BppSms, TileFromData4BppSms },
+            { GraphicsFormat.Format4BppMsx2, TileFromData4BppMsx2 },
+            { GraphicsFormat.Format4Bpp8x8, TileFromData4Bpp8x8 },
+            { GraphicsFormat.Format8BppSnes, TileFromData8BppSnes },
             { GraphicsFormat.Format8BppMode7, TileFromData8BppMode7 }
         };
 
         private static unsafe readonly IReadOnlyDictionary<GraphicsFormat, DataConverter> TileToDataDictionary = new Dictionary<GraphicsFormat, DataConverter>()
         {
-            { GraphicsFormat.Format1Bpp8x8  , TileToData1Bpp },
-            { GraphicsFormat.Format2BppNes  , TileToData2BppNes },
-            { GraphicsFormat.Format2BppGb   , TileToData2BppGb },
-            { GraphicsFormat.Format2BppNgp  , TileToData2BppNgp },
-            { GraphicsFormat.Format2BppVb   , TileToData2BppVb },
-            { GraphicsFormat.Format3BppSnes , TileToData3BppSnes },
-            { GraphicsFormat.Format3Bpp8x8  , TileToData3Bpp8x8 },
-            { GraphicsFormat.Format4BppSnes , TileToData4BppSnes },
-            { GraphicsFormat.Format4BppGba  , TileToData4BppGba },
-            { GraphicsFormat.Format4BppSms  , TileToData4BppSms },
-            { GraphicsFormat.Format4BppMsx2 , TileToData4BppMsx2 },
-            { GraphicsFormat.Format4Bpp8x8  , TileToData4Bpp8x8 },
-            { GraphicsFormat.Format8BppSnes , TileToData8BppSnes },
+            { GraphicsFormat.Format1Bpp8x8, TileToData1Bpp },
+            { GraphicsFormat.Format2BppNes, TileToData2BppNes },
+            { GraphicsFormat.Format2BppGb, TileToData2BppGb },
+            { GraphicsFormat.Format2BppNgp, TileToData2BppNgp },
+            { GraphicsFormat.Format2BppVb, TileToData2BppVb },
+            { GraphicsFormat.Format3BppSnes, TileToData3BppSnes },
+            { GraphicsFormat.Format3Bpp8x8, TileToData3Bpp8x8 },
+            { GraphicsFormat.Format4BppSnes, TileToData4BppSnes },
+            { GraphicsFormat.Format4BppGba, TileToData4BppGba },
+            { GraphicsFormat.Format4BppSms, TileToData4BppSms },
+            { GraphicsFormat.Format4BppMsx2, TileToData4BppMsx2 },
+            { GraphicsFormat.Format4Bpp8x8, TileToData4Bpp8x8 },
+            { GraphicsFormat.Format8BppSnes, TileToData8BppSnes },
             { GraphicsFormat.Format8BppMode7, TileToData8BppMode7 }
         };
 
@@ -495,16 +496,19 @@ namespace Snes
                 var val2 = 0;
                 for (var x = DotsPerPlane; --x >= 0; src++)
                 {
-                    if ((src[x] & 1) != 0)
+                    var value = src[x];
+
+                    if ((value & 1) != 0)
                     {
                         val1 |= 1 << x;
                     }
 
-                    if ((src[x] & 2) != 0)
+                    if ((value & 2) != 0)
                     {
                         val2 |= 1 << x;
                     }
                 }
+
                 dst[0] = (byte)val1;
                 dst[PlanesPerTile] = (byte)val2;
             }
@@ -532,16 +536,19 @@ namespace Snes
                 var val2 = 0;
                 for (var x = DotsPerPlane; --x >= 0; src++)
                 {
-                    if ((src[x] & 1) != 0)
+                    var value = src[x];
+
+                    if ((value & 1) != 0)
                     {
                         val1 |= 1 << x;
                     }
 
-                    if ((src[x] & 2) != 0)
+                    if ((value & 2) != 0)
                     {
                         val2 |= 1 << x;
                     }
                 }
+
                 dst[0] = (byte)val1;
                 dst[1] = (byte)val2;
             }
@@ -624,21 +631,24 @@ namespace Snes
                 var val3 = 0;
                 for (var x = DotsPerPlane; --x >= 0; src++)
                 {
-                    if ((src[x] & 1) != 0)
+                    var value = src[x];
+
+                    if ((value & 1) != 0)
                     {
                         val1 |= 1 << x;
                     }
 
-                    if ((src[x] & 2) != 0)
+                    if ((value & 2) != 0)
                     {
                         val2 |= 1 << x;
                     }
 
-                    if ((src[x] & 4) != 0)
+                    if ((value & 4) != 0)
                     {
                         val3 |= 1 << x;
                     }
                 }
+
                 dst[y << 1] = (byte)val1;
                 dst[(y << 1) + 1] = (byte)val2;
                 dst[y + (PlanesPerTile << 1)] = (byte)val3;
@@ -670,21 +680,24 @@ namespace Snes
                 var val3 = 0;
                 for (var x = DotsPerPlane; --x >= 0; src++)
                 {
-                    if ((src[x] & 1) != 0)
+                    var value = src[x];
+
+                    if ((value & 1) != 0)
                     {
                         val1 |= 1 << x;
                     }
 
-                    if ((src[x] & 2) != 0)
+                    if ((value & 2) != 0)
                     {
                         val2 |= 1 << x;
                     }
 
-                    if ((src[x] & 4) != 0)
+                    if ((value & 4) != 0)
                     {
                         val3 |= 1 << x;
                     }
                 }
+
                 dst[0 * PlanesPerTile] = (byte)val1;
                 dst[1 * PlanesPerTile] = (byte)val2;
                 dst[2 * PlanesPerTile] = (byte)val3;
@@ -719,26 +732,29 @@ namespace Snes
                 var val4 = 0;
                 for (var x = DotsPerPlane; --x >= 0; src++)
                 {
-                    if ((src[x] & 1) != 0)
+                    var value = src[x];
+
+                    if ((value & 1) != 0)
                     {
                         val1 |= 1 << x;
                     }
 
-                    if ((src[x] & 2) != 0)
+                    if ((value & 2) != 0)
                     {
                         val2 |= 1 << x;
                     }
 
-                    if ((src[x] & 4) != 0)
+                    if ((value & 4) != 0)
                     {
                         val3 |= 1 << x;
                     }
 
-                    if ((src[x] & 8) != 0)
+                    if ((value & 8) != 0)
                     {
                         val4 |= 1 << x;
                     }
                 }
+
                 dst[0] = (byte)val1;
                 dst[1] = (byte)val2;
                 dst[0 + (2 * PlanesPerTile)] = (byte)val3;
@@ -800,26 +816,29 @@ namespace Snes
                 var val4 = 0;
                 for (var x = DotsPerPlane; --x >= 0; src++)
                 {
-                    if ((src[x] & 1) != 0)
+                    var value = src[x];
+
+                    if ((value & 1) != 0)
                     {
                         val1 |= 1 << x;
                     }
 
-                    if ((src[x] & 2) != 0)
+                    if ((value & 2) != 0)
                     {
                         val2 |= 1 << x;
                     }
 
-                    if ((src[x] & 4) != 0)
+                    if ((value & 4) != 0)
                     {
                         val3 |= 1 << x;
                     }
 
-                    if ((src[x] & 8) != 0)
+                    if ((value & 8) != 0)
                     {
                         val4 |= 1 << x;
                     }
                 }
+
                 dst[0] = (byte)val1;
                 dst[1] = (byte)val2;
                 dst[2] = (byte)val3;
@@ -874,26 +893,29 @@ namespace Snes
                 var val4 = 0;
                 for (var x = DotsPerPlane; --x >= 0; src++)
                 {
-                    if ((src[x] & 1) != 0)
+                    var value = src[x];
+
+                    if ((value & 1) != 0)
                     {
                         val1 |= 1 << x;
                     }
 
-                    if ((src[x] & 2) != 0)
+                    if ((value & 2) != 0)
                     {
                         val2 |= 1 << x;
                     }
 
-                    if ((src[x] & 4) != 0)
+                    if ((value & 4) != 0)
                     {
                         val3 |= 1 << x;
                     }
 
-                    if ((src[x] & 8) != 0)
+                    if ((value & 8) != 0)
                     {
                         val4 |= 1 << x;
                     }
                 }
+
                 dst[0 * PlanesPerTile] = (byte)val1;
                 dst[1 * PlanesPerTile] = (byte)val2;
                 dst[2 * PlanesPerTile] = (byte)val3;
@@ -941,46 +963,49 @@ namespace Snes
                 var val8 = 0;
                 for (var x = DotsPerPlane; --x >= 0; src++)
                 {
-                    if ((src[x] & 1 << 0) != 0)
+                    var value = src[x];
+
+                    if ((value & 1 << 0) != 0)
                     {
                         val1 |= 1 << x;
                     }
 
-                    if ((src[x] & 1 << 1) != 0)
+                    if ((value & 1 << 1) != 0)
                     {
                         val2 |= 1 << x;
                     }
 
-                    if ((src[x] & 1 << 2) != 0)
+                    if ((value & 1 << 2) != 0)
                     {
                         val3 |= 1 << x;
                     }
 
-                    if ((src[x] & 1 << 3) != 0)
+                    if ((value & 1 << 3) != 0)
                     {
                         val4 |= 1 << x;
                     }
 
-                    if ((src[x] & 1 << 4) != 0)
+                    if ((value & 1 << 4) != 0)
                     {
                         val5 |= 1 << x;
                     }
 
-                    if ((src[x] & 1 << 5) != 0)
+                    if ((value & 1 << 5) != 0)
                     {
                         val6 |= 1 << x;
                     }
 
-                    if ((src[x] & 1 << 6) != 0)
+                    if ((value & 1 << 6) != 0)
                     {
                         val7 |= 1 << x;
                     }
 
-                    if ((src[x] & 1 << 7) != 0)
+                    if ((value & 1 << 7) != 0)
                     {
                         val8 |= 1 << x;
                     }
                 }
+
                 dst[0 + (0 * PlanesPerTile)] = (byte)val1;
                 dst[1 + (0 * PlanesPerTile)] = (byte)val2;
                 dst[0 + (2 * PlanesPerTile)] = (byte)val3;
@@ -994,18 +1019,12 @@ namespace Snes
 
         private static unsafe void TileFromData8BppMode7(byte* src, byte* dst)
         {
-            for (var i = DotsPerTile; --i >= 0;)
-            {
-                dst[i] = src[i];
-            }
+            Buffer.MemoryCopy(src, dst, DotsPerTile, DotsPerTile);
         }
 
         private static unsafe void TileToData8BppMode7(byte* src, byte* dst)
         {
-            for (var i = DotsPerTile; --i >= 0;)
-            {
-                dst[i] = src[i];
-            }
+            Buffer.MemoryCopy(src, dst, DotsPerTile, DotsPerTile);
         }
     }
 }
