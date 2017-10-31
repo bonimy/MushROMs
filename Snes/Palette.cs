@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Palette.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.Threading.Tasks;
 using Helper;
 using Helper.PixelFormats;
@@ -103,7 +107,10 @@ namespace Snes
                 // Cast the scan0 pointer as a fundamental pixel type.
                 var pixels = (Color32BppArgb*)scan0;
 
-                Parallel.For(0, Count, i =>
+                Parallel.For(
+                    0,
+                    Count,
+                    i =>
                 {
                     var index = i + zero;
 
