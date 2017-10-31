@@ -52,6 +52,16 @@ namespace Helper
 
         public void Add(Action undo, Action redo)
         {
+            if (undo == null)
+            {
+                throw new ArgumentNullException(nameof(undo));
+            }
+
+            if (redo == null)
+            {
+                throw new ArgumentNullException(nameof(redo));
+            }
+
             if (Index < Count)
             {
                 History.RemoveRange(Index, Count - Index);
