@@ -1,4 +1,8 @@
-﻿// We make the Compressor class non-static so it can be multi-threaded (since we need a nonlocal
+﻿// <copyright file="Compressor.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+// We make the Compressor class non-static so it can be multi-threaded (since we need a nonlocal
 // copy of a SuffixTree to maintain optimization).
 
 using System;
@@ -48,6 +52,7 @@ namespace Snes
             {
                 return Uncompressed[UncompressedIndex];
             }
+
             set
             {
                 Uncompressed[UncompressedIndex] = value;
@@ -60,6 +65,7 @@ namespace Snes
             {
                 return Uncompressed[++UncompressedIndex];
             }
+
             set
             {
                 Uncompressed[++UncompressedIndex] = value;
@@ -90,6 +96,7 @@ namespace Snes
             {
                 return Compressed[CompressedIndex];
             }
+
             set
             {
                 Compressed[CompressedIndex] = value;
@@ -102,6 +109,7 @@ namespace Snes
             {
                 return Compressed[++CompressedIndex];
             }
+
             set
             {
                 Compressed[++CompressedIndex] = value;
@@ -303,7 +311,8 @@ namespace Snes
                 do
                 {
                     dst[i] = src[i];
-                } while (++i < CommandLength);
+                }
+                while (++i < CommandLength);
             }
 
             UncompressedIndex += CommandLength;
@@ -327,7 +336,7 @@ namespace Snes
                 }
 
                 // Length is ten least significant bits.
-                clen = ((CurrentCompressed & 0x03) << BitsPerByte);
+                clen = (CurrentCompressed & 0x03) << BitsPerByte;
                 clen |= NextCompressed;
             }
             else
@@ -419,6 +428,7 @@ namespace Snes
 
                 DecompressCommands[command]();
             }
+
             return 0;
         }
 
@@ -646,6 +656,7 @@ namespace Snes
                                     last = srcIndex;
                                     continue;
                                 }
+
                                 // Get the repeated word value
                                 Add(CompressCommand.RepeatedWord, val0 + (val1 << BitsPerByte), srcIndex, length);
                                 srcIndex += length;
@@ -682,6 +693,7 @@ namespace Snes
                             last = srcIndex;
                             continue;
                         }
+
                         // Set repeated byte value
                         Add(CompressCommand.RepeatedByte, val0, srcIndex, length);
                         srcIndex += length;
@@ -715,6 +727,7 @@ namespace Snes
                                 last = srcIndex;
                                 continue;
                             }
+
                             // Set incrementing byte value.
                             Add(
                                 CompressCommand.IncrementingByte,
@@ -816,6 +829,7 @@ namespace Snes
 
                 goto _write;
             }
+
             goto _end;
 
             _write:
@@ -864,6 +878,7 @@ namespace Snes
                         lastDestIndex = dstIndex;
                         dst[dstIndex++] = (byte)(((int)command) << (BitsPerByte - 3) | (subLength - 1));
                     }
+
                     switch (command)
                     {
                     case CompressCommand.RepeatedByte:
@@ -920,6 +935,7 @@ namespace Snes
 
                 length -= subLength;
             }
+
             previous = Commands[i++];
             goto _loop;
 

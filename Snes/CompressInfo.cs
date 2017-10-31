@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="CompressInfo.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using Helper;
 
@@ -125,7 +129,7 @@ namespace Snes
                     }
 
                     // Length is ten least significant bits.
-                    clen = ((src[sindex] & 0x03) << BitsPerByte);
+                    clen = (src[sindex] & 0x03) << BitsPerByte;
                     clen |= src[++sindex];
                 }
                 else
@@ -179,6 +183,7 @@ namespace Snes
                 throw new ArgumentException();
                 }
             }
+
             return null;
         }
     }
