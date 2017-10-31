@@ -38,16 +38,25 @@ namespace Snes
             {
                 throw new ArgumentNullException(nameof(selection));
             }
+
+            var tiles = new GfxTile[selection.Count];
+
+            return new Gfx(tiles);
         }
 
         private interface IGfxSelection
         {
-            int StartIndex
+            int StartAddress
             {
                 get;
             }
 
             GraphicsFormat GraphicsFormat
+            {
+                get;
+            }
+
+            int Count
             {
                 get;
             }

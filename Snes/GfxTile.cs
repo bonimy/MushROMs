@@ -5,7 +5,7 @@ using Helper;
 
 namespace Snes
 {
-    public unsafe struct GFXTile
+    public unsafe struct GfxTile
     {
         public const int DotsPerPlane = 8;
         public const int PlanesPerTile = DotsPerPlane;
@@ -893,7 +893,7 @@ namespace Snes
             }
         }
 
-        public static bool operator ==(GFXTile left, GFXTile right)
+        public static bool operator ==(GfxTile left, GfxTile right)
         {
             for (var i = Size; --i >= 0;)
             {
@@ -906,7 +906,7 @@ namespace Snes
             return true;
         }
 
-        public static bool operator !=(GFXTile left, GFXTile right)
+        public static bool operator !=(GfxTile left, GfxTile right)
         {
             return !(left == right);
         }
@@ -918,12 +918,12 @@ namespace Snes
                 return false;
             }
 
-            if (!(obj is GFXTile))
+            if (!(obj is GfxTile))
             {
                 return false;
             }
 
-            return (GFXTile)obj == this;
+            return (GfxTile)obj == this;
         }
 
         public override int GetHashCode()

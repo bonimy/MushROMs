@@ -6,13 +6,13 @@ namespace Snes
 {
     public class Gfx
     {
-        private GFXTile[] Tiles
+        private GfxTile[] Tiles
         {
             get;
             set;
         }
 
-        public GFXTile this[int index]
+        public GfxTile this[int index]
         {
             get
             {
@@ -22,6 +22,15 @@ namespace Snes
             {
                 Tiles[index] = value;
             }
+        }
+
+        public Gfx(int count) : this(new GfxTile[count])
+        {
+        }
+
+        public Gfx(GfxTile[] tiles)
+        {
+            Tiles = tiles ?? throw new ArgumentNullException(nameof(tiles));
         }
     }
 }
