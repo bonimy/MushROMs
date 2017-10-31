@@ -19,6 +19,25 @@ namespace Snes
             set;
         }
 
+        private UndoFactory UndoFactory
+        {
+            get;
+            set;
+        }
+
+        public GfxEditor(byte[] data)
+        {
+            Data = data ?? throw new ArgumentNullException(nameof(data));
+        }
+
+        public Gfx CreateGfxFromSelection(IGfxSelection selection)
+        {
+            if (selection == null)
+            {
+                throw new ArgumentNullException(nameof(selection));
+            }
+        }
+
         private interface IGfxSelection
         {
             int StartIndex
