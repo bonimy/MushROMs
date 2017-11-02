@@ -30,6 +30,11 @@ namespace Helper
         {
         }
 
+        public override Selection1D Copy()
+        {
+            return Empty;
+        }
+
         public override bool Contains(int index)
         {
             return false;

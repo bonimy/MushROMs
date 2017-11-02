@@ -36,6 +36,11 @@ namespace Helper
             StartPosition = position;
         }
 
+        public override Selection2D Copy()
+        {
+            return new SingleSelection2D(StartPosition);
+        }
+
         public override bool Contains(Position2D position)
         {
             return position == StartPosition;

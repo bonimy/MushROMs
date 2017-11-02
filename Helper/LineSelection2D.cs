@@ -68,6 +68,11 @@ namespace Helper
             Length = length;
         }
 
+        public override Selection2D Copy()
+        {
+            return new LineSelection2D(StartPosition, RegionWidth, Length);
+        }
+
         public override bool Contains(Position2D position)
         {
             position -= StartPosition;

@@ -8,9 +8,9 @@ using System.Collections.Generic;
 
 namespace Helper
 {
-    public abstract class Selection2D : IReadOnlyList<Position2D>
+    public abstract class Selection2D : ISelection<Position2D>
     {
-        public static readonly Selection1D Empty = new EmptySelection1D();
+        public static readonly Selection2D Empty = new EmptySelection2D();
 
         public Position2D StartPosition
         {
@@ -38,6 +38,13 @@ namespace Helper
 
         protected Selection2D()
         {
+        }
+
+        public abstract Selection2D Copy();
+
+        ISelection<Position2D> ISelection<Position2D>.Copy()
+        {
+            return Copy();
         }
 
         public abstract bool Contains(Position2D position);
