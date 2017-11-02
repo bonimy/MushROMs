@@ -30,6 +30,24 @@ namespace Helper
             }
         }
 
+        public override Position2D this[int index]
+        {
+            get
+            {
+                if ((uint)index >= (uint)Length)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                var start = (StartPosition.Y * RegionWidth) + StartPosition.X;
+                start += index;
+
+                return new Position2D(
+                    index % RegionWidth,
+                    index / RegionWidth);
+            }
+        }
+
         public LineSelection2D(Position2D startPosition, int regionWidth, int length)
         {
             if (length < 0)
@@ -48,6 +66,11 @@ namespace Helper
 
             StartPosition = startPosition;
             Length = length;
+        }
+
+        public override Selection2D Copy()
+        {
+            return new LineSelection2D(StartPosition, RegionWidth, Length);
         }
 
         public override bool Contains(Position2D position)

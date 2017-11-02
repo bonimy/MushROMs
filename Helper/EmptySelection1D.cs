@@ -18,8 +18,21 @@ namespace Helper
             }
         }
 
+        public override int this[int index]
+        {
+            get
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+        }
+
         internal EmptySelection1D()
         {
+        }
+
+        public override Selection1D Copy()
+        {
+            return Empty;
         }
 
         public override bool Contains(int index)
