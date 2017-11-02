@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="TileMapControl.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -9,14 +13,14 @@ namespace Controls
 {
     public abstract class TileMapControl : DesignControl, ITileMap
     {
-        private ScrollBar _vScrollBar;
-        private ScrollBar _hScrollBar;
+        private ScrollBar _verticalScrollBar;
+        private ScrollBar _heightScrollBar;
 
         private Range2D _viewSize;
         private Range2D _tileSize;
         private Range2D _zoomSize;
 
-        protected Position2D _activeViewTile;
+        private Position2D _activeViewTile;
 
         public event EventHandler ViewSizeChanged;
 
@@ -34,6 +38,7 @@ namespace Controls
             {
                 return _viewSize;
             }
+
             set
             {
                 _viewSize = value;
@@ -49,6 +54,7 @@ namespace Controls
             {
                 return _viewSize.Width;
             }
+
             set
             {
                 _viewSize.Width = value;
@@ -64,6 +70,7 @@ namespace Controls
             {
                 return _viewSize.Height;
             }
+
             set
             {
                 _viewSize.Height = value;
@@ -77,6 +84,7 @@ namespace Controls
             {
                 return _tileSize;
             }
+
             set
             {
                 _tileSize = value;
@@ -92,6 +100,7 @@ namespace Controls
             {
                 return _tileSize.Width;
             }
+
             set
             {
                 _tileSize.Width = value;
@@ -107,6 +116,7 @@ namespace Controls
             {
                 return _tileSize.Height;
             }
+
             set
             {
                 _tileSize.Height = value;
@@ -120,6 +130,7 @@ namespace Controls
             {
                 return _zoomSize;
             }
+
             set
             {
                 _zoomSize = value;
@@ -135,6 +146,7 @@ namespace Controls
             {
                 return _zoomSize.Width;
             }
+
             set
             {
                 _zoomSize.Width = value;
@@ -150,6 +162,7 @@ namespace Controls
             {
                 return _zoomSize.Height;
             }
+
             set
             {
                 _zoomSize.Height = value;
@@ -219,6 +232,7 @@ namespace Controls
             {
                 return _activeViewTile;
             }
+
             set
             {
                 _activeViewTile = value;
@@ -234,6 +248,7 @@ namespace Controls
             {
                 return _activeViewTile.X;
             }
+
             set
             {
                 _activeViewTile.X = value;
@@ -249,6 +264,7 @@ namespace Controls
             {
                 return _activeViewTile.Y;
             }
+
             set
             {
                 _activeViewTile.Y = value;
@@ -268,7 +284,7 @@ namespace Controls
         {
             get
             {
-                return _vScrollBar;
+                return _verticalScrollBar;
             }
 
             set
@@ -284,7 +300,7 @@ namespace Controls
                     VerticalScrollBar.ValueChanged -= VerticalScrollBar_ValueChanged;
                 }
 
-                _vScrollBar = value;
+                _verticalScrollBar = value;
 
                 if (VerticalScrollBar != null)
                 {
@@ -300,7 +316,7 @@ namespace Controls
         {
             get
             {
-                return _hScrollBar;
+                return _heightScrollBar;
             }
 
             set
@@ -316,7 +332,7 @@ namespace Controls
                     HorizontalScrollBar.ValueChanged -= HorizontalScrollBar_ValueChanged;
                 }
 
-                _hScrollBar = value;
+                _heightScrollBar = value;
 
                 if (HorizontalScrollBar != null)
                 {
@@ -462,6 +478,7 @@ namespace Controls
             active.Y++;
             break;
             }
+
             if (ActiveViewTile != active)
             {
                 ActiveViewTile = active;
