@@ -32,6 +32,22 @@ namespace Helper
             }
         }
 
+        public bool IsInFirstQuadrantInclusive
+        {
+            get
+            {
+                return Width >= 0 && Height >= 0;
+            }
+        }
+
+        public bool IsInFirstQuadrantExclusive
+        {
+            get
+            {
+                return Width > 0 && Height > 0;
+            }
+        }
+
         public Range2D(int value) : this(value, value)
         {
         }
