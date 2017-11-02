@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Helper;
 using Helper.PixelFormats;
 
@@ -51,7 +52,7 @@ namespace Snes
             for (var i = selection.Count; --i >= 0;)
             {
                 var index = selection[i];
-                var address = selection.StartAddress + index * size;
+                var address = selection.StartAddress + (index * size);
 
                 tiles[i] = new GfxTile(Data, address, format);
             }
@@ -61,12 +62,25 @@ namespace Snes
 
         public void WriteGfxData(Gfx gfx, IGfxSelection selection)
         {
-            var count = Math.Min(gfx.Count, selection.Count);
+            var size = GfxTile.BytesPerTile(selection.GraphicsFormat);
 
-            for (var i = count; --i >= 0;)
+            for (var i = selection.Count; --i >= 0;)
             {
-                var tile = selection[i];
-                var address = selection.StartAddress + tile * size;
+                var index = selection[i];
+                if (index >= gfx.Count || index < 0)
+                {
+                    continue;
+                }
+
+                var address = selection.StartAddress + (index * size);
+                if (address >= Data.Length || address < 0)
+                {
+                    continue;
+                }
+
+                var tile = gfx[index].ToFormattedData(selection.GraphicsFormat);
+
+                Array.Copy(tile, 0, Data, address, Math.Min(tile.Length, Data.Length - address));
             }
         }
 
@@ -77,9 +91,8 @@ namespace Snes
             GraphicsFormat graphicsFormat,
             Range2D view,
             Range2D zoom,
-            Selection1D selection,
-            IList<Color32BppArgb> colors,
-            int colorStartIndex)
+            IGfxSelection selection,
+            IReadOnlyList<Color32BppArgb> colors)
         {
             if (scan0 == IntPtr.Zero)
             {
@@ -91,7 +104,7 @@ namespace Snes
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
 
-            if ((uint)startAddress >= (uint)Data.Length)
+            if ((uint)startAddress > (uint)Data.Length)
             {
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
@@ -124,16 +137,21 @@ namespace Snes
                 throw new ArgumentNullException(nameof(colors));
             }
 
-            if (colorStartIndex < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(colorStartIndex));
-            }
-
             var window = view * zoom;
             if (window.Area * Color32BppArgb.SizeOf > length)
             {
                 throw new ArgumentException();
             }
+
+            var numColors = GfxTile.ColorsPerPixel(graphicsFormat);
+            if (numColors >= colors.Count)
+            {
+                throw new ArgumentException();
+            }
+
+            var cell = zoom * view;
+            var plane = (window.Width * zoom.Height) - cell.Width;
+            var dot = (window.Width * zoom.Height) - zoom.Width;
 
             var unitSize = GfxTile.BytesPerTile(graphicsFormat);
             var area = view.Area;
@@ -141,7 +159,42 @@ namespace Snes
             var totalLength = Math.Min(unitSize * area, Data.Length - startAddress);
             var totalTiles = totalLength / unitSize;
 
-            var darkScale = selection is GateSelection1D ? 2 : 1;
+            var darkScale = selection.Selection is GateSelection1D ? 2 : 1;
+
+            unsafe
+            {
+                var pixels = (Color32BppArgb*)scan0;
+
+                Parallel.For(
+                    0,
+                    totalTiles,
+                    i =>
+                {
+                    var tile = new GfxTile(Data, i + startAddress, graphicsFormat);
+                    var dots = (byte*)&tile;
+
+                    var dest = pixels +
+                    ((i % view.Width) * cell.Width) +
+                    ((i / view.Width) * cell.Height);
+
+                    // Lets hope the compiler is smart enough to unroll the outer loops.
+                    for (var y = GfxTile.PlanesPerTile; --y >= 0; dest += plane)
+                    {
+                        for (var x = GfxTile.DotsPerPlane; --x >= 0; dest -= dot, dots++)
+                        {
+                            var color = colors[dots[0]];
+
+                            for (var j = zoom.Height; --j >= 0; dest += window.Width)
+                            {
+                                for (var k = zoom.Width; --k >= 0;)
+                                {
+                                    dest[k] = color;
+                                }
+                            }
+                        }
+                    }
+                });
+            }
         }
     }
 }

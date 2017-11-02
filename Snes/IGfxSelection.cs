@@ -3,6 +3,7 @@
 // </copyright>
 
 using System.Collections.Generic;
+using Helper;
 
 namespace Snes
 {
@@ -14,6 +15,11 @@ namespace Snes
         }
 
         GraphicsFormat GraphicsFormat
+        {
+            get;
+        }
+
+        ISelection<int> Selection
         {
             get;
         }

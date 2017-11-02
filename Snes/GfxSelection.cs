@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="GfxSelection.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +17,7 @@ namespace Snes
             get;
         }
 
-        private Selection1D Selection
+        public ISelection<int> Selection
         {
             get;
         }
@@ -40,7 +44,7 @@ namespace Snes
             }
         }
 
-        public GfxSelection(Selection1D selection, int startAddress, GraphicsFormat graphicsFormat)
+        public GfxSelection(ISelection<int> selection, int startAddress, GraphicsFormat graphicsFormat)
         {
             if (!Enum.IsDefined(typeof(GraphicsFormat), graphicsFormat))
             {

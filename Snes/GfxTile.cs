@@ -265,7 +265,7 @@ namespace Snes
             return result;
         }
 
-        public GfxTile ReplaceColor(byte original, byte replaced)
+        public GfxTile ReplaceColor(byte original, byte replacement)
         {
             var result = new GfxTile();
 
@@ -281,7 +281,7 @@ namespace Snes
 
                         if (value == original)
                         {
-                            dst[i] = replaced;
+                            dst[i] = replacement;
                         }
                         else
                         {
@@ -294,7 +294,7 @@ namespace Snes
             return result;
         }
 
-        public GfxTile SwapColors(byte index1, byte index2)
+        public GfxTile SwapColors(byte color1, byte color2)
         {
             var result = new GfxTile();
 
@@ -308,13 +308,13 @@ namespace Snes
                     {
                         var value = src[i];
 
-                        if (value == index1)
+                        if (value == color1)
                         {
-                            dst[i] = index2;
+                            dst[i] = color2;
                         }
-                        else if (value == index2)
+                        else if (value == color2)
                         {
-                            dst[i] = index1;
+                            dst[i] = color1;
                         }
                         else
                         {
