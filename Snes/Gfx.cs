@@ -3,8 +3,7 @@
 // </copyright>
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+using Helper;
 
 namespace Snes
 {
@@ -14,6 +13,19 @@ namespace Snes
         {
             get;
             set;
+        }
+
+        public int Count
+        {
+            get
+            {
+                return Tiles.Length;
+            }
+        }
+
+        public Selection1D Selection
+        {
+            get;
         }
 
         public GfxTile this[int index]
@@ -36,6 +48,12 @@ namespace Snes
         public Gfx(GfxTile[] tiles)
         {
             Tiles = tiles ?? throw new ArgumentNullException(nameof(tiles));
+
+            Selection = new LineSelection1D(0, tiles.Length);
+        }
+
+        internal Gfx(GfxTile[] tiles, Selection1D selection)
+        {
         }
     }
 }

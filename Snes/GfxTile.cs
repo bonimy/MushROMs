@@ -64,7 +64,7 @@ namespace Snes
                 throw new ArgumentOutOfRangeException(nameof(index));
             }
 
-            if (data.Length - index < DataSizePerTile(format))
+            if (data.Length - index < BytesPerTile(format))
             {
                 throw new ArgumentException();
             }
@@ -81,7 +81,7 @@ namespace Snes
 
         public byte[] ToFormattedData(GraphicsFormat format)
         {
-            var data = new byte[DataSizePerTile(format)];
+            var data = new byte[BytesPerTile(format)];
 
             unsafe
             {
@@ -386,7 +386,7 @@ namespace Snes
             return 1 << BitsPerPixel(format);
         }
 
-        public static int DataSizePerTile(GraphicsFormat format)
+        public static int BytesPerTile(GraphicsFormat format)
         {
             return BytesPerPlane(format) * PlanesPerTile;
         }
