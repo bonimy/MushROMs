@@ -56,7 +56,7 @@ namespace Helper
                     SR.ErrorLowerBoundExclusive(nameof(regionWidth), regionWidth, 0));
             }
 
-            if (range.Width <= 0 || range.Height <= 0)
+            if (!range.IsInFirstQuadrantExclusive)
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(range),
@@ -66,6 +66,11 @@ namespace Helper
             StartIndex = startIndex;
             RegionWidth = regionWidth;
             Range = range;
+        }
+
+        public override Selection1D Copy()
+        {
+            return new BoxSelection1D(StartIndex, RegionWidth, Range);
         }
 
         public override bool Contains(int index)

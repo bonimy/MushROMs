@@ -36,6 +36,11 @@ namespace Helper
             StartIndex = index;
         }
 
+        public override Selection1D Copy()
+        {
+            return new SingleSelection1D(StartIndex);
+        }
+
         public override bool Contains(int index)
         {
             return index == StartIndex;

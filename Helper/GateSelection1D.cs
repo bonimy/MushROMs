@@ -11,25 +11,13 @@ namespace Helper
 
     public sealed class GateSelection1D : Selection1D
     {
-        private Selection1D Left
-        {
-            get;
-            set;
-        }
-
-        private Selection1D Right
-        {
-            get;
-            set;
-        }
-
-        private GateMethod Rule
-        {
-            get;
-            set;
-        }
-
         private IReadOnlyList<int> SelectedIndexes
+        {
+            get;
+            set;
+        }
+
+        private HashSet<int> HashIndexes
         {
             get;
             set;
@@ -53,46 +41,72 @@ namespace Helper
 
         public GateSelection1D(Selection1D left, Selection1D right, GateMethod rule)
         {
-            Left = left ?? throw new ArgumentNullException(nameof(left));
-            Right = right ?? throw new ArgumentNullException(nameof(right));
-            Rule = rule ?? throw new ArgumentNullException(nameof(rule));
-
-            if (Left is EmptySelection1D)
+            if (left == null)
             {
-                StartIndex = Right.StartIndex;
+                throw new ArgumentNullException(nameof(left));
             }
-            else if (Right is EmptySelection1D)
+
+            if (right == null)
             {
-                StartIndex = Left.StartIndex;
+                throw new ArgumentNullException(nameof(right));
+            }
+
+            if (rule == null)
+            {
+                throw new ArgumentNullException(nameof(rule));
+            }
+
+            if (left is EmptySelection1D)
+            {
+                StartIndex = right.StartIndex;
+            }
+            else if (right is EmptySelection1D)
+            {
+                StartIndex = left.StartIndex;
             }
             else
             {
-                StartIndex = Math.Min(Left.StartIndex, Right.StartIndex);
+                StartIndex = Math.Min(left.StartIndex, right.StartIndex);
             }
 
-            InitializeSelectedIndexes();
+            InitializeSelectedIndexes(left, right, rule);
+        }
+
+        private GateSelection1D(GateSelection1D selection)
+        {
+            if (selection == null)
+            {
+                throw new ArgumentNullException(nameof(selection));
+            }
+
+            StartIndex = selection.StartIndex;
+
+            SelectedIndexes = new List<int>(selection);
+            HashIndexes = new HashSet<int>(selection);
+        }
+
+        public override Selection1D Copy()
+        {
+            return new GateSelection1D(this);
         }
 
         public override bool Contains(int index)
         {
-            var left = Left.Contains(index);
-            var right = Right.Contains(index);
-
-            return Rule(left, right);
+            return HashIndexes.Contains(index);
         }
 
-        private void InitializeSelectedIndexes()
+        private void InitializeSelectedIndexes(Selection1D left, Selection1D right, GateMethod rule)
         {
-            var result = new List<int>(Left.Count + Right.Count);
+            var result = new List<int>(left.Count + right.Count);
 
             // Add the left indexes.
-            foreach (var index in Left)
+            foreach (var index in left)
             {
                 // Check if right selection contains an index from left selection.
-                var contains = Right.Contains(index);
+                var contains = right.Contains(index);
 
                 // Add index if fits the binary selection rule.
-                if (Rule(true, contains))
+                if (rule(true, contains))
                 {
                     result.Add(index);
                 }
@@ -102,7 +116,7 @@ namespace Helper
             var hash = new HashSet<int>(result);
 
             // Add the right indexes.
-            foreach (var index in Right)
+            foreach (var index in right)
             {
                 // Skip indexes we've already checked
                 if (hash.Contains(index))
@@ -111,16 +125,17 @@ namespace Helper
                 }
 
                 // Check if left selection contains an index from right selection.
-                var contains = Left.Contains(index);
+                var contains = left.Contains(index);
 
                 // Add index if fits the binary selection rule.
-                if (Rule(contains, true))
+                if (rule(contains, true))
                 {
                     result.Add(index);
                 }
             }
 
             SelectedIndexes = result;
+            HashIndexes = hash;
         }
 
         public override IEnumerator<int> GetEnumerator()
