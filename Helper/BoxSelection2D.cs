@@ -54,6 +54,11 @@ namespace Helper
             Range = range;
         }
 
+        public override Selection2D Copy()
+        {
+            return new BoxSelection2D(StartPosition, Range);
+        }
+
         public override bool Contains(Position2D position)
         {
             position -= StartPosition;

@@ -50,6 +50,11 @@ namespace Helper
             Length = length;
         }
 
+        public override Selection1D Copy()
+        {
+            return new LineSelection1D(StartIndex, Length);
+        }
+
         public override bool Contains(int index)
         {
             index -= StartIndex;

@@ -30,6 +30,11 @@ namespace Helper
         {
         }
 
+        public override Selection2D Copy()
+        {
+            return Empty;
+        }
+
         public override bool Contains(Position2D position)
         {
             return false;
