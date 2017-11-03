@@ -198,6 +198,8 @@ namespace Controls
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Range2D TileMapSize
         {
             get
@@ -226,6 +228,8 @@ namespace Controls
             }
         }
 
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public Position2D ActiveViewTile
         {
             get
@@ -418,7 +422,7 @@ namespace Controls
                 CellSize.Height - 1 - padding.Vertical));
         }
 
-        public abstract void GenerateSelectionPath(GraphicsPath path);
+        public abstract void GenerateSelectionPath(GraphicsPath path, ISelection<int> selection);
 
         protected override void OnMouseMove(MouseEventArgs e)
         {

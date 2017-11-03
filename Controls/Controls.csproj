@@ -73,6 +73,12 @@
     <Compile Include="TileMapControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="TileMapControl1D.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TileMapForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="TileMapResizeMode.cs" />
     <Compile Include="UnsafeNativeMethods.cs" />
     <Compile Include="WinApiMethods.cs" />
