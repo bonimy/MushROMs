@@ -15,13 +15,13 @@ namespace Helper
         public int Width
         {
             get;
-            private set;
+            set;
         }
 
         public int Height
         {
             get;
-            private set;
+            set;
         }
 
         public int Area
@@ -29,6 +29,22 @@ namespace Helper
             get
             {
                 return Width * Height;
+            }
+        }
+
+        public bool IsInFirstQuadrantInclusive
+        {
+            get
+            {
+                return Width >= 0 && Height >= 0;
+            }
+        }
+
+        public bool IsInFirstQuadrantExclusive
+        {
+            get
+            {
+                return Width > 0 && Height > 0;
             }
         }
 

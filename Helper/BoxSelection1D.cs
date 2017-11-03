@@ -30,6 +30,23 @@ namespace Helper
             }
         }
 
+        public override int this[int index]
+        {
+            get
+            {
+                if ((uint)index >= (uint)Count)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                var result = StartIndex;
+                result += index % Range.Width;
+                result += (index / Range.Width) + RegionWidth;
+
+                return result;
+            }
+        }
+
         public BoxSelection1D(int startIndex, int regionWidth, Range2D range)
         {
             if (regionWidth <= 0)
@@ -39,7 +56,7 @@ namespace Helper
                     SR.ErrorLowerBoundExclusive(nameof(regionWidth), regionWidth, 0));
             }
 
-            if (range.Width <= 0 || range.Height <= 0)
+            if (!range.IsInFirstQuadrantExclusive)
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(range),
@@ -49,6 +66,11 @@ namespace Helper
             StartIndex = startIndex;
             RegionWidth = regionWidth;
             Range = range;
+        }
+
+        public override Selection1D Copy()
+        {
+            return new BoxSelection1D(StartIndex, RegionWidth, Range);
         }
 
         public override bool Contains(int index)

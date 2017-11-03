@@ -18,9 +18,27 @@ namespace Helper
             }
         }
 
+        public override Position2D this[int index]
+        {
+            get
+            {
+                if (index != 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                return StartPosition;
+            }
+        }
+
         public SingleSelection2D(Position2D position)
         {
             StartPosition = position;
+        }
+
+        public override Selection2D Copy()
+        {
+            return new SingleSelection2D(StartPosition);
         }
 
         public override bool Contains(Position2D position)

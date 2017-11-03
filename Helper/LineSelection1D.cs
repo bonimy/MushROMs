@@ -24,6 +24,19 @@ namespace Helper
             }
         }
 
+        public override int this[int index]
+        {
+            get
+            {
+                if ((uint)index >= (uint)Length)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                return StartIndex + index;
+            }
+        }
+
         public LineSelection1D(int startIndex, int length)
         {
             if (length < 0)
@@ -35,6 +48,11 @@ namespace Helper
 
             StartIndex = startIndex;
             Length = length;
+        }
+
+        public override Selection1D Copy()
+        {
+            return new LineSelection1D(StartIndex, Length);
         }
 
         public override bool Contains(int index)
