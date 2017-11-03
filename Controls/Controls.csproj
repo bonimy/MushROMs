@@ -63,6 +63,13 @@
     </Compile>
     <Compile Include="DialogProxy.cs" />
     <Compile Include="DrawHelper.cs" />
+    <Compile Include="IIntegerComponent.cs" />
+    <Compile Include="IntegerTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="LinkedTrackBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
