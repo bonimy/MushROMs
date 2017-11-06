@@ -10,11 +10,40 @@ using System.Windows.Forms;
 
 namespace Controls
 {
+    public interface IDialogForm : IComponent
+    {
+        event HelpEventHandler HelpRequested;
+
+        string Text
+        {
+            get;
+            set;
+        }
+
+        bool HelpButton
+        {
+            get;
+            set;
+        }
+
+        object Tag
+        {
+            get;
+            set;
+        }
+
+        DialogResult ShowDialog(IWin32Window owner);
+
+        ObjRef CreateObjRef(Type requestedType);
+
+        object InitializeLifetimeService();
+    }
+
     [ToolboxItem(true)]
     [DesignTimeVisible(true)]
     public abstract class DialogProxy : MarshalByRefObject, IComponent, IDisposable
     {
-        protected abstract DialogForm BaseForm
+        protected abstract IDialogForm BaseForm
         {
             get;
         }
@@ -83,14 +112,9 @@ namespace Controls
             remove { BaseForm.Disposed -= value; }
         }
 
-        ~DialogProxy()
-        {
-            Dispose(false);
-        }
-
         public DialogResult ShowDialog()
         {
-            return BaseForm.ShowDialog();
+            return ShowDialog(null);
         }
 
         public DialogResult ShowDialog(IWin32Window owner)
