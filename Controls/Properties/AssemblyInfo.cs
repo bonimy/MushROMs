@@ -1,14 +1,19 @@
-﻿using System.Reflection;
+﻿// <copyright file="AssemblyInfo.cs" company="Public Domain">
+//     Copyright (c) 2017 Nelson Garcia.
+// </copyright>
+
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("MushROMs")]
+[assembly: AssemblyTitle("Controls")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("MushROMs")]
+[assembly: AssemblyProduct("Controls")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -19,7 +24,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("37465dd1-993c-46d2-a995-0e204a5bafaa")]
+[assembly: Guid("cd3207d8-362c-4068-b6d1-3877359ef727")]
 
 // Version information for an assembly consists of the following four values:
 //
