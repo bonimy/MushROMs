@@ -6,7 +6,7 @@ using System.Windows.Forms;
 
 namespace Controls
 {
-    public class DialogForm : Form
+    public class DialogForm : Form, IDialogForm
     {
         protected virtual object ProxySender
         {

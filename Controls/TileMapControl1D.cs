@@ -13,7 +13,6 @@ namespace Controls
     {
         private int _gridSize;
         private int _zeroTile;
-        private int _activeGridTile;
 
         public event EventHandler GridSizeChanged;
 
