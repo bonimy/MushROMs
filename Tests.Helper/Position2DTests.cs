@@ -1,11 +1,6 @@
 ﻿using System;
-<<<<<<< HEAD
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Helper;
-=======
 using Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
->>>>>>> refs/remotes/origin/master
 
 namespace Tests.Helper
 {

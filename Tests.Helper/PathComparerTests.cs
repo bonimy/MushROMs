@@ -1,12 +1,7 @@
 ﻿using System;
 using System.IO;
-<<<<<<< HEAD
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Helper;
-=======
 using Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
->>>>>>> refs/remotes/origin/master
 
 namespace Tests.Helper
 {
@@ -19,11 +14,7 @@ namespace Tests.Helper
             // Default constructor should never throw.
             var comparer = PathComparer.DefaultComparer;
 
-<<<<<<< HEAD
-            // Ensure we are using our expected base compater.
-=======
             // Ensure we are using our expected base comparer.
->>>>>>> refs/remotes/origin/master
             Assert.AreEqual(comparer.BaseComparer, StringComparer.OrdinalIgnoreCase);
 
             // Ensure the base comparer is accepted by the constructor.
@@ -67,11 +58,7 @@ namespace Tests.Helper
                 var comparison = comparer.Compare(left, right);
 
                 Assert.AreEqual(0, comparison, SR.GetString(
-<<<<<<< HEAD
-                    "Path comparision of \"{0}\" and \"{1}\" returned {2} (expected 0).",
-=======
                     "Path comparison of \"{0}\" and \"{1}\" returned {2} (expected 0).",
->>>>>>> refs/remotes/origin/master
                     left, right, comparison)
                     );
 
@@ -160,10 +147,7 @@ namespace Tests.Helper
                 get;
                 private set;
             }
-<<<<<<< HEAD
-=======
 
->>>>>>> refs/remotes/origin/master
             public string Right
             {
                 get;
