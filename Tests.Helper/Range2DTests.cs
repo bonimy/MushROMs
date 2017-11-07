@@ -15,20 +15,20 @@ namespace Tests.Helper
         [TestMethod]
         public void ConstructorTests()
         {
-            Assert.AreEqual(Range2D.Empty.Horizontal, 0);
-            Assert.AreEqual(Range2D.Empty.Vertical, 0);
+            Assert.AreEqual(Range2D.Empty.Width, 0);
+            Assert.AreEqual(Range2D.Empty.Height, 0);
 
             var h = 20;
             var v = -100;
             var p = new Range2D(h, v);
-            Assert.AreEqual(p.Horizontal, h);
-            Assert.AreEqual(p.Vertical, v);
+            Assert.AreEqual(p.Width, h);
+            Assert.AreEqual(p.Height, v);
 
             h = Int32.MinValue;
             v = Int32.MaxValue;
             p = new Range2D(h, v);
-            Assert.AreEqual(h, p.Horizontal);
-            Assert.AreEqual(v, p.Vertical);
+            Assert.AreEqual(h, p.Width);
+            Assert.AreEqual(v, p.Height);
         }
 
         [TestMethod]
@@ -41,8 +41,8 @@ namespace Tests.Helper
             Assert.IsTrue(5 == new Range2D(5, 5));
 
             p = Range2D.Empty + new Range2D(3, 5);
-            Assert.AreEqual(p.Horizontal, 3);
-            Assert.AreEqual(p.Vertical, 5);
+            Assert.AreEqual(p.Width, 3);
+            Assert.AreEqual(p.Height, 5);
             Assert.AreEqual(p.Area, 15);
 
             p *= new Range2D(-2, 3);

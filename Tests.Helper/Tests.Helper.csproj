@@ -65,6 +65,7 @@
     <Compile Include="PointerTests.cs" />
 >>>>>>> refs/remotes/origin/master
     <Compile Include="UInt24Tests.cs" />
+    <Compile Include="SelectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

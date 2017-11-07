@@ -113,12 +113,12 @@ left.Y == right.Y;
 
         public static implicit operator Position2D(Range2D range)
         {
-            return new Position2D(range.Horizontal, range.Vertical);
+            return new Position2D(range.Width, range.Height);
         }
 
-        public static Position2D operator +(Position2D left, Position2D right)
+        public static Position2D operator +(Position2D left, Range2D right)
         {
-            return new Position2D(left.X + right.X, left.Y + right.Y);
+            return new Position2D(left.X + right.Width, left.Y + right.Height);
         }
 
         public static Position2D operator -(Position2D left, Position2D right)
@@ -133,17 +133,12 @@ left.Y == right.Y;
 
         public static Position2D operator *(Position2D left, Range2D right)
         {
-            return new Position2D(left.X * right.Horizontal, left.Y * right.Vertical);
-        }
-
-        public static Position2D operator *(Range2D left, Position2D right)
-        {
-            return new Position2D(left.Horizontal * right.X, left.Vertical * right.Y);
+            return new Position2D(left.X * right.Width, left.Y * right.Height);
         }
 
         public static Position2D operator /(Position2D left, Range2D right)
         {
-            var position = new Position2D(left.X / right.Horizontal, left.Y / right.Vertical);
+            var position = new Position2D(left.X / right.Width, left.Y / right.Height);
             /*
             if (left.X < 0)
                 position.X--;
