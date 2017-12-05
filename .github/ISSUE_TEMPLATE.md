@@ -1,7 +1,7 @@
 # Personal Checklist (Delete before submitting)
 For all issues, makes sure you have completed these tasks
-- [ ] - I have read the [CODE OF CONDUCT](CODE_OF_CONDUCT.md).
-- [ ] - I have read the [CONTRIBUTING](CONTRIBUTING.md) guidelines.
+- [ ] - I have read the [CODE OF CONDUCT](../CODE_OF_CONDUCT.md).
+- [ ] - I have read the [CONTRIBUTING](../CONTRIBUTING.md) guidelines.
 
 ## Issue
 >Put the subject of the issue here. This can be a sentence, a paragraph, or a whole page. Whatever best describes the problem.
