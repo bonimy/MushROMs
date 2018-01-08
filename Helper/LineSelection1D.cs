@@ -13,7 +13,6 @@ namespace Helper
         private int Length
         {
             get;
-            set;
         }
 
         public override int Count

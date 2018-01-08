@@ -11,7 +11,12 @@ namespace Helper
 {
     [DebuggerDisplay("{Value}")]
     [StructLayout(LayoutKind.Explicit, Size = 3)]
-    public struct UInt24 : IComparable, IComparable<UInt24>, IConvertible, IEquatable<UInt24>, IFormattable
+    public struct UInt24 :
+        IComparable,
+        IComparable<UInt24>,
+        IConvertible,
+        IEquatable<UInt24>,
+        IFormattable
     {
         public const int SizeOf = 3 * sizeof(byte);
 
@@ -31,9 +36,10 @@ namespace Helper
         {
             get
             {
-                return (_x0 << 0x00) |
-(_x1 << 0x08) |
-(_x2 << 0x10);
+                return
+                    (_x0 << 0x00) |
+                    (_x1 << 0x08) |
+                    (_x2 << 0x10);
             }
         }
 
@@ -151,9 +157,10 @@ namespace Helper
 
         public static bool operator ==(UInt24 left, UInt24 right)
         {
-            return left._x0 == right._x0 &&
-left._x1 == right._x1 &&
-left._x2 == right._x2;
+            return
+                left._x0 == right._x0 &&
+                left._x1 == right._x1 &&
+                left._x2 == right._x2;
         }
 
         public static bool operator !=(UInt24 left, UInt24 right)
@@ -163,7 +170,7 @@ left._x2 == right._x2;
 
         public static bool operator >=(UInt24 left, UInt24 right)
         {
-            return left.Value > right.Value;
+            return left.Value >= right.Value;
         }
 
         public static bool operator <=(UInt24 left, UInt24 right)

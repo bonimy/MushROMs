@@ -14,61 +14,28 @@ namespace Controls
     {
         public static readonly WinAPIRectangle Empty = new WinAPIRectangle();
 
-        private int _left;
-        private int _top;
-        private int _right;
-        private int _bottom;
-
         public int Left
         {
-            get
-            {
-                return _left;
-            }
-
-            set
-            {
-                _left = value;
-            }
+            get;
+            set;
         }
 
         public int Top
         {
-            get
-            {
-                return _top;
-            }
-
-            set
-            {
-                _top = value;
-            }
+            get;
+            set;
         }
 
         public int Right
         {
-            get
-            {
-                return _right;
-            }
-
-            set
-            {
-                _right = value;
-            }
+            get;
+            set;
         }
 
         public int Bottom
         {
-            get
-            {
-                return _bottom;
-            }
-
-            set
-            {
-                _bottom = value;
-            }
+            get;
+            set;
         }
 
         public int X
@@ -153,10 +120,10 @@ namespace Controls
 
         private WinAPIRectangle(int left, int top, int right, int bottom)
         {
-            _left = left;
-            _top = top;
-            _right = right;
-            _bottom = bottom;
+            Left = left;
+            Top = top;
+            Right = right;
+            Bottom = bottom;
         }
 
         public static implicit operator WinAPIRectangle(Rectangle rectangle)

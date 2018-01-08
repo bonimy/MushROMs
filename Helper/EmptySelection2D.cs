@@ -49,10 +49,7 @@ namespace Helper
         {
             public Position2D Current
             {
-                get
-                {
-                    return new Position2D(-1, -1);
-                }
+                get;
             }
 
             object IEnumerator.Current

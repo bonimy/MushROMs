@@ -22,9 +22,7 @@ namespace Helper
     public class SuffixTree
     {
         public const int TerminationValue = AlphabetSize;
-
         public const int AlphabetSize = Byte.MaxValue + 1;
-
         private const int EndOfData = SubstringPointer.EndOfString;
 
         private const int FallbakNodeCollectionSize = 0x1000;

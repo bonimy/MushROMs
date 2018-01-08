@@ -13,13 +13,11 @@ namespace Helper
         private int Length
         {
             get;
-            set;
         }
 
         private int RegionWidth
         {
             get;
-            set;
         }
 
         public override int Count

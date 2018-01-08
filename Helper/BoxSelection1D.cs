@@ -13,13 +13,11 @@ namespace Helper
         public int RegionWidth
         {
             get;
-            private set;
         }
 
         public Range2D Range
         {
             get;
-            private set;
         }
 
         public override int Count

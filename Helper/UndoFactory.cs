@@ -12,7 +12,6 @@ namespace Helper
         private List<State> History
         {
             get;
-            set;
         }
 
         public int Count
@@ -104,13 +103,11 @@ namespace Helper
             public Action Undo
             {
                 get;
-                private set;
             }
 
             public Action Redo
             {
                 get;
-                private set;
             }
 
             public State(Action undo, Action redo)

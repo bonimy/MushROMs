@@ -15,13 +15,11 @@ namespace Helper
         public int X
         {
             get;
-            set;
         }
 
         public int Y
         {
             get;
-            set;
         }
 
         public Position2D(int x, int y)
@@ -57,22 +55,30 @@ namespace Helper
 
         public static Position2D TopLeft(Position2D left, Position2D right)
         {
-            return new Position2D(Math.Min(left.X, right.X), Math.Min(left.Y, right.Y));
+            return new Position2D(
+                Math.Min(left.X, right.X),
+                Math.Min(left.Y, right.Y));
         }
 
         public static Position2D TopRight(Position2D left, Position2D right)
         {
-            return new Position2D(Math.Max(left.X, right.X), Math.Min(left.Y, right.Y));
+            return new Position2D(
+                Math.Max(left.X, right.X),
+                Math.Min(left.Y, right.Y));
         }
 
         public static Position2D BottomLeft(Position2D left, Position2D right)
         {
-            return new Position2D(Math.Min(left.X, right.X), Math.Max(left.Y, right.Y));
+            return new Position2D(
+                Math.Min(left.X, right.X),
+                Math.Max(left.Y, right.Y));
         }
 
         public static Position2D BottomRight(Position2D left, Position2D right)
         {
-            return new Position2D(Math.Max(left.X, right.X), Math.Max(left.Y, right.Y));
+            return new Position2D(
+                Math.Max(left.X, right.X),
+                Math.Max(left.Y, right.Y));
         }
 
         public override bool Equals(object obj)
@@ -97,8 +103,9 @@ namespace Helper
 
         public static bool operator ==(Position2D left, Position2D right)
         {
-            return left.X == right.X &&
-left.Y == right.Y;
+            return
+                left.X == right.X &&
+                left.Y == right.Y;
         }
 
         public static bool operator !=(Position2D left, Position2D right)
@@ -138,7 +145,9 @@ left.Y == right.Y;
 
         public static Position2D operator /(Position2D left, Range2D right)
         {
-            var position = new Position2D(left.X / right.Width, left.Y / right.Height);
+            var position = new Position2D(
+                left.X / right.Width,
+                left.Y / right.Height);
             /*
             if (left.X < 0)
                 position.X--;
