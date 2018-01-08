@@ -35,34 +35,76 @@ namespace Helper
             }
         }
 
-        public static string ErrorLowerBoundInclusive(string paramName, object value, object valid)
+        public static string ErrorLowerBoundInclusive(
+            string paramName,
+            object value,
+            object valid)
         {
-            return GetString(Resources.ErrorLowerBoundInclusive, paramName, value, valid);
+            return GetString(
+                Resources.ErrorLowerBoundInclusive,
+                paramName,
+                value,
+                valid);
         }
 
-        public static string ErrorUpperBoundInclusive(string paramName, object value, object valid)
+        public static string ErrorUpperBoundInclusive(
+            string paramName,
+            object value,
+            object valid)
         {
-            return GetString(Resources.ErrorUpperBoundInclusive, paramName, value, valid);
+            return GetString(
+                Resources.ErrorUpperBoundInclusive,
+                paramName,
+                value,
+                valid);
         }
 
-        public static string ErrorLowerBoundExclusive(string paramName, object value, object valid)
+        public static string ErrorLowerBoundExclusive(
+            string paramName,
+            object value,
+            object valid)
         {
-            return GetString(Resources.ErrorLowerBoundExclusive, paramName, value, valid);
+            return GetString(
+                Resources.ErrorLowerBoundExclusive,
+                paramName,
+                value,
+                valid);
         }
 
-        public static string ErrorUpperBoundExclusive(string paramName, object value, object valid)
+        public static string ErrorUpperBoundExclusive(
+            string paramName,
+            object value,
+            object valid)
         {
-            return GetString(Resources.ErrorUpperBoundExclusive, paramName, value, valid);
+            return GetString(
+                Resources.ErrorUpperBoundExclusive,
+                paramName,
+                value,
+                valid);
         }
 
-        public static string ErrorArrayBounds(string paramName, int value, int valid)
+        public static string ErrorArrayBounds(
+            string paramName,
+            int value,
+            int valid)
         {
             return GetString(Resources.ErrorArrayBounds, paramName, value, valid);
         }
 
-        public static string ErrorArrayRange(string paramName, int value, string arrayName, int arrayLength, int startIndex)
+        public static string ErrorArrayRange(
+            string paramName,
+            int value,
+            string arrayName,
+            int arrayLength,
+            int startIndex)
         {
-            return GetString(Resources.ErrorArrayRange, paramName, value, arrayName, arrayLength, startIndex);
+            return GetString(
+                Resources.ErrorArrayRange,
+                paramName,
+                value,
+                arrayName,
+                arrayLength,
+                startIndex);
         }
 
         public static string ErrorEmptyOrNullArray(string paramName)
@@ -81,14 +123,26 @@ namespace Helper
             return GetString(Resources.ErrorFileFormat, name);
         }
 
-        internal static string ErrorStringSubstringSize(string paramName, int startIndex, int length)
+        internal static string ErrorStringSubstringSize(
+            string paramName,
+            int startIndex,
+            int length)
         {
-            return GetString(Resources.ErrorStringSubstringSize, paramName, startIndex, length);
+            return GetString(
+                Resources.ErrorStringSubstringSize,
+                paramName,
+                startIndex,
+                length);
         }
 
-        internal static string ErrorSubstringPointerLength(string paramName, int value)
+        internal static string ErrorSubstringPointerLength(
+            string paramName,
+            int value)
         {
-            return GetString(Resources.ErrorSubstringPointerLength, paramName, value);
+            return GetString(
+                Resources.ErrorSubstringPointerLength,
+                paramName,
+                value);
         }
 
         public static string ErrorValueIsNaN(string paramName)
@@ -101,24 +155,40 @@ namespace Helper
             return GetString(Resources.ErrorValueIsInfinity, paramName);
         }
 
-        public static string ErrorCannotGetPathExtension(string paramName, string value, Exception innerException)
+        public static string ErrorCannotGetPathExtension(
+            string paramName,
+            string value,
+            Exception innerException)
         {
             if (innerException == null)
             {
                 throw new ArgumentNullException(nameof(innerException));
             }
 
-            return GetString(Resources.ErrorCannotGetPathExtension, paramName, value, innerException.Message, innerException.GetType());
+            return GetString(
+                Resources.ErrorCannotGetPathExtension,
+                paramName,
+                value,
+                innerException.Message,
+                innerException.GetType());
         }
 
-        public static string ErrorCannotGetFullPath(string paramName, string value, Exception innerException)
+        public static string ErrorCannotGetFullPath(
+            string paramName,
+            string value,
+            Exception innerException)
         {
             if (innerException == null)
             {
                 throw new ArgumentNullException(nameof(innerException));
             }
 
-            return GetString(Resources.ErrorCannotGetFullPath, paramName, value, innerException.Message, innerException.GetType());
+            return GetString(
+                Resources.ErrorCannotGetFullPath,
+                paramName,
+                value,
+                innerException.Message,
+                innerException.GetType());
         }
 
         public static string ErrorInvalidExtensionName(string ext)

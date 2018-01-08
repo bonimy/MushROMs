@@ -14,9 +14,17 @@ using System.Collections.Generic;
 
 namespace Helper
 {
-    public abstract class AssertDictionary<TKey, TValue> : ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IEnumerable, IDictionary<TKey, TValue>, IReadOnlyCollection<KeyValuePair<TKey, TValue>>, IReadOnlyDictionary<TKey, TValue>, ICollection, IDictionary
+    public abstract class AssertDictionary<TKey, TValue> :
+        IDictionary<TKey, TValue>,
+        IReadOnlyDictionary<TKey, TValue>,
+        ICollection<KeyValuePair<TKey, TValue>>,
+        IReadOnlyCollection<KeyValuePair<TKey, TValue>>,
+        IEnumerable<KeyValuePair<TKey, TValue>>,
+        IEnumerable,
+        IDictionary,
+        ICollection
     {
-        internal Dictionary<TKey, TValue> BaseDictionary
+        protected internal Dictionary<TKey, TValue> BaseDictionary
         {
             get;
             set;

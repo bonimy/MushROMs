@@ -9,15 +9,7 @@ namespace Helper
 {
     public sealed class ExtensionComparer : StringModifierComparer
     {
-        private static readonly ExtensionComparer Default = new ExtensionComparer();
-
-        public static ExtensionComparer DefaultComparer
-        {
-            get
-            {
-                return Default;
-            }
-        }
+        public static readonly ExtensionComparer DefaultComparer = new ExtensionComparer();
 
         private ExtensionComparer() : this(OrdinalIgnoreCase)
         {
@@ -30,7 +22,7 @@ namespace Helper
         public override string StringModifier(string value)
         {
             return Path.GetExtension(value) ??
-throw new ArgumentNullException(nameof(BaseComparer));
+                throw new ArgumentNullException(nameof(BaseComparer));
         }
     }
 }

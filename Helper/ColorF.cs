@@ -17,51 +17,54 @@ namespace Helper
     {
         public static readonly ColorF Empty = new ColorF();
 
-        private static readonly ColorF BalancedWeight = FromArgb(0, 1 / 3f, 1 / 3f, 1 / 3f);
+        private static readonly ColorF BalancedWeight = FromArgb(
+            0,
+            1 / 3f,
+            1 / 3f,
+            1 / 3f);
 
-        private static readonly ColorF LumaWeight = FromArgb(0, LumaRed, LumaGreen, LumaBlue);
+        private static readonly ColorF LumaWeight = FromArgb(
+            0,
+            LumaRed,
+            LumaGreen,
+            LumaBlue);
 
         private static readonly IReadOnlyDictionary<BlendMode, ColorBlend> BlendDictionary = new Dictionary<BlendMode, ColorBlend>()
         {
-            { BlendMode.Alpha, AlphaBlend },
-            { BlendMode.Grayscale, Grayscale },
-            { BlendMode.Multiply, Multiply },
-            { BlendMode.Screen, ScreenBlend },
-            { BlendMode.Overlay, Overlay },
-            { BlendMode.HardLight, HardLightBlend },
-            { BlendMode.SoftLight, SoftLightBlend },
-            { BlendMode.ColorDodge, ColorDodge },
-            { BlendMode.LinearDodge, LinearDodge },
-            { BlendMode.ColorBurn, ColorBurn },
-            { BlendMode.LinearBurn, LinearBurn },
-            { BlendMode.VividLight, VividLightBlend },
-            { BlendMode.LinearLight, LinearLightBlend },
-            { BlendMode.Difference, Difference },
-            { BlendMode.Darken, Darken },
-            { BlendMode.Lighten, Lighten },
-            { BlendMode.DarkerColor, DarkerColorBlend },
+            { BlendMode.Alpha       , AlphaBlend },
+            { BlendMode.Grayscale   , Grayscale },
+            { BlendMode.Multiply    , Multiply },
+            { BlendMode.Screen      , ScreenBlend },
+            { BlendMode.Overlay     , Overlay },
+            { BlendMode.HardLight   , HardLightBlend },
+            { BlendMode.SoftLight   , SoftLightBlend },
+            { BlendMode.ColorDodge  , ColorDodge },
+            { BlendMode.LinearDodge , LinearDodge },
+            { BlendMode.ColorBurn   , ColorBurn },
+            { BlendMode.LinearBurn  , LinearBurn },
+            { BlendMode.VividLight  , VividLightBlend },
+            { BlendMode.LinearLight , LinearLightBlend },
+            { BlendMode.Difference  , Difference },
+            { BlendMode.Darken      , Darken },
+            { BlendMode.Lighten     , Lighten },
+            { BlendMode.DarkerColor , DarkerColorBlend },
             { BlendMode.LighterColor, LighterColorBlend },
-            { BlendMode.Hue, HueBlend },
-            { BlendMode.Saturation, SaturationBlend },
-            { BlendMode.Luminosity, LuminosityBlend },
-            { BlendMode.Divide, Divide }
+            { BlendMode.Hue         , HueBlend },
+            { BlendMode.Saturation  , SaturationBlend },
+            { BlendMode.Luminosity  , LuminosityBlend },
+            { BlendMode.Divide      , Divide }
         };
 
         public const float LumaRed = 0.299f;
-
         public const float LumaGreen = 0.587f;
         public const float LumaBlue = 0.114f;
 
         public const int NumberOfChannels = 4;
-
         public const int NumberOfColorChannels = NumberOfChannels - 1;
 
         public const int AlphaIndex = 3;
-
         public const int RedIndex = 2;
-
         public const int GreenIndex = 1;
-
         public const int BlueIndex = 0;
 
         public const float Tolerance = 1e-7f;
@@ -96,22 +99,22 @@ namespace Helper
             {
                 switch (index)
                 {
-                case AlphaIndex:
-                return Alpha;
+                    case AlphaIndex:
+                        return Alpha;
 
-                case RedIndex:
-                return Red;
+                    case RedIndex:
+                        return Red;
 
-                case GreenIndex:
-                return Green;
+                    case GreenIndex:
+                        return Green;
 
-                case BlueIndex:
-                return Blue;
+                    case BlueIndex:
+                        return Blue;
 
-                default:
-                throw new ArgumentOutOfRangeException(
-                    nameof(index),
-                    SR.ErrorArrayBounds(nameof(index), index, NumberOfChannels));
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(index),
+                            SR.ErrorArrayBounds(nameof(index), index, NumberOfChannels));
                 }
             }
 
@@ -119,26 +122,26 @@ namespace Helper
             {
                 switch (index)
                 {
-                case AlphaIndex:
-                Alpha = value;
-                return;
+                    case AlphaIndex:
+                        Alpha = value;
+                        return;
 
-                case RedIndex:
-                Red = value;
-                return;
+                    case RedIndex:
+                        Red = value;
+                        return;
 
-                case GreenIndex:
-                Green = value;
-                return;
+                    case GreenIndex:
+                        Green = value;
+                        return;
 
-                case BlueIndex:
-                Blue = value;
-                return;
+                    case BlueIndex:
+                        Blue = value;
+                        return;
 
-                default:
-                throw new ArgumentOutOfRangeException(
-                    nameof(index),
-                    SR.ErrorArrayBounds(nameof(index), index, NumberOfChannels));
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(index),
+                            SR.ErrorArrayBounds(nameof(index), index, NumberOfChannels));
                 }
             }
         }
@@ -190,7 +193,7 @@ namespace Helper
                 var chroma = Chroma;
                 var hue = 0f;
 
-                // gray colors have no hue, but we return 0 for optimization
+                // Gray colors have no hue, but we return 0 for optimization.
                 if (NearlyEquals(chroma, 0, Tolerance))
                 {
                     return hue;

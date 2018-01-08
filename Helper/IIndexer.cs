@@ -4,9 +4,9 @@
 
 namespace Helper
 {
-    public interface IIndexer<T>
+    public interface IIndexer<T> : IReadOnlyIndexer<T>
     {
-        T this[int index]
+        new T this[int index]
         {
             get;
             set;

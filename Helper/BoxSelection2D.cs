@@ -13,7 +13,6 @@ namespace Helper
         private Range2D Range
         {
             get;
-            set;
         }
 
         public override int Count
