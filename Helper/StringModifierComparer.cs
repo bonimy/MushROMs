@@ -8,20 +8,15 @@ namespace Helper
 {
     public abstract class StringModifierComparer : StringComparer
     {
-        private StringComparer _baseComparer;
-
         public virtual StringComparer BaseComparer
         {
-            get
-            {
-                return _baseComparer;
-            }
+            get;
         }
 
         protected StringModifierComparer(StringComparer baseComparer)
         {
-            _baseComparer = baseComparer ??
-throw new ArgumentNullException(nameof(baseComparer));
+            BaseComparer = baseComparer ??
+                throw new ArgumentNullException(nameof(baseComparer));
         }
 
         public override sealed int Compare(string x, string y)

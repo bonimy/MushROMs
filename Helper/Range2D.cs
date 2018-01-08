@@ -15,13 +15,11 @@ namespace Helper
         public int Width
         {
             get;
-            set;
         }
 
         public int Height
         {
             get;
-            set;
         }
 
         public int Area
@@ -60,7 +58,8 @@ namespace Helper
 
         public bool Contains(Position2D position)
         {
-            return position.X >= 0 && position.X < Width &&
+            return
+                position.X >= 0 && position.X < Width &&
                 position.Y >= 0 && position.Y < Height;
         }
 
@@ -139,8 +138,9 @@ namespace Helper
 
         public static bool operator ==(Range2D left, Range2D right)
         {
-            return left.Width == right.Width &&
-left.Height == right.Height;
+            return
+                left.Width == right.Width &&
+                left.Height == right.Height;
         }
 
         public static bool operator !=(Range2D left, Range2D right)
@@ -150,12 +150,16 @@ left.Height == right.Height;
 
         public static Range2D operator +(Range2D left, Range2D right)
         {
-            return new Range2D(left.Width + right.Width, left.Height + right.Height);
+            return new Range2D(
+                left.Width + right.Width,
+                left.Height + right.Height);
         }
 
         public static Range2D operator -(Range2D left, Range2D right)
         {
-            return new Range2D(left.Width - right.Width, left.Height - right.Height);
+            return new Range2D(
+                left.Width - right.Width,
+                left.Height - right.Height);
         }
 
         public static Range2D operator -(Range2D right)
@@ -165,12 +169,16 @@ left.Height == right.Height;
 
         public static Range2D operator *(Range2D left, Range2D right)
         {
-            return new Range2D(left.Width * right.Width, left.Height * right.Height);
+            return new Range2D(
+                left.Width * right.Width,
+                left.Height * right.Height);
         }
 
         public static Range2D operator /(Range2D left, Range2D right)
         {
-            return new Range2D(left.Width / right.Width, left.Height / right.Height);
+            return new Range2D(
+                left.Width / right.Width,
+                left.Height / right.Height);
         }
 
         public static implicit operator Range2D(int range)

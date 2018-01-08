@@ -11,7 +11,12 @@ namespace Helper
 {
     [DebuggerDisplay("{Value}")]
     [StructLayout(LayoutKind.Explicit, Size = 3)]
-    public struct Int24 : IComparable, IComparable<Int24>, IConvertible, IEquatable<Int24>, IFormattable
+    public struct Int24 :
+        IComparable,
+        IComparable<Int24>,
+        IConvertible,
+        IEquatable<Int24>,
+        IFormattable
     {
         public const int SizeOf = 3 * sizeof(byte);
 
@@ -167,7 +172,7 @@ namespace Helper
 
         public static bool operator >=(Int24 left, Int24 right)
         {
-            return left.Value > right.Value;
+            return left.Value >= right.Value;
         }
 
         public static bool operator <=(Int24 left, Int24 right)

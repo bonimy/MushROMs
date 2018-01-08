@@ -9,15 +9,7 @@ namespace Helper
 {
     public sealed class PathComparer : StringModifierComparer
     {
-        private static readonly PathComparer Default = new PathComparer();
-
-        public static PathComparer DefaultComparer
-        {
-            get
-            {
-                return Default;
-            }
-        }
+        public static readonly PathComparer DefaultComparer = new PathComparer();
 
         private PathComparer() : this(OrdinalIgnoreCase)
         {
@@ -30,7 +22,7 @@ namespace Helper
         public override string StringModifier(string value)
         {
             return Path.GetFullPath(value) ??
-throw new ArgumentNullException(nameof(BaseComparer));
+                throw new ArgumentNullException(nameof(BaseComparer));
         }
     }
 }

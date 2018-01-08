@@ -7,7 +7,8 @@ using System.Collections.Generic;
 
 namespace Helper
 {
-    public sealed class ExtensionDictionary<TValue> : AssertDictionary<string, TValue>
+    public sealed class ExtensionDictionary<TValue> :
+        AssertDictionary<string, TValue>
     {
         public ExtensionDictionary() :
             base(ExtensionComparer.DefaultComparer)
@@ -26,7 +27,9 @@ namespace Helper
 
         public ExtensionDictionary(ExtensionDictionary<TValue> dictionary)
         {
-            BaseDictionary = new Dictionary<string, TValue>(dictionary, ExtensionComparer.DefaultComparer);
+            BaseDictionary = new Dictionary<string, TValue>(
+                dictionary,
+                ExtensionComparer.DefaultComparer);
         }
 
         public ExtensionDictionary(int capacity, ExtensionComparer comparer) :
@@ -34,7 +37,9 @@ namespace Helper
         {
         }
 
-        public ExtensionDictionary(ExtensionDictionary<TValue> dictionary, ExtensionComparer comparer)
+        public ExtensionDictionary(
+            ExtensionDictionary<TValue> dictionary,
+            ExtensionComparer comparer)
         {
             BaseDictionary = new Dictionary<string, TValue>(dictionary, comparer);
         }

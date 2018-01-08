@@ -26,7 +26,9 @@ namespace Helper
 
         public PathDictionary(PathDictionary<TValue> dictionary)
         {
-            BaseDictionary = new Dictionary<string, TValue>(dictionary, PathComparer.DefaultComparer);
+            BaseDictionary = new Dictionary<string, TValue>(
+                dictionary,
+                PathComparer.DefaultComparer);
         }
 
         public PathDictionary(int capacity, PathComparer comparer) :
@@ -34,7 +36,9 @@ namespace Helper
         {
         }
 
-        public PathDictionary(PathDictionary<TValue> dictionary, ExtensionComparer comparer)
+        public PathDictionary(
+            PathDictionary<TValue> dictionary,
+            ExtensionComparer comparer)
         {
             BaseDictionary = new Dictionary<string, TValue>(dictionary, comparer);
         }

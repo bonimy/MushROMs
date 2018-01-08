@@ -50,7 +50,6 @@ namespace Helper
             public int Current
             {
                 get;
-                private set;
             }
 
             object IEnumerator.Current
