@@ -15,25 +15,21 @@ namespace Snes
         public CompressCommand Command
         {
             get;
-            private set;
         }
 
         public int Value
         {
             get;
-            private set;
         }
 
         public int Index
         {
             get;
-            private set;
         }
 
         public int Length
         {
             get;
-            private set;
         }
 
         public int End
@@ -51,19 +47,19 @@ namespace Snes
                 var len = Length > 0x20 ? 2 : 1;
                 switch (Command)
                 {
-                case CompressCommand.DirectCopy:
-                return len + Length;
+                    case CompressCommand.DirectCopy:
+                        return len + Length;
 
-                case CompressCommand.RepeatedByte:
-                case CompressCommand.IncrementingByte:
-                return len + 1;
+                    case CompressCommand.RepeatedByte:
+                    case CompressCommand.IncrementingByte:
+                        return len + 1;
 
-                case CompressCommand.RepeatedWord:
-                case CompressCommand.CopySection:
-                return len + 2;
+                    case CompressCommand.RepeatedWord:
+                    case CompressCommand.CopySection:
+                        return len + 2;
 
-                default:
-                throw new ArgumentException();
+                    default:
+                        throw new ArgumentException();
                 }
             }
         }
@@ -143,44 +139,44 @@ namespace Snes
                 var value = 0;
                 switch (command)
                 {
-                case CompressCommand.RepeatedByte:
-                case CompressCommand.IncrementingByte:
-                value = src[sindex];
-                break;
+                    case CompressCommand.RepeatedByte:
+                    case CompressCommand.IncrementingByte:
+                        value = src[sindex];
+                        break;
 
-                case CompressCommand.RepeatedWord:
-                case CompressCommand.CopySection:
-                value = src[sindex] | (src[sindex + 1] << 8);
-                break;
+                    case CompressCommand.RepeatedWord:
+                    case CompressCommand.CopySection:
+                        value = src[sindex] | (src[sindex + 1] << 8);
+                        break;
                 }
 
                 list.Add(new CompressInfo(command, value, dindex, clen));
 
                 switch (command)
                 {
-                case CompressCommand.DirectCopy: // Direct byte copy
-                dindex += clen;
-                sindex += clen;
-                continue;
-                case CompressCommand.RepeatedByte: // Fill with one byte repeated
-                dindex += clen;
-                sindex++;
-                continue;
-                case CompressCommand.RepeatedWord: // Fill with two alternating bytes
-                dindex += clen;
-                sindex += 2;
-                continue;
-                case CompressCommand.IncrementingByte: // Fill with incrementing byte value
-                dindex += clen;
-                sindex++;
-                continue;
-                case CompressCommand.CopySection: // Copy data from previous section
-                dindex += clen;
-                sindex += 2;
-                continue;
+                    case CompressCommand.DirectCopy: // Direct byte copy
+                        dindex += clen;
+                        sindex += clen;
+                        continue;
+                    case CompressCommand.RepeatedByte: // Fill with one byte repeated
+                        dindex += clen;
+                        sindex++;
+                        continue;
+                    case CompressCommand.RepeatedWord: // Fill with two alternating bytes
+                        dindex += clen;
+                        sindex += 2;
+                        continue;
+                    case CompressCommand.IncrementingByte: // Fill with incrementing byte value
+                        dindex += clen;
+                        sindex++;
+                        continue;
+                    case CompressCommand.CopySection: // Copy data from previous section
+                        dindex += clen;
+                        sindex += 2;
+                        continue;
 
-                default:
-                throw new ArgumentException();
+                    default:
+                        throw new ArgumentException();
                 }
             }
 
