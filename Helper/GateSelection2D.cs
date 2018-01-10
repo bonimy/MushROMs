@@ -131,7 +131,7 @@ namespace Helper
             }
 
             SelectedIndexes = result;
-            HashIndexes = hash;
+            HashIndexes = new HashSet<Position2D>(SelectedIndexes);
         }
 
         public override IEnumerator<Position2D> GetEnumerator()
