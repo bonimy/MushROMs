@@ -8,7 +8,7 @@ namespace Tests.Helper
     public class Range2DTests
     {
         [TestMethod]
-        public void ConstructorTests()
+        public void Range2DConstructors()
         {
             Assert.AreEqual(Range2D.Empty.Width, 0);
             Assert.AreEqual(Range2D.Empty.Height, 0);
@@ -27,7 +27,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void OperatorTests()
+        public void Range2DOperators()
         {
             var p = new Range2D(0, 0);
             Assert.AreEqual(p, Range2D.Empty);

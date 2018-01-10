@@ -8,7 +8,7 @@ namespace Tests.Helper
     public class ExtensionComparerTests
     {
         [TestMethod]
-        public void ConstructorTests()
+        public void ExtensionComparerConstructors()
         {
             // Default constructor should never throw.
             var comparer = ExtensionComparer.DefaultComparer;
@@ -27,7 +27,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void EqualityTests()
+        public void ExtensionComparerEquality()
         {
             // Everything in this list is expected to compare to equal
             // with the default extension comparer.
@@ -75,7 +75,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void InequalityTests()
+        public void ExtensionComparerInequality()
         {
             // Everything in this list is expected to compare to unequal
             // with the default extension comparer.
@@ -115,7 +115,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void TestCompareExceptions()
+        public void ExtensionComparerExceptions()
         {
             var comparer = ExtensionComparer.DefaultComparer;
 

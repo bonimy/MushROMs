@@ -8,7 +8,7 @@ namespace Tests.Helper
     public class PointerTests
     {
         [TestMethod]
-        public void ConstructorTests()
+        public void PointerConstructors()
         {
             var list = new int[0x1000];
             for (var i = 0; i < list.Length; i++)
@@ -34,7 +34,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void UsageTests()
+        public void PointerUsage()
         {
             var list1 = new string[0x1000];
             for (var i = 0; i < 0x1000; i++)

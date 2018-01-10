@@ -8,7 +8,7 @@ namespace Tests.Helper
     public class ColorFTests
     {
         [TestMethod]
-        public void ConstTests()
+        public void ColorFConsts()
         {
             // We should have four channels, three non-alpha (RGB)
             Assert.AreEqual(ColorF.NumberOfChannels, 4);
@@ -24,7 +24,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void FromArgbTests()
+        public void FromArgb()
         {
             // Test empty color.
             var color = ColorF.Empty;
@@ -138,7 +138,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void FromAcmyTests()
+        public void FromAcmy()
         {
             // Test empty color.
             var color = ColorF.Empty;
