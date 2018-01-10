@@ -25,7 +25,6 @@ namespace Snes
         public GraphicsFormat GraphicsFormat
         {
             get;
-            private set;
         }
 
         public int Count
