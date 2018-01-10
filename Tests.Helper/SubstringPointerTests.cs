@@ -8,7 +8,7 @@ namespace Tests.Helper
     public class SubstringPointerTests
     {
         [TestMethod]
-        public void ConstructorTests()
+        public void SubstringPointerConstructors()
         {
             var endOfString = SubstringPointer.EndOfString;
             var negative = endOfString == -1 ? -2 : -1;
@@ -80,7 +80,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void EqualityTests()
+        public void SubstringPointerEquality()
         {
             Assert.AreEqual(new SubstringPointer(), SubstringPointer.Empty);
 

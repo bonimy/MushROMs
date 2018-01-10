@@ -9,7 +9,7 @@ namespace Tests.Helper
     public class PathComparerTests
     {
         [TestMethod]
-        public void ConstructorTests()
+        public void PathComparerConstructors()
         {
             // Default constructor should never throw.
             var comparer = PathComparer.DefaultComparer;
@@ -28,7 +28,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void EqualityTests()
+        public void PathComparerEquality()
         {
             // I don't like these being in the unit tests, but they are necessary.
             var directory = AppDomain.CurrentDomain.BaseDirectory;
@@ -81,7 +81,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void TestCompareExceptions()
+        public void PathComparerInequality()
         {
             var comparer = PathComparer.DefaultComparer;
             var directory = AppDomain.CurrentDomain.BaseDirectory;

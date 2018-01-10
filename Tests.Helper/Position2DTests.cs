@@ -8,7 +8,7 @@ namespace Tests.Helper
     public class Position2DTests
     {
         [TestMethod]
-        public void ConstructorTests()
+        public void Position2DConstructors()
         {
             Assert.AreEqual(Position2D.Empty.X, 0);
             Assert.AreEqual(Position2D.Empty.Y, 0);
@@ -27,7 +27,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void OperatorTests()
+        public void Position2DOperators()
         {
             var p = new Position2D(0, 0);
             Assert.AreEqual(p, Position2D.Empty);
