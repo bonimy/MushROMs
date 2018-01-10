@@ -8,7 +8,7 @@ namespace Tests.Helper
     public class UInt24Tests
     {
         [TestMethod]
-        public void TestUsage()
+        public void UInt24Usage()
         {
             Assert.AreEqual(new UInt24(), (UInt24)0);
 

@@ -8,7 +8,7 @@ namespace Tests.Helper
     public class SuffixTreeTests
     {
         [TestMethod]
-        public void TreeTests()
+        public void SuffixTreeUsage()
         {
             // suffix tree has just a default constructor.
             var tree = new SuffixTree();

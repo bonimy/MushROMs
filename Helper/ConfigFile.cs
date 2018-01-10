@@ -404,7 +404,7 @@ namespace Helper
                 return fallback;
             }
 
-            if (!Int32.TryParse(Entries[key].Value, out int result))
+            if (!Int32.TryParse(Entries[key].Value, out var result))
             {
                 return fallback;
             }
@@ -429,7 +429,7 @@ namespace Helper
                 return fallback;
             }
 
-            if (!Boolean.TryParse(Entries[key].Value, out bool result))
+            if (!Boolean.TryParse(Entries[key].Value, out var result))
             {
                 return fallback;
             }

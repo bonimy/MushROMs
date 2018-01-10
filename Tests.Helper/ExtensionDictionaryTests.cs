@@ -8,7 +8,7 @@ namespace Tests.Helper
     public class ExtensionDictionaryTests
     {
         [TestMethod]
-        public void ConstructorTests()
+        public void ExtensionDictionaryConstructors()
         {
             var dictionary = new ExtensionDictionary<int>();
             Assert.AreEqual(dictionary.Comparer, ExtensionComparer.DefaultComparer);
@@ -27,7 +27,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void UsageTests()
+        public void ExtensionComparerUsage()
         {
             // We test the extension dictionary usage overall, since a lot of its functionality
             // is shared.

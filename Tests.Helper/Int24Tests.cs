@@ -7,7 +7,7 @@ namespace Tests.Helper
     public class Int24Tests
     {
         [TestMethod]
-        public void TestUsage()
+        public void Int24Usage()
         {
             Assert.AreEqual(new Int24(), (Int24)0);
 

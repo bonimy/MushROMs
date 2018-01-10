@@ -135,7 +135,7 @@ namespace Helper
             }
 
             SelectedIndexes = result;
-            HashIndexes = hash;
+            HashIndexes = new HashSet<int>(SelectedIndexes);
         }
 
         public override IEnumerator<int> GetEnumerator()

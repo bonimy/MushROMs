@@ -9,7 +9,7 @@ namespace Tests.Helper
     public class PathDictionaryTests
     {
         [TestMethod]
-        public void ConstructorTests()
+        public void PathDictionaryConstructors()
         {
             var dictionary = new PathDictionary<int>();
             Assert.AreEqual(dictionary.Comparer, PathComparer.DefaultComparer);
@@ -28,7 +28,7 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void UsageTests()
+        public void PathDictionaryUsage()
         {
             // We test the path dictionary usage overall, since a lot of its functionality
             // is shared.
