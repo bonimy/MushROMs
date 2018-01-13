@@ -7,6 +7,7 @@ This project is still in "upload" phase. That means it has no code hosted yet. W
 * [What is MushROMs?](#what-is-mushroms)
 * [Installation](#installation)
     * [Visual Studio](#visual-studio)
+* [History](#history)
 * [Contributions](#contributions)
 * [Credits](#credits)
 * [License](#license)
@@ -26,6 +27,15 @@ Presently, the [Visual Studio 2017 IDE](https://www.visualstudio.com/en-us/news/
 * Click Install and let the installer do it's thing.
 * Clone our repository and open [MushROMs.sln](MushROMs.sln) in Visual Studio.
 * Hit `F5` to Build and Run and you should be all set!
+
+# History
+MushROMs has (for better or worse) gone through many revisions. There have been many major style changes requiring large overhauls and usually ending up in complete rewrites. The old versions of MushROMs still exist and are uploaded on GitHub for archival purposes.
+* [2011](https://github.com/bonimy/MushROMs-2011-Archive)
+* [2012](https://github.com/bonimy/MushROMs-2012-Archive)
+* [2014](https://github.com/bonimy/MushROMs-2014-Archive)
+* [2015](https://github.com/bonimy/MushROMs-2015-Archive)
+* [2016](https://github.com/bonimy/MushROMs-2016-Archive)
+* [2017](https://github.com/bonimy/MushROMs-2017-Archive)
 
 # Contributions
 Do you want to add a feature, report a bug, or propose a change to MushROMs? That's awesome! First, please refer to our [Contributing](CONTRIBUTING.md) file. We use it in hopes having the best working environment we can.
