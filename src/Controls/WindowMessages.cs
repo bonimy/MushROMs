@@ -1,5 +1,5 @@
 ﻿// <copyright file="WindowMessages.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 namespace Controls

@@ -1,3 +1,7 @@
+// <copyright file="AssemblyInfo.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
 using System.Reflection;
 using System.Runtime.InteropServices;
 

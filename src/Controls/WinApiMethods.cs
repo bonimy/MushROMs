@@ -1,5 +1,5 @@
 ﻿// <copyright file="WinApiMethods.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 using System;
@@ -73,23 +73,23 @@ namespace Controls
 
             switch (value)
             {
-            case BorderStyle.Fixed3D:
-            SetWindowLong(window, GwlStyle, style);
-            SetWindowLong(window, GwlExStyle, exstyle | WsExClientEdge);
-            return;
+                case BorderStyle.Fixed3D:
+                    SetWindowLong(window, GwlStyle, style);
+                    SetWindowLong(window, GwlExStyle, exstyle | WsExClientEdge);
+                    return;
 
-            case BorderStyle.FixedSingle:
-            SetWindowLong(window, GwlStyle, style | WsBorder);
-            SetWindowLong(window, GwlExStyle, exstyle);
-            return;
+                case BorderStyle.FixedSingle:
+                    SetWindowLong(window, GwlStyle, style | WsBorder);
+                    SetWindowLong(window, GwlExStyle, exstyle);
+                    return;
 
-            case BorderStyle.None:
-            SetWindowLong(window, GwlStyle, style);
-            SetWindowLong(window, GwlExStyle, exstyle);
-            return;
+                case BorderStyle.None:
+                    SetWindowLong(window, GwlStyle, style);
+                    SetWindowLong(window, GwlExStyle, exstyle);
+                    return;
 
-            default:
-            return;
+                default:
+                    return;
             }
         }
 
@@ -103,17 +103,17 @@ namespace Controls
         {
             switch (GetBorderStyle(window))
             {
-            case BorderStyle.None:
-            return Size.Empty;
+                case BorderStyle.None:
+                    return Size.Empty;
 
-            case BorderStyle.FixedSingle:
-            return SystemInformation.BorderSize;
+                case BorderStyle.FixedSingle:
+                    return SystemInformation.BorderSize;
 
-            case BorderStyle.Fixed3D:
-            return SystemInformation.Border3DSize;
+                case BorderStyle.Fixed3D:
+                    return SystemInformation.Border3DSize;
 
-            default:
-            throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
             }
         }
 
