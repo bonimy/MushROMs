@@ -59,11 +59,8 @@
     <Compile Include="SubstringPointerTests.cs" />
     <Compile Include="SuffixTreeTests.cs" />
     <Compile Include="ColorFTests.cs" />
-<<<<<<< HEAD
     <Compile Include="ArrayPointerTests.cs" />
-=======
     <Compile Include="PointerTests.cs" />
->>>>>>> refs/remotes/origin/master
     <Compile Include="UInt24Tests.cs" />
     <Compile Include="SelectionTests.cs" />
   </ItemGroup>

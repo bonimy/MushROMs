@@ -1,34 +1,24 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-<<<<<<< HEAD
-VisualStudioVersion = 15.0.27004.2002
-=======
-VisualStudioVersion = 15.0.27004.2005
->>>>>>> refs/remotes/origin/master
+VisualStudioVersion = 15.0.27130.2020
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helper", "Helper\Helper.csproj", "{6E9940F3-99D2-4F1F-B476-F3B9964D1C76}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helper", "Helper\Helper.csproj", "{6E9940F3-99D2-4F1F-B476-F3B9964D1C76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Helper", "Tests.Helper\Tests.Helper.csproj", "{7D9C71EA-F33B-4654-9163-E3E5861996C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MushROMs.SMAS", "MushROMs.SMAS\MushROMs.SMAS.csproj", "{D80072DE-89AB-42CD-88E2-480B6162F3BA}"
 EndProject
-<<<<<<< HEAD:MushROMs.sln
-<<<<<<< HEAD
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MushROMs.SMAS", "MushROMs.SMAS\MushROMs.SMAS.csproj", "{D80072DE-89AB-42CD-88E2-480B6162F3BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MushROMs.SMB1", "MushROMs.SMB1\MushROMs.SMB1.csproj", "{AF0B7CF5-4B99-4633-AFE8-D9FC9A6C8094}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MushROMs.SMB1", "MushROMs.SMB1\MushROMs.SMB1.csproj", "{AF0B7CF5-4B99-4633-AFE8-D9FC9A6C8094}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MushROMs.NES", "MushROMs.NES\MushROMs.NES.csproj", "{7441B62D-3EC6-4742-954E-973A1FEED46D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MushROMs.NES", "MushROMs.NES\MushROMs.NES.csproj", "{7441B62D-3EC6-4742-954E-973A1FEED46D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.SMB1", "Tests.SMB1\Tests.SMB1.csproj", "{C2981E05-E2A9-478C-A2B8-11AB41A9F2F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MushROMs.SNES", "MushROMs.SNES\MushROMs.SNES.csproj", "{87AE3AA3-F4D5-4CA6-A500-D6D335406A3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MushROMs.SNES", "MushROMs.SNES\MushROMs.SNES.csproj", "{87AE3AA3-F4D5-4CA6-A500-D6D335406A3A}"
 EndProject
-=======
->>>>>>> refs/remotes/origin/master
-=======
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controls", "Controls\Controls.csproj", "{CD3207D8-362C-4068-B6D1-3877359EF727}"
 EndProject
->>>>>>> refs/remotes/origin/master:src/MushROMs.sln
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Helper", "Tests.Helper\Tests.Helper.csproj", "{7D9C71EA-F33B-4654-9163-E3E5861996C8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,12 +29,6 @@ Global
 		{6E9940F3-99D2-4F1F-B476-F3B9964D1C76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E9940F3-99D2-4F1F-B476-F3B9964D1C76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E9940F3-99D2-4F1F-B476-F3B9964D1C76}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7D9C71EA-F33B-4654-9163-E3E5861996C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7D9C71EA-F33B-4654-9163-E3E5861996C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7D9C71EA-F33B-4654-9163-E3E5861996C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7D9C71EA-F33B-4654-9163-E3E5861996C8}.Release|Any CPU.Build.0 = Release|Any CPU
-<<<<<<< HEAD:MushROMs.sln
-<<<<<<< HEAD
 		{D80072DE-89AB-42CD-88E2-480B6162F3BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D80072DE-89AB-42CD-88E2-480B6162F3BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D80072DE-89AB-42CD-88E2-480B6162F3BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -65,14 +49,14 @@ Global
 		{87AE3AA3-F4D5-4CA6-A500-D6D335406A3A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{87AE3AA3-F4D5-4CA6-A500-D6D335406A3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87AE3AA3-F4D5-4CA6-A500-D6D335406A3A}.Release|Any CPU.Build.0 = Release|Any CPU
-=======
->>>>>>> refs/remotes/origin/master
-=======
 		{CD3207D8-362C-4068-B6D1-3877359EF727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CD3207D8-362C-4068-B6D1-3877359EF727}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD3207D8-362C-4068-B6D1-3877359EF727}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD3207D8-362C-4068-B6D1-3877359EF727}.Release|Any CPU.Build.0 = Release|Any CPU
->>>>>>> refs/remotes/origin/master:src/MushROMs.sln
+		{7D9C71EA-F33B-4654-9163-E3E5861996C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D9C71EA-F33B-4654-9163-E3E5861996C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D9C71EA-F33B-4654-9163-E3E5861996C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D9C71EA-F33B-4654-9163-E3E5861996C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
