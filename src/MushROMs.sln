@@ -9,7 +9,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Helper", "Tests.Helpe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controls", "Controls\Controls.csproj", "{CD3207D8-362C-4068-B6D1-3877359EF727}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MushROMs", "MushROMs\MushROMs.csproj", "{D04BB299-E0EA-406C-8B5D-E95E21EE62D7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MushROMs", "MushROMs\MushROMs.csproj", "{D04BB299-E0EA-406C-8B5D-E95E21EE62D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.MushROMs", "Tests.MushROMs\Tests.MushROMs.csproj", "{650633D5-C7A2-4D77-9704-F27B47764681}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{D04BB299-E0EA-406C-8B5D-E95E21EE62D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D04BB299-E0EA-406C-8B5D-E95E21EE62D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D04BB299-E0EA-406C-8B5D-E95E21EE62D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{650633D5-C7A2-4D77-9704-F27B47764681}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{650633D5-C7A2-4D77-9704-F27B47764681}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{650633D5-C7A2-4D77-9704-F27B47764681}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{650633D5-C7A2-4D77-9704-F27B47764681}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

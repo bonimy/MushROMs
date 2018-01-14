@@ -1,14 +1,15 @@
-﻿// <copyright file="EmptySelection1D.cs" company="Public Domain">
+﻿// <copyright file="EmptySelection2D.cs" company="Public Domain">
 //     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Helper;
 
-namespace Helper
+namespace MushROMs
 {
-    internal sealed class EmptySelection1D : Selection1D
+    internal sealed class EmptySelection2D : Selection2D
     {
         public override int Count
         {
@@ -18,7 +19,7 @@ namespace Helper
             }
         }
 
-        public override int this[int index]
+        public override Position2D this[int index]
         {
             get
             {
@@ -26,28 +27,28 @@ namespace Helper
             }
         }
 
-        internal EmptySelection1D()
+        internal EmptySelection2D()
         {
         }
 
-        public override Selection1D Copy()
+        public override Selection2D Copy()
         {
             return Empty;
         }
 
-        public override bool Contains(int index)
+        public override bool Contains(Position2D position)
         {
             return false;
         }
 
-        public override IEnumerator<int> GetEnumerator()
+        public override IEnumerator<Position2D> GetEnumerator()
         {
             return new Enumerator();
         }
 
-        private struct Enumerator : IEnumerator<int>
+        private struct Enumerator : IEnumerator<Position2D>
         {
-            public int Current
+            public Position2D Current
             {
                 get;
             }

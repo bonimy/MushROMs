@@ -4,8 +4,9 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using Helper;
 
-namespace Helper
+namespace MushROMs
 {
     public abstract class Selection2D : ISelection<Position2D>
     {
