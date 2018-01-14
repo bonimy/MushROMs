@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="IntegerTextBox.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
@@ -27,8 +31,16 @@ namespace Controls
         [Description("Determines whether the control reads hexadecimal values or decimal.")]
         public bool AllowHex
         {
-            get { return _allowHex; }
-            set { _allowHex = value; SetValue(Value); }
+            get
+            {
+                return _allowHex;
+            }
+
+            set
+            {
+                _allowHex = value;
+                SetValue(Value);
+            }
         }
 
         [Category("Editor")]
@@ -36,8 +48,16 @@ namespace Controls
         [Description("Determines whether negative numbers are valid input.")]
         public bool AllowNegative
         {
-            get { return _allowNegative; }
-            set { _allowNegative = value; SetValue(_value); }
+            get
+            {
+                return _allowNegative;
+            }
+
+            set
+            {
+                _allowNegative = value;
+                SetValue(_value);
+            }
         }
 
         [Browsable(false)]
@@ -150,6 +170,7 @@ namespace Controls
                     Value = textValue;
                 }
             }
+
             base.OnTextChanged(e);
         }
     }
