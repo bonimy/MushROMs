@@ -1,5 +1,5 @@
 ﻿// <copyright file="Compressor.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 // We make the Compressor class non-static so it can be multi-threaded (since we need a nonlocal
@@ -790,40 +790,40 @@ namespace Snes
 
                     switch (current.Command)
                     {
-                    case CompressCommand.RepeatedByte:
-                    case CompressCommand.IncrementingByte:
-                    if (edge && current.Length == 3)
-                    {
-                        break;
-                    }
+                        case CompressCommand.RepeatedByte:
+                        case CompressCommand.IncrementingByte:
+                            if (edge && current.Length == 3)
+                            {
+                                break;
+                            }
 
-                    if (current.Length > 3 + add)
-                    {
-                        break;
-                    }
+                            if (current.Length > 3 + add)
+                            {
+                                break;
+                            }
 
-                    Commands[++i] = new CompressInfo(CompressCommand.DirectCopy, 0, previous.Index, tlen);
-                    dstIndex = lastDestIndex;
-                    continue;
-                    case CompressCommand.RepeatedWord:
-                    case CompressCommand.CopySection:
-                    if (edge && current.Length == 4)
-                    {
-                        break;
-                    }
+                            Commands[++i] = new CompressInfo(CompressCommand.DirectCopy, 0, previous.Index, tlen);
+                            dstIndex = lastDestIndex;
+                            continue;
+                        case CompressCommand.RepeatedWord:
+                        case CompressCommand.CopySection:
+                            if (edge && current.Length == 4)
+                            {
+                                break;
+                            }
 
-                    if (current.Length > 4 + add)
-                    {
-                        break;
-                    }
+                            if (current.Length > 4 + add)
+                            {
+                                break;
+                            }
 
-                    Commands[++i] = new CompressInfo(
-                        CompressCommand.DirectCopy,
-                        0,
-                        previous.Index,
-                        tlen);
-                    dstIndex = lastDestIndex;
-                    continue;
+                            Commands[++i] = new CompressInfo(
+                                CompressCommand.DirectCopy,
+                                0,
+                                previous.Index,
+                                tlen);
+                            dstIndex = lastDestIndex;
+                            continue;
                     }
                 }
 
@@ -881,34 +881,34 @@ namespace Snes
 
                     switch (command)
                     {
-                    case CompressCommand.RepeatedByte:
-                    case CompressCommand.IncrementingByte:
-                    dst[dstIndex++] = (byte)current.Value;
-                    break;
+                        case CompressCommand.RepeatedByte:
+                        case CompressCommand.IncrementingByte:
+                            dst[dstIndex++] = (byte)current.Value;
+                            break;
 
-                    case CompressCommand.RepeatedWord:
-                    dst[dstIndex++] = (byte)current.Value;
-                    dst[dstIndex++] = (byte)(current.Value >> BitsPerByte);
-                    break;
+                        case CompressCommand.RepeatedWord:
+                            dst[dstIndex++] = (byte)current.Value;
+                            dst[dstIndex++] = (byte)(current.Value >> BitsPerByte);
+                            break;
 
-                    case CompressCommand.CopySection:
-                    dst[dstIndex++] = (byte)current.Value;
-                    dst[dstIndex++] = (byte)((current.Value + srcIndex) >> BitsPerByte);
-                    srcIndex += subLength;
-                    break;
+                        case CompressCommand.CopySection:
+                            dst[dstIndex++] = (byte)current.Value;
+                            dst[dstIndex++] = (byte)((current.Value + srcIndex) >> BitsPerByte);
+                            srcIndex += subLength;
+                            break;
 
-                    case CompressCommand.DirectCopy:
-                    Buffer.MemoryCopy(
-                        src + srcIndex + current.Index,
-                        dst + dstIndex,
-                        dstLength - dstIndex,
-                        subLength);
-                    dstIndex += subLength;
-                    srcIndex += subLength;
-                    break;
+                        case CompressCommand.DirectCopy:
+                            Buffer.MemoryCopy(
+                                src + srcIndex + current.Index,
+                                dst + dstIndex,
+                                dstLength - dstIndex,
+                                subLength);
+                            dstIndex += subLength;
+                            srcIndex += subLength;
+                            break;
 
-                    default:
-                    throw new ArgumentException();
+                        default:
+                            throw new ArgumentException();
                     }
                 }
                 else

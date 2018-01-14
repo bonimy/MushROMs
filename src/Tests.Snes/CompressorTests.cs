@@ -1,15 +1,19 @@
-﻿using System;
+﻿// <copyright file="CompressorTests.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tests.Snes.Properties;
 using Snes;
+using Tests.Snes.Properties;
 
 namespace Tests.Snes
 {
     [TestClass]
     public class CompressorTests
     {
-        private static Compressor Compressor = Compressor.Default;
+        private static readonly Compressor Compressor = Compressor.Default;
 
         [TestMethod]
         public void SmallCompressorTests()
@@ -84,6 +88,7 @@ namespace Tests.Snes
             {
                 data[i] = (byte)i;
             }
+
             best = Compressor.Compress(data);
             AssertArrayEquality(data, Compressor.Decompress(best));
 
@@ -92,6 +97,7 @@ namespace Tests.Snes
             {
                 data[i] = 0xFF;
             }
+
             best = Compressor.Compress(data);
             AssertArrayEquality(data, Compressor.Decompress(best));
 
@@ -99,6 +105,7 @@ namespace Tests.Snes
             {
                 data[i] = data[i + 0x800] = uncompressable[i];
             }
+
             best = Compressor.Compress(data);
             AssertArrayEquality(data, Compressor.Decompress(best));
 
@@ -153,7 +160,7 @@ namespace Tests.Snes
 
             var total = n + m + 3 - 1;
             expected[0] = (byte)(0xE0 | (total >> 8));
-            expected[1] = (byte)(total);
+            expected[1] = (byte)total;
 
             for (var i = 0; i < n; i++)
             {
@@ -186,7 +193,7 @@ namespace Tests.Snes
 
             total = n + m + 4 - 1;
             expected[0] = (byte)(0xE0 | (total >> 8));
-            expected[1] = (byte)(total);
+            expected[1] = (byte)total;
 
             for (var i = 0; i < n; i++)
             {
