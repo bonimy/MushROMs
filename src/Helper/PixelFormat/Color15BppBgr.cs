@@ -1,5 +1,5 @@
 ﻿// <copyright file="Color15BppBgr.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 using System;
@@ -145,19 +145,19 @@ namespace Helper.PixelFormats
             {
                 switch (index)
                 {
-                case RedIndex:
-                return Red;
+                    case RedIndex:
+                        return Red;
 
-                case GreenIndex:
-                return Green;
+                    case GreenIndex:
+                        return Green;
 
-                case BlueIndex:
-                return Blue;
+                    case BlueIndex:
+                        return Blue;
 
-                default:
-                throw new ArgumentOutOfRangeException(
-                    nameof(index),
-                    SR.ErrorArrayBounds(nameof(index), index, NumberOfChannels));
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(index),
+                            SR.ErrorArrayBounds(nameof(index), index, NumberOfChannels));
                 }
             }
 
@@ -165,22 +165,22 @@ namespace Helper.PixelFormats
             {
                 switch (index)
                 {
-                case RedIndex:
-                Red = value;
-                return;
+                    case RedIndex:
+                        Red = value;
+                        return;
 
-                case GreenIndex:
-                Green = value;
-                return;
+                    case GreenIndex:
+                        Green = value;
+                        return;
 
-                case BlueIndex:
-                Blue = value;
-                return;
+                    case BlueIndex:
+                        Blue = value;
+                        return;
 
-                default:
-                throw new ArgumentOutOfRangeException(
-                    nameof(index),
-                    SR.ErrorArrayBounds(nameof(index), index, NumberOfChannels));
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(index),
+                            SR.ErrorArrayBounds(nameof(index), index, NumberOfChannels));
                 }
             }
         }

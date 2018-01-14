@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="PathDictionaryTests.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.IO;
 using Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -30,9 +34,7 @@ namespace Tests.Helper
         [TestMethod]
         public void PathDictionaryUsage()
         {
-            // We test the path dictionary usage overall, since a lot of its functionality
-            // is shared.
-
+            // We test the path dictionary usage overall, since a lot of its functionality is shared.
             var directory = AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar;
             var name = Path.GetFileName(directory);
 
@@ -52,10 +54,10 @@ namespace Tests.Helper
             var dictionary = new PathDictionary<MockEditor>
             {
                 // Collect editors by path
-                {appPath, appEditor },
-                {dataPath, dataEditor },
-                {textPath, textEditor },
-                {codePath, codeEditor }
+                { appPath, appEditor },
+                { dataPath, dataEditor },
+                { textPath, textEditor },
+                { codePath, codeEditor }
             };
 
             // Simple sanity test.

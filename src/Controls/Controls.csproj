@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="DialogProxy.cs" />
     <Compile Include="DrawHelper.cs" />
+    <Compile Include="IDialogForm.cs" />
     <Compile Include="IIntegerComponent.cs" />
     <Compile Include="IntegerTextBox.cs">
       <SubType>Component</SubType>
@@ -99,9 +100,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Helper\Helper.licenseheader">
-      <Link>Helper.licenseheader</Link>
-    </None>
+    <None Include="License.licenseheader" />
     <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>

@@ -1,8 +1,7 @@
 ﻿// <copyright file="Selection1D.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
-using System;
 using System.Collections;
 using System.Collections.Generic;
 

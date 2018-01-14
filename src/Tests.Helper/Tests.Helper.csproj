@@ -64,7 +64,9 @@
     <Compile Include="SelectionTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="License.licenseheader" />
     <None Include="packages.config" />
+    <None Include="Settings.StyleCop" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Helper\Helper.csproj">

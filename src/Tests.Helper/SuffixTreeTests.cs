@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="SuffixTreeTests.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using System;
 using Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -15,34 +19,34 @@ namespace Tests.Helper
 
             var data = new byte[]
             {
-                //  0: A string of numbers from 0-9
+                // 00: A string of numbers from 0-9
                 0, 1, 2, 3, 4, 5, 6, 7, 8, 9,
 
-                //  1: All 0
+                // 01: All 0
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 
-                //  2: 0-5, then random
+                // 02: 0-5, then random
                 0, 1, 2, 3, 4, 5, 1, 7, 1, 4,
 
-                //  3: 2-9 then random
+                // 03: 2-9 then random
                 2, 3, 4, 5, 6, 7, 8, 9, 5, 5,
 
-                //  4: 0-7 (one off of row three)
+                // 04: 0-7 (one off of row three)
                 0, 1, 2, 3, 4, 5, 6, 7, 1, 4,
 
-                //  5: 0-7 again
+                // 05: 0-7 again
                 0, 1, 2, 3, 4, 5, 6, 7, 5, 5,
 
-                //  6: 0-7, then 5 and 6
+                // 06: 0-7, then 5 and 6
                 0, 1, 2, 3, 4, 5, 6, 7, 5, 7,
 
-                //  7: 0-8
+                // 07: 0-8
                 0, 1, 2, 3, 4, 5, 6, 7, 8, 1,
 
-                //  8: some reverse
+                // 08: some reverse
                 7, 6, 5, 4, 3, 2, 8, 8, 8, 8,
 
-                //  9: 6-3 reverse
+                // 09: 6-3 reverse
                 6, 5, 4, 3, 7, 7, 7, 7, 7, 7,
 
                 // 10: 5-1 reverse
@@ -113,7 +117,6 @@ namespace Tests.Helper
             Assert.AreEqual(index, SubstringPointer.Empty);
 
             // Just do some simple checks with expected longest substrings.
-
             index = tree.GetLongestInternalSubstring(20);
             Assert.AreEqual(index, SubstringPointer.FromStartAndLength(0, 6));
 
