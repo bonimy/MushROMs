@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="PathComparerTests.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.IO;
 using Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -56,27 +60,31 @@ namespace Tests.Helper
                 var right = parameter.Right;
 
                 var comparison = comparer.Compare(left, right);
+                var message = SR.GetString(
+                        "Path comparison of \"{0}\" and \"{1}\" returned {2} (expected 0).",
+                        left,
+                        right,
+                        comparison);
 
-                Assert.AreEqual(0, comparison, SR.GetString(
-                    "Path comparison of \"{0}\" and \"{1}\" returned {2} (expected 0).",
-                    left, right, comparison)
-                    );
+                Assert.AreEqual(0, comparison, message);
 
                 var equality = comparer.Equals(left, right);
+                message = SR.GetString(
+                   "Path equality of \"{0}\" and \"{1}\" returned false (expected true).",
+                   left,
+                   right);
 
-                Assert.IsTrue(equality, SR.GetString(
-                    "Path equality of \"{0}\" and \"{1}\" returned false (expected true).",
-                    left, right)
-                    );
+                Assert.IsTrue(equality, message);
 
                 // Equal parameters should have equal hashes.
                 var leftHash = comparer.GetHashCode(left);
                 var rightHash = comparer.GetHashCode(right);
+                message = SR.GetString(
+                    "Hash code of paths of \"{0}\" and \"{1}\" are unequal (expected    equal).",
+                    left,
+                    right);
 
-                Assert.AreEqual(leftHash, rightHash, SR.GetString(
-                    "Hash code of paths of \"{0}\" and \"{1}\" are unequal (expected equal).",
-                    left, right)
-                    );
+                Assert.AreEqual(leftHash, rightHash, message);
             }
         }
 

@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Range2DTests.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using System;
 using Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -33,7 +37,7 @@ namespace Tests.Helper
             Assert.AreEqual(p, Range2D.Empty);
             Assert.AreEqual(0, p.Area);
 
-            Assert.IsTrue(5 == new Range2D(5, 5));
+            Assert.IsTrue(new Range2D(5, 5) == 5);
 
             p = Range2D.Empty + new Range2D(3, 5);
             Assert.AreEqual(p.Width, 3);

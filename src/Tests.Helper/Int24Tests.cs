@@ -1,4 +1,8 @@
-﻿using Helper;
+﻿// <copyright file="Int24Tests.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Helper

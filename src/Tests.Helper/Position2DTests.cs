@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Position2DTests.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using System;
 using Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

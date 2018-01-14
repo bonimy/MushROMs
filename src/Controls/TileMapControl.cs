@@ -1,5 +1,5 @@
 ﻿// <copyright file="TileMapControl.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 using System;
@@ -466,21 +466,21 @@ namespace Controls
             var active = ActiveViewTile;
             switch (e.KeyCode)
             {
-            case Keys.Left:
-            active.X--;
-            break;
+                case Keys.Left:
+                    active.X--;
+                    break;
 
-            case Keys.Right:
-            active.X++;
-            break;
+                case Keys.Right:
+                    active.X++;
+                    break;
 
-            case Keys.Up:
-            active.Y--;
-            break;
+                case Keys.Up:
+                    active.Y--;
+                    break;
 
-            case Keys.Down:
-            active.Y++;
-            break;
+                case Keys.Down:
+                    active.Y++;
+                    break;
             }
 
             if (ActiveViewTile != active)

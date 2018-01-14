@@ -1,9 +1,8 @@
 ﻿// <copyright file="AssemblyInfo.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
