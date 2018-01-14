@@ -1,5 +1,5 @@
 ﻿// <copyright file="DesignForm.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 using System;
@@ -98,29 +98,29 @@ namespace Controls
         {
             switch (m.Msg)
             {
-            case WindowMessages.Size:
-            if (m.WParam == IntPtr.Zero)
-            {
-                unsafe
-                {
-                    var client = new Size((int)m.LParam & 0xFFFF, (int)m.LParam >> 0x10);
-                    var window = WinAPIMethods.InflateSize(client, WindowPadding);
-                    window = AdjustSize(window);
-                    client = WinAPIMethods.DeflateSize(window, WindowPadding);
-                    m.LParam = (IntPtr)((client.Width & 0xFFFF) | ((client.Height & 0xFFFF) << 0x10));
-                }
-            }
+                case WindowMessages.Size:
+                    if (m.WParam == IntPtr.Zero)
+                    {
+                        unsafe
+                        {
+                            var client = new Size((int)m.LParam & 0xFFFF, (int)m.LParam >> 0x10);
+                            var window = WinAPIMethods.InflateSize(client, WindowPadding);
+                            window = AdjustSize(window);
+                            client = WinAPIMethods.DeflateSize(window, WindowPadding);
+                            m.LParam = (IntPtr)((client.Width & 0xFFFF) | ((client.Height & 0xFFFF) << 0x10));
+                        }
+                    }
 
-            break;
+                    break;
 
-            case WindowMessages.Sizing:
-            unsafe
-            {
-                var rect = (WinAPIRectangle*)m.LParam;
-                *rect = AdjustSizingRectangle(*rect);
-            }
+                case WindowMessages.Sizing:
+                    unsafe
+                    {
+                        var rect = (WinAPIRectangle*)m.LParam;
+                        *rect = AdjustSizingRectangle(*rect);
+                    }
 
-            break;
+                    break;
             }
 
             base.DefWndProc(ref m);
@@ -145,27 +145,27 @@ namespace Controls
 
             switch (form.FormBorderStyle)
             {
-            case FormBorderStyle.None:
-            return Size.Empty;
+                case FormBorderStyle.None:
+                    return Size.Empty;
 
-            case FormBorderStyle.FixedSingle:
-            case FormBorderStyle.FixedDialog:
-            case FormBorderStyle.Sizable:
-            return SystemInformation.FrameBorderSize +
-                WinAPIMethods.PaddedBorderSize;
+                case FormBorderStyle.FixedSingle:
+                case FormBorderStyle.FixedDialog:
+                case FormBorderStyle.Sizable:
+                    return SystemInformation.FrameBorderSize +
+                        WinAPIMethods.PaddedBorderSize;
 
-            case FormBorderStyle.FixedToolWindow:
-            case FormBorderStyle.SizableToolWindow:
-            return SystemInformation.FixedFrameBorderSize +
-                WinAPIMethods.PaddedBorderSize;
+                case FormBorderStyle.FixedToolWindow:
+                case FormBorderStyle.SizableToolWindow:
+                    return SystemInformation.FixedFrameBorderSize +
+                        WinAPIMethods.PaddedBorderSize;
 
-            case FormBorderStyle.Fixed3D:
-            return SystemInformation.FrameBorderSize +
-                SystemInformation.Border3DSize +
-                WinAPIMethods.PaddedBorderSize;
+                case FormBorderStyle.Fixed3D:
+                    return SystemInformation.FrameBorderSize +
+                        SystemInformation.Border3DSize +
+                        WinAPIMethods.PaddedBorderSize;
 
-            default:
-            throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
             }
         }
 
@@ -184,21 +184,21 @@ namespace Controls
 
             switch (form.FormBorderStyle)
             {
-            case FormBorderStyle.None:
-            return 0;
+                case FormBorderStyle.None:
+                    return 0;
 
-            case FormBorderStyle.FixedSingle:
-            case FormBorderStyle.Fixed3D:
-            case FormBorderStyle.FixedDialog:
-            case FormBorderStyle.Sizable:
-            return SystemInformation.CaptionHeight;
+                case FormBorderStyle.FixedSingle:
+                case FormBorderStyle.Fixed3D:
+                case FormBorderStyle.FixedDialog:
+                case FormBorderStyle.Sizable:
+                    return SystemInformation.CaptionHeight;
 
-            case FormBorderStyle.FixedToolWindow:
-            case FormBorderStyle.SizableToolWindow:
-            return SystemInformation.ToolWindowCaptionHeight;
+                case FormBorderStyle.FixedToolWindow:
+                case FormBorderStyle.SizableToolWindow:
+                    return SystemInformation.ToolWindowCaptionHeight;
 
-            default:
-            throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
             }
         }
     }

@@ -6,7 +6,7 @@ namespace SnesXM.Emulator
     {
         bool Interlace { get; }
 
-        Color15BppBgr555[] GetColors();
+        Color15BppBgr[] GetColors();
 
         void Initialize();
     }

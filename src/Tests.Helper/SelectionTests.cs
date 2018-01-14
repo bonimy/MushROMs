@@ -1,7 +1,10 @@
-﻿using System;
+﻿// <copyright file="SelectionTests.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Helper;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Tests.Helper
 {

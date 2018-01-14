@@ -30,8 +30,11 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         private IControls Controls => Emulator.Controls;
+
         private IInternalPpu InternalPpu => Emulator.InternalPpu;
+
         ITimings Timings => Emulator.Timings;
 
         private Vma _vma;
@@ -59,6 +62,7 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public int Bg3Priority
         {
             get;
@@ -70,17 +74,20 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public int CgFlipRead
         {
             get;
             set;
         }
+
         public int CgAdd
         {
             get;
             set;
         }
-        internal Color15BppBgr555[] CgData
+
+        internal Color15BppBgr[] CgData
         {
             get;
             private set;
@@ -91,31 +98,37 @@ namespace SnesXM.Emulator
             get;
             private set;
         }
+
         public bool ObjThroughMain
         {
             get;
             set;
         }
+
         public bool ObjThroughSub
         {
             get;
             set;
         }
+
         public bool ObjAddition
         {
             get;
             set;
         }
+
         public int ObjNameBase
         {
             get;
             set;
         }
+
         public int ObjNameSelect
         {
             get;
             set;
         }
+
         public int ObjSizeSelect
         {
             get;
@@ -127,36 +140,43 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public int SavedOamAddress
         {
             get;
             set;
         }
+
         public int OamPriorityRotation
         {
             get;
             set;
         }
+
         public int OamFlip
         {
             get;
             set;
         }
+
         public int OamReadFlip
         {
             get;
             set;
         }
+
         public int OamTileAddress
         {
             get;
             set;
         }
+
         public int OamWriteRegister
         {
             get;
             set;
         }
+
         internal int[] OamData
         {
             get;
@@ -168,11 +188,13 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public int LastSprite
         {
             get;
             set;
         }
+
         public int RangeTimeOver
         {
             get;
@@ -184,26 +206,31 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public bool VTimerEnabled
         {
             get;
             set;
         }
+
         public int HTimerPosition
         {
             get;
             set;
         }
+
         public int VTimerPosition
         {
             get;
             set;
         }
+
         public int IrqHBeamPos
         {
             get;
             set;
         }
+
         public int IrqVBeamPos
         {
             get;
@@ -215,31 +242,37 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public bool VBeamFlip
         {
             get;
             set;
         }
+
         public int HBeamPosLatched
         {
             get;
             set;
         }
+
         public int VBeamPosLatched
         {
             get;
             set;
         }
+
         public int GunHLatch
         {
             get;
             set;
         }
+
         public int GunVLatch
         {
             get;
             set;
         }
+
         public int HVBeamCounterLatched
         {
             get;
@@ -251,51 +284,61 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public bool Mode7VFlip
         {
             get;
             set;
         }
+
         public int Mode7Repeat
         {
             get;
             set;
         }
+
         public int MatrixA
         {
             get;
             set;
         }
+
         public int MatrixB
         {
             get;
             set;
         }
+
         public int MatrixC
         {
             get;
             set;
         }
+
         public int MatrixD
         {
             get;
             set;
         }
+
         public int CenterX
         {
             get;
             set;
         }
+
         public int CenterY
         {
             get;
             set;
         }
+
         public int Mode7HOffset
         {
             get;
             set;
         }
+
         public int Mode7VOffset
         {
             get;
@@ -307,11 +350,13 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public int MosaicStart
         {
             get;
             set;
         }
+
         internal bool[] BgMosaic
         {
             get;
@@ -323,51 +368,61 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public int Window1Right
         {
             get;
             set;
         }
+
         public int Window2Left
         {
             get;
             set;
         }
+
         public int Window2Right
         {
             get;
             set;
         }
+
         public bool RecomputeWindows
         {
             get;
             set;
         }
+
         internal byte[] ClipCounts
         {
             get;
             private set;
         }
+
         internal ClipLogic[] ClipWindowOverlapLogic
         {
             get;
             private set;
         }
+
         internal bool[] ClipWindow1Enable
         {
             get;
             private set;
         }
+
         internal bool[] ClipWindow2Enable
         {
             get;
             private set;
         }
+
         internal bool[] ClipWindow1Inside
         {
             get;
             private set;
         }
+
         internal bool[] ClipWindow2Inside
         {
             get;
@@ -380,16 +435,18 @@ namespace SnesXM.Emulator
             set;
         }
 
-        public Color15BppBgr555 FixedColor
+        public Color15BppBgr FixedColor
         {
             get;
             set;
         }
+
         public int Brightness
         {
             get;
             set;
         }
+
         public int ScreenHeight
         {
             get;
@@ -401,11 +458,13 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public int BgNOffsetValue
         {
             get;
             set;
         }
+
         public int Mode7Value
         {
             get;
@@ -417,6 +476,7 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public int HdmaEnded
         {
             get;
@@ -428,6 +488,7 @@ namespace SnesXM.Emulator
             get;
             set;
         }
+
         public int OpenBus2
         {
             get;
@@ -440,7 +501,7 @@ namespace SnesXM.Emulator
 
             Bg = new Bg[BgCount];
             BgMosaic = new bool[BgCount];
-            CgData = new Color15BppBgr555[CgDataSize];
+            CgData = new Color15BppBgr[CgDataSize];
             Obj = new Obj[MaxSprites];
             OamData = new int[0x200 + 0x20];
 
@@ -493,7 +554,7 @@ namespace SnesXM.Emulator
                 var g = (i & (7 << 3)) << 2;
                 var b = (i & (2 << 6)) << 3; // I don't know why this is different (snes9x ppu.cpp:L1870)
 
-                colors[i] = new Color15BppBgr555(r, g, b);
+                colors[i] = new Color15BppBgr(r, g, b);
                 CgData[i] = colors[i];
             }
 
@@ -568,7 +629,7 @@ namespace SnesXM.Emulator
 
             ForcedBlanking = true;
 
-            FixedColor = Color15BppBgr555.Empty;
+            FixedColor = Color15BppBgr.Empty;
             Brightness = 0;
             ScreenHeight = Display.Height;
 

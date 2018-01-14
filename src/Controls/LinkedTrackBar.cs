@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="LinkedTrackBar.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.Windows.Forms;
 
 namespace Controls
@@ -9,7 +13,11 @@ namespace Controls
 
         public IIntegerComponent IntegerComponent
         {
-            get { return _integerComponent; }
+            get
+            {
+                return _integerComponent;
+            }
+
             set
             {
                 // Do not link to itself
