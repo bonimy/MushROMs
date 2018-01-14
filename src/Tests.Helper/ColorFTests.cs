@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ColorFTests.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using System;
 using Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -65,14 +69,14 @@ namespace Tests.Helper
             // blue
             color = ColorF.FromArgb(0.5f, 0, 0, 1);
             AssertArgb(color, 0.5f, 0, 0, 1);
-            Assert.AreEqual(color.Hue, (4 / 6f));
+            Assert.AreEqual(color.Hue, 4 / 6f);
             Assert.AreEqual(color.HueDegrees, 240f);
             Assert.AreEqual(color.Saturation, 1);
 
             // magenta
             color = ColorF.FromArgb(0.5f, 0.75f, 0.25f, 0.75f);
             AssertArgb(color, 0.5f, 0.75f, 0.25f, 0.75f);
-            Assert.AreEqual(color.Hue, (5 / 6f));
+            Assert.AreEqual(color.Hue, 5 / 6f);
             Assert.AreEqual(color.HueDegrees, 300f);
             Assert.AreEqual(color.Saturation, 0.5f);
 
@@ -133,8 +137,13 @@ namespace Tests.Helper
 
             Assert.AreEqual(color.Lightness, (max + min) / 2);
             Assert.AreEqual(color.Chroma, max - min);
-            Assert.AreEqual(color.Luma,
-                ColorF.LumaRed * red + ColorF.LumaGreen * green + ColorF.LumaBlue * blue);
+
+            var luma =
+                (ColorF.LumaRed * red) +
+                (ColorF.LumaGreen * green) +
+                (ColorF.LumaBlue * blue);
+
+            Assert.AreEqual(color.Luma, luma);
         }
 
         [TestMethod]
@@ -154,7 +163,7 @@ namespace Tests.Helper
             // Test FromArgb with defined alpha
             color = ColorF.FromCmy(0.75f, 0, 1, 0);
             assertAcmy(0.75f, 0, 1, 0);
-            Assert.AreEqual(color.Hue, (5 / 6f));
+            Assert.AreEqual(color.Hue, 5 / 6f);
             Assert.AreEqual(color.HueDegrees, 300f);
 
             Assert.ThrowsException<ArgumentException>(() =>

@@ -1,5 +1,5 @@
-﻿// <copyright file="ITileMap2D.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+﻿// <copyright file="iTileMap2D.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 namespace Helper

@@ -1,5 +1,5 @@
 ﻿// <copyright file="DesignControl.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 using System;
@@ -257,20 +257,20 @@ namespace Controls
             {
                 switch (BorderStyle)
                 {
-                case BorderStyle.None:
-                return Size.Empty;
+                    case BorderStyle.None:
+                        return Size.Empty;
 
-                case BorderStyle.FixedSingle:
-                return SystemInformation.BorderSize;
+                    case BorderStyle.FixedSingle:
+                        return SystemInformation.BorderSize;
 
-                case BorderStyle.Fixed3D:
-                return SystemInformation.Border3DSize;
+                    case BorderStyle.Fixed3D:
+                        return SystemInformation.Border3DSize;
 
-                default:
-                throw new InvalidEnumArgumentException(
-                    nameof(BorderStyle),
-                    (int)BorderStyle,
-                    typeof(BorderStyle));
+                    default:
+                        throw new InvalidEnumArgumentException(
+                            nameof(BorderStyle),
+                            (int)BorderStyle,
+                            typeof(BorderStyle));
                 }
             }
         }
@@ -344,30 +344,30 @@ namespace Controls
         {
             switch (m.Msg)
             {
-            case WindowMessages.KeyDown:
-            case WindowMessages.SystemKeyDown:
-            PreviousKeys = CurrentKeys;
-            CurrentKeys = (Keys)m.WParam | ModifierKeys;
-            ActiveKeys = CurrentKeys & ~PreviousKeys;
-            break;
+                case WindowMessages.KeyDown:
+                case WindowMessages.SystemKeyDown:
+                    PreviousKeys = CurrentKeys;
+                    CurrentKeys = (Keys)m.WParam | ModifierKeys;
+                    ActiveKeys = CurrentKeys & ~PreviousKeys;
+                    break;
 
-            case WindowMessages.KeyUp:
-            case WindowMessages.SystemKeyUp:
-            PreviousKeys = CurrentKeys;
-            CurrentKeys &= ~((Keys)m.WParam | ModifierKeys);
-            ActiveKeys = Keys.None;
-            break;
+                case WindowMessages.KeyUp:
+                case WindowMessages.SystemKeyUp:
+                    PreviousKeys = CurrentKeys;
+                    CurrentKeys &= ~((Keys)m.WParam | ModifierKeys);
+                    ActiveKeys = Keys.None;
+                    break;
 
-            case WindowMessages.MouseLeave:
-            PreviousMousePosition = CurrentMousePosition;
-            CurrentMousePosition = MouseOutOfRange;
-            break;
+                case WindowMessages.MouseLeave:
+                    PreviousMousePosition = CurrentMousePosition;
+                    CurrentMousePosition = MouseOutOfRange;
+                    break;
 
-            case WindowMessages.MouseMove:
-            PreviousMousePosition = CurrentMousePosition;
-            CurrentMousePosition = new Point((int)m.LParam & 0xFFFF, (int)m.LParam >> 0x10);
-            MouseHovering = PreviousMousePosition == CurrentMousePosition;
-            break;
+                case WindowMessages.MouseMove:
+                    PreviousMousePosition = CurrentMousePosition;
+                    CurrentMousePosition = new Point((int)m.LParam & 0xFFFF, (int)m.LParam >> 0x10);
+                    MouseHovering = PreviousMousePosition == CurrentMousePosition;
+                    break;
             }
 
             base.DefWndProc(ref m);
