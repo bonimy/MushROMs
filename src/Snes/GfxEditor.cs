@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Helper;
 using Helper.PixelFormats;
+using MushROMs;
 
 namespace Snes
 {
