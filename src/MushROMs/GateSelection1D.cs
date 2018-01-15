@@ -1,21 +1,23 @@
-﻿// <copyright file="GateSelection2D.cs" company="Public Domain">
+﻿// <copyright file="GateSelection1D.cs" company="Public Domain">
 //     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 using System;
 using System.Collections.Generic;
 
-namespace Helper
+namespace MushROMs
 {
-    public sealed class GateSelection2D : Selection2D
+    public delegate bool GateMethod(bool left, bool right);
+
+    public sealed class GateSelection1D : Selection1D
     {
-        private IReadOnlyList<Position2D> SelectedIndexes
+        private IReadOnlyList<int> SelectedIndexes
         {
             get;
             set;
         }
 
-        private HashSet<Position2D> HashIndexes
+        private HashSet<int> HashIndexes
         {
             get;
             set;
@@ -29,7 +31,7 @@ namespace Helper
             }
         }
 
-        public override Position2D this[int index]
+        public override int this[int index]
         {
             get
             {
@@ -37,7 +39,7 @@ namespace Helper
             }
         }
 
-        public GateSelection2D(Selection2D left, Selection2D right, GateMethod rule)
+        public GateSelection1D(Selection1D left, Selection1D right, GateMethod rule)
         {
             if (left == null)
             {
@@ -54,46 +56,48 @@ namespace Helper
                 throw new ArgumentNullException(nameof(rule));
             }
 
-            if (left is EmptySelection2D)
+            if (left is EmptySelection1D)
             {
-                StartPosition = right.StartPosition;
+                StartIndex = right.StartIndex;
             }
-            else if (right is EmptySelection2D)
+            else if (right is EmptySelection1D)
             {
-                StartPosition = left.StartPosition;
+                StartIndex = left.StartIndex;
             }
             else
             {
-                StartPosition = Position2D.TopLeft(left.StartPosition, right.StartPosition);
+                StartIndex = Math.Min(left.StartIndex, right.StartIndex);
             }
 
             InitializeSelectedIndexes(left, right, rule);
         }
 
-        private GateSelection2D(GateSelection2D selection)
+        private GateSelection1D(GateSelection1D selection)
         {
             if (selection == null)
             {
                 throw new ArgumentNullException(nameof(selection));
             }
 
-            SelectedIndexes = new List<Position2D>(selection);
-            HashIndexes = new HashSet<Position2D>(selection);
+            StartIndex = selection.StartIndex;
+
+            SelectedIndexes = new List<int>(selection);
+            HashIndexes = new HashSet<int>(selection);
         }
 
-        public override Selection2D Copy()
+        public override Selection1D Copy()
         {
-            return new GateSelection2D(this);
+            return new GateSelection1D(this);
         }
 
-        public override bool Contains(Position2D position)
+        public override bool Contains(int index)
         {
-            return HashIndexes.Contains(position);
+            return HashIndexes.Contains(index);
         }
 
-        private void InitializeSelectedIndexes(Selection2D left, Selection2D right, GateMethod rule)
+        private void InitializeSelectedIndexes(Selection1D left, Selection1D right, GateMethod rule)
         {
-            var result = new List<Position2D>(left.Count + right.Count);
+            var result = new List<int>(left.Count + right.Count);
 
             // Add the left indexes.
             foreach (var index in left)
@@ -109,7 +113,7 @@ namespace Helper
             }
 
             // The hash set saves all indexes we've added in the first comparison.
-            var hash = new HashSet<Position2D>(result);
+            var hash = new HashSet<int>(result);
 
             // Add the right indexes.
             foreach (var index in right)
@@ -131,10 +135,10 @@ namespace Helper
             }
 
             SelectedIndexes = result;
-            HashIndexes = new HashSet<Position2D>(SelectedIndexes);
+            HashIndexes = new HashSet<int>(SelectedIndexes);
         }
 
-        public override IEnumerator<Position2D> GetEnumerator()
+        public override IEnumerator<int> GetEnumerator()
         {
             return SelectedIndexes.GetEnumerator();
         }

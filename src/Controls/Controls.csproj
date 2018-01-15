@@ -99,6 +99,10 @@
       <Project>{6e9940f3-99d2-4f1f-b476-f3b9964d1c76}</Project>
       <Name>Helper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MushROMs\MushROMs.csproj">
+      <Project>{d04bb299-e0ea-406c-8b5d-e95e21ee62d7}</Project>
+      <Name>MushROMs</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="License.licenseheader" />
