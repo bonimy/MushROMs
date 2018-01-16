@@ -56,7 +56,7 @@ namespace Helper
 
         public Pointer(Pointer<T> pointer, int offset)
         {
-            if (pointer == null)
+            if (pointer is null)
             {
                 throw new ArgumentNullException(nameof(pointer));
             }
@@ -156,7 +156,7 @@ namespace Helper
 
         public static implicit operator Pointer<T>(T[] array)
         {
-            if (array == null)
+            if (array is null)
             {
                 return null;
             }
@@ -196,12 +196,12 @@ namespace Helper
 
         public static int operator -(Pointer<T> left, Pointer<T> right)
         {
-            if (left == null)
+            if (left is null)
             {
                 throw new ArgumentNullException(nameof(left));
             }
 
-            if (right == null)
+            if (right is null)
             {
                 throw new ArgumentNullException(nameof(right));
             }
@@ -241,12 +241,12 @@ namespace Helper
 
         public static bool operator <(Pointer<T> left, Pointer<T> right)
         {
-            if (left == null && right == null)
+            if (left is null && right is null)
             {
                 return true;
             }
 
-            if (left == null || right == null)
+            if (left is null || right is null)
             {
                 return false;
             }
@@ -261,12 +261,12 @@ namespace Helper
 
         public static bool operator >(Pointer<T> left, Pointer<T> right)
         {
-            if (left == null && right == null)
+            if (left is null && right is null)
             {
                 return true;
             }
 
-            if (left == null || right == null)
+            if (left is null || right is null)
             {
                 return false;
             }
@@ -281,12 +281,12 @@ namespace Helper
 
         public static bool operator >=(Pointer<T> left, Pointer<T> right)
         {
-            if (left == null && right == null)
+            if (left is null && right is null)
             {
                 return true;
             }
 
-            if (left == null || right == null)
+            if (left is null || right is null)
             {
                 return false;
             }
@@ -301,12 +301,12 @@ namespace Helper
 
         public static bool operator <=(Pointer<T> left, Pointer<T> right)
         {
-            if (left == null && right == null)
+            if (left is null && right is null)
             {
                 return true;
             }
 
-            if (left == null || right == null)
+            if (left is null || right is null)
             {
                 return false;
             }

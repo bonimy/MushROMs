@@ -40,17 +40,17 @@ namespace MushROMs
 
         public GateSelection2D(Selection2D left, Selection2D right, GateMethod rule)
         {
-            if (left == null)
+            if (left is null)
             {
                 throw new ArgumentNullException(nameof(left));
             }
 
-            if (right == null)
+            if (right is null)
             {
                 throw new ArgumentNullException(nameof(right));
             }
 
-            if (rule == null)
+            if (rule is null)
             {
                 throw new ArgumentNullException(nameof(rule));
             }
@@ -73,7 +73,7 @@ namespace MushROMs
 
         private GateSelection2D(GateSelection2D selection)
         {
-            if (selection == null)
+            if (selection is null)
             {
                 throw new ArgumentNullException(nameof(selection));
             }

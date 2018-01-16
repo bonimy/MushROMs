@@ -138,7 +138,7 @@ namespace Controls
 
         public static Size GetFormBorderSize(Form form)
         {
-            if (form == null)
+            if (form is null)
             {
                 throw new ArgumentNullException(nameof(form));
             }
@@ -177,7 +177,7 @@ namespace Controls
 
         public static int GetCaptionHeight(Form form)
         {
-            if (form == null)
+            if (form is null)
             {
                 throw new ArgumentNullException(nameof(form));
             }

@@ -129,7 +129,7 @@ namespace Helper
 
         public void CreateTree(byte[] data)
         {
-            if (data == null)
+            if (data is null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
@@ -139,7 +139,7 @@ namespace Helper
 
         public void CreateTree(byte[] data, int start, int size)
         {
-            if (data == null)
+            if (data is null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
@@ -169,7 +169,7 @@ namespace Helper
 
         private unsafe void CreateTree(byte* data, int length, int start, int size)
         {
-            if (data == null)
+            if (data is null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
@@ -223,7 +223,7 @@ namespace Helper
                 var stem = ActiveNode[activeValue];
 
                 // Create a new child node if it does not currently exist
-                if (stem == null)
+                if (stem is null)
                 {
                     var leaf = Nodes.Add(Position);
                     ActiveNode[activeValue] = leaf;
@@ -310,7 +310,7 @@ namespace Helper
                         node = node[value];
 
                         // If no node specifies the current value, then our substring has reached max.
-                        if (node == null)
+                        if (node is null)
                         {
                             return result;
                         }
@@ -408,7 +408,7 @@ namespace Helper
                     // null, then we need to update the active index array to include this new index.
                     if (value != null)
                     {
-                        if (this[key] == null)
+                        if (this[key] is null)
                         {
                             Active[ActiveSize++] = key;
                         }

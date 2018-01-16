@@ -160,7 +160,7 @@ namespace Helper
             string value,
             Exception innerException)
         {
-            if (innerException == null)
+            if (innerException is null)
             {
                 throw new ArgumentNullException(nameof(innerException));
             }
@@ -178,7 +178,7 @@ namespace Helper
             string value,
             Exception innerException)
         {
-            if (innerException == null)
+            if (innerException is null)
             {
                 throw new ArgumentNullException(nameof(innerException));
             }
@@ -203,7 +203,7 @@ namespace Helper
 
         public static string GetUntitledName(int number, string ext)
         {
-            if (ext == null)
+            if (ext is null)
             {
                 ext = String.Empty;
             }
@@ -223,7 +223,7 @@ namespace Helper
 
         public static string GetString(IFormattable value, string format)
         {
-            if (value == null)
+            if (value is null)
             {
                 return null;
             }

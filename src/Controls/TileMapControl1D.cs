@@ -92,7 +92,7 @@ namespace Controls
 
         public override void GenerateSelectionPath(GraphicsPath path, ISelection<int> selection)
         {
-            if (path == null)
+            if (path is null)
             {
                 throw new ArgumentNullException(nameof(path));
             }
