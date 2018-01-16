@@ -83,7 +83,7 @@ namespace Helper
 
         public static float Max(float[] values)
         {
-            if (values == null)
+            if (values is null)
             {
                 throw new ArgumentNullException(
                     nameof(values),
@@ -125,7 +125,7 @@ namespace Helper
 
         public static float Min(float[] values)
         {
-            if (values == null)
+            if (values is null)
             {
                 throw new ArgumentNullException(
                     nameof(values),

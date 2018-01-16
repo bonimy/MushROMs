@@ -51,7 +51,7 @@ namespace Controls
         protected ErrorCodeException(SerializationInfo info, StreamingContext context) :
             base(info, context)
         {
-            if (info == null)
+            if (info is null)
             {
                 throw new ArgumentNullException(nameof(info));
             }
@@ -67,7 +67,7 @@ namespace Controls
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info == null)
+            if (info is null)
             {
                 throw new ArgumentNullException(nameof(info));
             }

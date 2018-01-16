@@ -392,7 +392,7 @@ namespace MushROMs.Controls
 
         public static bool IsRightToLeft(IWin32Window owner)
         {
-            if (owner == null)
+            if (owner is null)
             {
                 return CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
             }

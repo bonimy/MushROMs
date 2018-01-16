@@ -238,7 +238,7 @@ namespace Controls
 
         protected override Rectangle AdjustSizingRectangle(Rectangle window)
         {
-            if (TileMapControl == null || MainTileMapPadding == Padding.Empty)
+            if (TileMapControl is null || MainTileMapPadding == Padding.Empty)
             {
                 return base.AdjustSizingRectangle(window);
             }
@@ -260,7 +260,7 @@ namespace Controls
 
         protected override Size AdjustSize(Size window)
         {
-            if (TileMapControl == null || MainTileMapPadding == Padding.Empty)
+            if (TileMapControl is null || MainTileMapPadding == Padding.Empty)
             {
                 return base.AdjustSize(window);
             }

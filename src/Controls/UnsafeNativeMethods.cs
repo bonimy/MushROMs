@@ -26,7 +26,7 @@ namespace Controls
 
         internal static int GetWindowLong(IWin32Window window, int index)
         {
-            if (window == null)
+            if (window is null)
             {
                 throw new ArgumentNullException(nameof(window));
             }
@@ -43,7 +43,7 @@ namespace Controls
 
         internal static int SetWindowLong(IWin32Window window, int index, int value)
         {
-            if (window == null)
+            if (window is null)
             {
                 throw new ArgumentNullException(nameof(window));
             }
@@ -60,7 +60,7 @@ namespace Controls
 
         internal static Rectangle GetWindowRect(IWin32Window window)
         {
-            if (window == null)
+            if (window is null)
             {
                 throw new ArgumentNullException(nameof(window));
             }
