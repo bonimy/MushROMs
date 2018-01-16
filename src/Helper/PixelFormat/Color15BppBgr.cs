@@ -69,7 +69,7 @@ namespace Helper.PixelFormats
             }
         }
 
-        public int High
+        public byte High
         {
             get
             {
@@ -78,12 +78,12 @@ namespace Helper.PixelFormats
 
             set
             {
-                Value &= 0xFF00;
-                Value |= (byte)(value << 8);
+                Value &= 0x00FF;
+                Value |= (ushort)(value << 8);
             }
         }
 
-        public int Low
+        public byte Low
         {
             get
             {
@@ -92,8 +92,8 @@ namespace Helper.PixelFormats
 
             set
             {
-                Value &= 0xFF;
-                Value |= (byte)value;
+                Value &= 0xFF00;
+                Value |= value;
             }
         }
 
@@ -188,6 +188,11 @@ namespace Helper.PixelFormats
         private Color15BppBgr(ushort value)
         {
             _value = value;
+        }
+
+        public Color15BppBgr(byte low, byte high) :
+            this((ushort)(low | (high << 8)))
+        {
         }
 
         public Color15BppBgr(int red, int green, int blue)
