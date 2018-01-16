@@ -33,7 +33,7 @@ namespace Helper
 
         public static short GetInt16(Pointer<byte> pointer, int offset)
         {
-            if (pointer == null)
+            if (pointer is null)
             {
                 throw new ArgumentNullException(nameof(pointer));
             }
@@ -50,7 +50,7 @@ namespace Helper
 
         public static void SetInt16(Pointer<byte> pointer, int index, int value)
         {
-            if (pointer == null)
+            if (pointer is null)
             {
                 throw new ArgumentNullException(nameof(pointer));
             }

@@ -45,7 +45,7 @@ namespace Helper
 
         protected override void AssertKey(string key)
         {
-            if (key == null)
+            if (key is null)
             {
                 throw new ArgumentNullException(nameof(key));
             }

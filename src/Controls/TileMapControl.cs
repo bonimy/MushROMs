@@ -407,7 +407,7 @@ namespace Controls
 
         public void DrawViewTilePath(GraphicsPath path, Position2D tile, Padding padding)
         {
-            if (path == null)
+            if (path is null)
             {
                 throw new ArgumentNullException(nameof(path));
             }
@@ -433,7 +433,7 @@ namespace Controls
 
         protected virtual void GetActiveTileFromMouse(MouseEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -458,7 +458,7 @@ namespace Controls
 
         protected virtual void GetActiveTileFromKeys(KeyEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }

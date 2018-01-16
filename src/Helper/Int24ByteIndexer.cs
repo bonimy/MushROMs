@@ -33,7 +33,7 @@ namespace Helper
 
         public static Int24 GetInt24(Pointer<byte> pointer, int offset)
         {
-            if (pointer == null)
+            if (pointer is null)
             {
                 throw new ArgumentNullException(nameof(pointer));
             }
@@ -51,7 +51,7 @@ namespace Helper
 
         public static void SetInt24(Pointer<byte> pointer, int index, int value)
         {
-            if (pointer == null)
+            if (pointer is null)
             {
                 throw new ArgumentNullException(nameof(pointer));
             }
