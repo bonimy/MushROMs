@@ -2,26 +2,20 @@
 //     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
-using System.Collections.Generic;
-using MushROMs;
-
 namespace Snes
 {
-    public interface IGfxSelection : IReadOnlyList<int>
+    public interface IGfxSelection : IDataSelection
     {
-        int StartAddress
-        {
-            get;
-        }
-
         GraphicsFormat GraphicsFormat
         {
             get;
         }
 
-        ISelection<int> Selection
+        int BytesPerTile
         {
             get;
         }
+
+        IGfxSelection Move(int startAddress);
     }
 }

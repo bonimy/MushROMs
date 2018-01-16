@@ -15,7 +15,7 @@ namespace Snes
         public const int DotsPerTile = DotsPerPlane * PlanesPerTile;
         public const int SizeOf = DotsPerTile * sizeof(byte);
 
-        public unsafe fixed byte Components[DotsPerTile];
+        private unsafe fixed byte Components[DotsPerTile];
 
         public byte this[int index]
         {
@@ -54,7 +54,7 @@ namespace Snes
 
         public GfxTile(byte[] data, int index, GraphicsFormat format)
         {
-            if (data == null)
+            if (data is null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
