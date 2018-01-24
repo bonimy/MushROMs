@@ -153,14 +153,16 @@ namespace Helper
 
         public void CreateTree(IntPtr data, int length)
         {
-            unsafe
-            {
-                CreateTree((byte*)data, length, 0, length);
-            }
+            CreateTree(data, length, 0, length);
         }
 
         public void CreateTree(IntPtr data, int length, int start, int size)
         {
+            if (data == IntPtr.Zero)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
             unsafe
             {
                 CreateTree((byte*)data, length, start, size);
@@ -169,11 +171,6 @@ namespace Helper
 
         private unsafe void CreateTree(byte* data, int length, int start, int size)
         {
-            if (data is null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
-
             if (start < 0)
             {
                 throw new ArgumentOutOfRangeException(
