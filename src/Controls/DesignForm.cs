@@ -101,14 +101,16 @@ namespace Controls
                 case WindowMessages.Size:
                     if (m.WParam == IntPtr.Zero)
                     {
-                        unsafe
-                        {
-                            var client = new Size((int)m.LParam & 0xFFFF, (int)m.LParam >> 0x10);
-                            var window = WinAPIMethods.InflateSize(client, WindowPadding);
-                            window = AdjustSize(window);
-                            client = WinAPIMethods.DeflateSize(window, WindowPadding);
-                            m.LParam = (IntPtr)((client.Width & 0xFFFF) | ((client.Height & 0xFFFF) << 0x10));
-                        }
+                        var client = new Size(
+                            (int)m.LParam & 0xFFFF,
+                            (int)m.LParam >> 0x10);
+
+                        var window = WinAPIMethods.InflateSize(client, WindowPadding);
+                        window = AdjustSize(window);
+                        client = WinAPIMethods.DeflateSize(window, WindowPadding);
+                        m.LParam = (IntPtr)(
+                            (client.Width & 0xFFFF) |
+                            ((client.Height & 0xFFFF) << 0x10));
                     }
 
                     break;

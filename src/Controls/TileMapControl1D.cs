@@ -90,11 +90,18 @@ namespace Controls
             return tile >= 0 && tile < GridSize;
         }
 
-        public override void GenerateSelectionPath(GraphicsPath path, ISelection<int> selection)
+        public override void GenerateSelectionPath(
+            GraphicsPath path,
+            ISelection<int> selection)
         {
             if (path is null)
             {
                 throw new ArgumentNullException(nameof(path));
+            }
+
+            if (selection is null)
+            {
+                throw new ArgumentNullException(nameof(selection));
             }
 
             path.Reset();
