@@ -66,20 +66,20 @@ namespace Snes
             {
                 if (value != LayerPriority.Priority0)
                 {
-                    Value |= (PriorityMask << PriorityBitShift);
+                    Value |= PriorityMask << PriorityBitShift;
                 }
                 else
                 {
-                    Value &= ~(PriorityMask << PriorityBitShift);
+                    Value &= ~PriorityMask << PriorityBitShift;
                 }
             }
         }
 
-        public TileFlipModes TileFlipMode
+        public TileFlipMode TileFlipMode
         {
             get
             {
-                return (TileFlipModes)((Value >> FlipBitShift) & FlipMask);
+                return (TileFlipMode)((Value >> FlipBitShift) & FlipMask);
             }
 
             set
@@ -93,18 +93,18 @@ namespace Snes
         {
             get
             {
-                return (TileFlipMode & TileFlipModes.FlipHorizontal) != 0;
+                return (TileFlipMode & TileFlipMode.FlipHorizontal) != 0;
             }
 
             set
             {
                 if (value)
                 {
-                    TileFlipMode &= ~TileFlipModes.FlipHorizontal;
+                    TileFlipMode &= ~TileFlipMode.FlipHorizontal;
                 }
                 else
                 {
-                    TileFlipMode |= TileFlipModes.FlipHorizontal;
+                    TileFlipMode |= TileFlipMode.FlipHorizontal;
                 }
             }
         }
@@ -113,18 +113,18 @@ namespace Snes
         {
             get
             {
-                return (TileFlipMode & TileFlipModes.FlipVeritcal) != 0;
+                return (TileFlipMode & TileFlipMode.FlipVeritcal) != 0;
             }
 
             set
             {
                 if (value)
                 {
-                    TileFlipMode &= ~TileFlipModes.FlipVeritcal;
+                    TileFlipMode &= ~TileFlipMode.FlipVeritcal;
                 }
                 else
                 {
-                    TileFlipMode |= TileFlipModes.FlipVeritcal;
+                    TileFlipMode |= TileFlipMode.FlipVeritcal;
                 }
             }
         }

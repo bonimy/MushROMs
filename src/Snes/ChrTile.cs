@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="ChrTile.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using System;
 using Helper;
 
 namespace Snes
@@ -65,11 +69,11 @@ namespace Snes
             }
         }
 
-        public TileFlipModes TileFlipMode
+        public TileFlipMode TileFlipMode
         {
             get
             {
-                return (TileFlipModes)((Value >> FlipBitShift) & FlipMask);
+                return (TileFlipMode)((Value >> FlipBitShift) & FlipMask);
             }
 
             set

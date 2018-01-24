@@ -154,7 +154,8 @@ namespace Snes
 
         public override string ToString()
         {
-            return SR.GetString("{0}-{1}-{2}-{3}",
+            return SR.GetString(
+                "{0}-{1}-{2}-{3}",
                 TopLeft.Value.ToString("X4"),
                 TopRight.Value.ToString("X4"),
                 BottomLeft.Value.ToString("X4"),

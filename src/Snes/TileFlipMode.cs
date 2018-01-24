@@ -7,7 +7,7 @@ using System;
 namespace Snes
 {
     [Flags]
-    public enum TileFlipModes
+    public enum TileFlipMode
     {
         None = 0,
         FlipHorizontal = 1,
