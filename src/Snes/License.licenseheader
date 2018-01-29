@@ -1,0 +1,4 @@
+﻿extensions: .cs .cpp .h
+// <copyright file="%FileName%" company="Public Domain">
+//     Copyright (c) %CreationYear% Nelson Garcia.
+// </copyright>
