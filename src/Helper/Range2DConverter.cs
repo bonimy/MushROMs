@@ -1,4 +1,8 @@
-﻿using System;
+﻿// <copyright file="Range2DConverter.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+using System;
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
