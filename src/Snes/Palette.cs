@@ -3,70 +3,65 @@
 // </copyright>
 
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Helper;
 using Helper.PixelFormats;
+using MushROMs;
 
 namespace Snes
 {
-    public delegate Color32BppArgb PaletteColorMethod(Color32BppArgb color);
-
-    public abstract class Palette
+    public class Palette : IReadOnlyList<byte>
     {
-        public abstract Color32BppArgb this[int index]
-        {
-            get;
-            set;
-        }
-
-        public abstract int Count
+        private byte[] Data
         {
             get;
         }
 
-        public void Clear(Selection1D selection)
+        public byte this[int index]
         {
-            Clear(selection, Color32BppArgb.Empty);
-        }
-
-        public void Clear(Selection1D selection, Color32BppArgb color)
-        {
-            AlterTiles(selection, x => color);
-        }
-
-        public void Invert(Selection1D selection)
-        {
-            AlterTiles(selection, x => x ^ 0xFFFFFF);
-        }
-
-        public void Blend(Selection1D selection, BlendMode blendMode, ColorF bottom)
-        {
-            AlterTiles(selection, blend);
-
-            Color32BppArgb blend(Color32BppArgb color)
+            get
             {
-                var colorF = (ColorF)color;
-                var result = colorF.BlendWith(bottom, blendMode);
-                return result;
+                return Data[index];
+            }
+
+            set
+            {
+                Data[index] = value;
             }
         }
 
-        public void AlterTiles(Selection1D selection, PaletteColorMethod method)
+        public int Count
         {
-            if (selection == null)
+            get
             {
-                throw new ArgumentNullException(nameof(selection));
+                return Data.Length;
+            }
+        }
+
+        public Palette(int size) :
+            this(new byte[size * Color15BppBgr.SizeOf])
+        {
+        }
+
+        public Palette(byte[] data) : this(
+            data ?? throw new ArgumentNullException(nameof(data)),
+            0,
+            data.Length)
+        {
+        }
+
+        public Palette(byte[] data, int startIndex, int size)
+        {
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
             }
 
-            if (method == null)
-            {
-                throw new ArgumentNullException(nameof(method));
-            }
-
-            foreach (var i in selection)
-            {
-                this[i] = method(this[i]);
-            }
+            var result = new byte[size];
+            Array.Copy(data, startIndex, result, 0, size);
+            Data = result;
         }
 
         public void DrawDataAsTileMap(IntPtr scan0, int length, int zero, int span, Range2D view, Range2D zoom, Selection1D selection)
@@ -81,12 +76,12 @@ namespace Snes
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
 
-            if (selection == null)
+            if (selection is null)
             {
                 throw new ArgumentNullException(nameof(selection));
             }
 
-            if (zero + span > Count)
+            if (zero + span > Data.Length)
             {
                 throw new ArgumentException();
             }
@@ -102,45 +97,88 @@ namespace Snes
             // This determines how much we darken the non-selected region.
             var darkShift = selection is GateSelection1D ? 2 : 1;
 
+            Parallel.For(0, Data.Length, DrawSquare);
+
+            void DrawSquare(int i)
+            {
+                this.DrawSquare(
+                    scan0,
+                    i,
+                    zero,
+                    view.Width,
+                    zoom.Width,
+                    zoom.Height,
+                    zoomRow,
+                    darkShift,
+                    window.Width,
+                    selection);
+            }
+        }
+
+        private void DrawSquare(
+            IntPtr scan0,
+            int index,
+            int startIndex,
+            int viewWidth,
+            int zoomWidth,
+            int zoomHeight,
+            int zoomRow,
+            int darkShift,
+            int windowWidth,
+            Selection1D selection)
+        {
+            var address = index + startIndex;
+
+            Color32BppArgb color = new Color15BppBgr(
+                Data[address],
+                Data[address + 1]);
+
+            // Darken regions that are not in the selection
+            if (selection != null && !selection.Contains(index + startIndex))
+            {
+                color.Red >>= darkShift;
+                color.Green >>= darkShift;
+                color.Blue >>= darkShift;
+            }
+
+            // Get destination pointer address.
+            var dest = scan0 +
+                ((index % viewWidth) * zoomHeight) +
+                ((index / viewWidth) * zoomRow);
+
+            // Draw the tile.
+            DrawSquare(dest, color, zoomWidth, zoomHeight, windowWidth);
+        }
+
+        private static void DrawSquare(
+            IntPtr dest,
+            Color32BppArgb color,
+            int zoomWidth,
+            int zoomHeight,
+            int windowWidth)
+        {
             unsafe
             {
-                // Cast the scan0 pointer as a fundamental pixel type.
-                var pixels = (Color32BppArgb*)scan0;
-
-                Parallel.For(
-                    0,
-                    Count,
-                    i =>
+                var pixels = (Color32BppArgb*)dest;
+                color.Alpha = Byte.MaxValue;
+                for (var h = zoomHeight; --h >= 0; pixels += windowWidth)
                 {
-                    var index = i + zero;
-
-                    var color = this[index];
-
-                    color.Alpha = Byte.MaxValue;
-
-                    // Darken regions that are not in the selection
-                    if (selection != null && !selection.Contains(i + zero))
+                    for (var w = zoomWidth; --w >= 0;)
                     {
-                        color.Red >>= darkShift;
-                        color.Green >>= darkShift;
-                        color.Blue >>= darkShift;
+                        pixels[w] = color;
                     }
-
-                    // Get destination pointer address.
-                    var dest = pixels +
-                        ((i % view.Width) * zoom.Height) +
-                        ((i / view.Width) * zoomRow);
-
-                    // Draw the tile.
-                    for (var h = zoom.Height; --h >= 0; dest += window.Width)
-                    {
-                        for (var w = zoom.Width; --w >= 0;)
-                        {
-                            dest[w] = color;
-                        }
-                    }
-                });
+                }
             }
+        }
+
+        public IEnumerator<byte> GetEnumerator()
+        {
+            return Data.GetEnumerator() as IEnumerator<byte>;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

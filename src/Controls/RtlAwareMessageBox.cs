@@ -384,7 +384,8 @@ namespace MushROMs.Controls
         {
             if (IsRightToLeft(owner))
             {
-                return options | MessageBoxOptions.RtlReading | MessageBoxOptions.RightAlign;
+                options |= MessageBoxOptions.RtlReading;
+                options |= MessageBoxOptions.RightAlign;
             }
 
             return options;
@@ -392,12 +393,19 @@ namespace MushROMs.Controls
 
         public static bool IsRightToLeft(IWin32Window owner)
         {
-            if (owner == null)
+            var current = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+            if (owner is null)
             {
-                return CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+                return current;
             }
 
-            return Control.FromHandle(owner.Handle).RightToLeft == RightToLeft.Yes;
+            var control = Control.FromHandle(owner.Handle);
+            if (control is null)
+            {
+                return current;
+            }
+
+            return control.RightToLeft == RightToLeft.Yes;
         }
     }
 }

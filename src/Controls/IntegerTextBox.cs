@@ -125,7 +125,7 @@ namespace Controls
 
         protected virtual void ParseNumericKeyPress(KeyPressEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }

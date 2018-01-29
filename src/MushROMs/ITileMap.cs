@@ -2,7 +2,9 @@
 //     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
-namespace Helper
+using Helper;
+
+namespace MushROMs
 {
     public interface ITileMap
     {

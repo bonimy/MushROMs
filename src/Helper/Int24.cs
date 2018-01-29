@@ -54,7 +54,7 @@ namespace Helper
 
         public int CompareTo(object value)
         {
-            if (value == null)
+            if (value is null)
             {
                 return 1;
             }

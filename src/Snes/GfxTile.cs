@@ -15,7 +15,7 @@ namespace Snes
         public const int DotsPerTile = DotsPerPlane * PlanesPerTile;
         public const int SizeOf = DotsPerTile * sizeof(byte);
 
-        public unsafe fixed byte Components[DotsPerTile];
+        private unsafe fixed byte _components[DotsPerTile];
 
         public byte this[int index]
         {
@@ -28,7 +28,7 @@ namespace Snes
 
                 unsafe
                 {
-                    fixed (byte* ptr = Components)
+                    fixed (byte* ptr = _components)
                     {
                         return ptr[index];
                     }
@@ -44,7 +44,7 @@ namespace Snes
 
                 unsafe
                 {
-                    fixed (byte* ptr = Components)
+                    fixed (byte* ptr = _components)
                     {
                         ptr[index] = value;
                     }
@@ -54,7 +54,7 @@ namespace Snes
 
         public GfxTile(byte[] data, int index, GraphicsFormat format)
         {
-            if (data == null)
+            if (data is null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
@@ -72,7 +72,7 @@ namespace Snes
             unsafe
             {
                 fixed (byte* src = data)
-                fixed (byte* dst = Components)
+                fixed (byte* dst = _components)
                 {
                     TileFromData(src, dst, format);
                 }
@@ -85,7 +85,7 @@ namespace Snes
 
             unsafe
             {
-                fixed (byte* src = Components)
+                fixed (byte* src = _components)
                 fixed (byte* dst = data)
                 {
                     TileToData(src, dst, format);
@@ -101,9 +101,9 @@ namespace Snes
 
             unsafe
             {
-                fixed (byte* src = Components)
+                fixed (byte* src = _components)
                 {
-                    var dst = result.Components;
+                    var dst = result._components;
 
                     for (var y = PlanesPerTile; --y >= 0;)
                     {
@@ -129,9 +129,9 @@ namespace Snes
 
             unsafe
             {
-                fixed (byte* src = Components)
+                fixed (byte* src = _components)
                 {
-                    var dst = result.Components;
+                    var dst = result._components;
 
                     for (var x = DotsPerPlane; --x >= 0;)
                     {
@@ -157,9 +157,9 @@ namespace Snes
 
             unsafe
             {
-                fixed (byte* src = Components)
+                fixed (byte* src = _components)
                 {
-                    var dst = result.Components;
+                    var dst = result._components;
 
                     var i = 0;
                     var j = DotsPerTile;
@@ -197,9 +197,9 @@ namespace Snes
 
             unsafe
             {
-                fixed (byte* src = Components)
+                fixed (byte* src = _components)
                 {
-                    var dst = result.Components;
+                    var dst = result._components;
 
                     var i = 0;
                     var j = DotsPerTile;
@@ -231,9 +231,9 @@ namespace Snes
 
             unsafe
             {
-                fixed (byte* src = Components)
+                fixed (byte* src = _components)
                 {
-                    var dst = result.Components;
+                    var dst = result._components;
 
                     var i = 0;
                     var j = DotsPerTile;
@@ -271,9 +271,9 @@ namespace Snes
 
             unsafe
             {
-                fixed (byte* src = Components)
+                fixed (byte* src = _components)
                 {
-                    var dst = result.Components;
+                    var dst = result._components;
 
                     for (var i = DotsPerTile; --i >= 0;)
                     {
@@ -300,9 +300,9 @@ namespace Snes
 
             unsafe
             {
-                fixed (byte* src = Components)
+                fixed (byte* src = _components)
                 {
-                    var dst = result.Components;
+                    var dst = result._components;
 
                     for (var i = DotsPerTile; --i >= 0;)
                     {
@@ -334,9 +334,9 @@ namespace Snes
 
             unsafe
             {
-                fixed (byte* src = Components)
+                fixed (byte* src = _components)
                 {
-                    var dst = result.Components;
+                    var dst = result._components;
 
                     for (var i = DotsPerTile; --i >= 0;)
                     {

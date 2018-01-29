@@ -5,7 +5,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Helper
+namespace MushROMs
 {
     public abstract class Selection1D : ISelection<int>
     {

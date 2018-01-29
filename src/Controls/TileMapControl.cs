@@ -8,274 +8,12 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Helper;
+using MushROMs;
 
 namespace Controls
 {
-    public abstract class TileMapControl : DesignControl, ITileMap
+    public abstract partial class TileMapControl : DesignControl, ITileMap
     {
-        private ScrollBar _verticalScrollBar;
-        private ScrollBar _heightScrollBar;
-
-        private Range2D _viewSize;
-        private Range2D _tileSize;
-        private Range2D _zoomSize;
-
-        private Position2D _activeViewTile;
-
-        public event EventHandler ViewSizeChanged;
-
-        public event EventHandler CellSizeChanged;
-
-        public event EventHandler ActiveViewTileChanged;
-
-        public event EventHandler GridLengthChanged;
-
-        public event EventHandler ZeroIndexChanged;
-
-        public Range2D ViewSize
-        {
-            get
-            {
-                return _viewSize;
-            }
-
-            set
-            {
-                _viewSize = value;
-                OnViewSizeChanged(this, EventArgs.Empty);
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int ViewWidth
-        {
-            get
-            {
-                return _viewSize.Width;
-            }
-
-            set
-            {
-                _viewSize.Width = value;
-                OnViewSizeChanged(this, EventArgs.Empty);
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int ViewHeight
-        {
-            get
-            {
-                return _viewSize.Height;
-            }
-
-            set
-            {
-                _viewSize.Height = value;
-                OnViewSizeChanged(this, EventArgs.Empty);
-            }
-        }
-
-        public Range2D TileSize
-        {
-            get
-            {
-                return _tileSize;
-            }
-
-            set
-            {
-                _tileSize = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int TileWidth
-        {
-            get
-            {
-                return _tileSize.Width;
-            }
-
-            set
-            {
-                _tileSize.Width = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int TileHeight
-        {
-            get
-            {
-                return _tileSize.Height;
-            }
-
-            set
-            {
-                _tileSize.Height = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
-            }
-        }
-
-        public Range2D ZoomSize
-        {
-            get
-            {
-                return _zoomSize;
-            }
-
-            set
-            {
-                _zoomSize = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int ZoomWidth
-        {
-            get
-            {
-                return _zoomSize.Width;
-            }
-
-            set
-            {
-                _zoomSize.Width = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int ZoomHeight
-        {
-            get
-            {
-                return _zoomSize.Height;
-            }
-
-            set
-            {
-                _zoomSize.Height = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
-            }
-        }
-
-        public Range2D CellSize
-        {
-            get
-            {
-                return TileSize * ZoomSize;
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int CellWidth
-        {
-            get
-            {
-                return TileWidth * ZoomWidth;
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int CellHeight
-        {
-            get
-            {
-                return TileHeight * ZoomHeight;
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Range2D TileMapSize
-        {
-            get
-            {
-                return CellSize * ViewSize;
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int TileMapWidth
-        {
-            get
-            {
-                return CellWidth * ViewWidth;
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int TileMapHeight
-        {
-            get
-            {
-                return CellHeight * ViewHeight;
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Position2D ActiveViewTile
-        {
-            get
-            {
-                return _activeViewTile;
-            }
-
-            set
-            {
-                _activeViewTile = value;
-                OnActiveViewTileChanged(this, EventArgs.Empty);
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int ActiveViewX
-        {
-            get
-            {
-                return _activeViewTile.X;
-            }
-
-            set
-            {
-                _activeViewTile.X = value;
-                OnActiveViewTileChanged(this, EventArgs.Empty);
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int ActiveViewY
-        {
-            get
-            {
-                return _activeViewTile.Y;
-            }
-
-            set
-            {
-                _activeViewTile.Y = value;
-                OnActiveViewTileChanged(this, EventArgs.Empty);
-            }
-        }
-
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         internal TileMapResizeMode TileMapResizeMode
@@ -284,68 +22,30 @@ namespace Controls
             set;
         }
 
-        public ScrollBar VerticalScrollBar
+        protected TileMapControl()
         {
-            get
-            {
-                return _verticalScrollBar;
-            }
-
-            set
-            {
-                if (VerticalScrollBar == value)
-                {
-                    return;
-                }
-
-                if (VerticalScrollBar != null)
-                {
-                    VerticalScrollBar.Scroll -= VerticalScrollBar_Scroll;
-                    VerticalScrollBar.ValueChanged -= VerticalScrollBar_ValueChanged;
-                }
-
-                _verticalScrollBar = value;
-
-                if (VerticalScrollBar != null)
-                {
-                    VerticalScrollBar.Scroll += VerticalScrollBar_Scroll;
-                    VerticalScrollBar.ValueChanged += VerticalScrollBar_ValueChanged;
-                }
-
-                ResetVerticalScrollBar();
-            }
+            ViewSize = new Range2D(8, 8);
+            TileSize = new Range2D(8, 8);
+            ZoomSize = new Range2D(1, 1);
         }
 
-        public ScrollBar HorizontalScrollBar
+        protected override void SetBoundsCore(
+            int x,
+            int y,
+            int width,
+            int height,
+            BoundsSpecified specified)
         {
-            get
-            {
-                return _heightScrollBar;
-            }
+            var padding = BorderPadding;
+            var clientSize = new Size(
+                width - padding.Horizontal,
+                height - padding.Vertical);
 
-            set
-            {
-                if (HorizontalScrollBar == value)
-                {
-                    return;
-                }
+            var size = new Size(
+                clientSize.Width + padding.Horizontal,
+                clientSize.Height + padding.Vertical);
 
-                if (HorizontalScrollBar != null)
-                {
-                    HorizontalScrollBar.Scroll -= HorizontalScrollBar_Scroll;
-                    HorizontalScrollBar.ValueChanged -= HorizontalScrollBar_ValueChanged;
-                }
-
-                _heightScrollBar = value;
-
-                if (HorizontalScrollBar != null)
-                {
-                    HorizontalScrollBar.Scroll += HorizontalScrollBar_Scroll;
-                    HorizontalScrollBar.ValueChanged += HorizontalScrollBar_ValueChanged;
-                }
-
-                ResetHorizontalScrollBar();
-            }
+            base.SetBoundsCore(x, y, size.Width, size.Height, specified);
         }
 
         protected override void SetClientSizeCore(int x, int y)
@@ -368,25 +68,9 @@ namespace Controls
             }
         }
 
-        public void ResetScrollBars()
-        {
-            ResetVerticalScrollBar();
-            ResetHorizontalScrollBar();
-        }
-
-        protected abstract void ResetHorizontalScrollBar();
-
-        protected abstract void ResetVerticalScrollBar();
-
-        protected abstract void AdjustScrollBarPositions();
-
-        protected abstract void ScrollTileMapVertical(int value);
-
-        protected abstract void ScrollTileMapHorizontal(int value);
-
         private void SetClientSizeFromTileMap()
         {
-            if (TileMapSize.ToSize() == ClientSize ||
+            if ((Size)TileMapSize == ClientSize ||
                 TileMapResizeMode == TileMapResizeMode.TileMapCellResize)
             {
                 return;
@@ -405,9 +89,12 @@ namespace Controls
             }
         }
 
-        public void DrawViewTilePath(GraphicsPath path, Position2D tile, Padding padding)
+        public void DrawViewTilePath(
+            GraphicsPath path,
+            Position2D tile,
+            Padding padding)
         {
-            if (path == null)
+            if (path is null)
             {
                 throw new ArgumentNullException(nameof(path));
             }
@@ -415,14 +102,18 @@ namespace Controls
             path.Reset();
 
             var dot = tile * CellSize;
-            path.AddRectangle(new Rectangle(
+            var rectangle = new Rectangle(
                 dot.X + padding.Left,
                 dot.Y + padding.Top,
                 CellSize.Width - 1 - padding.Horizontal,
-                CellSize.Height - 1 - padding.Vertical));
+                CellSize.Height - 1 - padding.Vertical);
+
+            path.AddRectangle(rectangle);
         }
 
-        public abstract void GenerateSelectionPath(GraphicsPath path, ISelection<int> selection);
+        public abstract void GenerateSelectionPath(
+            GraphicsPath path,
+            ISelection<int> selection);
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
@@ -433,7 +124,12 @@ namespace Controls
 
         protected virtual void GetActiveTileFromMouse(MouseEventArgs e)
         {
-            if (e == null)
+            if (CellSize == Range2D.Empty)
+            {
+                return;
+            }
+
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -445,7 +141,7 @@ namespace Controls
 
             if (!MouseHovering)
             {
-                ActiveViewTile = e.Location.ToPosition2D() / CellSize;
+                ActiveViewTile = (Position2D)e.Location / CellSize;
             }
         }
 
@@ -458,7 +154,7 @@ namespace Controls
 
         protected virtual void GetActiveTileFromKeys(KeyEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -487,62 +183,6 @@ namespace Controls
             {
                 ActiveViewTile = active;
             }
-        }
-
-        protected virtual void OnViewSizeChanged(object sender, EventArgs e)
-        {
-            SetClientSizeFromTileMap();
-            ResetScrollBars();
-            ViewSizeChanged?.Invoke(sender, e);
-        }
-
-        protected virtual void OnCellSizeChanged(object sender, EventArgs e)
-        {
-            SetClientSizeFromTileMap();
-            CellSizeChanged?.Invoke(sender, e);
-        }
-
-        protected virtual void OnActiveViewTileChanged(object sender, EventArgs e)
-        {
-            ActiveViewTileChanged?.Invoke(sender, e);
-        }
-
-        protected virtual void OnGridLengthChanged(object sender, EventArgs e)
-        {
-            ResetScrollBars();
-            GridLengthChanged?.Invoke(sender, e);
-        }
-
-        protected virtual void OnZeroIndexChanged(object sender, EventArgs e)
-        {
-            AdjustScrollBarPositions();
-            ZeroIndexChanged?.Invoke(sender, e);
-        }
-
-        private void HorizontalScrollBar_Scroll(object sender, ScrollEventArgs e)
-        {
-            if (e.NewValue != e.OldValue)
-            {
-                ScrollTileMapHorizontal(e.NewValue);
-            }
-        }
-
-        private void VerticalScrollBar_Scroll(object sender, ScrollEventArgs e)
-        {
-            if (e.NewValue != e.OldValue)
-            {
-                ScrollTileMapVertical(e.NewValue);
-            }
-        }
-
-        private void VerticalScrollBar_ValueChanged(object sender, EventArgs e)
-        {
-            ScrollTileMapVertical(VerticalScrollBar.Value);
-        }
-
-        private void HorizontalScrollBar_ValueChanged(object sender, EventArgs e)
-        {
-            ScrollTileMapHorizontal(HorizontalScrollBar.Value);
         }
     }
 }

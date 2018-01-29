@@ -93,8 +93,15 @@ namespace Controls.Editors
 
         public bool Preview
         {
-            get { return chkPreview.Checked; }
-            set { chkPreview.Checked = value; }
+            get
+            {
+                return chkPreview.Checked;
+            }
+
+            set
+            {
+                chkPreview.Checked = value;
+            }
         }
 
         public GrayscaleForm()
@@ -132,9 +139,9 @@ namespace Controls.Editors
         private void Luma_Click(object sender, EventArgs e)
         {
             RunEvent = false;
-            ltbRed.Value = (int)Round(ColorF.LumaRed * 100.0f);
-            ltbGreen.Value = (int)Round(ColorF.LumaGreen * 100.0f);
-            ltbBlue.Value = (int)Round(ColorF.LumaBlue * 100.0f);
+            ltbRed.Value = (int)Round(ColorF.LumaRedWeight * 100.0f);
+            ltbGreen.Value = (int)Round(ColorF.LumaGreenWeight * 100.0f);
+            ltbBlue.Value = (int)Round(ColorF.LumaBlueWeight * 100.0f);
             RunEvent = true;
 
             OnColorValueChanged(EventArgs.Empty);

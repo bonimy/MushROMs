@@ -3,11 +3,14 @@
 // </copyright>
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Helper
 {
     [DebuggerDisplay("H = {Horizontal}, V = {Vertical}")]
+    [TypeConverter(typeof(Range2DConverter))]
     public struct Range2D
     {
         public static readonly Range2D Empty = new Range2D();
@@ -186,6 +189,16 @@ namespace Helper
         public static implicit operator Range2D(int range)
         {
             return new Range2D(range, range);
+        }
+
+        public static implicit operator Size(Range2D value)
+        {
+            return new Size(value.Width, value.Height);
+        }
+
+        public static implicit operator Range2D(Size value)
+        {
+            return new Range2D(value.Width, value.Height);
         }
     }
 }

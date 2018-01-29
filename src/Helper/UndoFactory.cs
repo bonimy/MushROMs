@@ -51,12 +51,12 @@ namespace Helper
 
         public void Add(Action undo, Action redo)
         {
-            if (undo == null)
+            if (undo is null)
             {
                 throw new ArgumentNullException(nameof(undo));
             }
 
-            if (redo == null)
+            if (redo is null)
             {
                 throw new ArgumentNullException(nameof(redo));
             }
