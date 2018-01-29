@@ -135,7 +135,7 @@ namespace Controls
 
                         for (var i = edges.Length; --i >= 0;)
                         {
-                            var index2 = GetGridTile(edges[i].ToPosition2D());
+                            var index2 = GetGridTile(edges[i]);
                             if (!selection.Contains(index2) || !TileIsInGrid(index2))
                             {
                                 path.StartFigure();
@@ -149,47 +149,56 @@ namespace Controls
 
         protected override void ResetHorizontalScrollBar()
         {
-            if (HorizontalScrollBar != null)
+            if (HorizontalScrollBar is null)
             {
-                if (HorizontalScrollBar.Enabled = ViewWidth > 1)
-                {
-                    HorizontalScrollBar.SmallChange = 1;
-                    HorizontalScrollBar.LargeChange = ViewWidth - 1;
-                    HorizontalScrollBar.Minimum = 0;
-                    HorizontalScrollBar.Maximum = ((ViewWidth - 1) * 2) - 1;
-                    HorizontalScrollBar.Value = ZeroTile % ViewWidth;
-                }
+                return;
+            }
+
+            if (HorizontalScrollBar.Enabled = ViewWidth > 1)
+            {
+                HorizontalScrollBar.SmallChange = 1;
+                HorizontalScrollBar.LargeChange = ViewWidth - 1;
+                HorizontalScrollBar.Minimum = 0;
+                HorizontalScrollBar.Maximum = ((ViewWidth - 1) * 2) - 1;
+                HorizontalScrollBar.Value = ZeroTile % ViewWidth;
             }
         }
 
         protected override void ResetVerticalScrollBar()
         {
-            if (VerticalScrollBar != null)
+            if (VerticalScrollBar is null)
             {
-                var rows = GridSize / ViewWidth;
-                var enabled = rows > ViewHeight;
+                return;
+            }
 
-                if (enabled)
+            if (ViewWidth == 0)
+            {
+                return;
+            }
+
+            var rows = GridSize / ViewWidth;
+            var enabled = rows > ViewHeight;
+
+            if (enabled)
+            {
+                VerticalScrollBar.Enabled = true;
+                VerticalScrollBar.Minimum = 0;
+                VerticalScrollBar.Maximum = rows - 1;
+                VerticalScrollBar.SmallChange = 1;
+                VerticalScrollBar.LargeChange = ViewHeight;
+
+                var value = ZeroTile / ViewWidth;
+                if (rows <= value + ViewHeight)
                 {
-                    VerticalScrollBar.Enabled = true;
-                    VerticalScrollBar.Minimum = 0;
-                    VerticalScrollBar.Maximum = rows - 1;
-                    VerticalScrollBar.SmallChange = 1;
-                    VerticalScrollBar.LargeChange = ViewHeight;
-
-                    var value = ZeroTile / ViewWidth;
-                    if (rows <= value + ViewHeight)
-                    {
-                        value = rows - ViewHeight;
-                    }
-
-                    VerticalScrollBar.Value = value;
+                    value = rows - ViewHeight;
                 }
-                else
-                {
-                    VerticalScrollBar.Value = 0;
-                    VerticalScrollBar.Enabled = false;
-                }
+
+                VerticalScrollBar.Value = value;
+            }
+            else
+            {
+                VerticalScrollBar.Value = 0;
+                VerticalScrollBar.Enabled = false;
             }
         }
 

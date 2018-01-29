@@ -44,27 +44,35 @@ namespace Controls
 
         protected virtual Size MinimumTileSize
         {
-            get { return new Size(1, 1); }
+            get
+            {
+                return new Size(1, 1);
+            }
         }
 
         protected virtual Size MaximumTileSize
         {
-            get { return Size.Empty; }
+            get
+            {
+                return Size.Empty;
+            }
         }
 
         public void AnchorFormToTileMap()
         {
-            if (TileMapControl != null)
-            {
-                var form = WinAPIMethods.GetWindowRectangle(this);
-                var child = WinAPIMethods.GetWindowRectangle(TileMapControl);
-                var client = WinAPIMethods.DeflateRectangle(child, TileMapControl.BorderPadding);
-                MainTileMapPadding = WinAPIMethods.GetPadding(form, client);
-            }
-            else
+            if (TileMapControl == null)
             {
                 MainTileMapPadding = Padding.Empty;
+                return;
             }
+
+            var form = WinApiMethods.GetWindowRectangle(this);
+            var child = WinApiMethods.GetWindowRectangle(TileMapControl);
+            var client = WinApiMethods.DeflateRectangle(
+                child,
+                TileMapControl.BorderPadding);
+
+            MainTileMapPadding = WinApiMethods.GetPadding(form, client);
         }
 
         protected virtual void SetSizeFromTileMapControl()
@@ -80,9 +88,9 @@ namespace Controls
             }
 
             var client = ClientSize;
-            var window = WinAPIMethods.InflateSize(
+            var window = WinApiMethods.InflateSize(
                 TileMapControl.ClientSize, MainTileMapPadding);
-            window = AdjustSize(window);
+            window = SizeFromTileMap(window);
             Size = window;
 
             if (TileMapControl.TileMapResizeMode == TileMapResizeMode.ControlResize)
@@ -110,12 +118,12 @@ namespace Controls
             }
 
             // Remove the control padding from rectangle.
-            var tilemap = WinAPIMethods.DeflateRectangle(
+            var tilemap = WinApiMethods.DeflateRectangle(
                 window,
                 MainTileMapPadding);
 
-            var client = WinAPIMethods.DeflateRectangle(
-                WinAPIMethods.GetWindowRectangle(TileMapControl),
+            var client = WinApiMethods.DeflateRectangle(
+                WinApiMethods.GetWindowRectangle(TileMapControl),
                 TileMapControl.BorderPadding);
 
             // Gets the residual width that is not included in the tilemap size.
@@ -123,7 +131,7 @@ namespace Controls
             var residualHeight = tilemap.Height % TileMapControl.CellHeight;
 
             // Get the current dimensions of the window
-            var parent = WinAPIMethods.GetWindowRectangle(this);
+            var parent = WinApiMethods.GetWindowRectangle(this);
 
             // Remove residual area.
             tilemap.Width -= residualWidth;
@@ -247,13 +255,23 @@ namespace Controls
             */
         }
 
-        protected override Rectangle AdjustSizingRectangle(Rectangle window)
+        protected override void OnAdjustWindowBounds(EventArgs<Rectangle> e)
+        {
+            e.Data = RectangleFromTileMap(e.Data);
+        }
+
+        protected override void OnAdjustWindowSize(EventArgs<Size> e)
+        {
+            e.Data = SizeFromTileMap(e.Data);
+        }
+
+        private Rectangle RectangleFromTileMap(Rectangle window)
         {
             if (TileMapControl is null ||
                 MainTileMapPadding == Padding.Empty ||
                 TileMapControl.CellSize == Range2D.Empty)
             {
-                return base.AdjustSizingRectangle(window);
+                return window;
             }
 
             var tilemap = GetTileMapRectangle(window);
@@ -268,16 +286,16 @@ namespace Controls
             }
 
             // Adjust window size to bind to tilemap.
-            return WinAPIMethods.InflateRectangle(tilemap, MainTileMapPadding);
+            return WinApiMethods.InflateRectangle(tilemap, MainTileMapPadding);
         }
 
-        protected override Size AdjustSize(Size window)
+        private Size SizeFromTileMap(Size window)
         {
             if (TileMapControl is null ||
                 MainTileMapPadding == Padding.Empty ||
                 TileMapControl.CellSize == Range2D.Empty)
             {
-                return base.AdjustSize(window);
+                return window;
             }
 
             var tilemap = GetTileMapRectangle(window).Size;
@@ -292,7 +310,7 @@ namespace Controls
             }
 
             // Return inflated window size.
-            return WinAPIMethods.InflateSize(tilemap, MainTileMapPadding);
+            return WinApiMethods.InflateSize(tilemap, MainTileMapPadding);
         }
     }
 }

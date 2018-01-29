@@ -10,7 +10,7 @@ using static Controls.UnsafeNativeMethods;
 
 namespace Controls
 {
-    public static class WinAPIMethods
+    public static class WinApiMethods
     {
         private const int GwlExStyle = -20;
         private const int GwlStyle = -16;
@@ -95,7 +95,7 @@ namespace Controls
 
         public static Rectangle GetWindowRectangle(IWin32Window window)
         {
-            // Do not call method in window's constructor!
+            // Do not call this method in any constructors that override the Control class.
             return GetWindowRect(window);
         }
 
@@ -132,7 +132,9 @@ namespace Controls
                 large.Bottom - small.Bottom);
         }
 
-        public static Rectangle InflateRectangle(Rectangle rectangle, Padding padding)
+        public static Rectangle InflateRectangle(
+            Rectangle rectangle,
+            Padding padding)
         {
             return Rectangle.FromLTRB(
                 rectangle.Left - padding.Left,
@@ -141,7 +143,9 @@ namespace Controls
                 rectangle.Bottom + padding.Bottom);
         }
 
-        public static Rectangle DeflateRectangle(Rectangle rectangle, Padding padding)
+        public static Rectangle DeflateRectangle(
+            Rectangle rectangle,
+            Padding padding)
         {
             return InflateRectangle(rectangle, Padding.Empty - padding);
         }

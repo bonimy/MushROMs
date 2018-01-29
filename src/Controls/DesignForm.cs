@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Windows.Forms;
 
@@ -14,6 +15,21 @@ namespace Controls
     public class DesignForm : Form
     {
         internal static readonly ICollection<Keys> FallbackOverrideInputKeys = DesignControl.FallbackOverrideInputKeys;
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        private IReadOnlyDictionary<int, ProcessMessage> ProcedureOverrides
+        {
+            get;
+        }
+
+        [Browsable(true)]
+        [Description("Preprocess the window rectangle before applying it during a resize operation.")]
+        public event EventHandler<EventArgs<Rectangle>> AdjustWindowBounds;
+
+        [Browsable(true)]
+        [Description("Preprocess the window size before applying it during a resize operation.")]
+        public event EventHandler<EventArgs<Size>> AdjustWindowSize;
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -63,13 +79,19 @@ namespace Controls
         {
             get
             {
-                return WinAPIMethods.GetWindowRectangle(this);
+                return WinApiMethods.GetWindowRectangle(this);
             }
         }
 
         public DesignForm()
         {
             KeyPreview = true;
+
+            ProcedureOverrides = new Dictionary<int, ProcessMessage>()
+            {
+                { WindowMessages.Size, ProcessSize },
+                { WindowMessages.Sizing, ProcessSizing }
+            };
         }
 
         protected override bool IsInputKey(Keys keyData)
@@ -82,7 +104,9 @@ namespace Controls
             return base.IsInputKey(keyData);
         }
 
-        [UIPermission(SecurityAction.LinkDemand, Window = UIPermissionWindow.AllWindows)]
+        [UIPermission(
+            SecurityAction.LinkDemand,
+            Window = UIPermissionWindow.AllWindows)]
         protected override bool ProcessDialogKey(Keys keyData)
         {
             if (FallbackOverrideInputKeys.Contains(keyData))
@@ -93,49 +117,66 @@ namespace Controls
             return base.ProcessDialogKey(keyData);
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
+        [SecurityPermission(
+            SecurityAction.LinkDemand,
+            Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override void DefWndProc(ref Message m)
         {
-            switch (m.Msg)
+            if (ProcedureOverrides.TryGetValue(m.Msg, out var action))
             {
-                case WindowMessages.Size:
-                    if (m.WParam == IntPtr.Zero)
-                    {
-                        var client = new Size(
-                            (int)m.LParam & 0xFFFF,
-                            (int)m.LParam >> 0x10);
-
-                        var window = WinAPIMethods.InflateSize(client, WindowPadding);
-                        window = AdjustSize(window);
-                        client = WinAPIMethods.DeflateSize(window, WindowPadding);
-                        m.LParam = (IntPtr)(
-                            (client.Width & 0xFFFF) |
-                            ((client.Height & 0xFFFF) << 0x10));
-                    }
-
-                    break;
-
-                case WindowMessages.Sizing:
-                    unsafe
-                    {
-                        var rect = (WinAPIRectangle*)m.LParam;
-                        *rect = AdjustSizingRectangle(*rect);
-                    }
-
-                    break;
+                action(ref m);
             }
 
             base.DefWndProc(ref m);
         }
 
-        protected virtual Rectangle AdjustSizingRectangle(Rectangle window)
+        private void ProcessSize(ref Message m)
         {
-            return window;
+            if (m.WParam == IntPtr.Zero)
+            {
+                var clientSize = new Size(
+                    (int)m.LParam & 0xFFFF,
+                    (int)m.LParam >> 0x10);
+
+                var windowSize = WinApiMethods.InflateSize(
+                    clientSize,
+                    WindowPadding);
+
+                var e = new EventArgs<Size>(windowSize);
+                OnAdjustWindowSize(e);
+
+                var adjustedWindowSize = e.Data;
+
+                var adjustedClientSize = WinApiMethods.DeflateSize(
+                    adjustedWindowSize,
+                    WindowPadding);
+
+                m.LParam = (IntPtr)(
+                    (adjustedClientSize.Width & 0xFFFF) |
+                    ((adjustedClientSize.Height & 0xFFFF) << 0x10));
+            }
         }
 
-        protected virtual Size AdjustSize(Size window)
+        private void ProcessSizing(ref Message m)
         {
-            return window;
+            var windowBounds = Marshal.PtrToStructure<WinAPIRectangle>(m.LParam);
+
+            var e = new EventArgs<Rectangle>(windowBounds);
+            OnAdjustWindowBounds(e);
+
+            WinAPIRectangle adjustedWindowBounds = e.Data;
+
+            Marshal.StructureToPtr(adjustedWindowBounds, m.LParam, false);
+        }
+
+        protected virtual void OnAdjustWindowBounds(EventArgs<Rectangle> e)
+        {
+            AdjustWindowBounds?.Invoke(this, e);
+        }
+
+        protected virtual void OnAdjustWindowSize(EventArgs<Size> e)
+        {
+            AdjustWindowSize?.Invoke(this, e);
         }
 
         public static Size GetFormBorderSize(Form form)
@@ -145,7 +186,12 @@ namespace Controls
                 throw new ArgumentNullException(nameof(form));
             }
 
-            switch (form.FormBorderStyle)
+            return GetFormBorderSize(form.FormBorderStyle);
+        }
+
+        public static Size GetFormBorderSize(FormBorderStyle formBorderStyle)
+        {
+            switch (formBorderStyle)
             {
                 case FormBorderStyle.None:
                     return Size.Empty;
@@ -153,21 +199,27 @@ namespace Controls
                 case FormBorderStyle.FixedSingle:
                 case FormBorderStyle.FixedDialog:
                 case FormBorderStyle.Sizable:
-                    return SystemInformation.FrameBorderSize +
-                        WinAPIMethods.PaddedBorderSize;
+                    return
+                        SystemInformation.FrameBorderSize +
+                        WinApiMethods.PaddedBorderSize;
 
                 case FormBorderStyle.FixedToolWindow:
                 case FormBorderStyle.SizableToolWindow:
-                    return SystemInformation.FixedFrameBorderSize +
-                        WinAPIMethods.PaddedBorderSize;
+                    return
+                        SystemInformation.FixedFrameBorderSize +
+                        WinApiMethods.PaddedBorderSize;
 
                 case FormBorderStyle.Fixed3D:
-                    return SystemInformation.FrameBorderSize +
+                    return
+                        SystemInformation.FrameBorderSize +
                         SystemInformation.Border3DSize +
-                        WinAPIMethods.PaddedBorderSize;
+                        WinApiMethods.PaddedBorderSize;
 
                 default:
-                    throw new ArgumentException();
+                    throw new InvalidEnumArgumentException(
+                        nameof(formBorderStyle),
+                        (int)formBorderStyle,
+                        typeof(FormBorderStyle));
             }
         }
 
@@ -184,7 +236,12 @@ namespace Controls
                 throw new ArgumentNullException(nameof(form));
             }
 
-            switch (form.FormBorderStyle)
+            return GetCaptionHeight(form.FormBorderStyle);
+        }
+
+        public static int GetCaptionHeight(FormBorderStyle formBorderStyle)
+        {
+            switch (formBorderStyle)
             {
                 case FormBorderStyle.None:
                     return 0;
@@ -200,7 +257,10 @@ namespace Controls
                     return SystemInformation.ToolWindowCaptionHeight;
 
                 default:
-                    throw new ArgumentException();
+                    throw new InvalidEnumArgumentException(
+                        nameof(formBorderStyle),
+                        (int)formBorderStyle,
+                        typeof(FormBorderStyle));
             }
         }
     }
