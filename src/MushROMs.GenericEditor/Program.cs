@@ -35,7 +35,7 @@ namespace MushROMs.GenericEditor
                 Settings.Save();
             }
 
-            using (var form = new MasterForm())
+            using (var form = new MainForm())
             {
                 Application.Run(form);
             }

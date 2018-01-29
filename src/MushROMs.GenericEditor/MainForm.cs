@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace MushROMs.GenericEditor
 {
-    public partial class MasterForm : Form
+    public partial class MainForm : Form
     {
         public string StatusText
         {
@@ -24,7 +24,7 @@ namespace MushROMs.GenericEditor
             }
         }
 
-        public MasterForm()
+        public MainForm()
         {
             InitializeComponent();
         }
