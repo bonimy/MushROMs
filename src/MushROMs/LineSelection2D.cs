@@ -1,16 +1,22 @@
-﻿// <copyright file="LineSelection1D.cs" company="Public Domain">
+﻿// <copyright file="LineSelection2D.cs" company="Public Domain">
 //     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Helper;
 
-namespace Helper
+namespace MushROMs
 {
-    public sealed class LineSelection1D : Selection1D
+    public sealed class LineSelection2D : Selection2D
     {
         private int Length
+        {
+            get;
+        }
+
+        private int RegionWidth
         {
             get;
         }
@@ -23,7 +29,7 @@ namespace Helper
             }
         }
 
-        public override int this[int index]
+        public override Position2D this[int index]
         {
             get
             {
@@ -32,11 +38,16 @@ namespace Helper
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
-                return StartIndex + index;
+                var start = (StartPosition.Y * RegionWidth) + StartPosition.X;
+                start += index;
+
+                return new Position2D(
+                    index % RegionWidth,
+                    index / RegionWidth);
             }
         }
 
-        public LineSelection1D(int startIndex, int length)
+        public LineSelection2D(Position2D startPosition, int regionWidth, int length)
         {
             if (length < 0)
             {
@@ -45,29 +56,43 @@ namespace Helper
                     SR.ErrorLowerBoundInclusive(nameof(length), length, 0));
             }
 
-            StartIndex = startIndex;
+            if (regionWidth <= 0)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(regionWidth),
+                    SR.ErrorLowerBoundExclusive(nameof(regionWidth), regionWidth, 0));
+            }
+
+            StartPosition = startPosition;
             Length = length;
         }
 
-        public override Selection1D Copy()
+        public override Selection2D Copy()
         {
-            return new LineSelection1D(StartIndex, Length);
+            return new LineSelection2D(StartPosition, RegionWidth, Length);
         }
 
-        public override bool Contains(int index)
+        public override bool Contains(Position2D position)
         {
-            index -= StartIndex;
+            position -= StartPosition;
+            var index = (position.Y * RegionWidth) + position.X;
             return index >= 0 && index < Length;
         }
 
-        public override IEnumerator<int> GetEnumerator()
+        public override IEnumerator<Position2D> GetEnumerator()
         {
-            return new Enumerator(StartIndex, Length);
+            return new Enumerator(StartPosition, RegionWidth, Length);
         }
 
-        private struct Enumerator : IEnumerator<int>
+        private struct Enumerator : IEnumerator<Position2D>
         {
             private int StartIndex
+            {
+                get;
+                set;
+            }
+
+            private int RegionWidth
             {
                 get;
                 set;
@@ -85,7 +110,7 @@ namespace Helper
                 set;
             }
 
-            public int Current
+            public Position2D Current
             {
                 get;
                 private set;
@@ -99,12 +124,13 @@ namespace Helper
                 }
             }
 
-            public Enumerator(int startIndex, int length)
+            public Enumerator(Position2D startPosition, int regionWidth, int length)
             {
-                StartIndex = startIndex;
+                StartIndex = (startPosition.Y * regionWidth) + startPosition.X;
+                RegionWidth = regionWidth;
                 Last = StartIndex + length;
                 Index = StartIndex;
-                Current = default(int);
+                Current = default(Position2D);
             }
 
             public void Reset()
@@ -116,7 +142,10 @@ namespace Helper
             {
                 if (Index < Last)
                 {
-                    Current = Index++;
+                    Current = new Position2D(
+                        Index % RegionWidth,
+                        Index / RegionWidth);
+                    Index++;
                     return true;
                 }
 

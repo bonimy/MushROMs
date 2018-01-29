@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Helper
+namespace MushROMs
 {
     public delegate bool GateMethod(bool left, bool right);
 

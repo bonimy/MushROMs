@@ -4,8 +4,9 @@
 
 using System;
 using System.Collections.Generic;
+using Helper;
 
-namespace Helper
+namespace MushROMs
 {
     public sealed class GateSelection2D : Selection2D
     {

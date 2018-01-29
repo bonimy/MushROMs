@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using Helper;
+using MushROMs;
 
 namespace Controls
 {
@@ -35,34 +36,43 @@ namespace Controls
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Padding MainTileMapPadding
+        private Padding MainTileMapPadding
         {
-            get; private set;
+            get;
+            set;
         }
 
         protected virtual Size MinimumTileSize
         {
-            get { return new Size(1, 1); }
+            get
+            {
+                return new Size(1, 1);
+            }
         }
 
         protected virtual Size MaximumTileSize
         {
-            get { return Size.Empty; }
+            get
+            {
+                return Size.Empty;
+            }
         }
 
-        protected virtual void SetTileMapPadding()
+        public void AnchorFormToTileMap()
         {
-            if (TileMapControl != null)
-            {
-                var form = WinAPIMethods.GetWindowRectangle(this);
-                var child = WinAPIMethods.GetWindowRectangle(TileMapControl);
-                var client = WinAPIMethods.DeflateRectangle(child, TileMapControl.BorderPadding);
-                MainTileMapPadding = WinAPIMethods.GetPadding(form, client);
-            }
-            else
+            if (TileMapControl == null)
             {
                 MainTileMapPadding = Padding.Empty;
+                return;
             }
+
+            var form = WinApiMethods.GetWindowRectangle(this);
+            var child = WinApiMethods.GetWindowRectangle(TileMapControl);
+            var client = WinApiMethods.DeflateRectangle(
+                child,
+                TileMapControl.BorderPadding);
+
+            MainTileMapPadding = WinApiMethods.GetPadding(form, client);
         }
 
         protected virtual void SetSizeFromTileMapControl()
@@ -78,9 +88,9 @@ namespace Controls
             }
 
             var client = ClientSize;
-            var dbg = WinAPIMethods.InflateSize(client, WindowPadding);
-            var window = WinAPIMethods.InflateSize(TileMapControl.ClientSize, MainTileMapPadding);
-            window = AdjustSize(window);
+            var window = WinApiMethods.InflateSize(
+                TileMapControl.ClientSize, MainTileMapPadding);
+            window = SizeFromTileMap(window);
             Size = window;
 
             if (TileMapControl.TileMapResizeMode == TileMapResizeMode.ControlResize)
@@ -96,23 +106,32 @@ namespace Controls
 
         private Rectangle GetTileMapRectangle(Rectangle window)
         {
-            // Edge case for null rectangles
+            // Edge case for empty rectangles
             if (window.Size == Size.Empty)
             {
                 return Rectangle.Empty;
             }
 
+            if (TileMapControl.CellSize == Range2D.Empty)
+            {
+                return window;
+            }
+
             // Remove the control padding from rectangle.
-            var tilemap = WinAPIMethods.DeflateRectangle(window, MainTileMapPadding);
-            var client = WinAPIMethods.GetWindowRectangle(TileMapControl);
-            client = WinAPIMethods.DeflateRectangle(client, TileMapControl.BorderPadding);
+            var tilemap = WinApiMethods.DeflateRectangle(
+                window,
+                MainTileMapPadding);
+
+            var client = WinApiMethods.DeflateRectangle(
+                WinApiMethods.GetWindowRectangle(TileMapControl),
+                TileMapControl.BorderPadding);
 
             // Gets the residual width that is not included in the tilemap size.
             var residualWidth = tilemap.Width % TileMapControl.CellWidth;
             var residualHeight = tilemap.Height % TileMapControl.CellHeight;
 
             // Get the current dimensions of the window
-            var parent = WinAPIMethods.GetWindowRectangle(this);
+            var parent = WinApiMethods.GetWindowRectangle(this);
 
             // Remove residual area.
             tilemap.Width -= residualWidth;
@@ -236,11 +255,23 @@ namespace Controls
             */
         }
 
-        protected override Rectangle AdjustSizingRectangle(Rectangle window)
+        protected override void OnAdjustWindowBounds(EventArgs<Rectangle> e)
         {
-            if (TileMapControl is null || MainTileMapPadding == Padding.Empty)
+            e.Data = RectangleFromTileMap(e.Data);
+        }
+
+        protected override void OnAdjustWindowSize(EventArgs<Size> e)
+        {
+            e.Data = SizeFromTileMap(e.Data);
+        }
+
+        private Rectangle RectangleFromTileMap(Rectangle window)
+        {
+            if (TileMapControl is null ||
+                MainTileMapPadding == Padding.Empty ||
+                TileMapControl.CellSize == Range2D.Empty)
             {
-                return base.AdjustSizingRectangle(window);
+                return window;
             }
 
             var tilemap = GetTileMapRectangle(window);
@@ -255,14 +286,16 @@ namespace Controls
             }
 
             // Adjust window size to bind to tilemap.
-            return WinAPIMethods.InflateRectangle(tilemap, MainTileMapPadding);
+            return WinApiMethods.InflateRectangle(tilemap, MainTileMapPadding);
         }
 
-        protected override Size AdjustSize(Size window)
+        private Size SizeFromTileMap(Size window)
         {
-            if (TileMapControl is null || MainTileMapPadding == Padding.Empty)
+            if (TileMapControl is null ||
+                MainTileMapPadding == Padding.Empty ||
+                TileMapControl.CellSize == Range2D.Empty)
             {
-                return base.AdjustSize(window);
+                return window;
             }
 
             var tilemap = GetTileMapRectangle(window).Size;
@@ -277,7 +310,7 @@ namespace Controls
             }
 
             // Return inflated window size.
-            return WinAPIMethods.InflateSize(tilemap, MainTileMapPadding);
+            return WinApiMethods.InflateSize(tilemap, MainTileMapPadding);
         }
     }
 }

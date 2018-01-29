@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace Controls
 {
-    public static class UnsafeNativeMethods
+    internal static class UnsafeNativeMethods
     {
         [SecurityCritical]
         [DllImport("user32.dll", SetLastError = true)]

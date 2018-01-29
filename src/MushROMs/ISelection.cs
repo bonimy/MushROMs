@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 
-namespace Helper
+namespace MushROMs
 {
     public interface ISelection<T> : IReadOnlyList<T>
     {

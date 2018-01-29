@@ -19,12 +19,12 @@ namespace Tests.Helper
             Assert.AreEqual(ColorF.NumberOfColorChannels, 3);
 
             // Luma weights should sum to unity.
-            Assert.AreEqual(ColorF.LumaRed + ColorF.LumaGreen + ColorF.LumaBlue, 1f);
+            Assert.AreEqual(ColorF.LumaRedWeight + ColorF.LumaGreenWeight + ColorF.LumaBlueWeight, 1f);
 
             // Humans see green the best and blue the worst.
             Assert.IsTrue(
-                ColorF.LumaGreen > ColorF.LumaRed &&
-                ColorF.LumaRed > ColorF.LumaBlue);
+                ColorF.LumaGreenWeight > ColorF.LumaRedWeight &&
+                ColorF.LumaRedWeight > ColorF.LumaBlueWeight);
         }
 
         [TestMethod]
@@ -121,11 +121,6 @@ namespace Tests.Helper
             Assert.AreEqual(color.Green, green);
             Assert.AreEqual(color.Blue, blue);
 
-            Assert.AreEqual(color[ColorF.AlphaIndex], alpha);
-            Assert.AreEqual(color[ColorF.RedIndex], red);
-            Assert.AreEqual(color[ColorF.GreenIndex], green);
-            Assert.AreEqual(color[ColorF.BlueIndex], blue);
-
             Assert.AreEqual(color.Cyan, 1 - red);
             Assert.AreEqual(color.Magenta, 1 - green);
             Assert.AreEqual(color.Yellow, 1 - blue);
@@ -139,9 +134,9 @@ namespace Tests.Helper
             Assert.AreEqual(color.Chroma, max - min);
 
             var luma =
-                (ColorF.LumaRed * red) +
-                (ColorF.LumaGreen * green) +
-                (ColorF.LumaBlue * blue);
+                (ColorF.LumaRedWeight * red) +
+                (ColorF.LumaGreenWeight * green) +
+                (ColorF.LumaBlueWeight * blue);
 
             Assert.AreEqual(color.Luma, luma);
         }
