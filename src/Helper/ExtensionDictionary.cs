@@ -1,47 +1,55 @@
 ﻿// <copyright file="ExtensionDictionary.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections.Generic;
 
 namespace Helper
 {
-    public sealed class ExtensionDictionary<TValue> :
+    using System;
+    using System.Runtime.Serialization;
+
+    public class ExtensionDictionary<TValue> :
         AssertDictionary<string, TValue>
     {
-        public ExtensionDictionary() :
-            base(ExtensionComparer.DefaultComparer)
+        public ExtensionDictionary()
+            : base(ExtensionComparer.Default)
         {
         }
 
-        public ExtensionDictionary(int capacity) :
-            base(capacity, ExtensionComparer.DefaultComparer)
+        public ExtensionDictionary(int capacity)
+            : base(capacity, ExtensionComparer.Default)
         {
         }
 
-        public ExtensionDictionary(ExtensionComparer comparer) :
-            base(comparer ?? throw new ArgumentNullException(nameof(comparer)))
+        public ExtensionDictionary(ExtensionComparer comparer)
+            : base(comparer ?? ExtensionComparer.Default)
         {
         }
 
         public ExtensionDictionary(ExtensionDictionary<TValue> dictionary)
+            : base(dictionary)
         {
-            BaseDictionary = new Dictionary<string, TValue>(
-                dictionary,
-                ExtensionComparer.DefaultComparer);
         }
 
-        public ExtensionDictionary(int capacity, ExtensionComparer comparer) :
-            base(capacity, comparer ?? ExtensionComparer.DefaultComparer)
+        public ExtensionDictionary(int capacity, ExtensionComparer comparer)
+            : base(capacity, comparer ?? ExtensionComparer.Default)
         {
         }
 
         public ExtensionDictionary(
             ExtensionDictionary<TValue> dictionary,
             ExtensionComparer comparer)
+            : base(dictionary, comparer ?? ExtensionComparer.Default)
         {
-            BaseDictionary = new Dictionary<string, TValue>(dictionary, comparer);
+        }
+
+        protected ExtensionDictionary(
+            SerializationInfo info,
+            StreamingContext context)
+            : base(info, context)
+        {
         }
 
         protected override void AssertKey(string key)

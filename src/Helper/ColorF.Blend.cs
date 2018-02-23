@@ -1,47 +1,49 @@
 ﻿// <copyright file="ColorF.Blend.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using static System.Math;
 
 namespace Helper
 {
-    public delegate ColorF ColorBlend(ColorF top, ColorF bottom);
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using static System.Math;
 
-    public delegate float ChannelBlend(float top, float bottom);
-
-    partial struct ColorF
+    public partial struct ColorF
     {
-        private static readonly IReadOnlyDictionary<BlendMode, ColorBlend> BlendDictionary = new Dictionary<BlendMode, ColorBlend>()
+        private static readonly IReadOnlyDictionary<BlendMode, ColorBlendCallback> BlendDictionary = new Dictionary<BlendMode, ColorBlendCallback>()
         {
-            { BlendMode.Alpha       , AlphaBlend },
-            { BlendMode.Grayscale   , Grayscale },
-            { BlendMode.Multiply    , Multiply },
-            { BlendMode.Screen      , Screen },
-            { BlendMode.Overlay     , Overlay },
-            { BlendMode.HardLight   , HardLight },
-            { BlendMode.SoftLight   , SoftLight },
-            { BlendMode.ColorDodge  , ColorDodge },
-            { BlendMode.LinearDodge , LinearDodge },
-            { BlendMode.ColorBurn   , ColorBurn },
-            { BlendMode.LinearBurn  , LinearBurn },
-            { BlendMode.VividLight  , VividLight },
-            { BlendMode.LinearLight , LinearLight },
-            { BlendMode.Difference  , Difference },
-            { BlendMode.Darken      , Darken },
-            { BlendMode.Lighten     , Lighten },
-            { BlendMode.DarkerColor , DarkerColor },
+            { BlendMode.Alpha, AlphaBlend },
+            { BlendMode.Grayscale, Grayscale },
+            { BlendMode.Multiply, Multiply },
+            { BlendMode.Screen, Screen },
+            { BlendMode.Overlay, Overlay },
+            { BlendMode.HardLight, HardLight },
+            { BlendMode.SoftLight, SoftLight },
+            { BlendMode.ColorDodge, ColorDodge },
+            { BlendMode.LinearDodge, LinearDodge },
+            { BlendMode.ColorBurn, ColorBurn },
+            { BlendMode.LinearBurn, LinearBurn },
+            { BlendMode.VividLight, VividLight },
+            { BlendMode.LinearLight, LinearLight },
+            { BlendMode.Difference, Difference },
+            { BlendMode.Darken, Darken },
+            { BlendMode.Lighten, Lighten },
+            { BlendMode.DarkerColor, DarkerColor },
             { BlendMode.LighterColor, LighterColor },
-            { BlendMode.Hue         , HueBlend },
-            { BlendMode.Saturation  , SaturationBlend },
-            { BlendMode.Luminosity  , LuminosityBlend },
-            { BlendMode.Divide      , Divide }
+            { BlendMode.Hue, HueBlend },
+            { BlendMode.Saturation, SaturationBlend },
+            { BlendMode.Luminosity, LuminosityBlend },
+            { BlendMode.Divide, Divide }
         };
 
-        public static ColorF Blend(ColorF top, ColorF bottom, BlendMode blendMode)
+        public static ColorF Blend(
+            ColorF top,
+            ColorF bottom,
+            BlendMode blendMode)
         {
             if (BlendDictionary.TryGetValue(blendMode, out var blend))
             {
@@ -82,8 +84,16 @@ namespace Helper
             }
         }
 
-        public static ColorF Blend(ColorF top, ColorF bottom, ChannelBlend rule)
+        public static ColorF Blend(
+            ColorF top,
+            ColorF bottom,
+            ChannelBlendCallback rule)
         {
+            if (rule is null)
+            {
+                throw new ArgumentNullException(nameof(rule));
+            }
+
             var a = top.Alpha;
             var r = rule(top.Red, bottom.Red);
             var g = rule(top.Green, bottom.Green);
@@ -177,7 +187,7 @@ namespace Helper
                 }
                 else
                 {
-                    result *= (1 - x);
+                    result *= 1 - x;
                     result += (float)Sqrt(y) * ((2 * x) - 1);
                 }
 

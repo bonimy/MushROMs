@@ -1,21 +1,26 @@
 ﻿// <copyright file="ExtensionComparer.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.IO;
 
 namespace Helper
 {
+    using System;
+    using System.IO;
+
     public sealed class ExtensionComparer : StringModifierComparer
     {
-        public static readonly ExtensionComparer DefaultComparer = new ExtensionComparer();
+        public static readonly ExtensionComparer Default = new ExtensionComparer();
 
-        private ExtensionComparer() : this(OrdinalIgnoreCase)
+        public ExtensionComparer(StringComparer baseComparer)
+            : base(baseComparer)
         {
         }
 
-        public ExtensionComparer(StringComparer baseComparer) : base(baseComparer)
+        private ExtensionComparer()
+            : this(OrdinalIgnoreCase)
         {
         }
 

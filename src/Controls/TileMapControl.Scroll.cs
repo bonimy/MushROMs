@@ -1,9 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// <copyright file="TileMapControl.Scroll.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
+// </copyright>
+
+using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Controls
@@ -129,6 +132,7 @@ namespace Controls
             }
 
             ScrollTileMapHorizontal(e.NewValue);
+            Invalidate();
         }
 
         private void VerticalScrollBar_Scroll(object sender, ScrollEventArgs e)
@@ -139,16 +143,19 @@ namespace Controls
             }
 
             ScrollTileMapVertical(e.NewValue);
+            Invalidate();
         }
 
         private void VerticalScrollBar_ValueChanged(object sender, EventArgs e)
         {
             ScrollTileMapVertical(VerticalScrollBar.Value);
+            Invalidate();
         }
 
         private void HorizontalScrollBar_ValueChanged(object sender, EventArgs e)
         {
             ScrollTileMapHorizontal(HorizontalScrollBar.Value);
+            Invalidate();
         }
     }
 }

@@ -1,15 +1,23 @@
 ﻿// <copyright file="SingleSelection1D.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace MushROMs
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+
     public sealed class SingleSelection1D : Selection1D
     {
+        public SingleSelection1D(int index)
+            : base(index)
+        {
+        }
+
         public override int Count
         {
             get
@@ -31,12 +39,7 @@ namespace MushROMs
             }
         }
 
-        public SingleSelection1D(int index)
-        {
-            StartIndex = index;
-        }
-
-        public override Selection1D Copy()
+        public override ISelection1D Copy()
         {
             return new SingleSelection1D(StartIndex);
         }
@@ -53,10 +56,11 @@ namespace MushROMs
 
         private struct Enumerator : IEnumerator<int>
         {
-            private bool CanMove
+            public Enumerator(int startIndex)
             {
-                get;
-                set;
+                CanMove = true;
+                StartIndex = startIndex;
+                Current = default;
             }
 
             public int Current
@@ -73,15 +77,21 @@ namespace MushROMs
                 }
             }
 
-            public Enumerator(int startIndex)
+            private int StartIndex
             {
-                CanMove = true;
-                Current = startIndex;
+                get;
+            }
+
+            private bool CanMove
+            {
+                get;
+                set;
             }
 
             public void Reset()
             {
                 CanMove = true;
+                Current = default;
             }
 
             public bool MoveNext()
@@ -89,13 +99,14 @@ namespace MushROMs
                 if (CanMove)
                 {
                     CanMove = false;
+                    Current = StartIndex;
                     return true;
                 }
 
                 return false;
             }
 
-            public void Dispose()
+            void IDisposable.Dispose()
             {
             }
         }

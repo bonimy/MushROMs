@@ -50,23 +50,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtensionComparerTests.cs" />
-    <Compile Include="Int24Tests.cs" />
     <Compile Include="PathComparerTests.cs" />
     <Compile Include="PathDictionaryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ExtensionDictionaryTests.cs" />
-    <Compile Include="Position2DTests.cs" />
-    <Compile Include="Range2DTests.cs" />
     <Compile Include="SubstringPointerTests.cs" />
     <Compile Include="SuffixTreeTests.cs" />
     <Compile Include="ColorFTests.cs" />
-    <Compile Include="PointerTests.cs" />
-    <Compile Include="UInt24Tests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="License.licenseheader" />
     <None Include="packages.config" />
-    <None Include="Settings.StyleCop" />
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Helper\Helper.csproj">

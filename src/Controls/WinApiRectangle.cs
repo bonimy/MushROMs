@@ -1,5 +1,8 @@
 ﻿// <copyright file="WinApiRectangle.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -14,9 +17,9 @@ namespace Controls
     /// A rectangle structure whose data layout is consistent with the RECTANGLE struct used in the Windows API.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
-    public struct WinAPIRectangle : IEquatable<WinAPIRectangle>
+    public struct WinApiRectangle : IEquatable<WinApiRectangle>
     {
-        public static readonly WinAPIRectangle Empty = new WinAPIRectangle();
+        public static readonly WinApiRectangle Empty = new WinApiRectangle();
 
         public int Left
         {
@@ -122,7 +125,7 @@ namespace Controls
             }
         }
 
-        public WinAPIRectangle(int left, int top, int right, int bottom)
+        public WinApiRectangle(int left, int top, int right, int bottom)
         {
             Left = left;
             Top = top;
@@ -130,20 +133,20 @@ namespace Controls
             Bottom = bottom;
         }
 
-        public bool Equals(WinAPIRectangle obj)
+        public bool Equals(WinApiRectangle other)
         {
             return
-                Left.Equals(obj.Left) &&
-                Top.Equals(obj.Top) &&
-                Right.Equals(obj.Right) &&
-                Bottom.Equals(obj.Bottom);
+                Left.Equals(other.Left) &&
+                Top.Equals(other.Top) &&
+                Right.Equals(other.Right) &&
+                Bottom.Equals(other.Bottom);
         }
 
         public override bool Equals(object obj)
         {
-            if (obj is WinAPIRectangle value)
+            if (obj is WinApiRectangle other)
             {
-                return Equals(value);
+                return Equals(other);
             }
 
             return false;
@@ -177,16 +180,16 @@ namespace Controls
             return sb.ToString();
         }
 
-        public static implicit operator WinAPIRectangle(Rectangle rectangle)
+        public static implicit operator WinApiRectangle(Rectangle rectangle)
         {
-            return new WinAPIRectangle(
+            return new WinApiRectangle(
                 rectangle.Left,
                 rectangle.Top,
                 rectangle.Right,
                 rectangle.Bottom);
         }
 
-        public static implicit operator Rectangle(WinAPIRectangle rectangle)
+        public static implicit operator Rectangle(WinApiRectangle rectangle)
         {
             return Rectangle.FromLTRB(
                 rectangle.Left,
@@ -196,15 +199,15 @@ namespace Controls
         }
 
         public static bool operator ==(
-            WinAPIRectangle left,
-            WinAPIRectangle right)
+            WinApiRectangle left,
+            WinApiRectangle right)
         {
             return left.Equals(right);
         }
 
         public static bool operator !=(
-            WinAPIRectangle left,
-            WinAPIRectangle right)
+            WinApiRectangle left,
+            WinApiRectangle right)
         {
             return !(left == right);
         }

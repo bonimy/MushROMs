@@ -1,31 +1,20 @@
 ﻿// <copyright file="BlendForm.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
+using System.Windows.Forms;
 using Helper;
 using static System.Math;
 
 namespace Controls.Editors
 {
-    internal sealed partial class BlendForm : DialogForm
+    internal sealed partial class BlendForm : Form
     {
         public event EventHandler ColorValueChanged;
-
-        private readonly DialogProxy _dialogForm;
-
-        protected override object ProxySender
-        {
-            get
-            {
-                if (_dialogForm != null)
-                {
-                    return _dialogForm;
-                }
-
-                return base.ProxySender;
-            }
-        }
 
         private bool RunEvent
         {
@@ -82,9 +71,9 @@ namespace Controls.Editors
             set
             {
                 RunEvent = false;
-                Red = Color.Red;
-                Green = Color.Green;
-                Blue = Color.Blue;
+                Red = value.Red;
+                Green = value.Green;
+                Blue = value.Blue;
                 RunEvent = true;
 
                 OnColorValueChanged(EventArgs.Empty);
@@ -106,8 +95,15 @@ namespace Controls.Editors
 
         public bool Preview
         {
-            get { return chkPreview.Checked; }
-            set { chkPreview.Checked = value; }
+            get
+            {
+                return chkPreview.Checked;
+            }
+
+            set
+            {
+                chkPreview.Checked = value;
+            }
         }
 
         public BlendForm()
@@ -116,11 +112,6 @@ namespace Controls.Editors
 
             ResetValues();
             RunEvent = true;
-        }
-
-        internal BlendForm(DialogProxy dialogForm) : this()
-        {
-            _dialogForm = dialogForm;
         }
 
         public void ResetValues()
@@ -138,26 +129,11 @@ namespace Controls.Editors
         {
             if (RunEvent)
             {
-                ColorValueChanged?.Invoke(ProxySender, e);
+                ColorValueChanged?.Invoke(this, e);
             }
         }
 
-        private void Color_ValueChanged(object sender, EventArgs e)
-        {
-            OnColorValueChanged(EventArgs.Empty);
-        }
-
-        private void Preview_CheckedChanged(object sender, EventArgs e)
-        {
-            OnColorValueChanged(EventArgs.Empty);
-        }
-
-        private void Form_Shown(object sender, EventArgs e)
-        {
-            OnColorValueChanged(EventArgs.Empty);
-        }
-
-        private void BlendMode_SelectedIndexChanged(object sender, EventArgs e)
+        private void Object_ValueChanged(object sender, EventArgs e)
         {
             OnColorValueChanged(EventArgs.Empty);
         }

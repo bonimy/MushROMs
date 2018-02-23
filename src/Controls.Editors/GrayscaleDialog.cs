@@ -1,5 +1,8 @@
 ﻿// <copyright file="GrayscaleDialog.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -14,26 +17,7 @@ namespace Controls.Editors
             get;
         }
 
-        protected sealed override IDialogForm BaseForm
-        {
-            get
-            {
-                return GrayscaleForm;
-            }
-        }
-
-        public event EventHandler ValueChanged
-        {
-            add
-            {
-                GrayscaleForm.ColorValueChanged += value;
-            }
-
-            remove
-            {
-                GrayscaleForm.ColorValueChanged -= value;
-            }
-        }
+        public event EventHandler ColorValueChanged;
 
         public float Red
         {
@@ -100,14 +84,21 @@ namespace Controls.Editors
             }
         }
 
-        public GrayscaleDialog()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        public GrayscaleDialog() : base(new GrayscaleForm())
         {
-            GrayscaleForm = new GrayscaleForm(this);
+            GrayscaleForm = BaseForm as GrayscaleForm;
+            GrayscaleForm.ColorValueChanged += GrayscaleForm_ColorValueChanged;
         }
 
         public void ResetValues()
         {
             GrayscaleForm.ResetValues();
+        }
+
+        private void GrayscaleForm_ColorValueChanged(object sender, EventArgs e)
+        {
+            ColorValueChanged?.Invoke(this, e);
         }
     }
 }

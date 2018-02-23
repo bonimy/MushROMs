@@ -1,4 +1,8 @@
-﻿namespace MushROMs.GenericEditor
+﻿// <copyright file="AboutDialog.Designer.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+namespace MushROMs.GenericEditor
 {
     partial class AboutDialog
     {
@@ -35,47 +39,32 @@
             // 
             // tbxAbout
             // 
-            this.tbxAbout.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbxAbout.Location = new System.Drawing.Point(13, 13);
-            this.tbxAbout.Multiline = true;
+            resources.ApplyResources(this.tbxAbout, "tbxAbout");
             this.tbxAbout.Name = "tbxAbout";
             this.tbxAbout.ReadOnly = true;
-            this.tbxAbout.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.tbxAbout.ShortcutsEnabled = false;
-            this.tbxAbout.Size = new System.Drawing.Size(482, 387);
-            this.tbxAbout.TabIndex = 1;
-            this.tbxAbout.Text = resources.GetString("tbxAbout.Text");
             // 
             // btnOK
             // 
-            this.btnOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            resources.ApplyResources(this.btnOK, "btnOK");
             this.btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnOK.Location = new System.Drawing.Point(420, 406);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
-            this.btnOK.TabIndex = 0;
-            this.btnOK.Text = "&OK";
             this.btnOK.UseVisualStyleBackColor = true;
             // 
-            // About
+            // AboutDialog
             // 
             this.AcceptButton = this.btnOK;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(507, 441);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.tbxAbout);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "About";
+            this.Name = "AboutDialog";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "About";
             this.TopMost = true;
             this.ResumeLayout(false);
             this.PerformLayout();

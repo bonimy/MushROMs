@@ -1,5 +1,8 @@
 ﻿// <copyright file="BlendDialog.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -9,30 +12,11 @@ namespace Controls.Editors
 {
     public sealed class BlendDialog : DialogProxy
     {
+        public event EventHandler ColorValueChanged;
+
         private BlendForm BlendForm
         {
             get;
-        }
-
-        protected sealed override IDialogForm BaseForm
-        {
-            get
-            {
-                return BlendForm;
-            }
-        }
-
-        public event EventHandler ValueChanged
-        {
-            add
-            {
-                BlendForm.ColorValueChanged += value;
-            }
-
-            remove
-            {
-                BlendForm.ColorValueChanged -= value;
-            }
         }
 
         public float Red
@@ -113,9 +97,16 @@ namespace Controls.Editors
             }
         }
 
-        public BlendDialog()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        public BlendDialog() : base(new BlendForm())
         {
-            BlendForm = new BlendForm(this);
+            BlendForm = BaseForm as BlendForm;
+            BlendForm.ColorValueChanged += BlendForm_ColorValueChanged;
+        }
+
+        private void BlendForm_ColorValueChanged(object sender, EventArgs e)
+        {
+            ColorValueChanged?.Invoke(this, e);
         }
 
         public void ResetValues()

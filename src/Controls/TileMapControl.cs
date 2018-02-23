@@ -1,5 +1,8 @@
 ﻿// <copyright file="TileMapControl.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -7,13 +10,20 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
-using Helper;
 using MushROMs;
 
 namespace Controls
 {
     public abstract partial class TileMapControl : DesignControl, ITileMap
     {
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public event PaintEventHandler DrawViewTile;
+
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public event PaintEventHandler DrawSelection;
+
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         internal TileMapResizeMode TileMapResizeMode
@@ -24,9 +34,9 @@ namespace Controls
 
         protected TileMapControl()
         {
-            ViewSize = new Range2D(8, 8);
-            TileSize = new Range2D(8, 8);
-            ZoomSize = new Range2D(1, 1);
+            ViewSize = new Size(8, 8);
+            TileSize = new Size(8, 8);
+            ZoomSize = new Size(1, 1);
         }
 
         protected override void SetBoundsCore(
@@ -70,8 +80,7 @@ namespace Controls
 
         private void SetClientSizeFromTileMap()
         {
-            if ((Size)TileMapSize == ClientSize ||
-                TileMapResizeMode == TileMapResizeMode.TileMapCellResize)
+            if ((Size)TileMapSize == ClientSize)
             {
                 return;
             }
@@ -91,7 +100,7 @@ namespace Controls
 
         public void DrawViewTilePath(
             GraphicsPath path,
-            Position2D tile,
+            Point tile,
             Padding padding)
         {
             if (path is null)
@@ -101,10 +110,11 @@ namespace Controls
 
             path.Reset();
 
-            var dot = tile * CellSize;
+            var x = tile.X * CellWidth;
+            var y = tile.Y * CellHeight;
             var rectangle = new Rectangle(
-                dot.X + padding.Left,
-                dot.Y + padding.Top,
+                x + padding.Left,
+                y + padding.Top,
                 CellSize.Width - 1 - padding.Horizontal,
                 CellSize.Height - 1 - padding.Vertical);
 
@@ -113,76 +123,23 @@ namespace Controls
 
         public abstract void GenerateSelectionPath(
             GraphicsPath path,
-            ISelection<int> selection);
+            ISelection1D selection);
 
-        protected override void OnMouseMove(MouseEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
-            GetActiveTileFromMouse(e);
-
-            base.OnMouseMove(e);
+            base.OnPaint(e);
+            OnDrawViewTile(e);
+            OnDrawSelection(e);
         }
 
-        protected virtual void GetActiveTileFromMouse(MouseEventArgs e)
+        protected virtual void OnDrawViewTile(PaintEventArgs e)
         {
-            if (CellSize == Range2D.Empty)
-            {
-                return;
-            }
-
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
-
-            if (!ClientRectangle.Contains(e.Location))
-            {
-                return;
-            }
-
-            if (!MouseHovering)
-            {
-                ActiveViewTile = (Position2D)e.Location / CellSize;
-            }
+            DrawViewTile?.Invoke(this, e);
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+        protected virtual void OnDrawSelection(PaintEventArgs e)
         {
-            GetActiveTileFromKeys(e);
-
-            base.OnKeyDown(e);
-        }
-
-        protected virtual void GetActiveTileFromKeys(KeyEventArgs e)
-        {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
-
-            var active = ActiveViewTile;
-            switch (e.KeyCode)
-            {
-                case Keys.Left:
-                    active.X--;
-                    break;
-
-                case Keys.Right:
-                    active.X++;
-                    break;
-
-                case Keys.Up:
-                    active.Y--;
-                    break;
-
-                case Keys.Down:
-                    active.Y++;
-                    break;
-            }
-
-            if (ActiveViewTile != active)
-            {
-                ActiveViewTile = active;
-            }
+            DrawSelection?.Invoke(this, e);
         }
     }
 }

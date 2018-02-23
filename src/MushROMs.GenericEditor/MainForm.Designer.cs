@@ -1,4 +1,8 @@
-﻿namespace MushROMs.GenericEditor
+﻿// <copyright file="MainForm.Designer.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia.
+// </copyright>
+
+namespace MushROMs.GenericEditor
 {
     partial class MainForm
     {
@@ -28,15 +32,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.tsmFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmNew = new System.Windows.Forms.ToolStripMenuItem();
-            this.tsmOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmNewFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmOpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmOpenRecent = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.tsmClose = new System.Windows.Forms.ToolStripMenuItem();
+            this.tsmCloseFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.tsmSaveFile = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmSaveAs = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,13 +70,13 @@
             this.tsmOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.tsmAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.tsbNewFile = new System.Windows.Forms.ToolStripButton();
             this.tsbOpenFile = new System.Windows.Forms.ToolStripButton();
             this.tsbSaveFile = new System.Windows.Forms.ToolStripButton();
             this.tsbSaveAll = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
-            this.tsbRecentFiles = new System.Windows.Forms.ToolStripButton();
+            this.tsbOpenRecent = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.tsbCut = new System.Windows.Forms.ToolStripButton();
             this.tsbCopy = new System.Windows.Forms.ToolStripButton();
@@ -90,8 +95,9 @@
             this.tsbAbout = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.tssStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.cmsRecentFiles = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menuStrip.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -109,12 +115,12 @@
             // tsmFile
             // 
             this.tsmFile.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tsmNew,
-            this.tsmOpen,
+            this.tsmNewFile,
+            this.tsmOpenFile,
             this.toolStripSeparator5,
             this.tsmOpenRecent,
             this.toolStripSeparator,
-            this.tsmClose,
+            this.tsmCloseFile,
             this.toolStripSeparator2,
             this.tsmSaveFile,
             this.tsmSaveAs,
@@ -124,17 +130,16 @@
             this.tsmFile.Name = "tsmFile";
             resources.ApplyResources(this.tsmFile, "tsmFile");
             // 
-            // tsmNew
+            // tsmNewFile
             // 
-            resources.ApplyResources(this.tsmNew, "tsmNew");
-            this.tsmNew.Name = "tsmNew";
+            resources.ApplyResources(this.tsmNewFile, "tsmNewFile");
+            this.tsmNewFile.Name = "tsmNewFile";
             // 
-            // tsmOpen
+            // tsmOpenFile
             // 
-            this.tsmOpen.Image = global::MushROMs.GenericEditor.Properties.Resources.openHS;
-            resources.ApplyResources(this.tsmOpen, "tsmOpen");
-            this.tsmOpen.Name = "tsmOpen";
-            this.tsmOpen.Click += new System.EventHandler(this.OpenFile_Click);
+            this.tsmOpenFile.Image = global::MushROMs.GenericEditor.Properties.Resources.openHS;
+            resources.ApplyResources(this.tsmOpenFile, "tsmOpenFile");
+            this.tsmOpenFile.Name = "tsmOpenFile";
             // 
             // toolStripSeparator5
             // 
@@ -143,19 +148,19 @@
             // 
             // tsmOpenRecent
             // 
+            resources.ApplyResources(this.tsmOpenRecent, "tsmOpenRecent");
             this.tsmOpenRecent.Image = global::MushROMs.GenericEditor.Properties.Resources.NoteHS;
             this.tsmOpenRecent.Name = "tsmOpenRecent";
-            resources.ApplyResources(this.tsmOpenRecent, "tsmOpenRecent");
             // 
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
             resources.ApplyResources(this.toolStripSeparator, "toolStripSeparator");
             // 
-            // tsmClose
+            // tsmCloseFile
             // 
-            this.tsmClose.Name = "tsmClose";
-            resources.ApplyResources(this.tsmClose, "tsmClose");
+            this.tsmCloseFile.Name = "tsmCloseFile";
+            resources.ApplyResources(this.tsmCloseFile, "tsmCloseFile");
             // 
             // toolStripSeparator2
             // 
@@ -169,14 +174,14 @@
             // 
             // tsmSaveAs
             // 
-            this.tsmSaveAs.Name = "tsmSaveAs";
             resources.ApplyResources(this.tsmSaveAs, "tsmSaveAs");
+            this.tsmSaveAs.Name = "tsmSaveAs";
             // 
             // tsmSaveAll
             // 
+            resources.ApplyResources(this.tsmSaveAll, "tsmSaveAll");
             this.tsmSaveAll.Image = global::MushROMs.GenericEditor.Properties.Resources.SaveAllHS;
             this.tsmSaveAll.Name = "tsmSaveAll";
-            resources.ApplyResources(this.tsmSaveAll, "tsmSaveAll");
             // 
             // toolStripSeparator1
             // 
@@ -206,15 +211,15 @@
             // 
             // tsmUndo
             // 
+            resources.ApplyResources(this.tsmUndo, "tsmUndo");
             this.tsmUndo.Image = global::MushROMs.GenericEditor.Properties.Resources.Edit_UndoHS;
             this.tsmUndo.Name = "tsmUndo";
-            resources.ApplyResources(this.tsmUndo, "tsmUndo");
             // 
             // tsmRedo
             // 
+            resources.ApplyResources(this.tsmRedo, "tsmRedo");
             this.tsmRedo.Image = global::MushROMs.GenericEditor.Properties.Resources.Edit_RedoHS;
             this.tsmRedo.Name = "tsmRedo";
-            resources.ApplyResources(this.tsmRedo, "tsmRedo");
             // 
             // toolStripSeparator3
             // 
@@ -238,9 +243,9 @@
             // 
             // tsmDelete
             // 
+            resources.ApplyResources(this.tsmDelete, "tsmDelete");
             this.tsmDelete.Image = global::MushROMs.GenericEditor.Properties.Resources.DeleteHS;
             this.tsmDelete.Name = "tsmDelete";
-            resources.ApplyResources(this.tsmDelete, "tsmDelete");
             // 
             // toolStripSeparator4
             // 
@@ -249,8 +254,8 @@
             // 
             // tsmSelectAll
             // 
-            this.tsmSelectAll.Name = "tsmSelectAll";
             resources.ApplyResources(this.tsmSelectAll, "tsmSelectAll");
+            this.tsmSelectAll.Name = "tsmSelectAll";
             // 
             // tsmPalette
             // 
@@ -266,39 +271,39 @@
             // 
             // tsmInvertColors
             // 
+            resources.ApplyResources(this.tsmInvertColors, "tsmInvertColors");
             this.tsmInvertColors.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuInvert;
             this.tsmInvertColors.Name = "tsmInvertColors";
-            resources.ApplyResources(this.tsmInvertColors, "tsmInvertColors");
             // 
             // tsmBlend
             // 
+            resources.ApplyResources(this.tsmBlend, "tsmBlend");
             this.tsmBlend.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuBlend;
             this.tsmBlend.Name = "tsmBlend";
-            resources.ApplyResources(this.tsmBlend, "tsmBlend");
             // 
             // tsmColorize
             // 
+            resources.ApplyResources(this.tsmColorize, "tsmColorize");
             this.tsmColorize.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuColorize;
             this.tsmColorize.Name = "tsmColorize";
-            resources.ApplyResources(this.tsmColorize, "tsmColorize");
             // 
             // tsmGrayscale
             // 
+            resources.ApplyResources(this.tsmGrayscale, "tsmGrayscale");
             this.tsmGrayscale.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuGrayscale;
             this.tsmGrayscale.Name = "tsmGrayscale";
-            resources.ApplyResources(this.tsmGrayscale, "tsmGrayscale");
             // 
             // tsmHorizontalGradient
             // 
+            resources.ApplyResources(this.tsmHorizontalGradient, "tsmHorizontalGradient");
             this.tsmHorizontalGradient.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuHorizontalGradient;
             this.tsmHorizontalGradient.Name = "tsmHorizontalGradient";
-            resources.ApplyResources(this.tsmHorizontalGradient, "tsmHorizontalGradient");
             // 
             // tsmVerticalGradient
             // 
+            resources.ApplyResources(this.tsmVerticalGradient, "tsmVerticalGradient");
             this.tsmVerticalGradient.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuVerticalGradient;
             this.tsmVerticalGradient.Name = "tsmVerticalGradient";
-            resources.ApplyResources(this.tsmVerticalGradient, "tsmVerticalGradient");
             // 
             // tsmTools
             // 
@@ -310,13 +315,13 @@
             // 
             // tsmCustomize
             // 
-            this.tsmCustomize.Name = "tsmCustomize";
             resources.ApplyResources(this.tsmCustomize, "tsmCustomize");
+            this.tsmCustomize.Name = "tsmCustomize";
             // 
             // tsmOptions
             // 
-            this.tsmOptions.Name = "tsmOptions";
             resources.ApplyResources(this.tsmOptions, "tsmOptions");
+            this.tsmOptions.Name = "tsmOptions";
             // 
             // tsmHelp
             // 
@@ -330,17 +335,16 @@
             this.tsmAbout.Image = global::MushROMs.GenericEditor.Properties.Resources.Help;
             this.tsmAbout.Name = "tsmAbout";
             resources.ApplyResources(this.tsmAbout, "tsmAbout");
-            this.tsmAbout.Click += new System.EventHandler(this.About_Click);
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsbNewFile,
             this.tsbOpenFile,
             this.tsbSaveFile,
             this.tsbSaveAll,
             this.toolStripSeparator6,
-            this.tsbRecentFiles,
+            this.tsbOpenRecent,
             this.toolStripSeparator8,
             this.tsbCut,
             this.tsbCopy,
@@ -357,8 +361,8 @@
             this.tsbVerticalGradient,
             this.toolStripSeparator10,
             this.tsbAbout});
-            resources.ApplyResources(this.toolStrip1, "toolStrip1");
-            this.toolStrip1.Name = "toolStrip1";
+            resources.ApplyResources(this.toolStrip, "toolStrip");
+            this.toolStrip.Name = "toolStrip";
             // 
             // tsbNewFile
             // 
@@ -372,7 +376,6 @@
             this.tsbOpenFile.Image = global::MushROMs.GenericEditor.Properties.Resources.openHS;
             resources.ApplyResources(this.tsbOpenFile, "tsbOpenFile");
             this.tsbOpenFile.Name = "tsbOpenFile";
-            this.tsbOpenFile.Click += new System.EventHandler(this.OpenFile_Click);
             // 
             // tsbSaveFile
             // 
@@ -383,8 +386,8 @@
             // tsbSaveAll
             // 
             this.tsbSaveAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbSaveAll.Image = global::MushROMs.GenericEditor.Properties.Resources.SaveAllHS;
             resources.ApplyResources(this.tsbSaveAll, "tsbSaveAll");
+            this.tsbSaveAll.Image = global::MushROMs.GenericEditor.Properties.Resources.SaveAllHS;
             this.tsbSaveAll.Name = "tsbSaveAll";
             // 
             // toolStripSeparator6
@@ -392,12 +395,13 @@
             this.toolStripSeparator6.Name = "toolStripSeparator6";
             resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
             // 
-            // tsbRecentFiles
+            // tsbOpenRecent
             // 
-            this.tsbRecentFiles.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbRecentFiles.Image = global::MushROMs.GenericEditor.Properties.Resources.NoteHS;
-            resources.ApplyResources(this.tsbRecentFiles, "tsbRecentFiles");
-            this.tsbRecentFiles.Name = "tsbRecentFiles";
+            this.tsbOpenRecent.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tsbOpenRecent.Image = global::MushROMs.GenericEditor.Properties.Resources.NoteHS;
+            resources.ApplyResources(this.tsbOpenRecent, "tsbOpenRecent");
+            this.tsbOpenRecent.Name = "tsbOpenRecent";
+            this.tsbOpenRecent.Click += new System.EventHandler(this.OpenRecent_ToolStripButtonClick);
             // 
             // toolStripSeparator8
             // 
@@ -430,15 +434,15 @@
             // tsbUndo
             // 
             this.tsbUndo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbUndo.Image = global::MushROMs.GenericEditor.Properties.Resources.Edit_UndoHS;
             resources.ApplyResources(this.tsbUndo, "tsbUndo");
+            this.tsbUndo.Image = global::MushROMs.GenericEditor.Properties.Resources.Edit_UndoHS;
             this.tsbUndo.Name = "tsbUndo";
             // 
             // tsbRedo
             // 
             this.tsbRedo.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbRedo.Image = global::MushROMs.GenericEditor.Properties.Resources.Edit_RedoHS;
             resources.ApplyResources(this.tsbRedo, "tsbRedo");
+            this.tsbRedo.Image = global::MushROMs.GenericEditor.Properties.Resources.Edit_RedoHS;
             this.tsbRedo.Name = "tsbRedo";
             // 
             // toolStripSeparator9
@@ -449,43 +453,43 @@
             // tsbInvertColors
             // 
             this.tsbInvertColors.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbInvertColors.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuInvert;
             resources.ApplyResources(this.tsbInvertColors, "tsbInvertColors");
+            this.tsbInvertColors.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuInvert;
             this.tsbInvertColors.Name = "tsbInvertColors";
             // 
             // tsbBlend
             // 
             this.tsbBlend.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbBlend.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuBlend;
             resources.ApplyResources(this.tsbBlend, "tsbBlend");
+            this.tsbBlend.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuBlend;
             this.tsbBlend.Name = "tsbBlend";
             // 
             // tsbColorize
             // 
             this.tsbColorize.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbColorize.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuColorize;
             resources.ApplyResources(this.tsbColorize, "tsbColorize");
+            this.tsbColorize.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuColorize;
             this.tsbColorize.Name = "tsbColorize";
             // 
             // tsbGrayscale
             // 
             this.tsbGrayscale.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbGrayscale.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuGrayscale;
             resources.ApplyResources(this.tsbGrayscale, "tsbGrayscale");
+            this.tsbGrayscale.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuGrayscale;
             this.tsbGrayscale.Name = "tsbGrayscale";
             // 
             // tsbHorizontalGradient
             // 
             this.tsbHorizontalGradient.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbHorizontalGradient.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuHorizontalGradient;
             resources.ApplyResources(this.tsbHorizontalGradient, "tsbHorizontalGradient");
+            this.tsbHorizontalGradient.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuHorizontalGradient;
             this.tsbHorizontalGradient.Name = "tsbHorizontalGradient";
             // 
             // tsbVerticalGradient
             // 
             this.tsbVerticalGradient.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tsbVerticalGradient.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuVerticalGradient;
             resources.ApplyResources(this.tsbVerticalGradient, "tsbVerticalGradient");
+            this.tsbVerticalGradient.Image = global::MushROMs.GenericEditor.Properties.Resources.mnuVerticalGradient;
             this.tsbVerticalGradient.Name = "tsbVerticalGradient";
             // 
             // toolStripSeparator10
@@ -499,7 +503,6 @@
             this.tsbAbout.Image = global::MushROMs.GenericEditor.Properties.Resources.Help;
             resources.ApplyResources(this.tsbAbout, "tsbAbout");
             this.tsbAbout.Name = "tsbAbout";
-            this.tsbAbout.Click += new System.EventHandler(this.About_Click);
             // 
             // statusStrip
             // 
@@ -513,22 +516,27 @@
             this.tssStatus.Name = "tssStatus";
             resources.ApplyResources(this.tssStatus, "tssStatus");
             // 
-            // MasterForm
+            // cmsRecentFiles
+            // 
+            this.cmsRecentFiles.Name = "cmsRecentFiles";
+            resources.ApplyResources(this.cmsRecentFiles, "cmsRecentFiles");
+            // 
+            // MainForm
             // 
             this.AllowDrop = true;
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip);
             this.IsMdiContainer = true;
-            this.KeyPreview = true;
             this.MainMenuStrip = this.menuStrip;
-            this.Name = "MasterForm";
+            this.Name = "MainForm";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -540,12 +548,12 @@
 
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem tsmFile;
-        private System.Windows.Forms.ToolStripMenuItem tsmNew;
-        private System.Windows.Forms.ToolStripMenuItem tsmOpen;
+        private System.Windows.Forms.ToolStripMenuItem tsmNewFile;
+        private System.Windows.Forms.ToolStripMenuItem tsmOpenFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem tsmOpenRecent;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
-        private System.Windows.Forms.ToolStripMenuItem tsmClose;
+        private System.Windows.Forms.ToolStripMenuItem tsmCloseFile;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem tsmSaveFile;
         private System.Windows.Forms.ToolStripMenuItem tsmSaveAs;
@@ -574,13 +582,13 @@
         private System.Windows.Forms.ToolStripMenuItem tsmOptions;
         private System.Windows.Forms.ToolStripMenuItem tsmHelp;
         private System.Windows.Forms.ToolStripMenuItem tsmAbout;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton tsbNewFile;
         private System.Windows.Forms.ToolStripButton tsbOpenFile;
         private System.Windows.Forms.ToolStripButton tsbSaveFile;
         private System.Windows.Forms.ToolStripButton tsbSaveAll;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-        private System.Windows.Forms.ToolStripButton tsbRecentFiles;
+        private System.Windows.Forms.ToolStripButton tsbOpenRecent;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.ToolStripButton tsbCut;
         private System.Windows.Forms.ToolStripButton tsbCopy;
@@ -599,6 +607,7 @@
         private System.Windows.Forms.ToolStripButton tsbAbout;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel tssStatus;
+        private System.Windows.Forms.ContextMenuStrip cmsRecentFiles;
     }
 }
 

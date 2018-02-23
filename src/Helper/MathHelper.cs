@@ -1,12 +1,14 @@
 ﻿// <copyright file="MathHelper.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using static System.Math;
 
 namespace Helper
 {
+    using System;
+
     public static class MathHelper
     {
         public const float DefaultTolerance = 1e-7f;
@@ -16,12 +18,18 @@ namespace Helper
             return NearlyEquals(left, right, DefaultTolerance);
         }
 
-        public static bool NearlyEquals(float left, float right, float tolerance)
+        public static bool NearlyEquals(
+            float left,
+            float right,
+            float tolerance)
         {
-            return Abs(left - right) <= tolerance;
+            return Math.Abs(left - right) <= tolerance;
         }
 
-        public static float SnapToLimit(float value, float limit, float tolerance)
+        public static float SnapToLimit(
+            float value,
+            float limit,
+            float tolerance)
         {
             return NearlyEquals(value, limit, tolerance) ? limit : value;
         }
@@ -31,7 +39,11 @@ namespace Helper
             return Clamp(value, min, max, 0);
         }
 
-        public static float Clamp(float value, float min, float max, float tolerance)
+        public static float Clamp(
+            float value,
+            float min,
+            float max,
+            float tolerance)
         {
             // NaN cannot be clamped to a range.
             if (Single.IsNaN(value))
@@ -67,7 +79,10 @@ namespace Helper
             return value;
         }
 
-        public static float Max(float value1, float value2, params float[] values)
+        public static float Max(
+            float value1,
+            float value2,
+            params float[] values)
         {
             var max = Math.Max(value1, value2);
             if (values != null)
@@ -85,19 +100,10 @@ namespace Helper
         {
             if (values is null)
             {
-                throw new ArgumentNullException(
-                    nameof(values),
-                    SR.ErrorEmptyOrNullArray(nameof(values)));
+                throw new ArgumentNullException(nameof(values));
             }
 
-            if (values.Length == 0)
-            {
-                throw new ArgumentException(
-                    SR.ErrorEmptyOrNullArray(nameof(values)),
-                    nameof(values));
-            }
-
-            var max = values[0];
+            var max = Single.NegativeInfinity;
             foreach (var value in values)
             {
                 if (max < value)
@@ -109,7 +115,10 @@ namespace Helper
             return max;
         }
 
-        public static float Min(float value1, float value2, params float[] values)
+        public static float Min(
+            float value1,
+            float value2,
+            params float[] values)
         {
             var min = Math.Min(value1, value2);
             if (values != null)
@@ -127,19 +136,10 @@ namespace Helper
         {
             if (values is null)
             {
-                throw new ArgumentNullException(
-                    nameof(values),
-                    SR.ErrorEmptyOrNullArray(nameof(values)));
+                throw new ArgumentNullException(nameof(values));
             }
 
-            if (values.Length == 0)
-            {
-                throw new ArgumentException(
-                    SR.ErrorEmptyOrNullArray(nameof(values)),
-                    nameof(values));
-            }
-
-            var min = values[0];
+            var min = Single.PositiveInfinity;
             foreach (var value in values)
             {
                 if (min > value)

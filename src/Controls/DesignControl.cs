@@ -1,25 +1,26 @@
 ﻿// <copyright file="DesignControl.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Security.Permissions;
+using System.Security;
 using System.Windows.Forms;
+using static System.Diagnostics.Debug;
 
 namespace Controls
 {
-    public delegate void ProcessMessage(ref Message m);
-
     [DefaultEvent("Paint")]
     [Description("Provides a control to be used for design purposes.")]
     public partial class DesignControl : UserControl
     {
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        private IReadOnlyDictionary<int, ProcessMessage> ProcedureOverrides
+        private IReadOnlyDictionary<int, PreprocessMessageCallback> ProcedureOverrides
         {
             get;
         }
@@ -79,20 +80,18 @@ namespace Controls
             {
                 switch (BorderStyle)
                 {
-                    case BorderStyle.None:
-                        return Size.Empty;
+                case BorderStyle.None:
+                    return Size.Empty;
 
-                    case BorderStyle.FixedSingle:
-                        return SystemInformation.BorderSize;
+                case BorderStyle.FixedSingle:
+                    return SystemInformation.BorderSize;
 
-                    case BorderStyle.Fixed3D:
-                        return SystemInformation.Border3DSize;
+                case BorderStyle.Fixed3D:
+                    return SystemInformation.Border3DSize;
 
-                    default:
-                        throw new InvalidEnumArgumentException(
-                            nameof(BorderStyle),
-                            (int)BorderStyle,
-                            typeof(BorderStyle));
+                default:
+                    Assert(false);
+                    return Size.Empty;
                 }
             }
         }
@@ -113,10 +112,8 @@ namespace Controls
             DoubleBuffered = true;
             ResizeRedraw = true;
             BorderStyle = BorderStyle.FixedSingle;
-            BackgroundPattern = FallbackCheckerPattern;
-            SetTiledBackground(BackgroundPattern);
 
-            ProcedureOverrides = new Dictionary<int, ProcessMessage>()
+            ProcedureOverrides = new Dictionary<int, PreprocessMessageCallback>()
             {
                 { WindowMessages.KeyDown, ProcessKeyDown },
                 { WindowMessages.SystemKeyDown, ProcessKeyDown },
@@ -127,9 +124,7 @@ namespace Controls
             };
         }
 
-        [SecurityPermission(
-            SecurityAction.LinkDemand,
-            Flags = SecurityPermissionFlag.UnmanagedCode)]
+        [SecuritySafeCritical]
         protected override void DefWndProc(ref Message m)
         {
             if (ProcedureOverrides.TryGetValue(m.Msg, out var action))

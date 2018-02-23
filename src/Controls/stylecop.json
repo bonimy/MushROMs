@@ -1,0 +1,23 @@
+﻿{
+  // ACTION REQUIRED: This file was automatically added to your project, but it
+  // will not take effect until additional steps are taken to enable it. See the
+  // following page for additional information:
+  //
+  // https://github.com/DotNetAnalyzers/StyleCopAnalyzers/blob/master/documentation/EnableConfiguration.md
+
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+    "documentationRules": {
+      "companyName": "Public Domain",
+      "copyrightText": "Copyright (c) {year} {name}. All rights reserved\r\nLicensed under {licenseName}.\r\nSee {licenseFile} in project root for full license information, or visit\r\n{licenseSite}",
+      "xmlHeader": true,
+      "variables": {
+        "year": "2018",
+        "name": "Nelson Garcia",
+        "licenseName": "GNU Affero General Public License",
+        "licenseFile": "LICENSE",
+        "licenseSite": "https://www.gnu.org/licenses/#AGPL"
+      }
+    }
+  }
+}

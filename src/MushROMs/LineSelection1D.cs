@@ -1,19 +1,30 @@
 ﻿// <copyright file="LineSelection1D.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Helper;
 
 namespace MushROMs
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using static Helper.ThrowHelper;
+
     public sealed class LineSelection1D : Selection1D
     {
-        private int Length
+        public LineSelection1D(int startIndex, int length)
+            : base(startIndex)
         {
-            get;
+            if (length < 0)
+            {
+                throw ValueNotGreaterThanEqualTo(
+                    nameof(length),
+                    length);
+            }
+
+            Length = length;
         }
 
         public override int Count
@@ -24,33 +35,28 @@ namespace MushROMs
             }
         }
 
+        private int Length
+        {
+            get;
+        }
+
         public override int this[int index]
         {
             get
             {
                 if ((uint)index >= (uint)Length)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index));
+                    throw ValueNotInArrayBounds(
+                        nameof(index),
+                        index,
+                        Count);
                 }
 
                 return StartIndex + index;
             }
         }
 
-        public LineSelection1D(int startIndex, int length)
-        {
-            if (length < 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(length),
-                    SR.ErrorLowerBoundInclusive(nameof(length), length, 0));
-            }
-
-            StartIndex = startIndex;
-            Length = length;
-        }
-
-        public override Selection1D Copy()
+        public override ISelection1D Copy()
         {
             return new LineSelection1D(StartIndex, Length);
         }
@@ -68,22 +74,12 @@ namespace MushROMs
 
         private struct Enumerator : IEnumerator<int>
         {
-            private int StartIndex
+            public Enumerator(int startIndex, int length)
             {
-                get;
-                set;
-            }
-
-            private int Index
-            {
-                get;
-                set;
-            }
-
-            private int Last
-            {
-                get;
-                set;
+                StartIndex = startIndex;
+                Last = StartIndex + length;
+                Index = StartIndex;
+                Current = default;
             }
 
             public int Current
@@ -100,31 +96,40 @@ namespace MushROMs
                 }
             }
 
-            public Enumerator(int startIndex, int length)
+            private int StartIndex
             {
-                StartIndex = startIndex;
-                Last = StartIndex + length;
-                Index = StartIndex;
-                Current = default(int);
+                get;
+            }
+
+            private int Last
+            {
+                get;
+            }
+
+            private int Index
+            {
+                get;
+                set;
             }
 
             public void Reset()
             {
                 Index = StartIndex;
+                Current = default;
             }
 
             public bool MoveNext()
             {
-                if (Index < Last)
+                if (Index >= Last)
                 {
-                    Current = Index++;
-                    return true;
+                    return false;
                 }
 
-                return false;
+                Current = Index++;
+                return true;
             }
 
-            public void Dispose()
+            void IDisposable.Dispose()
             {
             }
         }

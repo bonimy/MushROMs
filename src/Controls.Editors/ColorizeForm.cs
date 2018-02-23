@@ -1,37 +1,28 @@
 ﻿// <copyright file="ColorizeForm.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
 using System.ComponentModel;
+using System.Windows.Forms;
 using static System.Math;
 
 namespace Controls.Editors
 {
-    internal sealed partial class ColorizeForm : DialogForm
+    internal sealed partial class ColorizeForm : Form
     {
-        private DialogProxy DialogProxy
-        {
-            get;
-        }
-
-        protected override object ProxySender
-        {
-            get
-            {
-                if (DialogProxy != null)
-                {
-                    return DialogProxy;
-                }
-
-                return base.ProxySender;
-            }
-        }
-
         public event EventHandler ColorValueChanged;
 
         private static readonly Hsl FallbackAdjust = new Hsl(0, 0, 0);
-        private static readonly Hsl FallbackColorize = new Hsl(0.25f, 0.50f, 0.50f);
+
+        private static readonly Hsl FallbackColorize = new Hsl(
+            0.25f,
+            0.50f,
+            0.50f);
+
         private const float FallbackEffectiveness = 1.00f;
 
         private Hsl SavedAdjust
@@ -105,6 +96,7 @@ namespace Controls.Editors
                 Saturation = value.Saturation;
                 Lightness = value.Lightness;
                 RunEvent = true;
+
                 OnColorValueChanged(EventArgs.Empty);
             }
         }
@@ -126,7 +118,9 @@ namespace Controls.Editors
         {
             get
             {
-                return chkColorize.Checked ? ColorizeMode.Colorize : ColorizeMode.Adjust;
+                return chkColorize.Checked ?
+                    ColorizeMode.Colorize :
+                    ColorizeMode.Adjust;
             }
 
             set
@@ -134,18 +128,18 @@ namespace Controls.Editors
                 switch (value)
                 {
                 case ColorizeMode.Adjust:
-                chkColorize.Checked = false;
-                return;
+                    chkColorize.Checked = false;
+                    return;
 
                 case ColorizeMode.Colorize:
-                chkColorize.Checked = true;
-                return;
+                    chkColorize.Checked = true;
+                    return;
 
                 default:
-                throw new InvalidEnumArgumentException(
-                    nameof(value),
-                    (int)value,
-                    typeof(ColorizeMode));
+                    throw new InvalidEnumArgumentException(
+                        nameof(value),
+                        (int)value,
+                        typeof(ColorizeMode));
                 }
             }
         }
@@ -186,11 +180,6 @@ namespace Controls.Editors
             ResetValues();
 
             RunEvent = true;
-        }
-
-        public ColorizeForm(DialogProxy dialogProxy) : this()
-        {
-            DialogProxy = dialogProxy;
         }
 
         public void ResetValues()
@@ -242,7 +231,7 @@ namespace Controls.Editors
         {
             if (RunEvent)
             {
-                ColorValueChanged?.Invoke(ProxySender, e);
+                ColorValueChanged?.Invoke(this, e);
             }
         }
 
@@ -261,7 +250,7 @@ namespace Controls.Editors
             OnColorValueChanged(EventArgs.Empty);
         }
 
-        private void HSLE_ValueChanged(object sender, EventArgs e)
+        private void TrackBar_ValueChanged(object sender, EventArgs e)
         {
             btnReset.Enabled = true;
             OnColorValueChanged(EventArgs.Empty);

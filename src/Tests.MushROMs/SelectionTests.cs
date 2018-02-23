@@ -1,5 +1,8 @@
 ﻿// <copyright file="SelectionTests.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System.Collections.Generic;
@@ -18,7 +21,7 @@ namespace Tests.Helper
             var selection = Selection1D.Empty;
             Assert.AreEqual(selection.Count, 0);
             TestSelection(selection);
-            Assert.IsTrue(selection.IsEmpty);
+            Assert.IsTrue(selection.Count == 0);
 
             for (var i = -0x1000; i <= 0x1000; i++)
             {
@@ -29,7 +32,7 @@ namespace Tests.Helper
             selection = new SingleSelection1D(0x100);
             Assert.AreEqual(selection.Count, 1);
             TestSelection(selection);
-            Assert.IsFalse(selection.IsEmpty);
+            Assert.IsFalse(selection.Count == 0);
             Assert.IsTrue(selection.Contains(0x100));
             for (var i = -0x1000; i <= 0x1000; i++)
             {
@@ -45,7 +48,7 @@ namespace Tests.Helper
             selection = new LineSelection1D(0x80, 0x80);
             Assert.AreEqual(selection.Count, 0x80);
             TestSelection(selection);
-            Assert.IsFalse(selection.IsEmpty);
+            Assert.IsFalse(selection.Count == 0);
             for (var i = -0x1000; i <= 0x1000; i++)
             {
                 if (i >= 0x80 && i < 0x100)
@@ -64,7 +67,7 @@ namespace Tests.Helper
                 (x, y) => x | y);
             Assert.AreEqual(selection.Count, 0x81);
             TestSelection(selection);
-            Assert.IsFalse(selection.IsEmpty);
+            Assert.IsFalse(selection.Count == 0);
             for (var i = -0x1000; i <= 0x1000; i++)
             {
                 if ((i >= 0x80 && i < 0x100) || i == 0x10)
@@ -78,7 +81,7 @@ namespace Tests.Helper
             }
         }
 
-        private void TestSelection(Selection1D selection)
+        private void TestSelection(ISelection1D selection)
         {
             // Add each selected index to the list
             var list = new List<int>();

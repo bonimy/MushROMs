@@ -1,5 +1,8 @@
 ﻿// <copyright file="IntegerTextBox.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -91,7 +94,7 @@ namespace Controls
 
         public IntegerTextBox()
         {
-            Text = FallbackValue.ToString(SR.CurrentCulture);
+            Text = SR.GetString(FallbackValue);
             CharacterCasing = FallbackCharacterCasing;
         }
 
@@ -107,8 +110,7 @@ namespace Controls
             _value = value;
 
             // Parse the value.
-            Text = Value.ToString(AllowHex ? "X" : String.Empty, SR.CurrentCulture);
-
+            Text = SR.GetString(Value, AllowHex ? "X" : String.Empty);
             OnValueChanged(EventArgs.Empty);
         }
 

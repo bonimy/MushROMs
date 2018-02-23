@@ -1,11 +1,13 @@
 ﻿// <copyright file="ErrorCodeException.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
+using System.Security;
 using Controls.Properties;
 using Helper;
 
@@ -17,11 +19,10 @@ namespace Controls
         public int ErrorCode
         {
             get;
-            private set;
         }
 
         public ErrorCodeException() :
-            this(Marshal.GetLastWin32Error())
+            this(UnsafeNativeMethods.LastWin32Error)
         {
         }
 
@@ -39,16 +40,18 @@ namespace Controls
         public ErrorCodeException(string message) :
             base(message)
         {
-            ErrorCode = Marshal.GetLastWin32Error();
+            ErrorCode = UnsafeNativeMethods.LastWin32Error;
         }
 
         public ErrorCodeException(string message, Exception innerException) :
             base(message, innerException)
         {
-            ErrorCode = Marshal.GetLastWin32Error();
+            ErrorCode = UnsafeNativeMethods.LastWin32Error;
         }
 
-        protected ErrorCodeException(SerializationInfo info, StreamingContext context) :
+        protected ErrorCodeException(
+            SerializationInfo info,
+            StreamingContext context) :
             base(info, context)
         {
             if (info is null)
@@ -64,8 +67,10 @@ namespace Controls
             return SR.GetString(Resources.ErrorCodeMessage, (uint)value);
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.SerializationFormatter)]
-        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        [SecurityCritical]
+        public override void GetObjectData(
+            SerializationInfo info,
+            StreamingContext context)
         {
             if (info is null)
             {

@@ -1,20 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using MushROMs.GenericEditor.Properties;
+﻿// <copyright file="Program.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
+// </copyright>
 
 namespace MushROMs.GenericEditor
 {
-    internal static class Program
+    using System;
+    using System.Collections.Specialized;
+    using System.Windows.Forms;
+    using MushROMs.GenericEditor.Properties;
+
+    public static class Program
     {
-        private static Settings Settings
+        internal static readonly Settings Settings = Settings.Default;
+
+        public static void About()
         {
-            get
+            About(null);
+        }
+
+        public static void About(IWin32Window owner)
+        {
+            using (var dialog = new AboutDialog())
             {
-                return Settings.Default;
+                dialog.ShowDialog(owner);
             }
+        }
+
+        internal static void InitializeSettings()
+        {
+            Settings.RecentFiles = new StringCollection();
         }
 
         /// <summary>
@@ -25,30 +42,28 @@ namespace MushROMs.GenericEditor
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.ApplicationExit += Application_ApplicationExit;
+            Application.ApplicationExit += (s, e) =>
+            {
+                Settings.Save();
+            };
 
             if (Settings.FirstTime)
             {
-                ResetSettings();
+                InitializeSettings();
 
                 Settings.FirstTime = false;
                 Settings.Save();
             }
 
-            using (var form = new MainForm())
+            using (var core = new Core())
             {
-                Application.Run(form);
+                core.MainForm.AboutClick += (sender, e) =>
+                {
+                    About(sender as IWin32Window);
+                };
+
+                Application.Run(core.MainForm);
             }
-        }
-
-        private static void Application_ApplicationExit(object sender, EventArgs e)
-        {
-            Settings.Save();
-        }
-
-        public static void ResetSettings()
-        {
-            Settings.RecentFiles = new System.Collections.Specialized.StringCollection();
         }
     }
 }

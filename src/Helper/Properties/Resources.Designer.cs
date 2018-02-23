@@ -14,7 +14,6 @@
 
 namespace Helper.Properties {
     using System;
-    using System.Reflection;
     
     
     /// <summary>
@@ -44,7 +43,7 @@ namespace Helper.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Helper.Properties.Resources", typeof(Resources).GetTypeInfo().Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Helper.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -66,119 +65,11 @@ namespace Helper.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value of &apos;{1}&apos; is not valid for &apos;{0}&apos;. &apos;{0}&apos; cannot be negative and must be and less than &apos;{2}&apos;..
+        ///   Looks up a localized string similar to End of string.
         /// </summary>
-        internal static string ErrorArrayBounds {
+        internal static string EndOfString {
             get {
-                return ResourceManager.GetString("ErrorArrayBounds", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Value of &apos;{1}&apos; is not valid for &apos;{0}&apos;. &apos;{0}&apos; exceeds the array range &apos;{3}&apos; of &apos;{2}&apos; from starting index &apos;{4}&apos;..
-        /// </summary>
-        internal static string ErrorArrayRange {
-            get {
-                return ResourceManager.GetString("ErrorArrayRange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Value of &quot;{1}&quot; for &apos;{0}&apos; is not a string that a full path can be obtained from.\n\n{3}:\n{2}.
-        /// </summary>
-        internal static string ErrorCannotGetFullPath {
-            get {
-                return ResourceManager.GetString("ErrorCannotGetFullPath", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Value of &quot;{1}&quot; for &apos;{0}&apos; is not a string that a path extension can be obtained from.\n\n{3}:\n{2}.
-        /// </summary>
-        internal static string ErrorCannotGetPathExtension {
-            get {
-                return ResourceManager.GetString("ErrorCannotGetPathExtension", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Array &apos;{0}&apos; cannot be empty or null..
-        /// </summary>
-        internal static string ErrorEmptyOrNullArray {
-            get {
-                return ResourceManager.GetString("ErrorEmptyOrNullArray", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; has data that is in an incorrect format..
-        /// </summary>
-        internal static string ErrorFileFormat {
-            get {
-                return ResourceManager.GetString("ErrorFileFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to File.
-        /// </summary>
-        internal static string ErrorFileFormatName {
-            get {
-                return ResourceManager.GetString("ErrorFileFormatName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Value was either too large or too small for an Int24..
-        /// </summary>
-        internal static string ErrorInt24Overflow {
-            get {
-                return ResourceManager.GetString("ErrorInt24Overflow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is an invalid extension name..
-        /// </summary>
-        internal static string ErrorInvalidExtensionName {
-            get {
-                return ResourceManager.GetString("ErrorInvalidExtensionName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Size of data is not a valid size for the specified format..
-        /// </summary>
-        internal static string ErrorInvalidFileDataSize {
-            get {
-                return ResourceManager.GetString("ErrorInvalidFileDataSize", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is an invalid path name..
-        /// </summary>
-        internal static string ErrorInvalidPathName {
-            get {
-                return ResourceManager.GetString("ErrorInvalidPathName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Value of &apos;{1}&apos; is not valid for &apos;{0}&apos;. &apos;{0}&apos; must be greater than {2}..
-        /// </summary>
-        internal static string ErrorLowerBoundExclusive {
-            get {
-                return ResourceManager.GetString("ErrorLowerBoundExclusive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Value of &apos;{1}&apos; is not valid for &apos;{0}&apos;. &apos;{0}&apos; must be greater than or equal to {2}..
-        /// </summary>
-        internal static string ErrorLowerBoundInclusive {
-            get {
-                return ResourceManager.GetString("ErrorLowerBoundInclusive", resourceCulture);
+                return ResourceManager.GetString("EndOfString", resourceCulture);
             }
         }
         
@@ -201,33 +92,6 @@ namespace Helper.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Value was either too large or too small for a UInt24..
-        /// </summary>
-        internal static string ErrorUInt24Overflow {
-            get {
-                return ResourceManager.GetString("ErrorUInt24Overflow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Value of &apos;{1}&apos; is not valid for &apos;{0}&apos;. &apos;{0}&apos; must be less than {2}..
-        /// </summary>
-        internal static string ErrorUpperBoundExclusive {
-            get {
-                return ResourceManager.GetString("ErrorUpperBoundExclusive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Value of &apos;{1}&apos; is not valid for &apos;{0}&apos;. &apos;{0}&apos; must be less than or equal to {2}..
-        /// </summary>
-        internal static string ErrorUpperBoundInclusive {
-            get {
-                return ResourceManager.GetString("ErrorUpperBoundInclusive", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Parameter {0} is infinite. A finite value was expected..
         /// </summary>
         internal static string ErrorValueIsInfinity {
@@ -246,11 +110,47 @@ namespace Helper.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Untitled{0}{1}.
+        ///   Looks up a localized string similar to Value of &apos;{1}&apos; is not valid for &apos;{0}&apos;. &apos;{0}&apos; must be greater than {2}..
         /// </summary>
-        internal static string UntitledName {
+        internal static string ErrorValueNotGreaterThan {
             get {
-                return ResourceManager.GetString("UntitledName", resourceCulture);
+                return ResourceManager.GetString("ErrorValueNotGreaterThan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value of &apos;{1}&apos; is not valid for &apos;{0}&apos;. &apos;{0}&apos; must be greater than or equal to {2}..
+        /// </summary>
+        internal static string ErrorValueNotGreaterThanOrEqualTo {
+            get {
+                return ResourceManager.GetString("ErrorValueNotGreaterThanOrEqualTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value of &apos;{1}&apos; is not valid for &apos;{0}&apos;. &apos;{0}&apos; cannot be negative and must be and less than &apos;{2}&apos;..
+        /// </summary>
+        internal static string ErrorValueNotInArrayBounds {
+            get {
+                return ResourceManager.GetString("ErrorValueNotInArrayBounds", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value of &apos;{1}&apos; is not valid for &apos;{0}&apos;. &apos;{0}&apos; must be less than {2}..
+        /// </summary>
+        internal static string ErrorValueNotLessThan {
+            get {
+                return ResourceManager.GetString("ErrorValueNotLessThan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value of &apos;{1}&apos; is not valid for &apos;{0}&apos;. &apos;{0}&apos; must be less than or equal to {2}..
+        /// </summary>
+        internal static string ErrorValueNotLessThanOrEqualTo {
+            get {
+                return ResourceManager.GetString("ErrorValueNotLessThanOrEqualTo", resourceCulture);
             }
         }
     }

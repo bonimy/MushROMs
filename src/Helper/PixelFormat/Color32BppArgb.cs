@@ -1,21 +1,22 @@
 ﻿// <copyright file="Color32BppArgb.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Text;
-using static System.Math;
-
-namespace Helper.PixelFormats
+namespace Helper.PixelFormat
 {
+    using System;
+    using System.Drawing;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using static System.Math;
+
     [StructLayout(LayoutKind.Explicit)]
     public struct Color32BppArgb : IEquatable<Color32BppArgb>
     {
         public const int SizeOf = sizeof(int);
-
-        public static readonly Color32BppArgb Empty = new Color32BppArgb();
 
         public const int AlphaIndex = 3;
 
@@ -25,7 +26,7 @@ namespace Helper.PixelFormats
 
         public const int BlueIndex = 0;
 
-        private const int BitsPerChannel = 8;
+        public static readonly Color32BppArgb Empty = default;
 
         internal const int BitsPerAlpha = BitsPerChannel;
 
@@ -34,6 +35,16 @@ namespace Helper.PixelFormats
         internal const int BitsPerGreen = BitsPerChannel;
 
         internal const int BitsPerBlue = BitsPerChannel;
+
+        private const int BitsPerChannel = 8;
+
+        private const int AlphaShift = BitsPerAlpha * AlphaIndex;
+
+        private const int RedShift = BitsPerRed * RedIndex;
+
+        private const int GreenShift = BitsPerGreen * GreenIndex;
+
+        private const int BlueShift = BitsPerBlue * BlueIndex;
 
         [FieldOffset(AlphaIndex)]
         private byte _alpha;
@@ -46,6 +57,28 @@ namespace Helper.PixelFormats
 
         [FieldOffset(BlueIndex)]
         private byte _blue;
+
+        public Color32BppArgb(int red, int green, int blue)
+            : this(Byte.MaxValue, red, green, blue)
+        {
+        }
+
+        public Color32BppArgb(int alpha, int red, int green, int blue)
+        {
+            _alpha = (byte)alpha;
+            _red = (byte)red;
+            _green = (byte)green;
+            _blue = (byte)blue;
+        }
+
+        private Color32BppArgb(int value)
+            : this(
+            value >> AlphaShift,
+            value >> RedShift,
+            value >> GreenShift,
+            value >> BlueShift)
+        {
+        }
 
         public byte Alpha
         {
@@ -116,80 +149,60 @@ namespace Helper.PixelFormats
             }
         }
 
-        public byte this[int index]
+        public static implicit operator Color32BppArgb(int value)
         {
-            get
-            {
-                switch (index)
-                {
-                    case AlphaIndex:
-                        return Alpha;
-
-                    case RedIndex:
-                        return Red;
-
-                    case GreenIndex:
-                        return Green;
-
-                    case BlueIndex:
-                        return Blue;
-
-                    default:
-                        throw new ArgumentOutOfRangeException(
-                            nameof(index),
-                            index,
-                            SR.ErrorArrayBounds(nameof(index), index, SizeOf));
-                }
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case AlphaIndex:
-                        Alpha = value;
-                        return;
-
-                    case RedIndex:
-                        Red = value;
-                        return;
-
-                    case GreenIndex:
-                        Green = value;
-                        return;
-
-                    case BlueIndex:
-                        Blue = value;
-                        return;
-
-                    default:
-                        throw new ArgumentOutOfRangeException(
-                            nameof(index),
-                            index,
-                            SR.ErrorArrayBounds(nameof(index), index, SizeOf));
-                }
-            }
+            return new Color32BppArgb(value);
         }
 
-        private Color32BppArgb(int value) : this(
-            value >> (BitsPerChannel * AlphaIndex),
-            value >> (BitsPerChannel * RedIndex),
-            value >> (BitsPerChannel * GreenIndex),
-            value >> (BitsPerChannel * BlueIndex))
+        public static implicit operator int(Color32BppArgb color32)
         {
+            return color32.Value;
         }
 
-        public Color32BppArgb(int red, int green, int blue) :
-            this(Byte.MaxValue, red, green, blue)
+        public static explicit operator Color32BppArgb(Color color)
         {
+            return new Color32BppArgb(
+                color.A,
+                color.R,
+                color.G,
+                color.B);
         }
 
-        public Color32BppArgb(int alpha, int red, int green, int blue)
+        public static implicit operator Color(Color32BppArgb color32)
         {
-            _alpha = (byte)alpha;
-            _red = (byte)red;
-            _green = (byte)green;
-            _blue = (byte)blue;
+            return Color.FromArgb(color32.Value);
+        }
+
+        public static explicit operator Color32BppArgb(ColorF colorF)
+        {
+            return new Color32BppArgb(
+                (int)Round(colorF.Alpha * Byte.MaxValue),
+                (int)Round(colorF.Red * Byte.MaxValue),
+                (int)Round(colorF.Green * Byte.MaxValue),
+                (int)Round(colorF.Blue * Byte.MaxValue));
+        }
+
+        public static implicit operator ColorF(Color32BppArgb color32)
+        {
+            return ColorF.FromArgb(
+                color32.Alpha / (float)Byte.MaxValue,
+                color32.Red / (float)Byte.MaxValue,
+                color32.Green / (float)Byte.MaxValue,
+                color32.Blue / (float)Byte.MaxValue);
+        }
+
+        public static bool operator ==(
+            Color32BppArgb left,
+            Color32BppArgb right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(
+            Color32BppArgb left,
+            Color32BppArgb right)
+        {
+            return !(left == right);
         }
 
         public bool Equals(Color32BppArgb obj)
@@ -233,58 +246,6 @@ namespace Helper.PixelFormats
             sb.Append(SR.GetString(Blue));
             sb.Append('}');
             return sb.ToString();
-        }
-
-        public static implicit operator Color32BppArgb(int value)
-        {
-            return new Color32BppArgb(value);
-        }
-
-        public static implicit operator int(Color32BppArgb color32)
-        {
-            return color32.Value;
-        }
-
-        public static explicit operator Color32BppArgb(Color color)
-        {
-            return new Color32BppArgb(
-                color.A,
-                color.R,
-                color.G,
-                color.B);
-        }
-
-        public static implicit operator Color(Color32BppArgb color32)
-        {
-            return Color.FromArgb(color32.Value);
-        }
-
-        public static explicit operator Color32BppArgb(ColorF colorF)
-        {
-            return new Color32BppArgb(
-                (int)Round(colorF.Alpha * Byte.MaxValue),
-                (int)Round(colorF.Red * Byte.MaxValue),
-                (int)Round(colorF.Green * Byte.MaxValue),
-                (int)Round(colorF.Blue * Byte.MaxValue));
-        }
-
-        public static implicit operator ColorF(Color32BppArgb color32)
-        {
-            return ColorF.FromArgb(
-                color32.Alpha / (float)Byte.MaxValue,
-                color32.Red / (float)Byte.MaxValue,
-                color32.Green / (float)Byte.MaxValue,
-                color32.Blue / (float)Byte.MaxValue);
-        }
-
-        public static bool operator ==(Color32BppArgb left, Color32BppArgb right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(Color32BppArgb left, Color32BppArgb right)
-        {
-            return !(left == right);
         }
     }
 }

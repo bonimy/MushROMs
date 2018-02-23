@@ -2,16 +2,42 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Nelson Garcia</Authors>
+    <Company>Public Domain</Company>
+    <Product>Helper</Product>
+    <Description>A geberal purpose class library with multiple uses</Description>
+    <Copyright>Copyright © 2018 Nelson Garcia</Copyright>
+    <PackageLicenseUrl>https://www.gnu.org/licenses/#AGPL</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/bonimy/MushROMs/tree/master/src/Helper</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bonimy/MushROMs</RepositoryUrl>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>Properties\helper.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Release\netstandard2.0\Helper.xml</DocumentationFile>
+    <NoWarn>1701;1702;1705;CS1591;</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.0\Helper.xml</DocumentationFile>
+    <LangVersion>latest</LangVersion>
+    <NoWarn>1701;1702;1705;CS1591;</NoWarn>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AdditionalFiles Include="stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.0.2" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

@@ -1,32 +1,35 @@
-﻿// <copyright file="iTileMap2D.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+﻿// <copyright file="ITileMap2D.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using Helper;
 
 namespace MushROMs
 {
+    using System.Drawing;
+
     public interface ITileMap2D : ITileMap
     {
-        Range2D GridSize
+        Size GridSize
         {
             get;
             set;
         }
 
-        Position2D ZeroTile
+        Point ZeroTile
         {
             get;
             set;
         }
 
-        Range2D ViewableTileRange
+        Size ViewableTileRange
         {
             get;
             set;
         }
 
-        Position2D ActiveTile
+        Point ActiveTile
         {
             get;
             set;

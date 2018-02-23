@@ -1,5 +1,8 @@
 ﻿// <copyright file="ExtensionComparerTests.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -15,7 +18,7 @@ namespace Tests.Helper
         public void ExtensionComparerConstructors()
         {
             // Default constructor should never throw.
-            var comparer = ExtensionComparer.DefaultComparer;
+            var comparer = ExtensionComparer.Default;
 
             // Ensure we are using our expected base comparer.
             Assert.AreEqual(
@@ -48,7 +51,7 @@ namespace Tests.Helper
                 new Parameters("No extension", String.Empty)
             };
 
-            var comparer = ExtensionComparer.DefaultComparer;
+            var comparer = ExtensionComparer.Default;
 
             foreach (var parameter in compareAsEqual)
             {
@@ -98,7 +101,7 @@ namespace Tests.Helper
                 new Parameters(@"C:\path\to\..\file.doc", "Document.docx")
             };
 
-            var comparer = ExtensionComparer.DefaultComparer;
+            var comparer = ExtensionComparer.Default;
 
             foreach (var parameter in compareAsUnequal)
             {
@@ -129,7 +132,7 @@ namespace Tests.Helper
         [TestMethod]
         public void ExtensionComparerExceptions()
         {
-            var comparer = ExtensionComparer.DefaultComparer;
+            var comparer = ExtensionComparer.Default;
 
             // Illegal path chars should always throw.
             Assert.ThrowsException<ArgumentException>(() =>

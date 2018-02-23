@@ -1,26 +1,43 @@
 ﻿// <copyright file="ColorF.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Text;
-using Helper.PixelFormats;
-using static System.Math;
-using static Helper.MathHelper;
-using Debug = System.Diagnostics.Debug;
 
 namespace Helper
 {
+    using System;
+    using System.Drawing;
+    using System.Text;
+    using Helper.PixelFormat;
+    using static Helper.MathHelper;
+    using static System.Diagnostics.Debug;
+    using static System.Math;
+
     public partial struct ColorF : IEquatable<ColorF>
     {
-        public static readonly ColorF Empty = new ColorF();
-
         public const float LumaRedWeight = 0.299f;
         public const float LumaGreenWeight = 0.587f;
         public const float LumaBlueWeight = 0.114f;
 
         public const int NumberOfChannels = 4;
         public const int NumberOfColorChannels = NumberOfChannels - 1;
+
+        public static readonly ColorF Empty = default;
+
+        private ColorF(float alpha, float red, float green, float blue)
+        {
+            Assert(!Single.IsNaN(alpha), "Invalid alpha value");
+            Assert(!Single.IsNaN(red), "Invalid red value");
+            Assert(!Single.IsNaN(green), "Invalid green value");
+            Assert(!Single.IsNaN(blue), "Invalid blue value");
+
+            Alpha = Clamp(alpha, 0, 1);
+            Red = Clamp(red, 0, 1);
+            Green = Clamp(green, 0, 1);
+            Blue = Clamp(blue, 0, 1);
+        }
 
         public float Alpha
         {
@@ -164,17 +181,73 @@ namespace Helper
             }
         }
 
-        private ColorF(float alpha, float red, float green, float blue)
+        public static explicit operator ColorF(Color color)
         {
-            Debug.Assert(!Single.IsNaN(alpha), "alpha cannot be NaN.");
-            Debug.Assert(!Single.IsNaN(red), "red cannot be NaN.");
-            Debug.Assert(!Single.IsNaN(green), "green cannot be NaN.");
-            Debug.Assert(!Single.IsNaN(blue), "blue cannot be NaN.");
+            // This is an explicit operator because we lose information if parameter color is a known/named color.
+            return FromArgb(
+                color.A / (float)Byte.MaxValue,
+                color.R / (float)Byte.MaxValue,
+                color.G / (float)Byte.MaxValue,
+                color.B / (float)Byte.MaxValue);
+        }
 
-            Alpha = Clamp(alpha, 0, 1);
-            Red = Clamp(red, 0, 1);
-            Green = Clamp(green, 0, 1);
-            Blue = Clamp(blue, 0, 1);
+        public static explicit operator Color(ColorF color)
+        {
+            return Color.FromArgb(
+                (int)Round(color.Alpha * Byte.MaxValue),
+                (int)Round(color.Red * Byte.MaxValue),
+                (int)Round(color.Green * Byte.MaxValue),
+                (int)Round(color.Blue * Byte.MaxValue));
+        }
+
+        public static ColorF operator -(ColorF left, ColorF right)
+        {
+            return Subtract(left, right);
+        }
+
+        public static ColorF operator *(ColorF left, ColorF right)
+        {
+            return Multiply(left, right);
+        }
+
+        public static ColorF operator /(ColorF left, ColorF right)
+        {
+            return Divide(left, right);
+        }
+
+        public static bool operator ==(ColorF left, ColorF right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ColorF left, ColorF right)
+        {
+            return !(left == right);
+        }
+
+        public static ColorF operator ~(ColorF color)
+        {
+            return Negate(color);
+        }
+
+        public static ColorF operator +(ColorF left, ColorF right)
+        {
+            return Add(left, right);
+        }
+
+        public static ColorF Negate(ColorF color)
+        {
+            return color.Invert();
+        }
+
+        public static ColorF Add(ColorF left, ColorF right)
+        {
+            return LinearDodge(left, right);
+        }
+
+        public static ColorF Subtract(ColorF left, ColorF right)
+        {
+            return Difference(left, right);
         }
 
         public ColorF Grayscale()
@@ -240,56 +313,6 @@ namespace Helper
             sb.Append(SR.GetString(Blue));
             sb.Append('}');
             return sb.ToString();
-        }
-
-        public static ColorF Negate(ColorF color)
-        {
-            return color.Invert();
-        }
-
-        public static ColorF operator ~(ColorF color)
-        {
-            return Negate(color);
-        }
-
-        public static ColorF Add(ColorF left, ColorF right)
-        {
-            return LinearDodge(left, right);
-        }
-
-        public static ColorF operator +(ColorF left, ColorF right)
-        {
-            return Add(left, right);
-        }
-
-        public static ColorF Subtract(ColorF left, ColorF right)
-        {
-            return Difference(left, right);
-        }
-
-        public static ColorF operator -(ColorF left, ColorF right)
-        {
-            return Subtract(left, right);
-        }
-
-        public static ColorF operator *(ColorF left, ColorF right)
-        {
-            return Multiply(left, right);
-        }
-
-        public static ColorF operator /(ColorF left, ColorF right)
-        {
-            return Divide(left, right);
-        }
-
-        public static bool operator ==(ColorF left, ColorF right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(ColorF left, ColorF right)
-        {
-            return !(left == right);
         }
     }
 }

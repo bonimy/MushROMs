@@ -1,5 +1,8 @@
 ﻿// <copyright file="SuffixTree.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 /*
@@ -13,19 +16,34 @@ A note on memory management:
 Try creating as few new suffix tree classes as possible. Every time a new node is created, it has to initialize an array of child nodes of size equal to the alphabet size (257). For large sets of data, this operation becomes expensive and time-consuming. To counter the performance hit, the SuffixTree class can be reused. The class keeps a list of every used node. When the class is reset to implement a new tree structure, it simply erases all of the nodes information and reference data without letting the class itself be erased from memory. This way, the next tree creation (if another one will be made) does not lose time on allocating new memory. The performance gains are very significant.
 */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-
 namespace Helper
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using static Helper.ThrowHelper;
+
     public class SuffixTree
     {
         public const int TerminationValue = AlphabetSize;
         public const int AlphabetSize = Byte.MaxValue + 1;
-        private const int EndOfData = SubstringPointer.EndOfString;
+        private const int EndOfData = SubstringInfo.EndOfString;
 
         private const int FallbakNodeCollectionSize = 0x1000;
+
+        public SuffixTree()
+        {
+            // Create a large node collection now to save time in the future.
+            Nodes = new NodeCollection(this, FallbakNodeCollectionSize);
+
+            Root = new RootNode(this);
+        }
+
+        public int Size
+        {
+            get;
+            private set;
+        }
 
         private RootNode Root
         {
@@ -89,42 +107,38 @@ namespace Helper
             }
         }
 
-        public int Size
+        public SubstringInfo GetLongestInternalSubstring(int index)
         {
-            get;
-            private set;
-        }
-
-        public SuffixTree()
-        {
-            // Create a large node collection now to save time in the future.
-            Nodes = new NodeCollection(this, FallbakNodeCollectionSize);
-
-            Root = new RootNode(this);
-        }
-
-        private void Initialize(int size)
-        {
-            if (size < 0)
+            if (index < 0 || index >= Size - 1)
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(size),
-                    SR.ErrorLowerBoundExclusive(nameof(size), size, 0));
+                throw ValueNotInArrayBounds(
+                    nameof(index),
+                    index,
+                    Size - 1);
             }
 
-            Nodes.Clear();
+            var node = (Node)Root;
+            var result = SubstringInfo.Empty;
 
-            size++;                 // +1 for the termination value.
-            Data = new int[size];
-            Size = size;
+            for (int i = index, length = 0; i < Size;)
+            {
+                // update to current node.
+                var value = Data[i];
+                node = node[value];
 
-            Position = -1;
-            Remainder = 0;
-            ActiveLength = 0;
-            ActivePosition = 0;
+                // Check if we're at the last node.
+                if (IsEndNode(node, index + length))
+                {
+                    return result;
+                }
 
-            Root.Reset();
-            ActiveNode = Root;
+                // update status to current node's position.
+                i += node.Length;
+                length += node.Length;
+                result = SubstringInfo.FromLengthAndEnd(length, node.End);
+            }
+
+            return result;
         }
 
         public void CreateTree(byte[] data)
@@ -147,7 +161,9 @@ namespace Helper
             unsafe
             {
                 fixed (byte* ptr = data)
+                {
                     CreateTree(ptr, data.Length, start, size);
+                }
             }
         }
 
@@ -169,32 +185,58 @@ namespace Helper
             }
         }
 
-        private unsafe void CreateTree(byte* data, int length, int start, int size)
+        private unsafe void CreateTree(
+            byte* data,
+            int length,
+            int start,
+            int size)
         {
             if (start < 0)
             {
-                throw new ArgumentOutOfRangeException(
+                throw ValueNotGreaterThan(
                     nameof(start),
-                    SR.ErrorLowerBoundExclusive(nameof(start), start, 0));
+                    start);
             }
 
             if (start + size > length)
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(size),
-                    SR.ErrorArrayRange(nameof(size), size, nameof(data), length, start));
+                throw new Exception();
             }
 
             Initialize(size);
 
-            data += start;
+            var src = data + start;
             for (var i = 0; i < size; i++)
             {
-                Add(data[i]);
+                Add(src[i]);
             }
 
             Add(TerminationValue);
             Position++;
+        }
+
+        private void Initialize(int size)
+        {
+            if (size < 0)
+            {
+                throw ValueNotGreaterThan(
+                    nameof(size),
+                    size);
+            }
+
+            Nodes.Clear();
+
+            // +1 for the termination value.
+            Data = new int[size + 1];
+            Size = Data.Length;
+
+            Position = -1;
+            Remainder = 0;
+            ActiveLength = 0;
+            ActivePosition = 0;
+
+            Root.Reset();
+            ActiveNode = Root;
         }
 
         private void Add(int value)
@@ -207,71 +249,102 @@ namespace Helper
 
             // [?] Is there a smarter way to go through this loop?
             Remainder++;
-            do
+            while (UpdatePosition(value))
             {
-                // [?] Why do we do this?
-                if (ActiveLength == 0)
+                if (Remainder > 0)
                 {
-                    ActivePosition = Position;
-                }
-
-                // Get the active child node.
-                var activeValue = Data[ActivePosition];
-                var stem = ActiveNode[activeValue];
-
-                // Create a new child node if it does not currently exist
-                if (stem is null)
-                {
-                    var leaf = Nodes.Add(Position);
-                    ActiveNode[activeValue] = leaf;
-                    AddLink(ActiveNode);
-                }
-                else
-                {
-                    // Determine if current substring exceeds the size of the active child node's.
-                    var edge = stem.Length;
-                    if (ActiveLength >= edge)
-                    {
-                        ActivePosition += edge;
-                        ActiveLength -= edge;
-                        ActiveNode = stem;
-                        continue;
-                    }
-
-                    // If the node and substring still match, update active point and terminate sequence.
-                    if (Data[stem.Start + ActiveLength] == value)
-                    {
-                        ActiveLength++;
-
-                        // If we are in an internal node needing a suffix link, we chain this node to those.
-                        AddLink(ActiveNode);
-                        break;
-                    }
-
-                    // Redefine active node as a branch. It will branch to the original substring and the new substring.
-                    var branch = Nodes.Add(stem.Start, stem.Start + ActiveLength);
-                    ActiveNode[activeValue] = branch;
-
-                    var leaf = Nodes.Add(Position, EndOfData);
-                    branch[value] = leaf;
-                    stem.Start += ActiveLength;
-                    branch[Data[stem.Start]] = stem;
-                    AddLink(branch);
-                }
-
-                Remainder--;
-
-                if (ActiveNode == Root && ActiveLength > 0)
-                {
-                    ActiveLength--;
-                    ActivePosition = Position - Remainder + 1;
-                }
-                else
-                {
-                    ActiveNode = ActiveNode.Link ?? Root;
+                    break;
                 }
             }
-            while (Remainder > 0);
+        }
+
+        private bool UpdatePosition(int value)
+        {
+            // [?] Why do we do this?
+            if (ActiveLength == 0)
+            {
+                ActivePosition = Position;
+            }
+
+            // Get the active child node.
+            var activeValue = Data[ActivePosition];
+            var stem = ActiveNode[activeValue];
+
+            // Create a new child node if it does not currently exist
+            if (stem is null)
+            {
+                var leaf = Nodes.Add(Position);
+                ActiveNode[activeValue] = leaf;
+                AddLink(ActiveNode);
+            }
+            else
+            {
+                if (IsEndNode(stem))
+                {
+                    return true;
+                }
+
+                if (!StillUpdating(stem, value))
+                {
+                    return false;
+                }
+
+                // Redefine active node as a branch. It will branch to the original substring and the new substring.
+                var branch = Nodes.Add(stem.Start, stem.Start + ActiveLength);
+                ActiveNode[activeValue] = branch;
+
+                var leaf = Nodes.Add(Position, EndOfData);
+                branch[value] = leaf;
+                stem.Start += ActiveLength;
+                branch[Data[stem.Start]] = stem;
+                AddLink(branch);
+            }
+
+            Remainder--;
+            UpdateActiveNode();
+            return true;
+        }
+
+        private bool StillUpdating(Node stem, int value)
+        {
+            // If the node and substring still match, update active point and terminate sequence.
+            if (Data[stem.Start + ActiveLength] != value)
+            {
+                return true;
+            }
+
+            ActiveLength++;
+
+            // If we are in an internal node needing a suffix link, we chain this node to those.
+            AddLink(ActiveNode);
+            return false;
+        }
+
+        private bool IsEndNode(Node stem)
+        {
+            // Determine if current substring exceeds the size of the active child node's.
+            var edge = stem.Length;
+            if (ActiveLength < edge)
+            {
+                return false;
+            }
+
+            ActivePosition += edge;
+            ActiveLength -= edge;
+            ActiveNode = stem;
+            return true;
+        }
+
+        private void UpdateActiveNode()
+        {
+            if (ActiveNode != Root || ActiveLength <= 0)
+            {
+                ActiveNode = ActiveNode.Link ?? Root;
+                return;
+            }
+
+            ActiveLength--;
+            ActivePosition = Position - Remainder + 1;
         }
 
         private void AddLink(Node node)
@@ -284,55 +357,44 @@ namespace Helper
             ActiveLinkNode = node;
         }
 
-        public SubstringPointer GetLongestInternalSubstring(int index)
+        private bool IsEndNode(Node node, int end)
         {
-            if (index < 0 || index >= Size - 1)
+            // If no node specifies the current value, then our substring has reached max.
+            if (node is null)
             {
-                throw new ArgumentOutOfRangeException(
-                    nameof(index),
-                    SR.ErrorArrayBounds(nameof(index), index, Size - 1));
+                return true;
             }
 
-            unsafe
+            // if node goes to end of data, then this is the longest match.
+            if (node.End > end)
             {
-                fixed (int* ptr = Data)
-                {
-                    var node = (Node)Root;
-                    var result = SubstringPointer.Empty;
-
-                    for (int i = index, length = 0; i < Size;)
-                    {
-                        // update to current node.
-                        var value = ptr[i];
-                        node = node[value];
-
-                        // If no node specifies the current value, then our substring has reached max.
-                        if (node is null)
-                        {
-                            return result;
-                        }
-
-                        // if node goes to end of data, then this is the longest match.
-                        if (node.End > index + length || node.End == -1)
-                        {
-                            return result;
-                        }
-
-                        // update status to current node's position.
-                        i += node.Length;
-                        length += node.Length;
-                        result = SubstringPointer.FromLengthAndEnd(length, node.End);
-                    }
-
-                    return result;
-                }
+                return true;
             }
+
+            // Or if this node explicitly specified the end of data.
+            return node.End == EndOfData;
         }
 
         [DebuggerDisplay("Start = {Start}, Length = {Length}")]
         private class Node
         {
             private const int AllocationSize = AlphabetSize + 1;
+
+            public Node(SuffixTree tree, int start, int end)
+                : this(tree)
+            {
+                Start = start;
+                End = end;
+            }
+
+            private Node(SuffixTree tree)
+            {
+                Debug.Assert(tree != null, "Tree cannot be null.");
+                Tree = tree;
+
+                Active = new int[AllocationSize];
+                Children = new Node[AllocationSize];
+            }
 
             public SuffixTree Tree
             {
@@ -360,11 +422,11 @@ namespace Helper
                 }
             }
 
-            public SubstringPointer SubstringPointer
+            public SubstringInfo SubstringPointer
             {
                 get
                 {
-                    return SubstringPointer.FromStartAndLength(Start, Length);
+                    return SubstringInfo.FromStartAndLength(Start, Length);
                 }
             }
 
@@ -415,21 +477,6 @@ namespace Helper
                 }
             }
 
-            private Node(SuffixTree tree)
-            {
-                Debug.Assert(tree != null, "Tree cannot be null.");
-                Tree = tree;
-
-                Active = new int[AllocationSize];
-                Children = new Node[AllocationSize];
-            }
-
-            public Node(SuffixTree tree, int start, int end) : this(tree)
-            {
-                Start = start;
-                End = end;
-            }
-
             public Node Reset(int start, int end)
             {
                 Start = start;
@@ -457,14 +504,9 @@ namespace Helper
         [DebuggerDisplay("Root")]
         private class RootNode : Node
         {
-            public RootNode(SuffixTree tree) : base(tree, -1, -1)
+            public RootNode(SuffixTree tree)
+                : base(tree, -1, -1)
             {
-            }
-
-            // Remove public access to this method.
-            private new void Reset(int start, int end)
-            {
-                base.Reset(start, end);
             }
 
             public void Reset()
@@ -476,10 +518,29 @@ namespace Helper
             {
                 return "Root";
             }
+
+            // Remove public access to this method.
+            private new void Reset(int start, int end)
+            {
+                base.Reset(start, end);
+            }
         }
 
         private class NodeCollection : List<Node>
         {
+            public NodeCollection(SuffixTree tree, int capacity)
+                : base(capacity)
+            {
+                Tree = tree;
+
+                for (var i = capacity; --i >= 0;)
+                {
+                    Add(-1);
+                }
+
+                Clear();
+            }
+
             public SuffixTree Tree
             {
                 get;
@@ -490,18 +551,6 @@ namespace Helper
             {
                 get;
                 private set;
-            }
-
-            public NodeCollection(SuffixTree tree, int capacity) : base(capacity)
-            {
-                Tree = tree;
-
-                for (var i = capacity; --i >= 0;)
-                {
-                    Add(-1);
-                }
-
-                Clear();
             }
 
             public Node Add(int position)

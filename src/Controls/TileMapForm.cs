@@ -1,5 +1,8 @@
 ﻿// <copyright file="TileMapForm.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -7,8 +10,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
-using Helper;
-using MushROMs;
 
 namespace Controls
 {
@@ -58,6 +59,9 @@ namespace Controls
             }
         }
 
+        /// <summary>
+        /// Do not call this method during this class's constructor. Add an event to <see cref="Form.Load"/> and call it there.
+        /// </summary>
         public void AnchorFormToTileMap()
         {
             if (TileMapControl == null)
@@ -87,7 +91,6 @@ namespace Controls
                 TileMapControl.TileMapResizeMode = TileMapResizeMode.ControlResize;
             }
 
-            var client = ClientSize;
             var window = WinApiMethods.InflateSize(
                 TileMapControl.ClientSize, MainTileMapPadding);
             window = SizeFromTileMap(window);
@@ -112,7 +115,7 @@ namespace Controls
                 return Rectangle.Empty;
             }
 
-            if (TileMapControl.CellSize == Range2D.Empty)
+            if (TileMapControl.CellSize.IsEmpty)
             {
                 return window;
             }
@@ -235,41 +238,49 @@ namespace Controls
 
         protected override void OnResizeBegin(EventArgs e)
         {
-            /*
             if (TileMapControl.TileMapResizeMode == TileMapResizeMode.None)
             {
                 TileMapControl.TileMapResizeMode = TileMapResizeMode.FormResize;
             }
-            */
+
             base.OnResizeBegin(e);
         }
 
         protected override void OnResizeEnd(EventArgs e)
         {
             base.OnResizeEnd(e);
-            /*
+
             if (TileMapControl.TileMapResizeMode == TileMapResizeMode.FormResize)
             {
                 TileMapControl.TileMapResizeMode = TileMapResizeMode.None;
             }
-            */
         }
 
-        protected override void OnAdjustWindowBounds(EventArgs<Rectangle> e)
+        protected override void OnAdjustWindowBounds(RectangleEventArgs e)
         {
-            e.Data = RectangleFromTileMap(e.Data);
+            if (e is null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
+            e.Rectangle = RectangleFromTileMap(e.Rectangle);
         }
 
-        protected override void OnAdjustWindowSize(EventArgs<Size> e)
+        protected override void OnAdjustWindowSize(RectangleEventArgs e)
         {
-            e.Data = SizeFromTileMap(e.Data);
+            if (e is null)
+            {
+                throw new ArgumentNullException(nameof(e));
+            }
+
+            e.Size = SizeFromTileMap(e.Size);
         }
 
         private Rectangle RectangleFromTileMap(Rectangle window)
         {
             if (TileMapControl is null ||
                 MainTileMapPadding == Padding.Empty ||
-                TileMapControl.CellSize == Range2D.Empty)
+                TileMapControl.CellSize.IsEmpty)
             {
                 return window;
             }
@@ -280,7 +291,7 @@ namespace Controls
             // Set new tile size
             if (TileMapControl.TileMapResizeMode != TileMapResizeMode.TileMapCellResize)
             {
-                TileMapControl.ViewSize = new Range2D(
+                TileMapControl.ViewSize = new Size(
                     tilemap.Width / TileMapControl.CellWidth,
                     tilemap.Height / TileMapControl.CellHeight);
             }
@@ -293,7 +304,7 @@ namespace Controls
         {
             if (TileMapControl is null ||
                 MainTileMapPadding == Padding.Empty ||
-                TileMapControl.CellSize == Range2D.Empty)
+                TileMapControl.CellSize.IsEmpty)
             {
                 return window;
             }
@@ -302,9 +313,9 @@ namespace Controls
             tilemap = GetBoundTileSize(tilemap);
 
             // Set new tile size
-            if (TileMapControl.TileMapResizeMode != TileMapResizeMode.TileMapCellResize)
+            if (TileMapControl.TileMapResizeMode == TileMapResizeMode.TileMapCellResize)
             {
-                TileMapControl.ViewSize = new Range2D(
+                TileMapControl.ViewSize = new Size(
                     tilemap.Width / TileMapControl.CellWidth,
                     tilemap.Height / TileMapControl.CellHeight);
             }

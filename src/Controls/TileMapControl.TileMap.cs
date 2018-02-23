@@ -1,27 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// <copyright file="TileMapControl.TileMap.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
+// </copyright>
+
+using System;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Helper;
+using System.Drawing;
 
 namespace Controls
 {
     partial class TileMapControl
     {
-        private Range2D _viewSize;
-        private Range2D _tileSize;
-        private Range2D _zoomSize;
-
-        private Position2D _activeViewTile;
+        private Size _viewSize;
+        private Size _tileSize;
+        private Size _zoomSize;
 
         public event EventHandler ViewSizeChanged;
 
         public event EventHandler CellSizeChanged;
-
-        public event EventHandler ActiveViewTileChanged;
 
         public event EventHandler GridLengthChanged;
 
@@ -30,7 +28,7 @@ namespace Controls
         [Browsable(true)]
         [Category("Tilemap")]
         [Description("The size, in tiles, of the view area")]
-        public Range2D ViewSize
+        public Size ViewSize
         {
             get
             {
@@ -45,7 +43,7 @@ namespace Controls
                 }
 
                 _viewSize = value;
-                OnViewSizeChanged(this, EventArgs.Empty);
+                OnViewSizeChanged(EventArgs.Empty);
             }
         }
 
@@ -66,7 +64,7 @@ namespace Controls
                 }
 
                 _viewSize.Width = value;
-                OnViewSizeChanged(this, EventArgs.Empty);
+                OnViewSizeChanged(EventArgs.Empty);
             }
         }
 
@@ -87,14 +85,14 @@ namespace Controls
                 }
 
                 _viewSize.Height = value;
-                OnViewSizeChanged(this, EventArgs.Empty);
+                OnViewSizeChanged(EventArgs.Empty);
             }
         }
 
         [Browsable(true)]
         [Category("Tilemap")]
         [Description("The unit size of a single tile")]
-        public Range2D TileSize
+        public Size TileSize
         {
             get
             {
@@ -109,7 +107,7 @@ namespace Controls
                 }
 
                 _tileSize = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
+                OnCellSizeChanged(EventArgs.Empty);
             }
         }
 
@@ -130,7 +128,7 @@ namespace Controls
                 }
 
                 _tileSize.Width = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
+                OnCellSizeChanged(EventArgs.Empty);
             }
         }
 
@@ -151,14 +149,14 @@ namespace Controls
                 }
 
                 _tileSize.Height = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
+                OnCellSizeChanged(EventArgs.Empty);
             }
         }
 
         [Browsable(true)]
         [Category("Tilemap")]
         [Description("The size, in pixels, of the unit size.")]
-        public Range2D ZoomSize
+        public Size ZoomSize
         {
             get
             {
@@ -173,7 +171,7 @@ namespace Controls
                 }
 
                 _zoomSize = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
+                OnCellSizeChanged(EventArgs.Empty);
             }
         }
 
@@ -194,7 +192,7 @@ namespace Controls
                 }
 
                 _zoomSize.Width = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
+                OnCellSizeChanged(EventArgs.Empty);
             }
         }
 
@@ -215,18 +213,18 @@ namespace Controls
                 }
 
                 _zoomSize.Height = value;
-                OnCellSizeChanged(this, EventArgs.Empty);
+                OnCellSizeChanged(EventArgs.Empty);
             }
         }
 
         [Browsable(true)]
         [Category("Tilemap")]
         [Description("The size, in pixels, of a single tile.")]
-        public Range2D CellSize
+        public Size CellSize
         {
             get
             {
-                return TileSize * ZoomSize;
+                return new Size(CellWidth, CellHeight);
             }
         }
 
@@ -252,11 +250,11 @@ namespace Controls
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Range2D TileMapSize
+        public Size TileMapSize
         {
             get
             {
-                return CellSize * ViewSize;
+                return new Size(TileMapWidth, TileMapHeight);
             }
         }
 
@@ -280,97 +278,29 @@ namespace Controls
             }
         }
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Position2D ActiveViewTile
-        {
-            get
-            {
-                return _activeViewTile;
-            }
-
-            set
-            {
-                if (ActiveViewTile == value)
-                {
-                    return;
-                }
-
-                _activeViewTile = value;
-                OnActiveViewTileChanged(this, EventArgs.Empty);
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int ActiveViewX
-        {
-            get
-            {
-                return _activeViewTile.X;
-            }
-
-            set
-            {
-                if (ActiveViewX == value)
-                {
-                    return;
-                }
-
-                _activeViewTile.X = value;
-                OnActiveViewTileChanged(this, EventArgs.Empty);
-            }
-        }
-
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public int ActiveViewY
-        {
-            get
-            {
-                return _activeViewTile.Y;
-            }
-
-            set
-            {
-                if (ActiveViewY == value)
-                {
-                    return;
-                }
-
-                _activeViewTile.Y = value;
-                OnActiveViewTileChanged(this, EventArgs.Empty);
-            }
-        }
-
-        protected virtual void OnViewSizeChanged(object sender, EventArgs e)
+        protected virtual void OnViewSizeChanged(EventArgs e)
         {
             SetClientSizeFromTileMap();
             ResetScrollBars();
-            ViewSizeChanged?.Invoke(sender, e);
+            ViewSizeChanged?.Invoke(this, e);
         }
 
-        protected virtual void OnCellSizeChanged(object sender, EventArgs e)
+        protected virtual void OnCellSizeChanged(EventArgs e)
         {
             SetClientSizeFromTileMap();
-            CellSizeChanged?.Invoke(sender, e);
+            CellSizeChanged?.Invoke(this, e);
         }
 
-        protected virtual void OnActiveViewTileChanged(object sender, EventArgs e)
-        {
-            ActiveViewTileChanged?.Invoke(sender, e);
-        }
-
-        protected virtual void OnGridLengthChanged(object sender, EventArgs e)
+        protected virtual void OnGridLengthChanged(EventArgs e)
         {
             ResetScrollBars();
-            GridLengthChanged?.Invoke(sender, e);
+            GridLengthChanged?.Invoke(this, e);
         }
 
-        protected virtual void OnZeroIndexChanged(object sender, EventArgs e)
+        protected virtual void OnZeroIndexChanged(EventArgs e)
         {
             AdjustScrollBarPositions();
-            ZeroIndexChanged?.Invoke(sender, e);
+            ZeroIndexChanged?.Invoke(this, e);
         }
     }
 }

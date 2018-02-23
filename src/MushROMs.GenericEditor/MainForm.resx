@@ -121,7 +121,7 @@
     <value>17, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="tsmNew.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+  <data name="tsmNewFile.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAERSURBVDhPrZDbSgJRGIXnpewd6jXsjSQvIrwoI0RQMChU
@@ -132,33 +132,37 @@
         2Mz2wxeg6/UAAAAASUVORK5CYII=
 </value>
   </data>
-  <data name="tsmNew.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+  <data name="tsmNewFile.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="tsmNew.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+  <data name="tsmNewFile.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+N</value>
   </data>
-  <data name="tsmNew.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tsmNewFile.Size" type="System.Drawing.Size, System.Drawing">
     <value>167, 22</value>
   </data>
-  <data name="tsmNew.Text" xml:space="preserve">
+  <data name="tsmNewFile.Text" xml:space="preserve">
     <value>&amp;New File</value>
   </data>
-  <data name="tsmOpen.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+  <data name="tsmOpenFile.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
-  <data name="tsmOpen.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
+  <data name="tsmOpenFile.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+O</value>
   </data>
-  <data name="tsmOpen.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tsmOpenFile.Size" type="System.Drawing.Size, System.Drawing">
     <value>167, 22</value>
   </data>
-  <data name="tsmOpen.Text" xml:space="preserve">
+  <data name="tsmOpenFile.Text" xml:space="preserve">
     <value>&amp;Open File</value>
   </data>
   <data name="toolStripSeparator5.Size" type="System.Drawing.Size, System.Drawing">
     <value>164, 6</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="tsmOpenRecent.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsmOpenRecent.Size" type="System.Drawing.Size, System.Drawing">
     <value>167, 22</value>
@@ -169,14 +173,17 @@
   <data name="toolStripSeparator.Size" type="System.Drawing.Size, System.Drawing">
     <value>164, 6</value>
   </data>
-  <data name="tsmClose.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tsmCloseFile.Size" type="System.Drawing.Size, System.Drawing">
     <value>167, 22</value>
   </data>
-  <data name="tsmClose.Text" xml:space="preserve">
-    <value>&amp;Close</value>
+  <data name="tsmCloseFile.Text" xml:space="preserve">
+    <value>&amp;Close File</value>
   </data>
   <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
     <value>164, 6</value>
+  </data>
+  <data name="tsmSaveFile.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsmSaveFile.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -206,11 +213,17 @@
   <data name="tsmSaveFile.Text" xml:space="preserve">
     <value>&amp;Save File</value>
   </data>
+  <data name="tsmSaveAs.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsmSaveAs.Size" type="System.Drawing.Size, System.Drawing">
     <value>167, 22</value>
   </data>
   <data name="tsmSaveAs.Text" xml:space="preserve">
     <value>Save &amp;As</value>
+  </data>
+  <data name="tsmSaveAll.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsmSaveAll.Size" type="System.Drawing.Size, System.Drawing">
     <value>167, 22</value>
@@ -236,6 +249,9 @@
   <data name="tsmFile.Text" xml:space="preserve">
     <value>&amp;File</value>
   </data>
+  <data name="tsmUndo.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsmUndo.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+Z</value>
   </data>
@@ -244,6 +260,9 @@
   </data>
   <data name="tsmUndo.Text" xml:space="preserve">
     <value>&amp;Undo</value>
+  </data>
+  <data name="tsmRedo.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsmRedo.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+Y</value>
@@ -256,6 +275,9 @@
   </data>
   <data name="toolStripSeparator3.Size" type="System.Drawing.Size, System.Drawing">
     <value>161, 6</value>
+  </data>
+  <data name="tsmCut.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsmCut.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -282,6 +304,9 @@
   <data name="tsmCut.Text" xml:space="preserve">
     <value>Cu&amp;t</value>
   </data>
+  <data name="tsmCopy.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsmCopy.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -307,6 +332,9 @@
   </data>
   <data name="tsmCopy.Text" xml:space="preserve">
     <value>&amp;Copy</value>
+  </data>
+  <data name="tsmPaste.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsmPaste.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -336,6 +364,9 @@
   <data name="tsmPaste.Text" xml:space="preserve">
     <value>&amp;Paste</value>
   </data>
+  <data name="tsmDelete.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsmDelete.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Del</value>
   </data>
@@ -347,6 +378,9 @@
   </data>
   <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
     <value>161, 6</value>
+  </data>
+  <data name="tsmSelectAll.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsmSelectAll.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+A</value>
@@ -363,6 +397,9 @@
   <data name="tsmEdit.Text" xml:space="preserve">
     <value>&amp;Edit</value>
   </data>
+  <data name="tsmInvertColors.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsmInvertColors.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+I</value>
   </data>
@@ -371,6 +408,9 @@
   </data>
   <data name="tsmInvertColors.Text" xml:space="preserve">
     <value>&amp;Invert Colors</value>
+  </data>
+  <data name="tsmBlend.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsmBlend.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+D</value>
@@ -381,6 +421,9 @@
   <data name="tsmBlend.Text" xml:space="preserve">
     <value>&amp;Blend</value>
   </data>
+  <data name="tsmColorize.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsmColorize.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+U</value>
   </data>
@@ -389,6 +432,9 @@
   </data>
   <data name="tsmColorize.Text" xml:space="preserve">
     <value>&amp;Colorize</value>
+  </data>
+  <data name="tsmGrayscale.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsmGrayscale.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+T</value>
@@ -399,6 +445,9 @@
   <data name="tsmGrayscale.Text" xml:space="preserve">
     <value>&amp;Grayscale</value>
   </data>
+  <data name="tsmHorizontalGradient.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsmHorizontalGradient.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+H</value>
   </data>
@@ -407,6 +456,9 @@
   </data>
   <data name="tsmHorizontalGradient.Text" xml:space="preserve">
     <value>&amp;Horizontal Gradient</value>
+  </data>
+  <data name="tsmVerticalGradient.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsmVerticalGradient.ShortcutKeys" type="System.Windows.Forms.Keys, System.Windows.Forms">
     <value>Ctrl+J</value>
@@ -423,14 +475,20 @@
   <data name="tsmPalette.Text" xml:space="preserve">
     <value>&amp;Palette</value>
   </data>
+  <data name="tsmCustomize.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsmCustomize.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>130, 22</value>
   </data>
   <data name="tsmCustomize.Text" xml:space="preserve">
     <value>&amp;Customize</value>
   </data>
+  <data name="tsmOptions.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsmOptions.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>130, 22</value>
   </data>
   <data name="tsmOptions.Text" xml:space="preserve">
     <value>&amp;Options</value>
@@ -462,7 +520,6 @@
   <data name="menuStrip.Size" type="System.Drawing.Size, System.Drawing">
     <value>984, 24</value>
   </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="menuStrip.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
   </data>
@@ -479,9 +536,9 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;menuStrip.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>3</value>
   </data>
-  <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="toolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 17</value>
   </metadata>
   <data name="tsbNewFile.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -513,6 +570,9 @@
   <data name="tsbOpenFile.Text" xml:space="preserve">
     <value>Open File</value>
   </data>
+  <data name="tsbSaveFile.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsbSaveFile.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -538,6 +598,9 @@
   <data name="tsbSaveFile.Text" xml:space="preserve">
     <value>Save File</value>
   </data>
+  <data name="tsbSaveAll.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsbSaveAll.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
@@ -550,17 +613,20 @@
   <data name="toolStripSeparator6.Size" type="System.Drawing.Size, System.Drawing">
     <value>6, 25</value>
   </data>
-  <data name="tsbRecentFiles.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
+  <data name="tsbOpenRecent.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
-  <data name="tsbRecentFiles.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="tsbOpenRecent.Size" type="System.Drawing.Size, System.Drawing">
     <value>23, 22</value>
   </data>
-  <data name="tsbRecentFiles.Text" xml:space="preserve">
+  <data name="tsbOpenRecent.Text" xml:space="preserve">
     <value>Recent Files</value>
   </data>
   <data name="toolStripSeparator8.Size" type="System.Drawing.Size, System.Drawing">
     <value>6, 25</value>
+  </data>
+  <data name="tsbCut.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsbCut.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -584,6 +650,9 @@
   <data name="tsbCut.Text" xml:space="preserve">
     <value>Cut</value>
   </data>
+  <data name="tsbCopy.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsbCopy.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
@@ -606,6 +675,9 @@
   </data>
   <data name="tsbCopy.Text" xml:space="preserve">
     <value>Copy</value>
+  </data>
+  <data name="tsbPaste.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsbPaste.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
@@ -635,6 +707,9 @@
   <data name="toolStripSeparator7.Size" type="System.Drawing.Size, System.Drawing">
     <value>6, 25</value>
   </data>
+  <data name="tsbUndo.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsbUndo.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
@@ -643,6 +718,9 @@
   </data>
   <data name="tsbUndo.Text" xml:space="preserve">
     <value>Undo</value>
+  </data>
+  <data name="tsbRedo.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsbRedo.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
@@ -656,6 +734,9 @@
   <data name="toolStripSeparator9.Size" type="System.Drawing.Size, System.Drawing">
     <value>6, 25</value>
   </data>
+  <data name="tsbInvertColors.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsbInvertColors.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
@@ -664,6 +745,9 @@
   </data>
   <data name="tsbInvertColors.Text" xml:space="preserve">
     <value>Invert Colors</value>
+  </data>
+  <data name="tsbBlend.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsbBlend.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
@@ -674,6 +758,9 @@
   <data name="tsbBlend.Text" xml:space="preserve">
     <value>Blend</value>
   </data>
+  <data name="tsbColorize.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsbColorize.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
@@ -682,6 +769,9 @@
   </data>
   <data name="tsbColorize.Text" xml:space="preserve">
     <value>Colorize</value>
+  </data>
+  <data name="tsbGrayscale.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsbGrayscale.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
@@ -692,6 +782,9 @@
   <data name="tsbGrayscale.Text" xml:space="preserve">
     <value>Grayscale</value>
   </data>
+  <data name="tsbHorizontalGradient.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="tsbHorizontalGradient.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
   </data>
@@ -700,6 +793,9 @@
   </data>
   <data name="tsbHorizontalGradient.Text" xml:space="preserve">
     <value>Horizontal Gradient</value>
+  </data>
+  <data name="tsbVerticalGradient.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="tsbVerticalGradient.ImageTransparentColor" type="System.Drawing.Color, System.Drawing">
     <value>Magenta</value>
@@ -722,29 +818,29 @@
   <data name="tsbAbout.Text" xml:space="preserve">
     <value>He&amp;lp</value>
   </data>
-  <data name="toolStrip1.Location" type="System.Drawing.Point, System.Drawing">
+  <data name="toolStrip.Location" type="System.Drawing.Point, System.Drawing">
     <value>0, 24</value>
   </data>
-  <data name="toolStrip1.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="toolStrip.Size" type="System.Drawing.Size, System.Drawing">
     <value>984, 25</value>
   </data>
-  <data name="toolStrip1.TabIndex" type="System.Int32, mscorlib">
+  <data name="toolStrip.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="toolStrip1.Text" xml:space="preserve">
+  <data name="toolStrip.Text" xml:space="preserve">
     <value>toolStrip</value>
   </data>
-  <data name="&gt;&gt;toolStrip1.Name" xml:space="preserve">
-    <value>toolStrip1</value>
+  <data name="&gt;&gt;toolStrip.Name" xml:space="preserve">
+    <value>toolStrip</value>
   </data>
-  <data name="&gt;&gt;toolStrip1.Type" xml:space="preserve">
+  <data name="&gt;&gt;toolStrip.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;toolStrip1.Parent" xml:space="preserve">
+  <data name="&gt;&gt;toolStrip.Parent" xml:space="preserve">
     <value>$this</value>
   </data>
-  <data name="&gt;&gt;toolStrip1.ZOrder" xml:space="preserve">
-    <value>1</value>
+  <data name="&gt;&gt;toolStrip.ZOrder" xml:space="preserve">
+    <value>2</value>
   </data>
   <metadata name="statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>237, 17</value>
@@ -774,7 +870,19 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;statusStrip.ZOrder" xml:space="preserve">
-    <value>0</value>
+    <value>1</value>
+  </data>
+  <metadata name="cmsRecentFiles.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>346, 17</value>
+  </metadata>
+  <data name="cmsRecentFiles.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 4</value>
+  </data>
+  <data name="&gt;&gt;cmsRecentFiles.Name" xml:space="preserve">
+    <value>cmsRecentFiles</value>
+  </data>
+  <data name="&gt;&gt;cmsRecentFiles.Type" xml:space="preserve">
+    <value>System.Windows.Forms.ContextMenuStrip, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -794,16 +902,16 @@
   <data name="&gt;&gt;tsmFile.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsmNew.Name" xml:space="preserve">
-    <value>tsmNew</value>
+  <data name="&gt;&gt;tsmNewFile.Name" xml:space="preserve">
+    <value>tsmNewFile</value>
   </data>
-  <data name="&gt;&gt;tsmNew.Type" xml:space="preserve">
+  <data name="&gt;&gt;tsmNewFile.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsmOpen.Name" xml:space="preserve">
-    <value>tsmOpen</value>
+  <data name="&gt;&gt;tsmOpenFile.Name" xml:space="preserve">
+    <value>tsmOpenFile</value>
   </data>
-  <data name="&gt;&gt;tsmOpen.Type" xml:space="preserve">
+  <data name="&gt;&gt;tsmOpenFile.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator5.Name" xml:space="preserve">
@@ -824,10 +932,10 @@
   <data name="&gt;&gt;toolStripSeparator.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsmClose.Name" xml:space="preserve">
-    <value>tsmClose</value>
+  <data name="&gt;&gt;tsmCloseFile.Name" xml:space="preserve">
+    <value>tsmCloseFile</value>
   </data>
-  <data name="&gt;&gt;tsmClose.Type" xml:space="preserve">
+  <data name="&gt;&gt;tsmCloseFile.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator2.Name" xml:space="preserve">
@@ -1028,10 +1136,10 @@
   <data name="&gt;&gt;toolStripSeparator6.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripSeparator, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;tsbRecentFiles.Name" xml:space="preserve">
-    <value>tsbRecentFiles</value>
+  <data name="&gt;&gt;tsbOpenRecent.Name" xml:space="preserve">
+    <value>tsbOpenRecent</value>
   </data>
-  <data name="&gt;&gt;tsbRecentFiles.Type" xml:space="preserve">
+  <data name="&gt;&gt;tsbOpenRecent.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripButton, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;toolStripSeparator8.Name" xml:space="preserve">
@@ -1137,7 +1245,7 @@
     <value>System.Windows.Forms.ToolStripStatusLabel, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>MasterForm</value>
+    <value>MainForm</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>System.Windows.Forms.Form, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>

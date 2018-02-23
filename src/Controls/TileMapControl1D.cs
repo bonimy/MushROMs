@@ -1,12 +1,15 @@
 ﻿// <copyright file="TileMapControl1D.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using Helper;
 using MushROMs;
+using static Helper.ThrowHelper;
 
 namespace Controls
 {
@@ -14,12 +17,6 @@ namespace Controls
     {
         private int _gridSize;
         private int _zeroTile;
-
-        public event EventHandler GridSizeChanged;
-
-        public event EventHandler ZeroTileChanged;
-
-        public event EventHandler ActiveGridTileChanged;
 
         public int ZeroTile
         {
@@ -36,7 +33,7 @@ namespace Controls
                 }
 
                 _zeroTile = value;
-                OnZeroTileChanged(EventArgs.Empty);
+                OnZeroIndexChanged(EventArgs.Empty);
             }
         }
 
@@ -56,21 +53,21 @@ namespace Controls
 
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(
+                    throw ValueNotGreaterThanEqualTo(
                         nameof(value),
-                        SR.ErrorLowerBoundInclusive(nameof(value), value, 0));
+                        value);
                 }
 
                 _gridSize = value;
-                OnGridSizeChanged(EventArgs.Empty);
+                OnGridLengthChanged(EventArgs.Empty);
             }
         }
 
-        private Position2D ZeroPosition
+        public Point ZeroPosition
         {
             get
             {
-                var zero = Position2D.Empty;
+                var zero = Point.Empty;
                 if (HorizontalScrollBar != null)
                 {
                     zero.X = HorizontalScrollBar.Value;
@@ -85,14 +82,14 @@ namespace Controls
             }
         }
 
-        public bool TileIsInGrid(int tile)
+        public bool GridContainsTile(int tile)
         {
             return tile >= 0 && tile < GridSize;
         }
 
         public override void GenerateSelectionPath(
             GraphicsPath path,
-            ISelection<int> selection)
+            ISelection1D selection)
         {
             if (path is null)
             {
@@ -110,8 +107,8 @@ namespace Controls
             {
                 for (var x = ViewWidth; --x >= 0;)
                 {
-                    var index = GetGridTile(new Position2D(x, y));
-                    if (selection.Contains(index) && TileIsInGrid(index))
+                    var index = GetGridTile(new Point(x, y));
+                    if (selection.Contains(index) && GridContainsTile(index))
                     {
                         var edges = new Point[]
                         {
@@ -136,7 +133,7 @@ namespace Controls
                         for (var i = edges.Length; --i >= 0;)
                         {
                             var index2 = GetGridTile(edges[i]);
-                            if (!selection.Contains(index2) || !TileIsInGrid(index2))
+                            if (!selection.Contains(index2) || !GridContainsTile(index2))
                             {
                                 path.StartFigure();
                                 path.AddLine(corners[((i - 1) & 3)], corners[i]);
@@ -220,23 +217,6 @@ namespace Controls
             ZeroTile = (value * ViewWidth) + zeroX;
         }
 
-        protected virtual void OnGridSizeChanged(EventArgs e)
-        {
-            ResetScrollBars();
-            GridSizeChanged?.Invoke(this, e);
-        }
-
-        protected virtual void OnZeroTileChanged(EventArgs e)
-        {
-            AdjustScrollBarPositions();
-            ZeroTileChanged?.Invoke(this, e);
-        }
-
-        protected virtual void OnActiveGridTileChanged(EventArgs e)
-        {
-            ActiveGridTileChanged?.Invoke(this, e);
-        }
-
         public int GetViewTileX(int gridTile)
         {
             return GetViewTileX(gridTile, ViewWidth, ZeroTile);
@@ -247,7 +227,7 @@ namespace Controls
             return GetViewTileY(gridTile, ViewWidth, ZeroTile);
         }
 
-        public Position2D GetViewTile(int gridTile)
+        public Point GetViewTile(int gridTile)
         {
             return GetViewTile(gridTile, ViewWidth, ZeroTile);
         }
@@ -262,7 +242,7 @@ namespace Controls
             return GetViewTileY(gridTile, viewWidth, 0);
         }
 
-        public static Position2D GetViewTile(int gridTile, int viewWidth)
+        public static Point GetViewTile(int gridTile, int viewWidth)
         {
             return GetViewTile(gridTile, viewWidth, 0);
         }
@@ -271,9 +251,9 @@ namespace Controls
         {
             if (viewWidth <= 0)
             {
-                throw new ArgumentOutOfRangeException(
+                throw ValueNotGreaterThan(
                     nameof(viewWidth),
-                    SR.ErrorLowerBoundExclusive(nameof(viewWidth), viewWidth, 0));
+                    viewWidth);
             }
 
             return (gridTile - zeroIndex) % viewWidth;
@@ -283,22 +263,25 @@ namespace Controls
         {
             if (viewWidth <= 0)
             {
-                throw new ArgumentOutOfRangeException(
+                throw ValueNotGreaterThan(
                     nameof(viewWidth),
-                    SR.ErrorLowerBoundExclusive(nameof(viewWidth), viewWidth, 0));
+                    viewWidth);
             }
 
             return (gridTile - zeroIndex) / viewWidth;
         }
 
-        public static Position2D GetViewTile(int gridTile, int viewWidth, int zeroIndex)
+        public static Point GetViewTile(
+            int gridTile,
+            int viewWidth,
+            int zeroIndex)
         {
-            return new Position2D(
+            return new Point(
                 GetViewTileX(gridTile, viewWidth, zeroIndex),
                 GetViewTileY(gridTile, viewWidth, zeroIndex));
         }
 
-        public int GetGridTile(Position2D viewTile)
+        public int GetGridTile(Point viewTile)
         {
             return GetGridTile(viewTile, ViewWidth, ZeroTile);
         }
@@ -308,28 +291,38 @@ namespace Controls
             return GetGridTile(viewTileX, viewTileY, ViewWidth, ZeroTile);
         }
 
-        public static int GetGridTile(Position2D viewTile, int viewWidth)
+        public static int GetGridTile(Point viewTile, int viewWidth)
         {
             return GetGridTile(viewTile, viewWidth, 0);
         }
 
-        public static int GetGridTile(int viewTileX, int viewTileY, int viewWidth)
+        public static int GetGridTile(
+            int viewTileX,
+            int viewTileY,
+            int viewWidth)
         {
             return GetGridTile(viewTileX, viewTileY, viewWidth, 0);
         }
 
-        public static int GetGridTile(Position2D viewTile, int viewWidth, int zeroIndex)
+        public static int GetGridTile(
+            Point viewTile,
+            int viewWidth,
+            int zeroIndex)
         {
             return GetGridTile(viewTile.X, viewTile.Y, viewWidth, zeroIndex);
         }
 
-        public static int GetGridTile(int viewTileX, int viewTileY, int viewWidth, int zeroIndex)
+        public static int GetGridTile(
+            int viewTileX,
+            int viewTileY,
+            int viewWidth,
+            int zeroIndex)
         {
             if (viewWidth <= 0)
             {
-                throw new ArgumentOutOfRangeException(
+                throw ValueNotGreaterThan(
                     nameof(viewWidth),
-                    SR.ErrorLowerBoundExclusive(nameof(viewWidth), viewWidth, 0));
+                    viewWidth);
             }
 
             return (viewTileY * viewWidth) + viewTileX + zeroIndex;

@@ -1,31 +1,20 @@
 ﻿// <copyright file="GrayscaleForm.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
+using System.Windows.Forms;
 using Helper;
 using static System.Math;
 
 namespace Controls.Editors
 {
-    internal sealed partial class GrayscaleForm : DialogForm, IDialogForm
+    internal sealed partial class GrayscaleForm : Form
     {
         public event EventHandler ColorValueChanged;
-
-        private readonly DialogProxy _dialogForm;
-
-        protected override object ProxySender
-        {
-            get
-            {
-                if (_dialogForm != null)
-                {
-                    return _dialogForm;
-                }
-
-                return base.ProxySender;
-            }
-        }
 
         private bool RunEvent
         {
@@ -82,9 +71,9 @@ namespace Controls.Editors
             set
             {
                 RunEvent = false;
-                Red = Color.Red;
-                Green = Color.Green;
-                Blue = Color.Blue;
+                Red = value.Red;
+                Green = value.Green;
+                Blue = value.Blue;
                 RunEvent = true;
 
                 OnColorValueChanged(EventArgs.Empty);
@@ -112,11 +101,6 @@ namespace Controls.Editors
             RunEvent = true;
         }
 
-        internal GrayscaleForm(DialogProxy dialogForm) : this()
-        {
-            _dialogForm = dialogForm;
-        }
-
         public void ResetValues()
         {
             RunEvent = false;
@@ -132,7 +116,7 @@ namespace Controls.Editors
         {
             if (RunEvent)
             {
-                ColorValueChanged?.Invoke(ProxySender, e);
+                ColorValueChanged?.Invoke(this, e);
             }
         }
 

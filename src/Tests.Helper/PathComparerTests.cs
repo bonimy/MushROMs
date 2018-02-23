@@ -1,5 +1,8 @@
 ﻿// <copyright file="PathComparerTests.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -16,7 +19,7 @@ namespace Tests.Helper
         public void PathComparerConstructors()
         {
             // Default constructor should never throw.
-            var comparer = PathComparer.DefaultComparer;
+            var comparer = PathComparer.Default;
 
             // Ensure we are using our expected base comparer.
             Assert.AreEqual(comparer.BaseComparer, StringComparer.OrdinalIgnoreCase);
@@ -52,7 +55,7 @@ namespace Tests.Helper
                 new Parameters("app.exe", directory + "/app.exe")
             };
 
-            var comparer = PathComparer.DefaultComparer;
+            var comparer = PathComparer.Default;
 
             foreach (var parameter in compareAsEqual)
             {
@@ -91,7 +94,7 @@ namespace Tests.Helper
         [TestMethod]
         public void PathComparerInequality()
         {
-            var comparer = PathComparer.DefaultComparer;
+            var comparer = PathComparer.Default;
             var directory = AppDomain.CurrentDomain.BaseDirectory;
 
             // Illegal path chars should always throw.

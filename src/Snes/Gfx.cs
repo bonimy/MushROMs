@@ -1,23 +1,45 @@
 ﻿// <copyright file="Gfx.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Threading.Tasks;
-using Helper;
-using Helper.PixelFormats;
 
 namespace Snes
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Threading.Tasks;
+    using Helper.PixelFormat;
+
     public class Gfx : IReadOnlyList<byte>
     {
-        private byte[] Data
+        public Gfx(int size, GraphicsFormat graphicsFormat)
+            : this(new byte[size * GfxTile.BytesPerTile(graphicsFormat)])
         {
-            get;
-            set;
+        }
+
+        public Gfx(byte[] data)
+            : this(
+                  data ?? throw new ArgumentNullException(nameof(data)),
+                  0,
+                  data.Length)
+        {
+        }
+
+        public Gfx(byte[] data, int startIndex, int size)
+        {
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            var result = new byte[size];
+            Array.Copy(data, startIndex, result, 0, size);
+            Data = result;
         }
 
         public int Count
@@ -26,6 +48,11 @@ namespace Snes
             {
                 return Data.Length;
             }
+        }
+
+        private byte[] Data
+        {
+            get;
         }
 
         public byte this[int index]
@@ -41,17 +68,8 @@ namespace Snes
             }
         }
 
-        public Gfx(int size, GraphicsFormat graphicsFormat) :
-            this(new byte[size * GfxTile.BytesPerTile(graphicsFormat)])
-        {
-        }
-
-        public Gfx(byte[] data)
-        {
-            Data = data ?? throw new ArgumentNullException(nameof(data));
-        }
-
-        public GfxData CreateGfxFromSelection(IGfxSelection selection)
+        public GfxData CreateGfxFromSelection(
+            IGfxSelection selection)
         {
             if (selection is null)
             {
@@ -81,14 +99,14 @@ namespace Snes
             for (var i = selection.Count; --i >= 0;)
             {
                 var address = selection[i];
-                var inRange = address + size <= Data.Length && address >= 0;
+                var inRange = address + size <= Count && address >= 0;
                 if (!inRange)
                 {
                     continue;
                 }
 
                 var tile = gfxData[i].ToFormattedData(format);
-                var length = Math.Min(tile.Length, Data.Length - address);
+                var length = Math.Min(tile.Length, Count - address);
                 Array.Copy(tile, 0, Data, address, length);
             }
         }
@@ -98,8 +116,8 @@ namespace Snes
             int length,
             int startAddress,
             GraphicsFormat graphicsFormat,
-            Range2D view,
-            Range2D zoom,
+            Size view,
+            Size zoom,
             IGfxSelection selection,
             IReadOnlyList<Color32BppArgb> colors)
         {
@@ -113,7 +131,7 @@ namespace Snes
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
 
-            if ((uint)startAddress > (uint)Data.Length)
+            if ((uint)startAddress > (uint)Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(length));
             }
@@ -126,16 +144,6 @@ namespace Snes
                     typeof(GraphicsFormat));
             }
 
-            if (!view.IsInFirstQuadrantExclusive)
-            {
-                throw new ArgumentException();
-            }
-
-            if (!zoom.IsInFirstQuadrantExclusive)
-            {
-                throw new ArgumentException();
-            }
-
             if (selection is null)
             {
                 throw new ArgumentNullException(nameof(selection));
@@ -146,8 +154,10 @@ namespace Snes
                 throw new ArgumentNullException(nameof(colors));
             }
 
-            var window = view * zoom;
-            if (window.Area * Color32BppArgb.SizeOf > length)
+            var width = view.Width * zoom.Width;
+            var height = view.Height * zoom.Height;
+            var window = new Size(width, height);
+            if (width * height * Color32BppArgb.SizeOf > length)
             {
                 throw new ArgumentException();
             }
@@ -158,14 +168,15 @@ namespace Snes
                 throw new ArgumentException();
             }
 
-            var cell = zoom * view;
-            var plane = (window.Width * zoom.Height) - cell.Width;
+            var cellWidth = zoom.Width * view.Width;
+            var cellHeight = zoom.Height * view.Height;
+            var plane = (window.Width * zoom.Height) - cellWidth;
             var dot = (window.Width * zoom.Height) - zoom.Width;
 
             var unitSize = GfxTile.BytesPerTile(graphicsFormat);
-            var area = view.Area;
+            var area = view.Width * view.Height;
 
-            var totalLength = Math.Min(unitSize * area, Data.Length - startAddress);
+            var totalLength = Math.Min(unitSize * area, Count - startAddress);
             var totalTiles = totalLength / unitSize;
 
             unsafe
@@ -181,8 +192,8 @@ namespace Snes
                     var dots = (byte*)&tile;
 
                     var dest = pixels +
-                    ((i % view.Width) * cell.Width) +
-                    ((i / view.Width) * cell.Height);
+                    ((i % view.Width) * cellWidth) +
+                    ((i / view.Width) * cellHeight);
 
                     // Lets hope the compiler is smart enough to unroll the outer loops.
                     for (var y = GfxTile.PlanesPerTile; --y >= 0; dest += plane)
@@ -202,6 +213,11 @@ namespace Snes
                     }
                 });
             }
+        }
+
+        public void CopyTo(byte[] array, int arrayIndex)
+        {
+            Data.CopyTo(array, arrayIndex);
         }
 
         public IEnumerator<byte> GetEnumerator()

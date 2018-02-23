@@ -1,25 +1,47 @@
 ﻿// <copyright file="PaletteData.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Helper;
-using Helper.PixelFormats;
 
 namespace Snes
 {
-    public delegate Color15BppBgr PaletteColorMethod(Color15BppBgr color);
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using Helper;
+    using Helper.PixelFormat;
+    using MushROMs;
 
     public class PaletteData : IReadOnlyList<Color15BppBgr>
     {
-        private Color15BppBgr[] Colors
+        internal PaletteData(
+            Color15BppBgr[] colors,
+            ISelection1D selection)
         {
-            get;
+            Colors = colors ??
+                throw new ArgumentNullException(nameof(colors));
+
+            Selection = selection ??
+                throw new ArgumentNullException(nameof(selection));
         }
 
-        public IDataSelection Selection
+        private PaletteData(PaletteData paletteData)
+        {
+            if (paletteData is null)
+            {
+                throw new ArgumentNullException(nameof(paletteData));
+            }
+
+            var result = new Color15BppBgr[paletteData.Count];
+            paletteData.CopyTo(result, 0);
+            Colors = result;
+
+            Selection = paletteData.Selection.Copy();
+        }
+
+        public ISelection1D Selection
         {
             get;
         }
@@ -28,8 +50,13 @@ namespace Snes
         {
             get
             {
-                return Colors.Length;
+                return Colors.Count;
             }
+        }
+
+        private IList<Color15BppBgr> Colors
+        {
+            get;
         }
 
         public Color15BppBgr this[int index]
@@ -45,33 +72,29 @@ namespace Snes
             }
         }
 
-        internal PaletteData(Color15BppBgr[] colors, IDataSelection selection)
+        public PaletteData Copy()
         {
-            Colors = colors ??
-                throw new ArgumentNullException(nameof(colors));
-
-            Selection = selection ??
-                throw new ArgumentNullException(nameof(selection));
+            return new PaletteData(this);
         }
 
-        public void Clear()
+        public void Empty()
         {
-            Clear(Color15BppBgr.Empty);
+            Empty(Color15BppBgr.Empty);
         }
 
-        public void Clear(Color15BppBgr color)
+        public void Empty(Color15BppBgr color)
         {
-            AlterTiles(x => color);
+            AlterColors(x => color);
         }
 
-        public void Invert()
+        public void InvertColors()
         {
-            AlterTiles(x => (Color15BppBgr)(x ^ 0x7FFF));
+            AlterColors(x => (Color15BppBgr)(x ^ 0x7FFF));
         }
 
         public void Blend(BlendMode blendMode, ColorF bottom)
         {
-            AlterTiles(blend);
+            AlterColors(blend);
 
             Color15BppBgr blend(Color15BppBgr color)
             {
@@ -81,22 +104,39 @@ namespace Snes
             }
         }
 
-        public void AlterTiles(PaletteColorMethod method)
+        public void Colorize(ColorF amount)
         {
-            if (method is null)
+            AlterColors(colorize);
+
+            Color15BppBgr colorize(Color15BppBgr color)
             {
-                throw new ArgumentNullException(nameof(method));
+                var result = ColorF.HueBlend(color, amount);
+                return (Color15BppBgr)result;
+            }
+        }
+
+        public void AlterColors(
+            Func<Color15BppBgr, Color15BppBgr> alterColor)
+        {
+            if (alterColor is null)
+            {
+                throw new ArgumentNullException(nameof(alterColor));
             }
 
             for (var i = Count; --i >= 0;)
             {
-                this[i] = method(this[i]);
+                this[i] = alterColor(this[i]);
             }
+        }
+
+        public void CopyTo(Color15BppBgr[] array, int arrayIndex)
+        {
+            Colors.CopyTo(array, arrayIndex);
         }
 
         public IEnumerator<Color15BppBgr> GetEnumerator()
         {
-            return Colors.GetEnumerator() as IEnumerator<Color15BppBgr>;
+            return Colors.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

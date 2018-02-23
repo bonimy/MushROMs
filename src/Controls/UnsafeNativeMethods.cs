@@ -1,5 +1,8 @@
 ﻿// <copyright file="UnsafeNativeMethods.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -12,17 +15,28 @@ namespace Controls
 {
     internal static class UnsafeNativeMethods
     {
+        internal static int LastWin32Error
+        {
+            get;
+            private set;
+        }
+
         [SecurityCritical]
         [DllImport("user32.dll", SetLastError = true)]
         private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
 
         [SecurityCritical]
         [DllImport("user32.dll", SetLastError = true)]
-        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+        private static extern int SetWindowLong(
+            IntPtr hWnd,
+            int nIndex,
+            int dwNewLong);
 
         [SecurityCritical]
         [DllImport("user32.dll", SetLastError = true)]
-        private static unsafe extern int GetWindowRect(IntPtr hWnd, WinAPIRectangle* lpRect);
+        private static unsafe extern int GetWindowRect(
+            IntPtr hWnd,
+            WinApiRectangle* lpRect);
 
         internal static int GetWindowLong(IWin32Window window, int index)
         {
@@ -35,13 +49,17 @@ namespace Controls
 
             if (value == 0)
             {
+                LastWin32Error = Marshal.GetLastWin32Error();
                 throw new ErrorCodeException();
             }
 
             return value;
         }
 
-        internal static int SetWindowLong(IWin32Window window, int index, int value)
+        internal static int SetWindowLong(
+            IWin32Window window,
+            int index,
+            int value)
         {
             if (window is null)
             {
@@ -52,6 +70,7 @@ namespace Controls
 
             if (code == 0)
             {
+                LastWin32Error = Marshal.GetLastWin32Error();
                 throw new ErrorCodeException();
             }
 
@@ -65,7 +84,7 @@ namespace Controls
                 throw new ArgumentNullException(nameof(window));
             }
 
-            var rect = WinAPIRectangle.Empty;
+            var rect = WinApiRectangle.Empty;
             int code;
 
             unsafe
@@ -75,6 +94,7 @@ namespace Controls
 
             if (code == 0)
             {
+                LastWin32Error = Marshal.GetLastWin32Error();
                 throw new ErrorCodeException();
             }
 

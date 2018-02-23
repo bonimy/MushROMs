@@ -1,21 +1,22 @@
 ﻿// <copyright file="Color24BppRgb.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Text;
-using static System.Math;
-
-namespace Helper.PixelFormats
+namespace Helper.PixelFormat
 {
+    using System;
+    using System.Drawing;
+    using System.Runtime.InteropServices;
+    using System.Text;
+    using static System.Math;
+
     [StructLayout(LayoutKind.Explicit, Size = 3)]
     public struct Color24BppRgb : IEquatable<Color24BppRgb>
     {
         public const int SizeOf = 3 * sizeof(byte);
-
-        public static readonly Color24BppRgb Empty = new Color24BppRgb();
 
         public const int RedIndex = 2;
 
@@ -23,7 +24,7 @@ namespace Helper.PixelFormats
 
         public const int BlueIndex = 0;
 
-        private const int BitsPerChannel = 8;
+        public static readonly Color24BppRgb Empty = default;
 
         internal const int BitsPerRed = BitsPerChannel;
 
@@ -31,11 +32,13 @@ namespace Helper.PixelFormats
 
         internal const int BitsPerBlue = BitsPerChannel;
 
-        private const int RedShift = BitsPerChannel * RedIndex;
+        internal const int BitsPerChannel = 8;
 
-        private const int GreenShift = BitsPerChannel * GreenIndex;
+        private const int RedShift = BitsPerRed * RedIndex;
 
-        private const int BlueShift = BitsPerChannel * BlueIndex;
+        private const int GreenShift = BitsPerGreen * GreenIndex;
+
+        private const int BlueShift = BitsPerBlue * BlueIndex;
 
         [FieldOffset(RedIndex)]
         private byte _red;
@@ -45,6 +48,21 @@ namespace Helper.PixelFormats
 
         [FieldOffset(BlueIndex)]
         private byte _blue;
+
+        public Color24BppRgb(int red, int green, int blue)
+        {
+            _red = (byte)red;
+            _green = (byte)green;
+            _blue = (byte)blue;
+        }
+
+        private Color24BppRgb(int value)
+            : this(
+            value >> RedShift,
+            value >> GreenShift,
+            value >> BlueShift)
+        {
+        }
 
         public byte Red
         {
@@ -101,107 +119,6 @@ namespace Helper.PixelFormats
             }
         }
 
-        public byte this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case RedIndex:
-                        return Red;
-
-                    case GreenIndex:
-                        return Green;
-
-                    case BlueIndex:
-                        return Blue;
-
-                    default:
-                        throw new ArgumentOutOfRangeException(
-                            nameof(index),
-                            index,
-                            SR.ErrorArrayBounds(nameof(index), index, SizeOf));
-                }
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case RedIndex:
-                        Red = value;
-                        return;
-
-                    case GreenIndex:
-                        Green = value;
-                        return;
-
-                    case BlueIndex:
-                        Blue = value;
-                        return;
-
-                    default:
-                        throw new ArgumentOutOfRangeException(
-                            nameof(index),
-                            index,
-                            SR.ErrorArrayBounds(nameof(index), index, SizeOf));
-                }
-            }
-        }
-
-        private Color24BppRgb(int value) : this(
-            value >> RedShift,
-            value >> GreenShift,
-            value >> BlueShift)
-        {
-        }
-
-        public Color24BppRgb(int red, int green, int blue)
-        {
-            _red = (byte)red;
-            _green = (byte)green;
-            _blue = (byte)blue;
-        }
-
-        public bool Equals(Color24BppRgb obj)
-        {
-            return Value.Equals(obj.Value);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is Color24BppRgb value)
-            {
-                return Equals(value);
-            }
-
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            return Value.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.Append('{');
-            sb.Append(nameof(Red));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Red));
-            sb.Append(", ");
-            sb.Append(nameof(Green));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Green));
-            sb.Append(", ");
-            sb.Append(nameof(Blue));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Blue));
-            sb.Append('}');
-            return sb.ToString();
-        }
-
         public static explicit operator Color24BppRgb(int value)
         {
             return new Color24BppRgb(value);
@@ -212,12 +129,14 @@ namespace Helper.PixelFormats
             return color24.Value;
         }
 
-        public static explicit operator Color24BppRgb(Color32BppArgb color32)
+        public static explicit operator Color24BppRgb(
+            Color32BppArgb color32)
         {
             return new Color24BppRgb(color32.Value);
         }
 
-        public static implicit operator Color32BppArgb(Color24BppRgb color24)
+        public static implicit operator Color32BppArgb(
+            Color24BppRgb color24)
         {
             return color24.Value;
         }
@@ -251,14 +170,60 @@ namespace Helper.PixelFormats
                 color24.Blue / (float)Byte.MaxValue);
         }
 
-        public static bool operator ==(Color24BppRgb left, Color24BppRgb right)
+        public static bool operator ==(
+            Color24BppRgb left,
+            Color24BppRgb right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Color24BppRgb left, Color24BppRgb right)
+        public static bool operator !=(
+            Color24BppRgb left,
+            Color24BppRgb right)
         {
             return !(left == right);
+        }
+
+        public bool Equals(Color24BppRgb obj)
+        {
+            return
+                Red.Equals(obj.Red) &&
+                Green.Equals(obj.Green) &&
+                Blue.Equals(obj.Blue);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Color24BppRgb value)
+            {
+                return Equals(value);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Value;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append('{');
+            sb.Append(nameof(Red));
+            sb.Append(": ");
+            sb.Append(SR.GetString(Red));
+            sb.Append(", ");
+            sb.Append(nameof(Green));
+            sb.Append(": ");
+            sb.Append(SR.GetString(Green));
+            sb.Append(", ");
+            sb.Append(nameof(Blue));
+            sb.Append(": ");
+            sb.Append(SR.GetString(Blue));
+            sb.Append('}');
+            return sb.ToString();
         }
     }
 }

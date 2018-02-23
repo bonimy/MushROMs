@@ -1,5 +1,5 @@
 ﻿// <copyright file="ColorizeForm.Designer.cs" company="Public Domain">
-//     Copyright (c) 2017 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia.
 // </copyright>
 
 namespace Controls.Editors
@@ -127,7 +127,7 @@ namespace Controls.Editors
             this.ltnWeight.Name = "ltnWeight";
             this.ltnWeight.TickFrequency = 5;
             this.ltnWeight.Value = 100;
-            this.ltnWeight.ValueChanged += new System.EventHandler(this.HSLE_ValueChanged);
+            this.ltnWeight.ValueChanged += new System.EventHandler(this.TrackBar_ValueChanged);
             // 
             // ntbWeight
             // 
@@ -150,7 +150,7 @@ namespace Controls.Editors
             this.ltbLightness.Minimum = -100;
             this.ltbLightness.Name = "ltbLightness";
             this.ltbLightness.TickFrequency = 10;
-            this.ltbLightness.ValueChanged += new System.EventHandler(this.HSLE_ValueChanged);
+            this.ltbLightness.ValueChanged += new System.EventHandler(this.TrackBar_ValueChanged);
             // 
             // ntbLightness
             // 
@@ -173,7 +173,7 @@ namespace Controls.Editors
             this.ltbSaturation.Minimum = -100;
             this.ltbSaturation.Name = "ltbSaturation";
             this.ltbSaturation.TickFrequency = 10;
-            this.ltbSaturation.ValueChanged += new System.EventHandler(this.HSLE_ValueChanged);
+            this.ltbSaturation.ValueChanged += new System.EventHandler(this.TrackBar_ValueChanged);
             // 
             // ntbSaturation
             // 
@@ -195,7 +195,7 @@ namespace Controls.Editors
             this.ltbHue.Minimum = -180;
             this.ltbHue.Name = "ltbHue";
             this.ltbHue.TickFrequency = 18;
-            this.ltbHue.ValueChanged += new System.EventHandler(this.HSLE_ValueChanged);
+            this.ltbHue.ValueChanged += new System.EventHandler(this.TrackBar_ValueChanged);
             // 
             // ntbHue
             // 

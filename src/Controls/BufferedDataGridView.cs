@@ -1,5 +1,8 @@
 ﻿// <copyright file="BufferedDataGridView.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -14,21 +17,6 @@ namespace Controls
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.DoubleBuffer, true);
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
-
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.Handled = true;
-            }
-
-            base.OnKeyDown(e);
         }
     }
 }

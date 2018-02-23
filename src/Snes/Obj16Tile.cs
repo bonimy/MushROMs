@@ -1,12 +1,15 @@
 ﻿// <copyright file="Obj16Tile.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using Helper;
 
 namespace Snes
 {
+    using System;
+    using Helper;
+
     public struct Obj16Tile : IEquatable<Obj16Tile>
     {
         public const int NumberOfTiles = 4;
@@ -17,6 +20,18 @@ namespace Snes
         public const int BottomRightIndex = 3;
 
         public const int SizeOf = NumberOfTiles * ObjTile.SizeOf;
+
+        public Obj16Tile(
+            ObjTile topLeft,
+            ObjTile topRight,
+            ObjTile bottomLeft,
+            ObjTile bottomRight)
+        {
+            TopLeft = topLeft;
+            TopRight = topRight;
+            BottomLeft = bottomLeft;
+            BottomRight = bottomRight;
+        }
 
         public ObjTile TopLeft
         {
@@ -48,20 +63,20 @@ namespace Snes
             {
                 switch (index)
                 {
-                    case TopLeftIndex:
-                        return TopLeft;
+                case TopLeftIndex:
+                    return TopLeft;
 
-                    case BottomLeftIndex:
-                        return TopRight;
+                case BottomLeftIndex:
+                    return TopRight;
 
-                    case TopRightIndex:
-                        return BottomLeft;
+                case TopRightIndex:
+                    return BottomLeft;
 
-                    case BottomRightIndex:
-                        return BottomRight;
+                case BottomRightIndex:
+                    return BottomRight;
 
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(index));
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
             }
 
@@ -69,38 +84,50 @@ namespace Snes
             {
                 switch (index)
                 {
-                    case TopLeftIndex:
-                        TopLeft = value;
-                        return;
+                case TopLeftIndex:
+                    TopLeft = value;
+                    return;
 
-                    case BottomLeftIndex:
-                        TopRight = value;
-                        return;
+                case BottomLeftIndex:
+                    TopRight = value;
+                    return;
 
-                    case TopRightIndex:
-                        BottomLeft = value;
-                        return;
+                case TopRightIndex:
+                    BottomLeft = value;
+                    return;
 
-                    case BottomRightIndex:
-                        BottomRight = value;
-                        return;
+                case BottomRightIndex:
+                    BottomRight = value;
+                    return;
 
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(index));
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(index));
                 }
             }
         }
 
-        public Obj16Tile(
-            ObjTile topLeft,
-            ObjTile topRight,
-            ObjTile bottomLeft,
-            ObjTile bottomRight)
+        public static bool operator ==(Obj16Tile left, Obj16Tile right)
         {
-            TopLeft = topLeft;
-            TopRight = topRight;
-            BottomLeft = bottomLeft;
-            BottomRight = bottomRight;
+            return
+                left.TopLeft == right.TopLeft &&
+                left.TopRight == right.TopRight &&
+                left.BottomLeft == right.BottomLeft &&
+                left.BottomRight == right.BottomRight;
+        }
+
+        public static bool operator !=(Obj16Tile left, Obj16Tile right)
+        {
+            return !(left == right);
+        }
+
+        public static int GetXCoordinate(int index)
+        {
+            return index / 2;
+        }
+
+        public static int GetYCoordinate(int index)
+        {
+            return index % 2;
         }
 
         public Obj16Tile FlipX()
@@ -121,19 +148,9 @@ namespace Snes
                 BottomLeft.FlipY());
         }
 
-        public static int GetXCoordinate(int index)
+        public bool Equals(Obj16Tile other)
         {
-            return index / 2;
-        }
-
-        public static int GetYCoordinate(int index)
-        {
-            return index % 2;
-        }
-
-        public bool Equals(Obj16Tile obj)
-        {
-            return this == obj;
+            return this == other;
         }
 
         public override bool Equals(object obj)
@@ -160,20 +177,6 @@ namespace Snes
                 TopRight.Value.ToString("X4"),
                 BottomLeft.Value.ToString("X4"),
                 BottomRight.Value.ToString("X4"));
-        }
-
-        public static bool operator ==(Obj16Tile left, Obj16Tile right)
-        {
-            return
-                left.TopLeft == right.TopLeft &&
-                left.TopRight == right.TopRight &&
-                left.BottomLeft == right.BottomLeft &&
-                left.BottomRight == right.BottomRight;
-        }
-
-        public static bool operator !=(Obj16Tile left, Obj16Tile right)
-        {
-            return !(left == right);
         }
     }
 }

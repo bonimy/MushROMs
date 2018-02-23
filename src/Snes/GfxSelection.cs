@@ -1,55 +1,22 @@
 ﻿// <copyright file="GfxSelection.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using MushROMs;
 
 namespace Snes
 {
-    public class GfxSelection : IGfxSelection
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using MushROMs;
+
+    public sealed class GfxSelection : IGfxSelection
     {
-        public int StartAddress
-        {
-            get;
-        }
-
-        public ISelection<int> Selection
-        {
-            get;
-        }
-
-        public GraphicsFormat GraphicsFormat
-        {
-            get;
-        }
-
-        public int BytesPerTile
-        {
-            get;
-        }
-
-        public int Count
-        {
-            get
-            {
-                return Selection.Count;
-            }
-        }
-
-        public int this[int index]
-        {
-            get
-            {
-                return StartAddress + (Selection[index] * BytesPerTile);
-            }
-        }
-
         public GfxSelection(
-            ISelection<int> selection,
+            ISelection1D selection,
             int startAddress,
             GraphicsFormat graphicsFormat)
         {
@@ -72,6 +39,55 @@ namespace Snes
             BytesPerTile = GfxTile.BytesPerTile(GraphicsFormat);
         }
 
+        public int StartAddress
+        {
+            get;
+        }
+
+        public int StartIndex
+        {
+            get
+            {
+                return Selection.StartIndex;
+            }
+        }
+
+        public GraphicsFormat GraphicsFormat
+        {
+            get;
+        }
+
+        public int BytesPerTile
+        {
+            get;
+        }
+
+        public int Count
+        {
+            get
+            {
+                return Selection.Count;
+            }
+        }
+
+        private ISelection1D Selection
+        {
+            get;
+        }
+
+        public int this[int index]
+        {
+            get
+            {
+                return StartAddress + (Selection[index] * BytesPerTile);
+            }
+        }
+
+        public bool Contains(int index)
+        {
+            return Selection.Contains(index);
+        }
+
         public GfxSelection Copy()
         {
             return Move(StartAddress);
@@ -82,7 +98,7 @@ namespace Snes
             return new GfxSelection(Selection, startAddress, GraphicsFormat);
         }
 
-        IDataSelection IDataSelection.Copy()
+        ISelection1D ISelection1D.Copy()
         {
             return Copy();
         }

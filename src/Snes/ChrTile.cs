@@ -1,12 +1,15 @@
 ﻿// <copyright file="ChrTile.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using Helper;
 
 namespace Snes
 {
+    using System;
+    using Helper;
+
     public struct ChrTile : IEquatable<ChrTile>
     {
         public const int Size = sizeof(ushort);
@@ -19,12 +22,24 @@ namespace Snes
         private const int FlipBitShift = 14;
         private const int FlipMask = 3;
 
-        private ushort _value;
+        private ushort value;
+
+        private ChrTile(int value)
+        {
+            this.value = (ushort)value;
+        }
 
         public int Value
         {
-            get { return _value; }
-            set { this = new ChrTile(value); }
+            get
+            {
+                return value;
+            }
+
+            set
+            {
+                this = new ChrTile(value);
+            }
         }
 
         public int TileIndex
@@ -83,9 +98,24 @@ namespace Snes
             }
         }
 
-        private ChrTile(int value)
+        public static implicit operator int(ChrTile tile)
         {
-            _value = (ushort)value;
+            return tile.Value;
+        }
+
+        public static implicit operator ChrTile(int value)
+        {
+            return new ChrTile(value);
+        }
+
+        public static bool operator ==(ChrTile left, ChrTile right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ChrTile left, ChrTile right)
+        {
+            return !(left == right);
         }
 
         public bool Equals(ChrTile obj)
@@ -111,26 +141,6 @@ namespace Snes
         public override string ToString()
         {
             return SR.GetString(Value, "X4");
-        }
-
-        public static implicit operator int(ChrTile tile)
-        {
-            return tile.Value;
-        }
-
-        public static implicit operator ChrTile(int value)
-        {
-            return new ChrTile(value);
-        }
-
-        public static bool operator ==(ChrTile left, ChrTile right)
-        {
-            return left.Equals(right);
-        }
-
-        public static bool operator !=(ChrTile left, ChrTile right)
-        {
-            return !(left == right);
         }
     }
 }
