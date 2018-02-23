@@ -3,11 +3,14 @@
 // </copyright>
 
 using System;
+using System.ComponentModel;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace Helper
 {
     [DebuggerDisplay("X = {X}, Y = {Y}")]
+    [TypeConverter(typeof(Position2DConverter))]
     public struct Position2D
     {
         public static readonly Position2D Empty = new Position2D();
@@ -157,6 +160,16 @@ namespace Helper
                 position.Y--;
                 */
             return position;
+        }
+
+        public static implicit operator Point(Position2D value)
+        {
+            return new Point(value.X, value.Y);
+        }
+
+        public static implicit operator Position2D(Point value)
+        {
+            return new Position2D(value.X, value.Y);
         }
     }
 }

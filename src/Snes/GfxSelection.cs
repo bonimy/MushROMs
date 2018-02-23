@@ -6,7 +6,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Helper;
+using MushROMs;
 
 namespace Snes
 {
@@ -27,6 +27,11 @@ namespace Snes
             get;
         }
 
+        public int BytesPerTile
+        {
+            get;
+        }
+
         public int Count
         {
             get
@@ -39,12 +44,20 @@ namespace Snes
         {
             get
             {
-                return Selection[index];
+                return StartAddress + (Selection[index] * BytesPerTile);
             }
         }
 
-        public GfxSelection(ISelection<int> selection, int startAddress, GraphicsFormat graphicsFormat)
+        public GfxSelection(
+            ISelection<int> selection,
+            int startAddress,
+            GraphicsFormat graphicsFormat)
         {
+            if (selection is null)
+            {
+                throw new ArgumentNullException(nameof(selection));
+            }
+
             if (!Enum.IsDefined(typeof(GraphicsFormat), graphicsFormat))
             {
                 throw new InvalidEnumArgumentException(
@@ -53,9 +66,30 @@ namespace Snes
                     typeof(GraphicsFormat));
             }
 
-            Selection = selection ?? throw new ArgumentNullException(nameof(selection));
+            Selection = selection.Copy();
             StartAddress = startAddress;
             GraphicsFormat = graphicsFormat;
+            BytesPerTile = GfxTile.BytesPerTile(GraphicsFormat);
+        }
+
+        public GfxSelection Copy()
+        {
+            return Move(StartAddress);
+        }
+
+        public GfxSelection Move(int startAddress)
+        {
+            return new GfxSelection(Selection, startAddress, GraphicsFormat);
+        }
+
+        IDataSelection IDataSelection.Copy()
+        {
+            return Copy();
+        }
+
+        IGfxSelection IGfxSelection.Move(int startAddress)
+        {
+            return Move(startAddress);
         }
 
         public IEnumerator<int> GetEnumerator()

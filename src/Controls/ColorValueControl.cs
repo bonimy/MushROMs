@@ -97,7 +97,7 @@ namespace Controls
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -147,7 +147,7 @@ namespace Controls
 
         protected virtual void DrawColorValue(PaintEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }
@@ -160,7 +160,7 @@ namespace Controls
 
         protected virtual void DrawFocusedBorder(PaintEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }

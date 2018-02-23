@@ -22,7 +22,7 @@ namespace Helper
         {
             get
             {
-                if (_defaultComparer == null)
+                if (_defaultComparer is null)
                 {
                     _defaultComparer = StringComparer.OrdinalIgnoreCase;
                 }
@@ -680,17 +680,17 @@ namespace Helper
 
             public int Compare(Entry x, Entry y)
             {
-                if (x == null && y == null)
+                if (x is null && y is null)
                 {
                     return 0;
                 }
 
-                if (x == null)
+                if (x is null)
                 {
                     return -1;
                 }
 
-                if (y == null)
+                if (y is null)
                 {
                     return +1;
                 }

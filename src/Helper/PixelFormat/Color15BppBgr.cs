@@ -3,16 +3,19 @@
 // </copyright>
 
 using System;
+using System.Drawing;
 using System.Text;
 using static System.Math;
 
 namespace Helper.PixelFormats
 {
-    public unsafe struct Color15BppBgr
+    public struct Color15BppBgr : IEquatable<Color15BppBgr>
     {
         public const int SizeOf = sizeof(short);
 
         public static readonly Color15BppBgr Empty = new Color15BppBgr();
+
+        private const int BitsPerByte = 8;
 
         private const int NumberOfChannels = 3;
 
@@ -39,6 +42,10 @@ namespace Helper.PixelFormats
         private const int BlueMask = ChannelMask << BlueShift;
 
         private const int ColorMask = RedMask | GreenMask | BlueMask;
+
+        private const int HighMask = Byte.MaxValue << BitsPerByte;
+
+        private const int LowMask = Byte.MaxValue;
 
         private ushort _value;
 
@@ -69,21 +76,21 @@ namespace Helper.PixelFormats
             }
         }
 
-        public int High
+        public byte High
         {
             get
             {
-                return (byte)(Value >> 8);
+                return (byte)(Value >> BitsPerByte);
             }
 
             set
             {
-                Value &= 0xFF00;
-                Value |= (byte)(value << 8);
+                Value &= HighMask;
+                Value |= (ushort)(value << BitsPerByte);
             }
         }
 
-        public int Low
+        public byte Low
         {
             get
             {
@@ -92,8 +99,8 @@ namespace Helper.PixelFormats
 
             set
             {
-                Value &= 0xFF;
-                Value |= (byte)value;
+                Value &= LowMask;
+                Value |= value;
             }
         }
 
@@ -190,6 +197,11 @@ namespace Helper.PixelFormats
             _value = value;
         }
 
+        public Color15BppBgr(byte low, byte high) :
+            this((ushort)(low | (high << BitsPerByte)))
+        {
+        }
+
         public Color15BppBgr(int red, int green, int blue)
         {
             _value = (ushort)(
@@ -198,87 +210,16 @@ namespace Helper.PixelFormats
                 ((blue & ChannelMask) << BlueShift));
         }
 
-        public static implicit operator Color15BppBgr(int value)
+        public bool Equals(Color15BppBgr obj)
         {
-            return new Color15BppBgr((ushort)value);
-        }
-
-        public static implicit operator int(Color15BppBgr color15)
-        {
-            return color15.Value;
-        }
-
-        public static explicit operator Color15BppBgr(Color24BppRgb color24)
-        {
-            // Each component goes from 8 bits of sensitivity to 5
-            // So we shift right 3 bytes for the conversion.
-            return new Color15BppBgr(
-                color24.Red >> (8 - BitsPerChannel),
-                color24.Green >> (8 - BitsPerChannel),
-                color24.Blue >> (8 - BitsPerChannel));
-        }
-
-        public static implicit operator Color24BppRgb(Color15BppBgr color15)
-        {
-            // Each component goes from 5 bits of sensitivity to 8
-            // So we shift left 3 bytes for the conversion.
-            return new Color24BppRgb(
-                color15.Red << (8 - BitsPerChannel),
-                color15.Green << (8 - BitsPerChannel),
-                color15.Blue << (8 - BitsPerChannel));
-        }
-
-        public static explicit operator Color15BppBgr(Color32BppArgb color32)
-        {
-            // Same as the 24-bit color conversion; we ignore the alpha component.
-            return new Color15BppBgr(
-                color32.Red >> (8 - BitsPerChannel),
-                color32.Green >> (8 - BitsPerChannel),
-                color32.Blue >> (8 - BitsPerChannel));
-        }
-
-        public static implicit operator Color32BppArgb(Color15BppBgr color15)
-        {
-            // Same as the 24-bit color conversion; we ignore the alpha component.
-            return new Color32BppArgb(
-                color15.Red << (8 - BitsPerChannel),
-                color15.Green << (8 - BitsPerChannel),
-                color15.Blue << (8 - BitsPerChannel));
-        }
-
-        public static bool operator ==(Color15BppBgr left, Color15BppBgr right)
-        {
-            // We compare the proper values because we do not care about
-            // the most significant bit.
-            return left.ProperValue == right.ProperValue;
-        }
-
-        public static bool operator !=(Color15BppBgr left, Color15BppBgr right)
-        {
-            return !(left == right);
-        }
-
-        public static explicit operator Color15BppBgr(ColorF color)
-        {
-            return new Color15BppBgr(
-                (int)Round(color.Red * ChannelMask),
-                (int)Round(color.Green * ChannelMask),
-                (int)Round(color.Blue * ChannelMask));
-        }
-
-        public static implicit operator ColorF(Color15BppBgr pixel)
-        {
-            return ColorF.FromArgb(
-                pixel.Red / (float)ChannelMask,
-                pixel.Green / (float)ChannelMask,
-                pixel.Blue / (float)ChannelMask);
+            return Value.Equals(obj.Value);
         }
 
         public override bool Equals(object obj)
         {
             if (obj is Color15BppBgr value)
             {
-                return value == this;
+                return Equals(value);
             }
 
             return false;
@@ -287,7 +228,7 @@ namespace Helper.PixelFormats
         public override int GetHashCode()
         {
             // We base equality on the proper value, not the base value.
-            return ProperValue;
+            return ProperValue.GetHashCode();
         }
 
         public override string ToString()
@@ -307,6 +248,90 @@ namespace Helper.PixelFormats
             sb.Append(SR.GetString(Blue));
             sb.Append('}');
             return sb.ToString();
+        }
+
+        public static explicit operator Color15BppBgr(int value)
+        {
+            return new Color15BppBgr((ushort)value);
+        }
+
+        public static implicit operator int(Color15BppBgr color15)
+        {
+            return color15.Value;
+        }
+
+        public static explicit operator Color15BppBgr(Color24BppRgb color24)
+        {
+            return new Color15BppBgr(
+                color24.Red >> (BitsPerByte - BitsPerChannel),
+                color24.Green >> (BitsPerByte - BitsPerChannel),
+                color24.Blue >> (BitsPerByte - BitsPerChannel));
+        }
+
+        public static implicit operator Color24BppRgb(Color15BppBgr color15)
+        {
+            return new Color24BppRgb(
+                color15.Red << (BitsPerByte - BitsPerChannel),
+                color15.Green << (BitsPerByte - BitsPerChannel),
+                color15.Blue << (BitsPerByte - BitsPerChannel));
+        }
+
+        public static explicit operator Color15BppBgr(Color32BppArgb color32)
+        {
+            return new Color15BppBgr(
+                color32.Red >> (BitsPerByte - BitsPerChannel),
+                color32.Green >> (BitsPerByte - BitsPerChannel),
+                color32.Blue >> (BitsPerByte - BitsPerChannel));
+        }
+
+        public static implicit operator Color32BppArgb(Color15BppBgr color15)
+        {
+            return new Color32BppArgb(
+                color15.Red << (BitsPerByte - BitsPerChannel),
+                color15.Green << (BitsPerByte - BitsPerChannel),
+                color15.Blue << (BitsPerByte - BitsPerChannel));
+        }
+
+        public static explicit operator Color15BppBgr(Color color)
+        {
+            return new Color15BppBgr(
+                color.R >> (BitsPerByte - BitsPerChannel),
+                color.G >> (BitsPerByte - BitsPerChannel),
+                color.B >> (BitsPerByte - BitsPerChannel));
+        }
+
+        public static implicit operator Color(Color15BppBgr color15)
+        {
+            return Color.FromArgb(
+                color15.Red << (BitsPerByte - BitsPerChannel),
+                color15.Green << (BitsPerByte - BitsPerChannel),
+                color15.Blue << (BitsPerByte - BitsPerChannel));
+        }
+
+        public static explicit operator Color15BppBgr(ColorF colorF)
+        {
+            return new Color15BppBgr(
+                (int)Round(colorF.Red * ChannelMask),
+                (int)Round(colorF.Green * ChannelMask),
+                (int)Round(colorF.Blue * ChannelMask));
+        }
+
+        public static implicit operator ColorF(Color15BppBgr color15)
+        {
+            return ColorF.FromArgb(
+                color15.Red / (float)ChannelMask,
+                color15.Green / (float)ChannelMask,
+                color15.Blue / (float)ChannelMask);
+        }
+
+        public static bool operator ==(Color15BppBgr left, Color15BppBgr right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Color15BppBgr left, Color15BppBgr right)
+        {
+            return !(left == right);
         }
     }
 }

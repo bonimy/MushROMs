@@ -83,7 +83,7 @@ namespace Snes
 
         public static int GetTotalLength(IEnumerable<CompressInfo> collection)
         {
-            if (collection == null)
+            if (collection is null)
             {
                 throw new ArgumentNullException(nameof(collection));
             }

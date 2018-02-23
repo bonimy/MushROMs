@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Text;
 using static System.Math;
@@ -10,7 +11,7 @@ using static System.Math;
 namespace Helper.PixelFormats
 {
     [StructLayout(LayoutKind.Explicit)]
-    public unsafe struct Color32BppArgb
+    public struct Color32BppArgb : IEquatable<Color32BppArgb>
     {
         public const int SizeOf = sizeof(int);
 
@@ -34,12 +35,6 @@ namespace Helper.PixelFormats
 
         internal const int BitsPerBlue = BitsPerChannel;
 
-        [FieldOffset(0)]
-        private int _value;
-
-        [FieldOffset(0)]
-        private fixed byte _components[SizeOf];
-
         [FieldOffset(AlphaIndex)]
         private byte _alpha;
 
@@ -51,19 +46,6 @@ namespace Helper.PixelFormats
 
         [FieldOffset(BlueIndex)]
         private byte _blue;
-
-        public int Value
-        {
-            get
-            {
-                return _value;
-            }
-
-            set
-            {
-                _value = value;
-            }
-        }
 
         public byte Alpha
         {
@@ -117,43 +99,92 @@ namespace Helper.PixelFormats
             }
         }
 
-        public byte this[int index]
+        public int Value
         {
             get
             {
-                if (index < 0 || index >= SizeOf)
-                {
-                    SR.ErrorArrayBounds(nameof(index), index, SizeOf);
-                }
-
-                fixed (byte* components = _components)
-                    return components[index];
+                return
+                    (Alpha << (BitsPerChannel * AlphaIndex)) |
+                    (Red << (BitsPerChannel * RedIndex)) |
+                    (Green << (BitsPerChannel * GreenIndex)) |
+                    (Blue << (BitsPerChannel * BlueIndex));
             }
 
             set
             {
-                if (index < 0 || index >= SizeOf)
-                {
-                    SR.ErrorArrayBounds(nameof(index), index, SizeOf);
-                }
-
-                fixed (byte* components = _components)
-                    components[index] = value;
+                this = new Color32BppArgb(value);
             }
         }
 
-        private Color32BppArgb(int value)
-            : this()
+        public byte this[int index]
         {
-            _value = value;
+            get
+            {
+                switch (index)
+                {
+                    case AlphaIndex:
+                        return Alpha;
+
+                    case RedIndex:
+                        return Red;
+
+                    case GreenIndex:
+                        return Green;
+
+                    case BlueIndex:
+                        return Blue;
+
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(index),
+                            index,
+                            SR.ErrorArrayBounds(nameof(index), index, SizeOf));
+                }
+            }
+
+            set
+            {
+                switch (index)
+                {
+                    case AlphaIndex:
+                        Alpha = value;
+                        return;
+
+                    case RedIndex:
+                        Red = value;
+                        return;
+
+                    case GreenIndex:
+                        Green = value;
+                        return;
+
+                    case BlueIndex:
+                        Blue = value;
+                        return;
+
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(index),
+                            index,
+                            SR.ErrorArrayBounds(nameof(index), index, SizeOf));
+                }
+            }
         }
 
-        public Color32BppArgb(int red, int green, int blue) : this(Byte.MaxValue, red, green, blue)
+        private Color32BppArgb(int value) : this(
+            value >> (BitsPerChannel * AlphaIndex),
+            value >> (BitsPerChannel * RedIndex),
+            value >> (BitsPerChannel * GreenIndex),
+            value >> (BitsPerChannel * BlueIndex))
+        {
+        }
+
+        public Color32BppArgb(int red, int green, int blue) :
+            this(Byte.MaxValue, red, green, blue)
         {
         }
 
         public Color32BppArgb(int alpha, int red, int green, int blue)
-            : this()
         {
             _alpha = (byte)alpha;
             _red = (byte)red;
@@ -161,49 +192,16 @@ namespace Helper.PixelFormats
             _blue = (byte)blue;
         }
 
-        public static implicit operator Color32BppArgb(int value)
+        public bool Equals(Color32BppArgb obj)
         {
-            return new Color32BppArgb(value);
-        }
-
-        public static implicit operator int(Color32BppArgb color32)
-        {
-            return color32.Value;
-        }
-
-        public static implicit operator Color32BppArgb(ColorF color)
-        {
-            return new Color32BppArgb(
-                (int)Round(color.Alpha * Byte.MaxValue),
-                (int)Round(color.Red * Byte.MaxValue),
-                (int)Round(color.Green * Byte.MaxValue),
-                (int)Round(color.Blue * Byte.MaxValue));
-        }
-
-        public static implicit operator ColorF(Color32BppArgb pixel)
-        {
-            return ColorF.FromArgb(
-                pixel.Alpha / (float)Byte.MaxValue,
-                pixel.Red / (float)Byte.MaxValue,
-                pixel.Green / (float)Byte.MaxValue,
-                pixel.Blue / (float)Byte.MaxValue);
-        }
-
-        public static bool operator ==(Color32BppArgb left, Color32BppArgb right)
-        {
-            return left.Value == right.Value;
-        }
-
-        public static bool operator !=(Color32BppArgb left, Color32BppArgb right)
-        {
-            return !(left == right);
+            return Value.Equals(obj.Value);
         }
 
         public override bool Equals(object obj)
         {
             if (obj is Color32BppArgb value)
             {
-                return value == this;
+                return Equals(value);
             }
 
             return false;
@@ -211,7 +209,7 @@ namespace Helper.PixelFormats
 
         public override int GetHashCode()
         {
-            return Value;
+            return Value.GetHashCode();
         }
 
         public override string ToString()
@@ -235,6 +233,58 @@ namespace Helper.PixelFormats
             sb.Append(SR.GetString(Blue));
             sb.Append('}');
             return sb.ToString();
+        }
+
+        public static implicit operator Color32BppArgb(int value)
+        {
+            return new Color32BppArgb(value);
+        }
+
+        public static implicit operator int(Color32BppArgb color32)
+        {
+            return color32.Value;
+        }
+
+        public static explicit operator Color32BppArgb(Color color)
+        {
+            return new Color32BppArgb(
+                color.A,
+                color.R,
+                color.G,
+                color.B);
+        }
+
+        public static implicit operator Color(Color32BppArgb color32)
+        {
+            return Color.FromArgb(color32.Value);
+        }
+
+        public static explicit operator Color32BppArgb(ColorF colorF)
+        {
+            return new Color32BppArgb(
+                (int)Round(colorF.Alpha * Byte.MaxValue),
+                (int)Round(colorF.Red * Byte.MaxValue),
+                (int)Round(colorF.Green * Byte.MaxValue),
+                (int)Round(colorF.Blue * Byte.MaxValue));
+        }
+
+        public static implicit operator ColorF(Color32BppArgb color32)
+        {
+            return ColorF.FromArgb(
+                color32.Alpha / (float)Byte.MaxValue,
+                color32.Red / (float)Byte.MaxValue,
+                color32.Green / (float)Byte.MaxValue,
+                color32.Blue / (float)Byte.MaxValue);
+        }
+
+        public static bool operator ==(Color32BppArgb left, Color32BppArgb right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Color32BppArgb left, Color32BppArgb right)
+        {
+            return !(left == right);
         }
     }
 }

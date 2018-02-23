@@ -5,8 +5,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Helper;
 
-namespace Helper
+namespace MushROMs
 {
     public sealed class BoxSelection1D : Selection1D
     {

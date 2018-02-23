@@ -18,7 +18,7 @@ namespace Controls
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e == null)
+            if (e is null)
             {
                 throw new ArgumentNullException(nameof(e));
             }

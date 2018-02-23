@@ -5,7 +5,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Helper
+namespace MushROMs
 {
     public delegate bool GateMethod(bool left, bool right);
 
@@ -41,17 +41,17 @@ namespace Helper
 
         public GateSelection1D(Selection1D left, Selection1D right, GateMethod rule)
         {
-            if (left == null)
+            if (left is null)
             {
                 throw new ArgumentNullException(nameof(left));
             }
 
-            if (right == null)
+            if (right is null)
             {
                 throw new ArgumentNullException(nameof(right));
             }
 
-            if (rule == null)
+            if (rule is null)
             {
                 throw new ArgumentNullException(nameof(rule));
             }
@@ -74,7 +74,7 @@ namespace Helper
 
         private GateSelection1D(GateSelection1D selection)
         {
-            if (selection == null)
+            if (selection is null)
             {
                 throw new ArgumentNullException(nameof(selection));
             }
