@@ -5,8 +5,11 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-namespace MushROMs.SMB1
+namespace Smb1
 {
+    using System;
+    using static Helper.SR;
+
     /// <summary>
     /// The header data for the current area.
     /// </summary>
@@ -17,12 +20,44 @@ namespace MushROMs.SMB1
     /// too, but every area object pointer starts with two bytes that deterime the
     /// header.
     /// </remarks>
-    public struct AreaHeader
+    public struct AreaHeader : IEquatable<AreaHeader>
     {
         /// <summary>
         /// The size, in bytes, of this <see cref="AreaHeader"/>.
         /// </summary>
         public const int SizeOf = sizeof(ushort);
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AreaHeader"/> struct.
+        /// </summary>
+        /// <param name="val1">
+        /// The first byte of the area header.
+        /// </param>
+        /// <param name="val2">
+        /// The second byte of the area header.
+        /// </param>
+        public AreaHeader(byte val1, byte val2)
+        {
+            Value1 = val1;
+            Value2 = val2;
+        }
+
+        public AreaHeader(
+            StartTime startTime,
+            StartYPosition startYPosition,
+            BackgroundType backgroundType,
+            MiscPlatformType objectMode,
+            SceneryType sceneryType,
+            TerrainMode terrainMode)
+            : this()
+        {
+            StartTime = startTime;
+            StartYPosition = startYPosition;
+            BackgroundType = backgroundType;
+            ObjectMode = objectMode;
+            SceneryType = sceneryType;
+            TerrainMode = terrainMode;
+        }
 
         /// <summary>
         /// Gets or sets the first byte of the area data.
@@ -144,35 +179,9 @@ namespace MushROMs.SMB1
             }
         }
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="AreaHeader"/> struct.
-        /// </summary>
-        /// <param name="val1">
-        /// The first byte of the area header.
-        /// </param>
-        /// <param name="val2">
-        /// The second byte of the area header.
-        /// </param>
-        public AreaHeader(byte val1, byte val2)
-        {
-            Value1 = val1;
-            Value2 = val2;
-        }
-
-        public AreaHeader(StartTime startTime, StartYPosition startYPosition, BackgroundType backgroundType, MiscPlatformType objectMode, SceneryType sceneryType, TerrainMode terrainMode) : this()
-        {
-            StartTime = startTime;
-            StartYPosition = startYPosition;
-            BackgroundType = backgroundType;
-            ObjectMode = objectMode;
-            SceneryType = sceneryType;
-            TerrainMode = terrainMode;
-        }
-
         public static bool operator ==(AreaHeader left, AreaHeader right)
         {
-            return left.Value1 == right.Value1 &&
-                left.Value2 == right.Value2;
+            return left.Equals(right);
         }
 
         public static bool operator !=(AreaHeader left, AreaHeader right)
@@ -182,22 +191,32 @@ namespace MushROMs.SMB1
 
         public override bool Equals(object obj)
         {
-            if (!(obj is AreaHeader))
+            if (obj is AreaHeader other)
             {
-                return false;
+                return Equals(other);
             }
 
-            return (AreaHeader)obj == this;
+            return false;
+        }
+
+        public bool Equals(AreaHeader other)
+        {
+            return
+                Value1.Equals(other.Value1) &&
+                Value2.Equals(other.Value2);
         }
 
         public override int GetHashCode()
         {
-            return (Value1) | (Value2 << 8);
+            return Value1 | (Value2 << 8);
         }
 
         public override string ToString()
         {
-            return System.String.Format("{0} {1}", Value1.ToString("X2"), Value2.ToString("X2"));
+            return GetString(
+                "{0:X2} {1:X2}",
+                Value1,
+                Value2);
         }
     }
 }

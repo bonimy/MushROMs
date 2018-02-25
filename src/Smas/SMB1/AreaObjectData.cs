@@ -5,14 +5,16 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using MushROMs.SMB1;
-using AreaHeader = MushROMs.SMB1.AreaHeader;
-using NesAreaObjectData = MushROMs.SMB1.AreaObjectData;
-
-namespace MushROMs.SMAS.SMB1
+namespace Smas.Smb1
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using global::Smb1;
+    using static Helper.ThrowHelper;
+    using AreaHeader = global::Smb1.AreaHeader;
+    using NesAreaObjectData = global::Smb1.AreaObjectData;
+
     public class AreaObjectData : IEnumerable<AreaObjectCommand>
     {
         /// <summary>
@@ -21,78 +23,24 @@ namespace MushROMs.SMAS.SMB1
         /// </summary>
         public const byte TerminationCode = 0xFD;
 
-        public AreaHeader AreaHeader
+        public AreaObjectData(IReadOnlyList<byte> data, int index)
         {
-            get;
-            set;
-        }
-
-        private IList<AreaObjectCommand> AreaObjects
-        {
-            get;
-            set;
-        }
-
-        public int AreaObjectCount
-        {
-            get
-            {
-                return AreaObjects.Count;
-            }
-        }
-
-        /// <summary>
-        /// Gets the size, in bytes, of this <see cref="AreaObjectData"/>. This
-        /// size includes the <see cref="AreaHeader"/> and the termination code.
-        /// </summary>
-        public int DataSize
-        {
-            get
-            {
-                // We add one byte for the termination code.
-                var result = 1;
-
-                // We add two bytes for the area header.
-                result += AreaHeader.SizeOf;
-
-                foreach (var obj in AreaObjects)
-                {
-                    result += obj.Size;
-                }
-
-                return result;
-            }
-        }
-
-        public AreaObjectCommand this[int index]
-        {
-            get
-            {
-                return AreaObjects[index];
-            }
-
-            set
-            {
-                AreaObjects[index] = value;
-            }
-        }
-
-        public AreaObjectData(byte[] data, int index)
-        {
-            if (data == null)
+            if (data is null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
 
             if (index < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(index));
+                throw ValueNotGreaterThanEqualTo(
+                    nameof(index),
+                    index);
             }
 
             AreaHeader = new AreaHeader(data[index++], data[index++]);
 
             AreaObjects = new List<AreaObjectCommand>();
-            for (var j = index; j < data.Length;)
+            for (var j = index; j < data.Count;)
             {
                 if (data[j] == TerminationCode)
                 {
@@ -103,17 +51,18 @@ namespace MushROMs.SMAS.SMB1
                 if ((data[j] & 0x0F) == 0x0F)
                 {
                     // We expected a three byte object but didn't have enough space.
-                    if (data.Length < j + 3)
+                    if (data.Count < j + 3)
                     {
                         throw new ArgumentException();
                     }
 
-                    AreaObjects.Add(new AreaObjectCommand(data[j++], data[j++], data[j++]));
+                    AreaObjects.Add(
+                        new AreaObjectCommand(data[j++], data[j++], data[j++]));
                 }
                 else
                 {
                     // We expected a two byte object but didn't have enough space.
-                    if (data.Length < j + 2)
+                    if (data.Count < j + 2)
                     {
                         throw new ArgumentException();
                     }
@@ -142,14 +91,14 @@ namespace MushROMs.SMAS.SMB1
             var page = 0;
             var x = 0;
             var xPage = 0;
-            var CastleLedge = areaType == AreaType.Castle;
+            var castleLedge = areaType == AreaType.Castle;
 
-            for (var i = 0; i < nes.AreaObjectCount; i++)
+            for (var i = 0; i < nes.Count; i++)
             {
                 var obj = (AreaObjectCommand)nes[i];
                 var type = obj.AreaObjectCode;
 
-                if (CastleLedge)
+                if (castleLedge)
                 {
                     if (type == AreaObjectCode.HorizontalBlocks)
                     {
@@ -159,7 +108,7 @@ namespace MushROMs.SMAS.SMB1
                     }
                     else
                     {
-                        CastleLedge = false;
+                        castleLedge = false;
                     }
                 }
 
@@ -207,9 +156,11 @@ namespace MushROMs.SMAS.SMB1
 
                 if (type == AreaObjectCode.Castle)
                 {
-                    if (obj.Parameter != 0) // Big castle
+                    // Big castle
+                    if (obj.Parameter != 0)
                     {
-                        obj.Parameter = 6; // Small castle
+                        // Small castle
+                        obj.Parameter = 6;
                     }
                     else if (page != 0)
                     {
@@ -227,10 +178,80 @@ namespace MushROMs.SMAS.SMB1
                     lastTerrain = current;
                 }
             }
+
             AreaObjects.Add(new AreaObjectCommand(0x7D, 0xC7));
         }
 
-        private void InsertCastleTiles(IList<AreaObjectCommand> objects, TerrainMode terrain, TerrainMode last)
+        public int AreaObjectCount
+        {
+            get
+            {
+                return AreaObjects.Count;
+            }
+        }
+
+        public AreaHeader AreaHeader
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Gets the size, in bytes, of this <see cref="AreaObjectData"/>. This
+        /// size includes the <see cref="AreaHeader"/> and the termination code.
+        /// </summary>
+        public int DataSize
+        {
+            get
+            {
+                // We add one byte for the termination code.
+                var result = 1;
+
+                // We add two bytes for the area header.
+                result += AreaHeader.SizeOf;
+
+                foreach (var obj in AreaObjects)
+                {
+                    result += obj.Size;
+                }
+
+                return result;
+            }
+        }
+
+        private IList<AreaObjectCommand> AreaObjects
+        {
+            get;
+            set;
+        }
+
+        public AreaObjectCommand this[int index]
+        {
+            get
+            {
+                return AreaObjects[index];
+            }
+
+            set
+            {
+                AreaObjects[index] = value;
+            }
+        }
+
+        public IEnumerator<AreaObjectCommand> GetEnumerator()
+        {
+            return AreaObjects.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        private void InsertCastleTiles(
+            IList<AreaObjectCommand> objects,
+            TerrainMode terrain,
+            TerrainMode last)
         {
             switch (terrain)
             {
@@ -282,16 +303,6 @@ namespace MushROMs.SMAS.SMB1
                 case TerrainMode.Solid:
                     return;
             }
-        }
-
-        public IEnumerator<AreaObjectCommand> GetEnumerator()
-        {
-            return AreaObjects.GetEnumerator();
-        }
-
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

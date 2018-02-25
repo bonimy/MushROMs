@@ -5,7 +5,7 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-namespace MushROMs.NES
+namespace Nes
 {
     public static class AddressConverter
     {

@@ -5,7 +5,7 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-namespace MushROMs.SMB1
+namespace Smb1
 {
     public enum AreaObjectCode
     {

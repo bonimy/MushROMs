@@ -5,16 +5,17 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using Helper;
-using MushROMs.SMB1;
-using NesAreaData = MushROMs.SMB1.AreaData;
-using static MushROMs.NES.AddressConverter;
-using static MushROMs.SNES.AddressConverter;
-
-namespace MushROMs.SMAS.SMB1
+namespace Smas.Smb1
 {
+    using System;
+    using System.Collections.Generic;
+    using global::Smb1;
+    using Helper;
+    using static global::Nes.AddressConverter;
+    using static MushROMs.SNES.AddressConverter;
+    using NesAreaData = global::Smb1.AreaData;
+    using PrgRom = Nes.PrgRom;
+
     public class AreaData
     {
         public const int NumberOfWorlds = 8;
@@ -27,6 +28,35 @@ namespace MushROMs.SMAS.SMB1
         public const int AreaTypeSpriteOffsetPointer = 0x04C148;
         public const int AreaTypeObjectOffsetPointer = 0x04C190;
         public const int NumberOfAreas = ObjectAddressHighBytePointer - ObjectAddressLowBytePointer;
+
+        public AreaData(
+            AreaObjectData areaObjectData,
+            AreaSpriteData areaSpriteData,
+            int areaNumber,
+            AreaType areaType)
+        {
+            AreaObjectData = areaObjectData ??
+                throw new ArgumentNullException(nameof(areaObjectData));
+
+            AreaSpriteData = areaSpriteData ??
+                throw new ArgumentNullException(nameof(areaSpriteData));
+
+            AreaNumber = areaNumber;
+            AreaType = AreaType;
+        }
+
+        public AreaData(NesAreaData nes)
+        {
+            if (nes is null)
+            {
+                throw new ArgumentNullException(nameof(nes));
+            }
+
+            AreaNumber = nes.AreaNumber;
+            AreaType = nes.AreaType;
+            AreaObjectData = new AreaObjectData(nes.AreaObjectData, nes.AreaType);
+            AreaSpriteData = new AreaSpriteData(nes.AreaSpriteData);
+        }
 
         public AreaObjectData AreaObjectData
         {
@@ -77,22 +107,9 @@ namespace MushROMs.SMAS.SMB1
             }
         }
 
-        public AreaData(
-            AreaObjectData areaObjectData,
-            AreaSpriteData areaSpriteData,
-            int areaNumber,
-            AreaType areaType)
-        {
-            AreaObjectData = areaObjectData ?? throw new ArgumentNullException(nameof(areaObjectData));
-            AreaSpriteData = areaSpriteData ?? throw new ArgumentNullException(nameof(areaSpriteData));
-
-            AreaNumber = areaNumber;
-            AreaType = AreaType;
-        }
-
         public static byte GetAreaNumber(byte[] rom, int world, int level)
         {
-            if (rom == null)
+            if (rom is null)
             {
                 throw new ArgumentNullException(nameof(rom));
             }
@@ -155,17 +172,158 @@ namespace MushROMs.SMAS.SMB1
             return new AreaData(areaObjectData, areaSpriteData, areaNumber, areaType);
         }
 
-        public AreaData(NesAreaData nes)
+        public static AreaData[] GetAllAreas(byte[] src)
         {
-            if (nes == null)
+            var areas = new AreaData[NumberOfAreas];
+
+            var areaPointers = MemoryToLoRom(AreaTypeObjectOffsetPointer);
+            var ws = src[areaPointers + (int)AreaType.Water];
+            var gs = src[areaPointers + (int)AreaType.Grassland];
+            var us = src[areaPointers + (int)AreaType.Underground];
+            var cs = src[areaPointers + (int)AreaType.Castle];
+            var list = new List<AreaIndex>()
             {
-                throw new ArgumentNullException(nameof(nes));
+                new AreaIndex(ws, AreaType.Water),
+                new AreaIndex(gs, AreaType.Grassland),
+                new AreaIndex(us, AreaType.Underground),
+                new AreaIndex(cs, AreaType.Castle),
+                new AreaIndex(Int32.MaxValue, (AreaType)(-1))
+            };
+
+            list.Sort((x, y) => x.Index - y.Index);
+
+            for (var i = 0; i < NumberOfAreas; i++)
+            {
+                var map = i;
+                for (var j = 0; j < 4; j++)
+                {
+                    if (i >= list[j].Index && i < list[j + 1].Index)
+                    {
+                        map -= list[j].Index;
+                        map |= (int)list[j].AreaType << 5;
+                        break;
+                    }
+                }
+
+                areas[i] = FromRomData(src, map);
             }
 
-            AreaNumber = nes.AreaNumber;
-            AreaType = nes.AreaType;
-            AreaObjectData = new AreaObjectData(nes.AreaObjectData, nes.AreaType);
-            AreaSpriteData = new AreaSpriteData(nes.AreaSpriteData);
+            return areas;
+        }
+
+        public static bool WriteAllLevels(byte[] ptr, PrgRom src)
+        {
+            if (ptr == null)
+            {
+                throw new ArgumentNullException(nameof(ptr));
+            }
+
+            var first = MemoryToLoRom(0x04C1D8);
+            var last = MemoryToLoRom(0x04D800);
+            var range = last - first;
+
+            var nlevels = NesAreaData.GetAllAreas(src);
+            var slevels = new AreaData[NumberOfAreas];
+
+            var size = 0;
+            for (var i = 0; i < NumberOfAreas; i++)
+            {
+                slevels[i] = new AreaData(nlevels[i]);
+                size += slevels[i].DataSize;
+            }
+
+            if (size >= range)
+            {
+                return false;
+            }
+
+            var msrc = NesToPc(NesAreaData.AreaListPointer);
+            var mdest = MemoryToLoRom(AreaListPointer);
+            for (var i = 0; i < NumberOfAreas; i++)
+            {
+                ptr[mdest + i] = src[msrc + i];
+            }
+
+            var wsrc = NesToPc(NesAreaData.LevelsPerWorldPointer);
+            var wdest = MemoryToLoRom(LevelsPerWorldPointer);
+            for (var i = 0; i < 8; i++)
+            {
+                ptr[wdest + i] = src[wsrc + i];
+            }
+
+            var atesrc = NesToPc(NesAreaData.AreaTypeSpriteOffsetPointer);
+            var atedest = MemoryToLoRom(AreaTypeSpriteOffsetPointer);
+            for (var i = 0; i < 4; i++)
+            {
+                ptr[atedest + i] = src[atesrc + i];
+            }
+
+            var atlsrc = NesToPc(NesAreaData.AreaTypeObjectOffsetPointer);
+            var atldest = MemoryToLoRom(AreaTypeObjectOffsetPointer);
+            for (var i = 0; i < 4; i++)
+            {
+                ptr[atldest + i] = src[atlsrc + i];
+            }
+
+            var lldest = MemoryToLoRom(ObjectAddressLowBytePointer);
+            var hldest = MemoryToLoRom(ObjectAddressHighBytePointer);
+
+            var ledest = MemoryToLoRom(SpriteAddressLowBytePointer);
+            var hedest = MemoryToLoRom(SpriteAddressHighBytePointer);
+
+            var address = first;
+            for (var i = 0; i < NumberOfAreas; i++)
+            {
+                var level = slevels[i];
+                var map = level.AreaNumber;
+                var type = (int)level.AreaType;
+                var reduced = map & 0x1F;
+                var index = reduced + ptr[atldest + type];
+
+                var snes = MemoryToLoRom(address);
+                ptr[lldest + index] = (byte)snes;
+                ptr[hldest + index] = (byte)(snes >> 8);
+
+                ptr[address++] = level.AreaHeader.Value1;
+                ptr[address++] = level.AreaHeader.Value2;
+                for (var j = 0; j < level.AreaObjectData.AreaObjectCount; j++)
+                {
+                    var obj = level.AreaObjectData[j];
+                    ptr[address++] = obj.Value1;
+                    ptr[address++] = obj.Value2;
+                    if (obj.Size == 3)
+                    {
+                        ptr[address++] = obj.Value3;
+                    }
+                }
+
+                ptr[address++] = 0xFD;
+
+                index = reduced + ptr[atedest + type];
+                snes = MemoryToLoRom(address);
+                ptr[ledest + index] = (byte)snes;
+                ptr[hedest + index] = (byte)(snes >> 8);
+
+                for (var j = 0; j < level.AreaSpriteData.AreaSpriteCount; j++)
+                {
+                    var obj = level.AreaSpriteData[j];
+                    ptr[address++] = obj.Value1;
+                    ptr[address++] = obj.Value2;
+                    if (obj.Size == 3)
+                    {
+                        ptr[address++] = obj.Value3;
+                    }
+                }
+
+                ptr[address++] = 0xFF;
+            }
+
+            return true;
+        }
+
+        public override string ToString()
+        {
+            return SR.GetString("Area{0:X2}", AreaNumber);
         }
 
         private int GetCeilingSize(TerrainMode terrain)
@@ -215,155 +373,6 @@ namespace MushROMs.SMAS.SMB1
                 Index = index;
                 AreaType = areaType;
             }
-        }
-
-        public static AreaData[] GetAllAreas(byte[] src)
-        {
-            var areas = new AreaData[NumberOfAreas];
-
-            var areaPointers = MemoryToLoRom(AreaTypeObjectOffsetPointer);
-            var ws = src[areaPointers + (int)AreaType.Water];
-            var gs = src[areaPointers + (int)AreaType.Grassland];
-            var us = src[areaPointers + (int)AreaType.Underground];
-            var cs = src[areaPointers + (int)AreaType.Castle];
-            var list = new List<AreaIndex>(new AreaIndex[] {
-                new AreaIndex(ws, AreaType.Water),
-                new AreaIndex(gs, AreaType.Grassland),
-                new AreaIndex(us, AreaType.Underground),
-                new AreaIndex(cs, AreaType.Castle),
-                new AreaIndex(Int32.MaxValue, (AreaType)(-1))});
-            list.Sort((x, y) => x.Index - y.Index);
-
-            for (var i = 0; i < NumberOfAreas; i++)
-            {
-                var map = i;
-                for (var j = 0; j < 4; j++)
-                {
-                    if (i >= list[j].Index && i < list[j + 1].Index)
-                    {
-                        map -= list[j].Index;
-                        map |= (int)list[j].AreaType << 5;
-                        break;
-                    }
-                }
-
-                areas[i] = FromRomData(src, map);
-            }
-
-            return areas;
-        }
-
-        public override string ToString()
-        {
-            return SR.GetString("Area{0:X2}", AreaNumber);
-        }
-
-        public static bool WriteAllLevels(byte[] ptr, byte[] src)
-        {
-            if (ptr == null)
-            {
-                throw new ArgumentNullException(nameof(ptr));
-            }
-
-            var first = MemoryToLoRom(0x04C1D8);
-            var last = MemoryToLoRom(0x04D800);
-            var range = last - first;
-
-            var nlevels = NesAreaData.GetAllAreas(src);
-            var slevels = new AreaData[NumberOfAreas];
-
-            var size = 0;
-            for (var i = 0; i < NumberOfAreas; i++)
-            {
-                slevels[i] = new AreaData(nlevels[i]);
-                size += slevels[i].DataSize;
-            }
-
-            if (size >= range)
-            {
-                return false;
-            }
-
-            var msrc = NesToPc(NesAreaData.AreaListPointer);
-            var mdest = MemoryToLoRom(AreaListPointer);
-            for (var i = 0; i < NumberOfAreas; i++)
-            {
-                ptr[mdest + i] = src[msrc + i];
-            }
-
-            var wsrc = NesToPc(NesAreaData.LevelsPerWorldPointer);
-            var wdest = MemoryToLoRom(LevelsPerWorldPointer);
-            for (var i = 0; i < 8; i++)
-            {
-                ptr[wdest + i] = src[wsrc + i];
-            }
-
-            var atesrc = NesToPc(NesAreaData.AreaTypeSpriteOffsetPointer);
-            var atedest = MemoryToLoRom(AreaTypeSpriteOffsetPointer);
-            for (var i = 0; i < 4; i++)
-            {
-                ptr[atedest + i] = src[atesrc + i];
-            }
-
-            var atlsrc = NesToPc(MushROMs.SMB1.AreaData.AreaTypeObjectOffsetPointer);
-            var atldest = MemoryToLoRom(AreaTypeObjectOffsetPointer);
-            for (var i = 0; i < 4; i++)
-            {
-                ptr[atldest + i] = src[atlsrc + i];
-            }
-
-            var lldest = MemoryToLoRom(ObjectAddressLowBytePointer);
-            var hldest = MemoryToLoRom(ObjectAddressHighBytePointer);
-
-            var ledest = MemoryToLoRom(SpriteAddressLowBytePointer);
-            var hedest = MemoryToLoRom(SpriteAddressHighBytePointer);
-
-            var address = first;
-            for (var i = 0; i < NumberOfAreas; i++)
-            {
-                var level = slevels[i];
-                var map = level.AreaNumber;
-                var type = (int)level.AreaType;
-                var reduced = map & 0x1F;
-                var index = reduced + ptr[atldest + type];
-
-                var snes = MemoryToLoRom(address);
-                ptr[lldest + index] = (byte)snes;
-                ptr[hldest + index] = (byte)(snes >> 8);
-
-                ptr[address++] = level.AreaHeader.Value1;
-                ptr[address++] = level.AreaHeader.Value2;
-                for (var j = 0; j < level.AreaObjectData.AreaObjectCount; j++)
-                {
-                    var obj = level.AreaObjectData[j];
-                    ptr[address++] = obj.Value1;
-                    ptr[address++] = obj.Value2;
-                    if (obj.Size == 3)
-                    {
-                        ptr[address++] = obj.Value3;
-                    }
-                }
-                ptr[address++] = 0xFD;
-
-                index = reduced + ptr[atedest + type];
-                snes = MemoryToLoRom(address);
-                ptr[ledest + index] = (byte)snes;
-                ptr[hedest + index] = (byte)(snes >> 8);
-
-                for (var j = 0; j < level.AreaSpriteData.AreaSpriteCount; j++)
-                {
-                    var obj = level.AreaSpriteData[j];
-                    ptr[address++] = obj.Value1;
-                    ptr[address++] = obj.Value2;
-                    if (obj.Size == 3)
-                    {
-                        ptr[address++] = obj.Value3;
-                    }
-                }
-                ptr[address++] = 0xFF;
-            }
-
-            return true;
         }
     }
 }

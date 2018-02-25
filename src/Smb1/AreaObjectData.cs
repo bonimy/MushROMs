@@ -5,11 +5,14 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-
-namespace MushROMs.SMB1
+namespace Smb1
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using Nes;
+    using static Helper.ThrowHelper;
+
     public class AreaObjectData : IEnumerable<AreaObjectCommand>
     {
         /// <summary>
@@ -18,24 +21,55 @@ namespace MushROMs.SMB1
         /// </summary>
         public const byte TerminationCode = 0xFD;
 
-        public AreaHeader AreaHeader
+        public AreaObjectData(IReadOnlyList<byte> data, int index)
         {
-            get;
-            set;
+            if (data is null)
+            {
+                throw new ArgumentNullException(nameof(data));
+            }
+
+            if (index < 0)
+            {
+                throw ValueNotGreaterThanEqualTo(
+                    nameof(index),
+                    index);
+            }
+
+            AreaHeader = new AreaHeader(data[index++], data[index++]);
+
+            AreaObjects = new List<AreaObjectCommand>();
+            for (var j = index; j < data.Count;)
+            {
+                if (data[j] == TerminationCode)
+                {
+                    return;
+                }
+
+                // We expected a two byte object but didn't have enough space.
+                if (j + 2 > data.Count)
+                {
+                    throw new ArgumentException();
+                }
+
+                AreaObjects.Add(new AreaObjectCommand(data[j++], data[j++]));
+            }
+
+            // We've reached the end of the data array without reading the terminating byte command.
+            throw new ArgumentException();
         }
 
-        private IList<AreaObjectCommand> AreaObjects
-        {
-            get;
-            set;
-        }
-
-        public int AreaObjectCount
+        public int Count
         {
             get
             {
                 return AreaObjects.Count;
             }
+        }
+
+        public AreaHeader AreaHeader
+        {
+            get;
+            set;
         }
 
         /// <summary>
@@ -61,6 +95,11 @@ namespace MushROMs.SMB1
             }
         }
 
+        private IList<AreaObjectCommand> AreaObjects
+        {
+            get;
+        }
+
         public AreaObjectCommand this[int index]
         {
             get
@@ -74,47 +113,12 @@ namespace MushROMs.SMB1
             }
         }
 
-        public AreaObjectData(byte[] data, int index)
-        {
-            if (data == null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
-
-            if (index < 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index));
-            }
-
-            AreaHeader = new AreaHeader(data[index++], data[index++]);
-
-            AreaObjects = new List<AreaObjectCommand>();
-            for (var j = index; j < data.Length;)
-            {
-                if (data[j] == TerminationCode)
-                {
-                    return;
-                }
-
-                // We expected a two byte object but didn't have enough space.
-                if (data.Length < j + 2)
-                {
-                    throw new ArgumentException();
-                }
-
-                AreaObjects.Add(new AreaObjectCommand(data[j++], data[j++]));
-            }
-
-            // We've reached the end of the data array without reading the terminating byte command.
-            throw new ArgumentException();
-        }
-
         public IEnumerator<AreaObjectCommand> GetEnumerator()
         {
             return AreaObjects.GetEnumerator();
         }
 
-        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }

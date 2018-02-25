@@ -5,14 +5,14 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using Helper;
-using MushROMs.NES;
-using static MushROMs.NES.AddressConverter;
-
-namespace MushROMs.SMB1
+namespace Smb1
 {
+    using System;
+    using System.Collections.Generic;
+    using Helper;
+    using Nes;
+    using static Helper.ThrowHelper;
+
     public class AreaData
     {
         public const int NumberOfWorlds = 8;
@@ -26,16 +26,30 @@ namespace MushROMs.SMB1
         public const int AreaTypeObjectOffsetPointer = 0x9D28;
         public const int NumberOfAreas = ObjectAddressHighBytePointer - ObjectAddressLowBytePointer;
 
+        public AreaData(
+            AreaObjectData areaObjectData,
+            AreaSpriteData areaSpriteData,
+            int areaNumber,
+            AreaType areaType)
+        {
+            AreaObjectData = areaObjectData ??
+                throw new ArgumentNullException(nameof(areaObjectData));
+
+            AreaSpriteData = areaSpriteData ??
+                throw new ArgumentNullException(nameof(areaSpriteData));
+
+            AreaNumber = areaNumber;
+            AreaType = AreaType;
+        }
+
         public AreaObjectData AreaObjectData
         {
             get;
-            private set;
         }
 
         public AreaSpriteData AreaSpriteData
         {
             get;
-            private set;
         }
 
         public int AreaNumber
@@ -62,113 +76,106 @@ namespace MushROMs.SMB1
             }
         }
 
-        public AreaData(
-            AreaObjectData areaObjectData,
-            AreaSpriteData areaSpriteData,
-            int areaNumber,
-            AreaType areaType)
+        public static byte GetAreaNumber(PrgRom rom, int world, int level)
         {
-            AreaObjectData = areaObjectData ?? throw new ArgumentNullException(nameof(areaObjectData));
-            AreaSpriteData = areaSpriteData ?? throw new ArgumentNullException(nameof(areaSpriteData));
-
-            AreaNumber = areaNumber;
-            AreaType = AreaType;
-        }
-
-        public static byte GetAreaNumber(byte[] rom, int world, int level)
-        {
-            if (rom == null)
+            if (rom is null)
             {
                 throw new ArgumentNullException(nameof(rom));
             }
 
             if (world < 0)
             {
-                throw new ArgumentNullException(nameof(world));
+                throw ValueNotGreaterThanEqualTo(
+                    nameof(world),
+                    world);
             }
 
             if (level < 0)
             {
-                throw new ArgumentNullException(nameof(level));
+                throw ValueNotGreaterThanEqualTo(
+                    nameof(level),
+                    level);
             }
 
-            var areas = AddressConverter.NesToPc(AreaListPointer);
-            var worldOffsetPointer = AddressConverter.NesToPc(LevelsPerWorldPointer);
-            int worldOffset = rom[worldOffsetPointer + world];
-            worldOffset += AddressConverter.NesToPc(AreaListPointer);
+            var worldIndex = rom[LevelsPerWorldPointer + world];
+            var levelIndex = worldIndex + AreaListPointer;
 
-            return (byte)(rom[worldOffset + level] & 0x7F);
+            return (byte)(rom[levelIndex + level] & 0x7F);
         }
 
-        public static AreaData FromRomData(byte[] rom, int areaNumber)
+        public static AreaData FromRomData(PrgRom rom, int areaNumber)
         {
-            if (rom == null)
+            if (rom is null)
             {
                 throw new ArgumentNullException(nameof(rom));
             }
 
             if (areaNumber < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(areaNumber));
+                throw ValueNotGreaterThanEqualTo(
+                    nameof(areaNumber),
+                    areaNumber);
             }
-
-            var lo = NesToPc(ObjectAddressLowBytePointer);
-            var hi = NesToPc(ObjectAddressHighBytePointer);
-            var areas = NesToPc(AreaTypeObjectOffsetPointer);
 
             var areaType = (AreaType)((areaNumber >> 5) & 3);
             var reducedMapNumer = areaNumber & 0x1F;
-            var index = reducedMapNumer + rom[areas + (int)areaType];
-            var address = rom[lo + index] | (rom[hi + index] << 8);
-            address = NesToPc(address);
+            var objectIndex =
+                reducedMapNumer +
+                rom[AreaTypeObjectOffsetPointer + (int)areaType];
 
-            var areaObjectData = new AreaObjectData(rom, address);
+            var objectAddress =
+                rom[ObjectAddressLowBytePointer + objectIndex] |
+                (rom[ObjectAddressHighBytePointer + objectIndex] << 8);
 
-            lo = NesToPc(SpriteAddressLowBytePointer);
-            hi = NesToPc(SpriteAddressHighBytePointer);
-            areas = NesToPc(AreaTypeSpriteOffsetPointer);
+            var areaObjectData = new AreaObjectData(rom, objectAddress);
 
-            index = reducedMapNumer + rom[areas + (int)areaType];
+            var spriteIndex =
+                reducedMapNumer +
+                rom[AreaTypeSpriteOffsetPointer + (int)areaType];
 
-            address = rom[lo + index] | (rom[hi + index] << 8);
-            address = NesToPc(address);
+            var spriteAddress =
+                rom[SpriteAddressLowBytePointer + spriteIndex] |
+                (rom[SpriteAddressHighBytePointer + spriteIndex] << 8);
 
-            var areaSpriteData = new AreaSpriteData(rom, address);
+            var areaSpriteData = new AreaSpriteData(rom, spriteAddress);
 
             return new AreaData(areaObjectData, areaSpriteData, areaNumber, areaType);
         }
 
-        public static AreaData[] GetAllAreas(byte[] src)
+        public static AreaData[] GetAllAreas(PrgRom src)
         {
             var areas = new AreaData[NumberOfAreas];
 
-            var areaPointers = NesToPc(AreaTypeObjectOffsetPointer);
+            var areaPointers = AreaTypeObjectOffsetPointer;
             var ws = src[areaPointers + (int)AreaType.Water];
             var gs = src[areaPointers + (int)AreaType.Grassland];
             var us = src[areaPointers + (int)AreaType.Underground];
             var cs = src[areaPointers + (int)AreaType.Castle];
-            var list = new List<AreaIndex>(new AreaIndex[] {
+            var list = new List<AreaIndex>()
+            {
                 new AreaIndex(ws, AreaType.Water),
                 new AreaIndex(gs, AreaType.Grassland),
                 new AreaIndex(us, AreaType.Underground),
                 new AreaIndex(cs, AreaType.Castle),
-                new AreaIndex(Int32.MaxValue, (AreaType)(-1))});
+                new AreaIndex(Int32.MaxValue, (AreaType)(-1))
+            };
+
             list.Sort((x, y) => x.Index - y.Index);
 
             for (var i = 0; i < NumberOfAreas; i++)
             {
-                var map = i;
+                var areaNumber = i;
                 for (var j = 0; j < 4; j++)
                 {
                     if (i >= list[j].Index && i < list[j + 1].Index)
                     {
-                        map -= list[j].Index;
-                        map |= (int)list[j].AreaType << 5;
+                        areaNumber -= list[j].Index;
+                        areaNumber |= (int)list[j].AreaType << 5;
                         break;
                     }
                 }
 
-                areas[i] = FromRomData(src, map);
+                areas[i] = FromRomData(src, areaNumber);
             }
 
             return areas;
@@ -181,6 +188,12 @@ namespace MushROMs.SMB1
 
         private struct AreaIndex
         {
+            public AreaIndex(int index, AreaType areaType)
+            {
+                Index = index;
+                AreaType = areaType;
+            }
+
             public int Index
             {
                 get;
@@ -191,12 +204,6 @@ namespace MushROMs.SMB1
             {
                 get;
                 set;
-            }
-
-            public AreaIndex(int index, AreaType areaType)
-            {
-                Index = index;
-                AreaType = areaType;
             }
 
             public override string ToString()

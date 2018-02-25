@@ -5,16 +5,39 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using Helper;
-
-namespace MushROMs.SMB1
+namespace Smb1
 {
-    public struct AreaObjectCommand
+    using System;
+    using Helper;
+    using static Helper.SR;
+
+    public struct AreaObjectCommand : IEquatable<AreaObjectCommand>
     {
         /// <summary>
         /// The size, in bytes, of this <see cref="AreaObjectCommand"/>.
         /// </summary>
         public const int Size = 2;
+
+        public AreaObjectCommand(byte value1, byte value2)
+        {
+            Value1 = value1;
+            Value2 = value2;
+        }
+
+        public AreaObjectCommand(
+            int x,
+            int y,
+            bool pageFlag,
+            int command,
+            int parameter)
+            : this()
+        {
+            X = x;
+            Y = y;
+            PageFlag = pageFlag;
+            Command = command;
+            Parameter = parameter;
+        }
 
         public byte Value1
         {
@@ -116,71 +139,66 @@ namespace MushROMs.SMB1
                         {
                             return AreaObjectCode.PageSkip;
                         }
-                        else
-                        {
-                            return (AreaObjectCode)((Y << 8) | (Command << 4) | (Parameter));
-                        }
+
+                        var code = (Y << 8) | (Command << 4) | Parameter;
+                        return (AreaObjectCode)code;
                     }
-                    else
-                    {
-                        return (AreaObjectCode)((Y << 8) | (Command << 4));
-                    }
+
+                    return (AreaObjectCode)((Y << 8) | (Command << 4));
                 }
-                else if (Command == 0)
+
+                if (Command == 0)
                 {
                     return (AreaObjectCode)Parameter;
                 }
-                else
-                {
-                    return (AreaObjectCode)(Command << 4);
-                }
+
+                return (AreaObjectCode)(Command << 4);
             }
         }
 
-        public AreaObjectCommand(byte value1, byte value2)
+        public static bool operator ==(
+            AreaObjectCommand left,
+            AreaObjectCommand right)
         {
-            Value1 = value1;
-            Value2 = value2;
+            return left.Equals(right);
         }
 
-        public AreaObjectCommand(int x, int y, bool pageFlag, int command, int parameter) : this()
-        {
-            X = x;
-            Y = y;
-            PageFlag = pageFlag;
-            Command = command;
-            Parameter = parameter;
-        }
-
-        public static bool operator ==(AreaObjectCommand left, AreaObjectCommand right)
-        {
-            return left.Value1 == right.Value1 &&
-                left.Value2 == right.Value2;
-        }
-
-        public static bool operator !=(AreaObjectCommand left, AreaObjectCommand right)
+        public static bool operator !=(
+            AreaObjectCommand left,
+            AreaObjectCommand right)
         {
             return !(left == right);
         }
 
         public override bool Equals(object obj)
         {
-            if (!(obj is AreaObjectCommand))
+            if (obj is AreaObjectCommand other)
             {
-                return false;
+                return Equals(other);
             }
 
-            return (AreaObjectCommand)obj == this;
+            return false;
+        }
+
+        public bool Equals(AreaObjectCommand other)
+        {
+            return
+                Value1.Equals(other.Value1) &&
+                Value2.Equals(other.Value2);
         }
 
         public override int GetHashCode()
         {
-            return (Value1) | (Value2 << 8);
+            return Value1 | (Value2 << 8);
         }
 
         public override string ToString()
         {
-            return SR.GetString("({0}, {1}): {2}", (X & 0x0F).ToString("X"), Y.ToString("X"), ObjectType);
+            return GetString(
+                "({0:X}, {1:X}): {2}",
+                X & 0x0F,
+                Y,
+                ObjectType);
         }
     }
 }

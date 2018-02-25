@@ -5,10 +5,10 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using MiscPlatformType = MushROMs.SMB1.MiscPlatformType;
-
-namespace MushROMs.SMAS.SMB1
+namespace Smas.Smb1
 {
+    using MiscPlatformType = global::Smb1.MiscPlatformType;
+
     public enum AreaObjectCode
     {
         Invalid = -1,

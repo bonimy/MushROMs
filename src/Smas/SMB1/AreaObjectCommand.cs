@@ -5,12 +5,43 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using Helper;
-
-namespace MushROMs.SMAS.SMB1
+namespace Smas.Smb1
 {
-    public struct AreaObjectCommand
+    using System;
+    using static Helper.SR;
+    using NesAreaObjectCommand = global::Smb1.AreaObjectCommand;
+
+    public struct AreaObjectCommand : IEquatable<AreaObjectCommand>
     {
+        public AreaObjectCommand(byte value1, byte value2)
+            : this(value1, value2, 0)
+        {
+        }
+
+        public AreaObjectCommand(byte value1, byte value2, byte value3)
+        {
+            Value1 = value1;
+            Value2 = value2;
+            Value3 = (byte)(((value1 & 0x0F) == 0x0F) ? value3 : 0);
+        }
+
+        public AreaObjectCommand(
+            int x,
+            int y,
+            bool pageFlag,
+            int command,
+            int parameter,
+            int extendedCommand)
+            : this()
+        {
+            ExtendedCommand = extendedCommand;
+            X = x;
+            Y = y;
+            PageFlag = pageFlag;
+            Command = command;
+            Parameter = parameter;
+        }
+
         public byte Value1
         {
             get;
@@ -30,13 +61,13 @@ namespace MushROMs.SMAS.SMB1
         }
 
         /// <summary>
-        /// The size, in bytes, of this <see cref="AreaObjectCommand"/>.
+        /// Gets the size, in bytes, of this <see cref="AreaObjectCommand"/>.
         /// </summary>
         public int Size
         {
             get
             {
-                return YInternal ? 3 : 2;
+                return IsExtendedObject ? 3 : 2;
             }
         }
 
@@ -54,31 +85,11 @@ namespace MushROMs.SMAS.SMB1
             }
         }
 
-        private bool YInternal
-        {
-            get
-            {
-                return (Value1 & 0x0F) == 0x0F;
-            }
-
-            set
-            {
-                if (value)
-                {
-                    Value1 |= 0x0F;
-                }
-                else
-                {
-                    Value1 &= 0xF0;
-                }
-            }
-        }
-
         public int Y
         {
             get
             {
-                if (YInternal)
+                if (IsExtendedObject)
                 {
                     return Value2 >> 4;
                 }
@@ -90,7 +101,7 @@ namespace MushROMs.SMAS.SMB1
 
             set
             {
-                if (YInternal)
+                if (IsExtendedObject)
                 {
                     Value2 &= 0x0F;
                     Value2 |= (byte)((value & 0x0F) << 4);
@@ -107,12 +118,12 @@ namespace MushROMs.SMAS.SMB1
         {
             get
             {
-                return ((YInternal ? Value3 : Value2) & 0x80) != 0;
+                return ((IsExtendedObject ? Value3 : Value2) & 0x80) != 0;
             }
 
             set
             {
-                if (YInternal)
+                if (IsExtendedObject)
                 {
                     if (value)
                     {
@@ -141,7 +152,7 @@ namespace MushROMs.SMAS.SMB1
         {
             get
             {
-                if (YInternal)
+                if (IsExtendedObject)
                 {
                     return (Value3 >> 4) & 7;
                 }
@@ -153,7 +164,7 @@ namespace MushROMs.SMAS.SMB1
 
             set
             {
-                if (YInternal)
+                if (IsExtendedObject)
                 {
                     Value3 &= 0x8F;
                     Value3 |= (byte)((value & 7) << 4);
@@ -184,7 +195,7 @@ namespace MushROMs.SMAS.SMB1
         {
             get
             {
-                if (YInternal)
+                if (IsExtendedObject)
                 {
                     return Value3 & 0x0F;
                 }
@@ -203,7 +214,7 @@ namespace MushROMs.SMAS.SMB1
 
                 if (value == -1)
                 {
-                    YInternal = false;
+                    IsExtendedObject = false;
                     Y = y;
                     PageFlag = p;
                     Command = c;
@@ -212,7 +223,7 @@ namespace MushROMs.SMAS.SMB1
                 }
                 else
                 {
-                    YInternal = true;
+                    IsExtendedObject = true;
                     Y = y;
                     PageFlag = p;
                     Command = c;
@@ -227,43 +238,42 @@ namespace MushROMs.SMAS.SMB1
         {
             get
             {
-                if (YInternal)
+                if (IsExtendedObject)
                 {
-                    return (AreaObjectCode)((ExtendedCommand << 0x0C | 0xF00 | (Command << 4)));
+                    return (AreaObjectCode)(
+                        ExtendedCommand << 0x0C |
+                        0xF00 |
+                        (Command << 4));
                 }
-                else
+
+                if (Y >= 0x0C)
                 {
-                    if (Y >= 0x0C)
+                    if (Y == 0x0D)
                     {
-                        if (Y == 0x0D)
+                        if (Command == 0)
                         {
-                            if (Command == 0)
-                            {
-                                return AreaObjectCode.PageSkip;
-                            }
-                            else
-                            {
-                                return (AreaObjectCode)((Y << 8) | (Command << 4) | (Parameter));
-                            }
+                            return AreaObjectCode.PageSkip;
                         }
-                        else if (Y == 0x0E)
-                        {
-                            return (AreaObjectCode)(0x0E00 | (Command >= 4 ? 0x40 : 0));
-                        }
-                        else
-                        {
-                            return (AreaObjectCode)((Y << 8) | (Command << 4));
-                        }
+
+                        return (AreaObjectCode)(
+                        (Y << 8) |
+                        (Command << 4) |
+                        Parameter);
                     }
-                    else if (Command == 0)
+                    else if (Y == 0x0E)
                     {
-                        return (AreaObjectCode)Parameter;
+                        return (AreaObjectCode)(0x0E00 | (Command >= 4 ? 0x40 : 0));
                     }
-                    else
-                    {
-                        return (AreaObjectCode)(Command << 4);
-                    }
+
+                    return (AreaObjectCode)((Y << 8) | (Command << 4));
                 }
+
+                if (Command == 0)
+                {
+                    return (AreaObjectCode)Parameter;
+                }
+
+                return (AreaObjectCode)(Command << 4);
             }
         }
 
@@ -285,60 +295,58 @@ namespace MushROMs.SMAS.SMB1
             }
         }
 
-        public AreaObjectCommand(byte value1, byte value2) : this(value1, value2, 0)
-        { }
-
-        public AreaObjectCommand(byte value1, byte value2, byte value3)
+        public bool IsExtendedObject
         {
-            Value1 = value1;
-            Value2 = value2;
-            Value3 = (byte)(((value1 & 0x0F) == 0x0F) ? value3 : 0);
+            get
+            {
+                return (Value1 & 0x0F) == 0x0F;
+            }
+
+            private set
+            {
+                if (value)
+                {
+                    Value1 |= 0x0F;
+                }
+                else
+                {
+                    Value1 &= 0xF0;
+                }
+            }
         }
 
-        public AreaObjectCommand(
-            int x, int y, bool pageFlag,
-            int command, int parameter, int extendedCommand) : this()
-        {
-            ExtendedCommand = extendedCommand;
-            X = x;
-            Y = y;
-            PageFlag = pageFlag;
-            Command = command;
-            Parameter = parameter;
-        }
-
-        public static implicit operator AreaObjectCommand(MushROMs.SMB1.AreaObjectCommand src)
+        public static implicit operator AreaObjectCommand(NesAreaObjectCommand src)
         {
             if (src.Y == 0x0F)
             {
-                return new AreaObjectCommand(src.X, 0x0F, src.PageFlag, src.Command, src.Parameter, 0);
+                return new AreaObjectCommand(
+                    src.X,
+                    0x0F,
+                    src.PageFlag,
+                    src.Command,
+                    src.Parameter,
+                    0);
             }
-            else
-            {
-                return new AreaObjectCommand(src.X, src.Y, src.PageFlag, src.Command, src.Parameter, -1);
-            }
+
+            return new AreaObjectCommand(
+                src.X,
+                src.Y,
+                src.PageFlag,
+                src.Command,
+                src.Parameter,
+                -1);
         }
 
-        public static bool operator ==(AreaObjectCommand left, AreaObjectCommand right)
+        public static bool operator ==(
+            AreaObjectCommand left,
+            AreaObjectCommand right)
         {
-            if (left.Size == 2 && right.Size == 2)
-            {
-                return left.Value1 == right.Value1 &&
-                    left.Value2 == right.Value2;
-            }
-            else if (left.Size == 3 && right.Size == 3)
-            {
-                return left.Value1 == right.Value1 &&
-                    left.Value2 == right.Value2 &&
-                    left.Value3 == right.Value3;
-            }
-            else
-            {
-                return false;
-            }
+            return left.Equals(right);
         }
 
-        public static bool operator !=(AreaObjectCommand left, AreaObjectCommand right)
+        public static bool operator !=(
+            AreaObjectCommand left,
+            AreaObjectCommand right)
         {
             return !(left == right);
         }
@@ -353,14 +361,38 @@ namespace MushROMs.SMAS.SMB1
             return false;
         }
 
+        public bool Equals(AreaObjectCommand other)
+        {
+            if (IsExtendedObject != other.IsExtendedObject)
+            {
+                return false;
+            }
+
+            if (Value1 != other.Value1 || Value2 != other.Value2)
+            {
+                return false;
+            }
+
+            if (!IsExtendedObject)
+            {
+                return true;
+            }
+
+            return Value3 == other.Value3;
+        }
+
         public override int GetHashCode()
         {
-            return (Value1) | (Value2 << 8) | (Value3 << 16);
+            return Value1 | (Value2 << 8) | (Value3 << 16);
         }
 
         public override string ToString()
         {
-            return SR.GetString("({0}, {1}): {2}", X.ToString("X"), Y.ToString("X"), AreaObjectCode);
+            return GetString(
+                "({0:X}, {1:X}): {2}",
+                X,
+                Y,
+                AreaObjectCode);
         }
     }
 }

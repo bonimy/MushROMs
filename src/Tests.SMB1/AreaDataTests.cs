@@ -9,7 +9,8 @@ using System;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Helper;
-using MushROMs.SMB1;
+using Nes;
+using Smb1;
 using Tests.SMB1.Properties;
 
 namespace Tests.SMB1
@@ -20,7 +21,7 @@ namespace Tests.SMB1
         [TestMethod]
         public void TestMethod1()
         {
-            byte[] rom = null;
+            PrgRom rom = null;
 
             Assert.AreEqual(0x25, AreaData.GetAreaNumber(rom, 0, 0));
             Assert.AreEqual(0x29, AreaData.GetAreaNumber(rom, 0, 1));

@@ -5,12 +5,25 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using Helper;
-
-namespace MushROMs.SMB1
+namespace Smb1
 {
-    public struct AreaSpriteCommand
+    using System;
+    using static Helper.SR;
+
+    public struct AreaSpriteCommand : IEquatable<AreaSpriteCommand>
     {
+        public AreaSpriteCommand(byte value1, byte value2)
+            : this(value1, value2, 0)
+        {
+        }
+
+        public AreaSpriteCommand(byte value1, byte value2, byte value3)
+        {
+            Value1 = value1;
+            Value2 = value2;
+            Value3 = value3;
+        }
+
         /// <summary>
         /// Gets or sets the first value of this <see cref="AreaSpriteCommand"/>.
         /// </summary>
@@ -38,6 +51,14 @@ namespace MushROMs.SMB1
             set;
         }
 
+        public bool IsExtendedSpriteCommand
+        {
+            get
+            {
+                return Y == 0x0E;
+            }
+        }
+
         /// <summary>
         /// Gets the size, in bytes, of this <see cref="AreaSpriteCommand"/>.
         /// </summary>
@@ -45,7 +66,7 @@ namespace MushROMs.SMB1
         {
             get
             {
-                return Y == 0x0E ? 3 : 2;
+                return IsExtendedSpriteCommand ? 3 : 2;
             }
         }
 
@@ -85,7 +106,7 @@ namespace MushROMs.SMB1
         }
 
         /// <summary>
-        /// Gets or sets a flag that determines whether this <see cref="AreaSpriteCommand"/>
+        /// Gets or sets a value indicating whether this <see cref="AreaSpriteCommand"/>
         /// starts on the next page.
         /// </summary>
         public bool PageFlag
@@ -109,8 +130,8 @@ namespace MushROMs.SMB1
         }
 
         /// <summary>
-        /// Gets or sets a flag that determines whether this <see cref="AreaSpriteCommand"/>
-        /// only spawns after the hard world flag has been set.
+        /// Gets or sets a value indicating whether this <see cref="AreaSpriteCommand"/>
+        /// will only spawn after the hard world flag has been set.
         /// </summary>
         public bool HardWorldFlag
         {
@@ -149,36 +170,16 @@ namespace MushROMs.SMB1
             }
         }
 
-        public AreaSpriteCommand(byte value1, byte value2) : this(value1, value2, 0)
-        { }
-
-        public AreaSpriteCommand(byte value1, byte value2, byte value3)
+        public static bool operator ==(
+            AreaSpriteCommand left,
+            AreaSpriteCommand right)
         {
-            Value1 = value1;
-            Value2 = value2;
-            Value3 = value3;
+            return left.Equals(right);
         }
 
-        public static bool operator ==(AreaSpriteCommand left, AreaSpriteCommand right)
-        {
-            if (left.Size == 2 && right.Size == 2)
-            {
-                return left.Value1 == right.Value1 &&
-                    left.Value2 == right.Value2;
-            }
-            else if (left.Size == 3 && right.Size == 3)
-            {
-                return left.Value1 == right.Value1 &&
-                    left.Value2 == right.Value2 &&
-                    left.Value3 == right.Value3;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public static bool operator !=(AreaSpriteCommand left, AreaSpriteCommand right)
+        public static bool operator !=(
+            AreaSpriteCommand left,
+            AreaSpriteCommand right)
         {
             return !(left == right);
         }
@@ -193,14 +194,38 @@ namespace MushROMs.SMB1
             return (AreaSpriteCommand)obj == this;
         }
 
+        public bool Equals(AreaSpriteCommand other)
+        {
+            if (IsExtendedSpriteCommand != other.IsExtendedSpriteCommand)
+            {
+                return false;
+            }
+
+            if (Value1 != other.Value1 || Value2 != other.Value2)
+            {
+                return false;
+            }
+
+            if (!IsExtendedSpriteCommand)
+            {
+                return true;
+            }
+
+            return Value3 == other.Value3;
+        }
+
         public override int GetHashCode()
         {
-            return (Value1) | (Value2 << 8) | (Value3 << 0x10);
+            return Value1 | (Value2 << 8) | (Value3 << 0x10);
         }
 
         public override string ToString()
         {
-            return SR.GetString("({0}, {1}): {2}", X.ToString("X"), Y.ToString("X"), Code);
+            return GetString(
+                "({0:X}, {1:X}): {2:X}",
+                X,
+                Y,
+                Code);
         }
     }
 }

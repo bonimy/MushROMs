@@ -64,6 +64,10 @@
       <Project>{6e9940f3-99d2-4f1f-b476-f3b9964d1c76}</Project>
       <Name>Helper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Nes\Nes.csproj">
+      <Project>{74bf6911-d2b3-4d93-ae6b-8f9ba74e7702}</Project>
+      <Name>Nes</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Smb1\Smb1.csproj">
       <Project>{b70120b0-7106-47a6-b956-52ba80ecfba6}</Project>
       <Name>Smb1</Name>
