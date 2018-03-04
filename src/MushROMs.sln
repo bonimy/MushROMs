@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Helper", "Helper\Helper.csproj", "{6E9940F3-99D2-4F1F-B476-F3B9964D1C76}"
 EndProject
@@ -10,11 +10,18 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Snes", "Tests.Snes\Tests.Snes.csproj", "{64B699CE-7740-4F3A-A8F6-174FF0838B98}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Snes", "Snes\Snes.csproj", "{6AAF947F-C2FB-48DD-9078-FFAB60CF7E97}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controls", "Controls\Controls.csproj", "{CD3207D8-362C-4068-B6D1-3877359EF727}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MushROMs", "MushROMs\MushROMs.csproj", "{D04BB299-E0EA-406C-8B5D-E95E21EE62D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.MushROMs", "Tests.MushROMs\Tests.MushROMs.csproj", "{650633D5-C7A2-4D77-9704-F27B47764681}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{22A64BBC-F8F0-4FA3-A8BE-7190659C606F}"
+	ProjectSection(SolutionItems) = preProject
+		MushROMs.ruleset = MushROMs.ruleset
+		MushROMs.sln.licenseheader = MushROMs.sln.licenseheader
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
