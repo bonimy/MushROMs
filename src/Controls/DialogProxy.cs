@@ -1,20 +1,32 @@
 ﻿// <copyright file="DialogProxy.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
 using System.ComponentModel;
-using System.Runtime.Remoting;
-using System.Security.Permissions;
 using System.Windows.Forms;
 
 namespace Controls
 {
     [ToolboxItem(true)]
     [DesignTimeVisible(true)]
-    public abstract class DialogProxy : MarshalByRefObject, IComponent, IDisposable
+    public abstract class DialogProxy :
+        MarshalByRefObject,
+        IComponent,
+        IDisposable
     {
-        protected abstract IDialogForm BaseForm
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Design",
+            "CA1009:DeclareEventHandlersCorrectly",
+            Justification = "Microsoft")]
+        public event HelpEventHandler HelpRequested;
+
+        public event EventHandler Disposed;
+
+        protected Form BaseForm
         {
             get;
         }
@@ -30,12 +42,6 @@ namespace Controls
             {
                 BaseForm.HelpButton = value;
             }
-        }
-
-        public event HelpEventHandler HelpRequested
-        {
-            add { BaseForm.HelpRequested += value; }
-            remove { BaseForm.HelpRequested -= value; }
         }
 
         public string Title
@@ -77,10 +83,13 @@ namespace Controls
             }
         }
 
-        public event EventHandler Disposed
+        protected DialogProxy(Form baseForm)
         {
-            add { BaseForm.Disposed += value; }
-            remove { BaseForm.Disposed -= value; }
+            BaseForm = baseForm ??
+                throw new ArgumentNullException(nameof(baseForm));
+
+            BaseForm.HelpRequested += BaseForm_HelpRequested;
+            BaseForm.Disposed += BaseForm_Disposed;
         }
 
         public DialogResult ShowDialog()
@@ -93,22 +102,20 @@ namespace Controls
             return BaseForm.ShowDialog(owner);
         }
 
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.Infrastructure)]
-        public override ObjRef CreateObjRef(Type requestedType)
-        {
-            return BaseForm.CreateObjRef(requestedType);
-        }
-
-        [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.Infrastructure)]
-        public override object InitializeLifetimeService()
-        {
-            return BaseForm.InitializeLifetimeService();
-        }
-
         public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        protected virtual void OnHelpRequested(HelpEventArgs e)
+        {
+            HelpRequested?.Invoke(this, e);
+        }
+
+        protected virtual void OnDisposed(EventArgs e)
+        {
+            Disposed?.Invoke(this, e);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -117,6 +124,18 @@ namespace Controls
             {
                 BaseForm.Dispose();
             }
+        }
+
+        private void BaseForm_Disposed(object sender, EventArgs e)
+        {
+            OnDisposed(e);
+        }
+
+        private void BaseForm_HelpRequested(
+            object sender,
+            HelpEventArgs hlpevent)
+        {
+            OnHelpRequested(hlpevent);
         }
     }
 }

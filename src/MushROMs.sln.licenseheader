@@ -1,0 +1,36 @@
+extensions: designer.cs generated.cs
+extensions: .cs .cpp .h
+// <copyright file="%FileName%" company="Public Domain">
+//     Copyright (c) %CurrentYear% Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
+// </copyright>
+
+extensions: .aspx .ascx
+<%-- 
+<copyright file="%FileName%" company="Public Domain">
+    Copyright (c) %CurrentYear% Nelson Garcia. All rights reserved
+    Licensed under GNU Affero General Public License.
+	See LICENSE in project root for full license information, or visit
+    https://www.gnu.org/licenses/#AGPL
+</copyright>
+
+--%>
+extensions: .vb
+'<copyright file="%FileName%" company="Public Domain">
+'    Copyright (c) %CurrentYear% Nelson Garcia. All rights reserved
+'    Licensed under GNU Affero General Public License.
+'    See LICENSE in project root for full license information, or visit
+'    https://www.gnu.org/licenses/#AGPL
+'</copyright>
+
+extensions:  .xml .config .xsd
+<!--
+<copyright file="%FileName%" company="Public Domain">
+    Copyright (c) %CurrentYear% Nelson Garcia. All rights reserved
+    Licensed under GNU Affero General Public License.
+	See LICENSE in project root for full license information, or visit
+    https://www.gnu.org/licenses/#AGPL
+</copyright>
+-->

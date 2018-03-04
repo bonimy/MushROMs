@@ -1,14 +1,17 @@
 ﻿// <copyright file="PaletteFormatter.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Helper.PixelFormats;
 
 namespace Snes
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using Helper.PixelFormat;
+
     public abstract class PaletteFormatter
     {
         public static readonly PaletteFormatter Rpf = new RpfFormatter();
@@ -36,7 +39,7 @@ namespace Snes
 
         private class TplFormatter : PaletteFormatter
         {
-            private static readonly string Header = "TPL\x02";
+            private static readonly string TplHeader = "TPL\x02";
 
             public override Palette CreatePalette(byte[] data)
             {
@@ -45,7 +48,7 @@ namespace Snes
                     throw new ArgumentNullException(nameof(data));
                 }
 
-                if (data.Length < Header.Length)
+                if (data.Length < TplHeader.Length)
                 {
                     throw new ArgumentException();
                 }
@@ -55,13 +58,13 @@ namespace Snes
                     throw new ArgumentException();
                 }
 
-                var size = data.Length - Header.Length;
+                var size = data.Length - TplHeader.Length;
                 if ((size % Color15BppBgr.SizeOf) != 0)
                 {
                     throw new ArgumentException();
                 }
 
-                return new Palette(data, Header.Length, size);
+                return new Palette(data, TplHeader.Length, size);
             }
 
             public override byte[] CreateData(Palette palette)
@@ -77,16 +80,16 @@ namespace Snes
                 }
 
                 var result = new List<byte>();
-                result.AddRange(Encoding.ASCII.GetBytes(Header));
+                result.AddRange(Encoding.ASCII.GetBytes(TplHeader));
                 result.AddRange(palette);
                 return result.ToArray();
             }
 
             private bool CompareHeader(byte[] data)
             {
-                var header = Encoding.ASCII.GetString(data, 0, Header.Length);
+                var header = Encoding.ASCII.GetString(data, 0, TplHeader.Length);
 
-                return Header == header;
+                return String.Equals(header, TplHeader);
             }
         }
 

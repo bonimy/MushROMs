@@ -80,7 +80,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="License.licenseheader" />
     <None Include="packages.config" />
     <None Include="Resources\AllCompressedBest.bin" />
     <None Include="Resources\AllCompressedLunar.bin" />
@@ -88,7 +87,7 @@
     <None Include="Resources\CompressedIndexesBest.bin" />
     <None Include="Resources\CompressedIndexesLunar.bin" />
     <None Include="Resources\DecompressedIndexes.bin" />
-    <None Include="Settings.StyleCop" />
+    <AdditionalFiles Include="stylecop.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Helper\Helper.csproj">
@@ -96,7 +95,7 @@
       <Name>Helper</Name>
     </ProjectReference>
     <ProjectReference Include="..\Snes\Snes.csproj">
-      <Project>{9dddbd59-43f9-42c7-abcb-5db784143cbe}</Project>
+      <Project>{1601214d-6ff8-46c1-84c9-b3788d6754ba}</Project>
       <Name>Snes</Name>
     </ProjectReference>
   </ItemGroup>

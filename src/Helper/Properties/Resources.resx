@@ -117,54 +117,8 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ErrorArrayBounds" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' cannot be negative and must be and less than '{2}'.</value>
-    <comment>0 - paramName; 1 - value; 2 - valid</comment>
-  </data>
-  <data name="ErrorArrayRange" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' exceeds the array range '{3}' of '{2}' from starting index '{4}'.</value>
-    <comment>0 - paramName; 1 - value; 2 - arrayName; 3 - arrayLength; 4 - startIndex</comment>
-  </data>
-  <data name="ErrorCannotGetFullPath" xml:space="preserve">
-    <value>Value of "{1}" for '{0}' is not a string that a full path can be obtained from.\n\n{3}:\n{2}</value>
-    <comment>0 - paramName, 1 - value, 2 - exceptionMessage. 3 - innerException</comment>
-  </data>
-  <data name="ErrorCannotGetPathExtension" xml:space="preserve">
-    <value>Value of "{1}" for '{0}' is not a string that a path extension can be obtained from.\n\n{3}:\n{2}</value>
-    <comment>0 - paramName, 1 - value, 2 - exceptionMessage. 3 - innerException</comment>
-  </data>
-  <data name="ErrorEmptyOrNullArray" xml:space="preserve">
-    <value>Array '{0}' cannot be empty or null.</value>
-    <comment>0 - paramName</comment>
-  </data>
-  <data name="ErrorFileFormat" xml:space="preserve">
-    <value>'{0}' has data that is in an incorrect format.</value>
-    <comment>0 - paramName</comment>
-  </data>
-  <data name="ErrorFileFormatName" xml:space="preserve">
-    <value>File</value>
-  </data>
-  <data name="ErrorInt24Overflow" xml:space="preserve">
-    <value>Value was either too large or too small for an Int24.</value>
-  </data>
-  <data name="ErrorInvalidExtensionName" xml:space="preserve">
-    <value>'{0}' is an invalid extension name.</value>
-    <comment>0 - paramName</comment>
-  </data>
-  <data name="ErrorInvalidFileDataSize" xml:space="preserve">
-    <value>Size of data is not a valid size for the specified format.</value>
-  </data>
-  <data name="ErrorInvalidPathName" xml:space="preserve">
-    <value>'{0}' is an invalid path name.</value>
-    <comment>0 - paramName</comment>
-  </data>
-  <data name="ErrorLowerBoundExclusive" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</value>
-    <comment>0 - paramName; 1 - value; 2 - valid</comment>
-  </data>
-  <data name="ErrorLowerBoundInclusive" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</value>
-    <comment>0 - paramName; 1 - value; 2 - valid</comment>
+  <data name="EndOfString" xml:space="preserve">
+    <value>End of string</value>
   </data>
   <data name="ErrorStringSubstringSize" xml:space="preserve">
     <value>Parameter '{0}' is a string of insufficient size to get a substring with index '{1}' and length '{2}'.</value>
@@ -174,17 +128,6 @@
     <value>Parameter '{0}' is less than zero and not equal to the EndOfString value '-1'.\nValue given: {1}</value>
     <comment>0 - paramName, 1 - value</comment>
   </data>
-  <data name="ErrorUInt24Overflow" xml:space="preserve">
-    <value>Value was either too large or too small for a UInt24.</value>
-  </data>
-  <data name="ErrorUpperBoundExclusive" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</value>
-    <comment>0 - paramName; 1 - value; 2 - valid</comment>
-  </data>
-  <data name="ErrorUpperBoundInclusive" xml:space="preserve">
-    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</value>
-    <comment>0 - paramName; 1 - value; 2 - valid</comment>
-  </data>
   <data name="ErrorValueIsInfinity" xml:space="preserve">
     <value>Parameter {0} is infinite. A finite value was expected.</value>
     <comment>0 - paramName</comment>
@@ -193,8 +136,24 @@
     <value>Parameter {0} is NaN. A real number was expected.</value>
     <comment>0 - paramName</comment>
   </data>
-  <data name="UntitledName" xml:space="preserve">
-    <value>Untitled{0}{1}</value>
-    <comment>0 - untitledNumber 1 - extension</comment>
+  <data name="ErrorValueNotGreaterThan" xml:space="preserve">
+    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</value>
+    <comment>0 - paramName; 1 - value; 2 - valid</comment>
+  </data>
+  <data name="ErrorValueNotGreaterThanOrEqualTo" xml:space="preserve">
+    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</value>
+    <comment>0 - paramName; 1 - value; 2 - valid</comment>
+  </data>
+  <data name="ErrorValueNotInArrayBounds" xml:space="preserve">
+    <value>Value of '{1}' is not valid for '{0}'. '{0}' cannot be negative and must be and less than '{2}'.</value>
+    <comment>0 - paramName; 1 - value; 2 - valid</comment>
+  </data>
+  <data name="ErrorValueNotLessThan" xml:space="preserve">
+    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</value>
+    <comment>0 - paramName; 1 - value; 2 - valid</comment>
+  </data>
+  <data name="ErrorValueNotLessThanOrEqualTo" xml:space="preserve">
+    <value>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</value>
+    <comment>0 - paramName; 1 - value; 2 - valid</comment>
   </data>
 </root>

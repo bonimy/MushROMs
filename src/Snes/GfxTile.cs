@@ -1,13 +1,16 @@
 ﻿// <copyright file="GfxTile.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace Snes
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+
     public struct GfxTile
     {
         public const int DotsPerPlane = 8;
@@ -15,42 +18,43 @@ namespace Snes
         public const int DotsPerTile = DotsPerPlane * PlanesPerTile;
         public const int SizeOf = DotsPerTile * sizeof(byte);
 
-        private unsafe fixed byte _components[DotsPerTile];
-
-        public byte this[int index]
+        private static unsafe readonly IReadOnlyDictionary<GraphicsFormat, ConvertDataCallback> TileFromDataDictionary = new Dictionary<GraphicsFormat, ConvertDataCallback>()
         {
-            get
-            {
-                if ((uint)index >= (uint)DotsPerTile)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
+            { GraphicsFormat.Format1Bpp8x8, TileFromData1Bpp },
+            { GraphicsFormat.Format2BppNes, TileFromData2BppNes },
+            { GraphicsFormat.Format2BppGb, TileFromData2BppGb },
+            { GraphicsFormat.Format2BppNgp, TileFromData2BppNgp },
+            { GraphicsFormat.Format2BppVb, TileFromData2BppVb },
+            { GraphicsFormat.Format3BppSnes, TileFromData3BppSnes },
+            { GraphicsFormat.Format3Bpp8x8, TileFromData3Bpp8x8 },
+            { GraphicsFormat.Format4BppSnes, TileFromData4BppSnes },
+            { GraphicsFormat.Format4BppGba, TileFromData4BppGba },
+            { GraphicsFormat.Format4BppSms, TileFromData4BppSms },
+            { GraphicsFormat.Format4BppMsx2, TileFromData4BppMsx2 },
+            { GraphicsFormat.Format4Bpp8x8, TileFromData4Bpp8x8 },
+            { GraphicsFormat.Format8BppSnes, TileFromData8BppSnes },
+            { GraphicsFormat.Format8BppMode7, TileFromData8BppMode7 }
+        };
 
-                unsafe
-                {
-                    fixed (byte* ptr = _components)
-                    {
-                        return ptr[index];
-                    }
-                }
-            }
+        private static unsafe readonly IReadOnlyDictionary<GraphicsFormat, ConvertDataCallback> TileToDataDictionary = new Dictionary<GraphicsFormat, ConvertDataCallback>()
+        {
+            { GraphicsFormat.Format1Bpp8x8, TileToData1Bpp },
+            { GraphicsFormat.Format2BppNes, TileToData2BppNes },
+            { GraphicsFormat.Format2BppGb, TileToData2BppGb },
+            { GraphicsFormat.Format2BppNgp, TileToData2BppNgp },
+            { GraphicsFormat.Format2BppVb, TileToData2BppVb },
+            { GraphicsFormat.Format3BppSnes, TileToData3BppSnes },
+            { GraphicsFormat.Format3Bpp8x8, TileToData3Bpp8x8 },
+            { GraphicsFormat.Format4BppSnes, TileToData4BppSnes },
+            { GraphicsFormat.Format4BppGba, TileToData4BppGba },
+            { GraphicsFormat.Format4BppSms, TileToData4BppSms },
+            { GraphicsFormat.Format4BppMsx2, TileToData4BppMsx2 },
+            { GraphicsFormat.Format4Bpp8x8, TileToData4Bpp8x8 },
+            { GraphicsFormat.Format8BppSnes, TileToData8BppSnes },
+            { GraphicsFormat.Format8BppMode7, TileToData8BppMode7 }
+        };
 
-            set
-            {
-                if ((uint)index >= (uint)DotsPerTile)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(index));
-                }
-
-                unsafe
-                {
-                    fixed (byte* ptr = _components)
-                    {
-                        ptr[index] = value;
-                    }
-                }
-            }
-        }
+        private unsafe fixed byte components[DotsPerTile];
 
         public GfxTile(byte[] data, int index, GraphicsFormat format)
         {
@@ -72,11 +76,79 @@ namespace Snes
             unsafe
             {
                 fixed (byte* src = data)
-                fixed (byte* dst = _components)
+                fixed (byte* dst = components)
                 {
                     TileFromData(src, dst, format);
                 }
             }
+        }
+
+        private unsafe delegate void ConvertDataCallback(
+            byte* src,
+            byte* dst);
+
+        public byte this[int index]
+        {
+            get
+            {
+                if ((uint)index >= (uint)DotsPerTile)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                unsafe
+                {
+                    fixed (byte* ptr = components)
+                    {
+                        return ptr[index];
+                    }
+                }
+            }
+
+            set
+            {
+                if ((uint)index >= (uint)DotsPerTile)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(index));
+                }
+
+                unsafe
+                {
+                    fixed (byte* ptr = components)
+                    {
+                        ptr[index] = value;
+                    }
+                }
+            }
+        }
+
+        public static int BitsPerPixel(GraphicsFormat format)
+        {
+            var bpp = (int)format & 0x0F;
+            if (bpp == 0)
+            {
+                throw new InvalidEnumArgumentException(
+                    nameof(format),
+                    (int)format,
+                    typeof(GraphicsFormat));
+            }
+
+            return bpp;
+        }
+
+        public static int BytesPerPlane(GraphicsFormat format)
+        {
+            return BitsPerPixel(format);
+        }
+
+        public static int ColorsPerPixel(GraphicsFormat format)
+        {
+            return 1 << BitsPerPixel(format);
+        }
+
+        public static int BytesPerTile(GraphicsFormat format)
+        {
+            return BytesPerPlane(format) * PlanesPerTile;
         }
 
         public byte[] ToFormattedData(GraphicsFormat format)
@@ -85,7 +157,7 @@ namespace Snes
 
             unsafe
             {
-                fixed (byte* src = _components)
+                fixed (byte* src = components)
                 fixed (byte* dst = data)
                 {
                     TileToData(src, dst, format);
@@ -97,13 +169,13 @@ namespace Snes
 
         public GfxTile FlipX()
         {
-            var result = new GfxTile();
+            var result = default(GfxTile);
 
             unsafe
             {
-                fixed (byte* src = _components)
+                fixed (byte* src = components)
                 {
-                    var dst = result._components;
+                    var dst = result.components;
 
                     for (var y = PlanesPerTile; --y >= 0;)
                     {
@@ -125,13 +197,13 @@ namespace Snes
 
         public GfxTile FlipY()
         {
-            var result = new GfxTile();
+            var result = default(GfxTile);
 
             unsafe
             {
-                fixed (byte* src = _components)
+                fixed (byte* src = components)
                 {
-                    var dst = result._components;
+                    var dst = result.components;
 
                     for (var x = DotsPerPlane; --x >= 0;)
                     {
@@ -153,13 +225,13 @@ namespace Snes
 
         public GfxTile Rotate90()
         {
-            var result = new GfxTile();
+            var result = default(GfxTile);
 
             unsafe
             {
-                fixed (byte* src = _components)
+                fixed (byte* src = components)
                 {
-                    var dst = result._components;
+                    var dst = result.components;
 
                     var i = 0;
                     var j = DotsPerTile;
@@ -193,13 +265,13 @@ namespace Snes
 
         public GfxTile Rotate180()
         {
-            var result = new GfxTile();
+            var result = default(GfxTile);
 
             unsafe
             {
-                fixed (byte* src = _components)
+                fixed (byte* src = components)
                 {
-                    var dst = result._components;
+                    var dst = result.components;
 
                     var i = 0;
                     var j = DotsPerTile;
@@ -227,13 +299,13 @@ namespace Snes
 
         public GfxTile Rotate270()
         {
-            var result = new GfxTile();
+            var result = default(GfxTile);
 
             unsafe
             {
-                fixed (byte* src = _components)
+                fixed (byte* src = components)
                 {
-                    var dst = result._components;
+                    var dst = result.components;
 
                     var i = 0;
                     var j = DotsPerTile;
@@ -267,13 +339,13 @@ namespace Snes
 
         public GfxTile ReplaceColor(byte original, byte replacement)
         {
-            var result = new GfxTile();
+            var result = default(GfxTile);
 
             unsafe
             {
-                fixed (byte* src = _components)
+                fixed (byte* src = components)
                 {
-                    var dst = result._components;
+                    var dst = result.components;
 
                     for (var i = DotsPerTile; --i >= 0;)
                     {
@@ -296,13 +368,13 @@ namespace Snes
 
         public GfxTile SwapColors(byte color1, byte color2)
         {
-            var result = new GfxTile();
+            var result = default(GfxTile);
 
             unsafe
             {
-                fixed (byte* src = _components)
+                fixed (byte* src = components)
                 {
-                    var dst = result._components;
+                    var dst = result.components;
 
                     for (var i = DotsPerTile; --i >= 0;)
                     {
@@ -329,14 +401,14 @@ namespace Snes
 
         public GfxTile RotateColors(byte first, byte last, byte shift)
         {
-            var result = new GfxTile();
+            var result = default(GfxTile);
             var length = (byte)(last - first + 1);
 
             unsafe
             {
-                fixed (byte* src = _components)
+                fixed (byte* src = components)
                 {
-                    var dst = result._components;
+                    var dst = result.components;
 
                     for (var i = DotsPerTile; --i >= 0;)
                     {
@@ -360,35 +432,6 @@ namespace Snes
             }
 
             return result;
-        }
-
-        public static int BitsPerPixel(GraphicsFormat format)
-        {
-            var bpp = (int)format & 0x0F;
-            if (bpp == 0)
-            {
-                throw new InvalidEnumArgumentException(
-                    nameof(format),
-                    (int)format,
-                    typeof(GraphicsFormat));
-            }
-
-            return bpp;
-        }
-
-        public static int BytesPerPlane(GraphicsFormat format)
-        {
-            return BitsPerPixel(format);
-        }
-
-        public static int ColorsPerPixel(GraphicsFormat format)
-        {
-            return 1 << BitsPerPixel(format);
-        }
-
-        public static int BytesPerTile(GraphicsFormat format)
-        {
-            return BytesPerPlane(format) * PlanesPerTile;
         }
 
         private static unsafe void TileFromData(byte* src, byte* dst, GraphicsFormat format)
@@ -416,44 +459,6 @@ namespace Snes
 
             getFormatData(src, dst);
         }
-
-        private unsafe delegate void DataConverter(byte* src, byte* dst);
-
-        private static unsafe readonly IReadOnlyDictionary<GraphicsFormat, DataConverter> TileFromDataDictionary = new Dictionary<GraphicsFormat, DataConverter>()
-        {
-            { GraphicsFormat.Format1Bpp8x8, TileFromData1Bpp },
-            { GraphicsFormat.Format2BppNes, TileFromData2BppNes },
-            { GraphicsFormat.Format2BppGb, TileFromData2BppGb },
-            { GraphicsFormat.Format2BppNgp, TileFromData2BppNgp },
-            { GraphicsFormat.Format2BppVb, TileFromData2BppVb },
-            { GraphicsFormat.Format3BppSnes, TileFromData3BppSnes },
-            { GraphicsFormat.Format3Bpp8x8, TileFromData3Bpp8x8 },
-            { GraphicsFormat.Format4BppSnes, TileFromData4BppSnes },
-            { GraphicsFormat.Format4BppGba, TileFromData4BppGba },
-            { GraphicsFormat.Format4BppSms, TileFromData4BppSms },
-            { GraphicsFormat.Format4BppMsx2, TileFromData4BppMsx2 },
-            { GraphicsFormat.Format4Bpp8x8, TileFromData4Bpp8x8 },
-            { GraphicsFormat.Format8BppSnes, TileFromData8BppSnes },
-            { GraphicsFormat.Format8BppMode7, TileFromData8BppMode7 }
-        };
-
-        private static unsafe readonly IReadOnlyDictionary<GraphicsFormat, DataConverter> TileToDataDictionary = new Dictionary<GraphicsFormat, DataConverter>()
-        {
-            { GraphicsFormat.Format1Bpp8x8, TileToData1Bpp },
-            { GraphicsFormat.Format2BppNes, TileToData2BppNes },
-            { GraphicsFormat.Format2BppGb, TileToData2BppGb },
-            { GraphicsFormat.Format2BppNgp, TileToData2BppNgp },
-            { GraphicsFormat.Format2BppVb, TileToData2BppVb },
-            { GraphicsFormat.Format3BppSnes, TileToData3BppSnes },
-            { GraphicsFormat.Format3Bpp8x8, TileToData3Bpp8x8 },
-            { GraphicsFormat.Format4BppSnes, TileToData4BppSnes },
-            { GraphicsFormat.Format4BppGba, TileToData4BppGba },
-            { GraphicsFormat.Format4BppSms, TileToData4BppSms },
-            { GraphicsFormat.Format4BppMsx2, TileToData4BppMsx2 },
-            { GraphicsFormat.Format4Bpp8x8, TileToData4Bpp8x8 },
-            { GraphicsFormat.Format8BppSnes, TileToData8BppSnes },
-            { GraphicsFormat.Format8BppMode7, TileToData8BppMode7 }
-        };
 
         private static unsafe void TileFromData1Bpp(byte* src, byte* dst)
         {

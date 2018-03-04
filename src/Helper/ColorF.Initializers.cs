@@ -1,16 +1,35 @@
 ﻿// <copyright file="ColorF.Initializers.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using Debug = System.Diagnostics.Debug;
-using static System.Math;
-using static Helper.MathHelper;
 
 namespace Helper
 {
-    partial struct ColorF
+    using System;
+    using System.Collections.Generic;
+    using static Helper.MathHelper;
+    using static Helper.ThrowHelper;
+    using static System.Math;
+
+    public partial struct ColorF
     {
+        private static readonly IReadOnlyList<RgbFromHueAndChromaCallback> GetRgbFromInterval = new List<RgbFromHueAndChromaCallback>()
+        {
+            (chroma, hue) => (chroma, chroma * hue, 0),
+            (chroma, hue) => (chroma * (2 - hue), chroma, 0),
+            (chroma, hue) => (0, chroma, chroma * (hue - 2)),
+            (chroma, hue) => (0, chroma, chroma * (hue - 2)),
+            (chroma, hue) => (chroma * (hue - 4), 0, chroma),
+            (chroma, hue) => (chroma, 0, chroma * (6 - hue)),
+        };
+
+        private delegate (float red, float green, float blue)
+            RgbFromHueAndChromaCallback(
+            float hue,
+            float chroma);
+
         public static ColorF FromArgb(float red, float green, float blue)
         {
             return FromArgb(1, red, green, blue);
@@ -29,22 +48,22 @@ namespace Helper
         {
             if (Single.IsNaN(alpha))
             {
-                throw new ArgumentNaNException(nameof(alpha));
+                throw ValueIsNaN(nameof(alpha));
             }
 
             if (Single.IsNaN(red))
             {
-                throw new ArgumentNaNException(nameof(red));
+                throw ValueIsNaN(nameof(red));
             }
 
             if (Single.IsNaN(green))
             {
-                throw new ArgumentNaNException(nameof(green));
+                throw ValueIsNaN(nameof(green));
             }
 
             if (Single.IsNaN(blue))
             {
-                throw new ArgumentNaNException(nameof(blue));
+                throw ValueIsNaN(nameof(blue));
             }
 
             return new ColorF(alpha, red, green, blue);
@@ -66,22 +85,22 @@ namespace Helper
         {
             if (Single.IsNaN(alpha))
             {
-                throw new ArgumentNaNException(nameof(alpha));
+                throw ValueIsNaN(nameof(alpha));
             }
 
             if (Single.IsNaN(cyan))
             {
-                throw new ArgumentNaNException(nameof(cyan));
+                throw ValueIsNaN(nameof(cyan));
             }
 
             if (Single.IsNaN(magenta))
             {
-                throw new ArgumentNaNException(nameof(magenta));
+                throw ValueIsNaN(nameof(magenta));
             }
 
             if (Single.IsNaN(yellow))
             {
-                throw new ArgumentNaNException(nameof(yellow));
+                throw ValueIsNaN(nameof(yellow));
             }
 
             var red = 1 - cyan;
@@ -109,27 +128,27 @@ namespace Helper
         {
             if (Single.IsNaN(alpha))
             {
-                throw new ArgumentNaNException(nameof(alpha));
+                throw ValueIsNaN(nameof(alpha));
             }
 
             if (Single.IsNaN(cyan))
             {
-                throw new ArgumentNaNException(nameof(cyan));
+                throw ValueIsNaN(nameof(cyan));
             }
 
             if (Single.IsNaN(magenta))
             {
-                throw new ArgumentNaNException(nameof(yellow));
+                throw ValueIsNaN(nameof(yellow));
             }
 
             if (Single.IsNaN(yellow))
             {
-                throw new ArgumentNaNException(nameof(magenta));
+                throw ValueIsNaN(nameof(magenta));
             }
 
             if (Single.IsNaN(black))
             {
-                throw new ArgumentNaNException(nameof(black));
+                throw ValueIsNaN(nameof(black));
             }
 
             var white = 1 - black;
@@ -156,22 +175,22 @@ namespace Helper
         {
             if (Single.IsNaN(alpha))
             {
-                throw new ArgumentNaNException(nameof(alpha));
+                throw ValueIsNaN(nameof(alpha));
             }
 
             if (Single.IsNaN(hue))
             {
-                throw new ArgumentNaNException(nameof(hue));
+                throw ValueIsNaN(nameof(hue));
             }
 
             if (Single.IsNaN(chroma))
             {
-                throw new ArgumentNaNException(nameof(chroma));
+                throw ValueIsNaN(nameof(chroma));
             }
 
             if (Single.IsNaN(luma))
             {
-                throw new ArgumentNaNException(nameof(luma));
+                throw ValueIsNaN(nameof(luma));
             }
 
             chroma = Clamp(chroma, 0, 1);
@@ -202,22 +221,22 @@ namespace Helper
         {
             if (Single.IsNaN(alpha))
             {
-                throw new ArgumentNaNException(nameof(alpha));
+                throw ValueIsNaN(nameof(alpha));
             }
 
             if (Single.IsNaN(hue))
             {
-                throw new ArgumentNaNException(nameof(hue));
+                throw ValueIsNaN(nameof(hue));
             }
 
             if (Single.IsNaN(saturation))
             {
-                throw new ArgumentNaNException(nameof(saturation));
+                throw ValueIsNaN(nameof(saturation));
             }
 
             if (Single.IsNaN(lightness))
             {
-                throw new ArgumentNaNException(nameof(lightness));
+                throw ValueIsNaN(nameof(lightness));
             }
 
             saturation = Clamp(saturation, 0, 1);
@@ -230,7 +249,9 @@ namespace Helper
             return new ColorF(alpha, r + match, g + match, b + match);
         }
 
-        private static (float r, float g, float b) GetRgb(float hue, float chroma)
+        private static (float r, float g, float b) GetRgb(
+            float hue,
+            float chroma)
         {
             if (chroma == 0)
             {
@@ -248,38 +269,8 @@ namespace Helper
             }
 
             hue *= 6;
-            if (hue >= 0 && hue < 1)
-            {
-                return (chroma, chroma * hue, 0);
-            }
-
-            if (hue >= 1 && hue < 2)
-            {
-                return (chroma * (2 - hue), chroma, 0);
-            }
-
-            if (hue >= 2 && hue < 3)
-            {
-                return (0, chroma, chroma * (hue - 2));
-            }
-
-            if (hue >= 3 && hue < 4)
-            {
-                return (0, chroma * (4 - hue), chroma);
-            }
-
-            if (hue >= 4 && hue < 5)
-            {
-                return (chroma * (hue - 4), 0, chroma);
-            }
-
-            if (hue >= 5 && hue < 6)
-            {
-                return (chroma, 0, chroma * (6 - hue));
-            }
-
-            Debug.Assert(false, "Impossible hue value");
-            return (Single.NaN, Single.NaN, Single.NaN);
+            var index = (int)hue;
+            return GetRgbFromInterval[index](hue, chroma);
         }
     }
 }

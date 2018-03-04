@@ -1,46 +1,54 @@
 ﻿// <copyright file="PathDictionary.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections.Generic;
 
 namespace Helper
 {
-    public sealed class PathDictionary<TValue> : AssertDictionary<string, TValue>
+    using System;
+    using System.Runtime.Serialization;
+
+    public class PathDictionary<TValue> : AssertDictionary<string, TValue>
     {
-        public PathDictionary() :
-            base(PathComparer.DefaultComparer)
+        public PathDictionary()
+            : base(PathComparer.Default)
         {
         }
 
-        public PathDictionary(int capacity) :
-            base(capacity, PathComparer.DefaultComparer)
+        public PathDictionary(int capacity)
+            : base(capacity, PathComparer.Default)
         {
         }
 
-        public PathDictionary(PathComparer comparer) :
-            base(comparer ?? throw new ArgumentNullException(nameof(comparer)))
+        public PathDictionary(PathComparer comparer)
+            : base(comparer ?? PathComparer.Default)
         {
         }
 
         public PathDictionary(PathDictionary<TValue> dictionary)
+            : base(dictionary)
         {
-            BaseDictionary = new Dictionary<string, TValue>(
-                dictionary,
-                PathComparer.DefaultComparer);
         }
 
-        public PathDictionary(int capacity, PathComparer comparer) :
-            base(capacity, comparer ?? PathComparer.DefaultComparer)
+        public PathDictionary(int capacity, PathComparer comparer)
+            : base(capacity, comparer ?? PathComparer.Default)
         {
         }
 
         public PathDictionary(
             PathDictionary<TValue> dictionary,
-            ExtensionComparer comparer)
+            PathComparer comparer)
+            : base(dictionary, comparer)
         {
-            BaseDictionary = new Dictionary<string, TValue>(dictionary, comparer);
+        }
+
+        protected PathDictionary(
+            SerializationInfo info,
+            StreamingContext context)
+            : base(info, context)
+        {
         }
 
         protected override void AssertKey(string key)

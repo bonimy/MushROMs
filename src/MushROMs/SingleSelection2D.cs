@@ -1,16 +1,24 @@
 ﻿// <copyright file="SingleSelection2D.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Helper;
 
 namespace MushROMs
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Drawing;
+
     public sealed class SingleSelection2D : Selection2D
     {
+        public SingleSelection2D(Point position)
+            : base(position)
+        {
+        }
+
         public override int Count
         {
             get
@@ -19,7 +27,7 @@ namespace MushROMs
             }
         }
 
-        public override Position2D this[int index]
+        public override Point this[int index]
         {
             get
             {
@@ -32,35 +40,31 @@ namespace MushROMs
             }
         }
 
-        public SingleSelection2D(Position2D position)
-        {
-            StartPosition = position;
-        }
-
         public override Selection2D Copy()
         {
             return new SingleSelection2D(StartPosition);
         }
 
-        public override bool Contains(Position2D position)
+        public override bool Contains(Point position)
         {
             return position == StartPosition;
         }
 
-        public override IEnumerator<Position2D> GetEnumerator()
+        public override IEnumerator<Point> GetEnumerator()
         {
             return new Enumerator(StartPosition);
         }
 
-        private struct Enumerator : IEnumerator<Position2D>
+        private struct Enumerator : IEnumerator<Point>
         {
-            private bool CanMove
+            public Enumerator(Point startPosition)
             {
-                get;
-                set;
+                CanMove = true;
+                StartPosition = startPosition;
+                Current = default;
             }
 
-            public Position2D Current
+            public Point Current
             {
                 get;
                 private set;
@@ -74,21 +78,28 @@ namespace MushROMs
                 }
             }
 
-            public Enumerator(Position2D startPosition)
+            private Point StartPosition
             {
-                CanMove = true;
-                Current = startPosition;
+                get;
+            }
+
+            private bool CanMove
+            {
+                get;
+                set;
             }
 
             public void Reset()
             {
                 CanMove = true;
+                Current = default;
             }
 
             public bool MoveNext()
             {
                 if (CanMove)
                 {
+                    Current = StartPosition;
                     CanMove = false;
                     return true;
                 }

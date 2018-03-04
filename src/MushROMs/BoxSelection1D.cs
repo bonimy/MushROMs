@@ -1,22 +1,66 @@
 ﻿// <copyright file="BoxSelection1D.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Helper;
 
 namespace MushROMs
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using static Helper.ThrowHelper;
+
     public sealed class BoxSelection1D : Selection1D
     {
+        public BoxSelection1D(
+            int startIndex,
+            int regionWidth,
+            Size range)
+            : this(startIndex, regionWidth, range.Width, range.Height)
+        {
+        }
+
+        public BoxSelection1D(
+            int startIndex,
+            int regionWidth,
+            int width,
+            int heigth)
+            : base(startIndex)
+        {
+            if (regionWidth <= 0)
+            {
+                throw ValueNotGreaterThan(
+                    nameof(regionWidth),
+                    regionWidth);
+            }
+
+            if (width <= 0)
+            {
+                throw ValueNotGreaterThan(
+                    nameof(width),
+                    width);
+            }
+
+            if (heigth <= 0)
+            {
+                throw ValueNotGreaterThan(
+                    nameof(heigth),
+                    heigth);
+            }
+
+            RegionWidth = regionWidth;
+            Size = new Size(width, heigth);
+        }
+
         public int RegionWidth
         {
             get;
         }
 
-        public Range2D Range
+        public Size Size
         {
             get;
         }
@@ -25,7 +69,7 @@ namespace MushROMs
         {
             get
             {
-                return Range.Area;
+                return Size.Width * Size.Height;
             }
         }
 
@@ -35,79 +79,53 @@ namespace MushROMs
             {
                 if ((uint)index >= (uint)Count)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index));
+                    throw ValueNotInArrayBounds(
+                        nameof(index),
+                        index,
+                        Count);
                 }
 
-                var result = StartIndex;
-                result += index % Range.Width;
-                result += (index / Range.Width) + RegionWidth;
+                var x = index % Size.Width;
+                var y = index / Size.Width;
 
+                var result = StartIndex;
+                result += x;
+                result += y * RegionWidth;
                 return result;
             }
         }
 
-        public BoxSelection1D(int startIndex, int regionWidth, Range2D range)
+        public override ISelection1D Copy()
         {
-            if (regionWidth <= 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(regionWidth),
-                    SR.ErrorLowerBoundExclusive(nameof(regionWidth), regionWidth, 0));
-            }
-
-            if (!range.IsInFirstQuadrantExclusive)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(range),
-                    SR.ErrorLowerBoundExclusive(nameof(range), range, Range2D.Empty));
-            }
-
-            StartIndex = startIndex;
-            RegionWidth = regionWidth;
-            Range = range;
-        }
-
-        public override Selection1D Copy()
-        {
-            return new BoxSelection1D(StartIndex, RegionWidth, Range);
+            return new BoxSelection1D(StartIndex, RegionWidth, Size);
         }
 
         public override bool Contains(int index)
         {
-            index -= StartIndex;
-            return Range.Contains(
-                new Position2D(index % RegionWidth, index / RegionWidth));
+            var viewIndex = index -= StartIndex;
+            var x = viewIndex % RegionWidth;
+            var y = viewIndex / RegionWidth;
+            var bounds = new Rectangle(Point.Empty, Size);
+            return bounds.Contains(x, y);
         }
 
         public override IEnumerator<int> GetEnumerator()
         {
-            return new Enumerator(StartIndex, RegionWidth, Range);
+            return new Enumerator(StartIndex, RegionWidth, Size);
         }
 
         private struct Enumerator : IEnumerator<int>
         {
-            private int StartIndex
+            public Enumerator(
+                int startIndex,
+                int regionWidth,
+                Size range)
             {
-                get;
-                set;
-            }
-
-            private int Index
-            {
-                get;
-                set;
-            }
-
-            private Range2D Range
-            {
-                get;
-                set;
-            }
-
-            private int RegionWidth
-            {
-                get;
-                set;
+                StartIndex = startIndex;
+                Size = range;
+                RegionWidth = regionWidth;
+                Index = 0;
+                Current = default;
             }
 
             public int Current
@@ -124,18 +142,35 @@ namespace MushROMs
                 }
             }
 
-            public Enumerator(int startIndex, int regionWidth, Range2D range)
+            private int StartIndex
             {
-                StartIndex = startIndex;
-                Range = range;
-                RegionWidth = regionWidth;
-                Index = 0;
-                Current = default(int);
+                get;
+            }
+
+            private Size Size
+            {
+                get;
+            }
+
+            private int RegionWidth
+            {
+                get;
+            }
+
+            private int Index
+            {
+                get;
+                set;
+            }
+
+            void IDisposable.Dispose()
+            {
             }
 
             public void Reset()
             {
                 Index = 0;
+                Current = default;
             }
 
             public bool MoveNext()
@@ -148,7 +183,7 @@ namespace MushROMs
                 x++;
 
                 // If we've exceeded the width...
-                if (x >= Range.Width)
+                if (x >= Size.Width)
                 {
                     // ... go to the start of the next row.
                     x = 0;
@@ -156,7 +191,7 @@ namespace MushROMs
                 }
 
                 // If we're still within our height...
-                if (y < Range.Height)
+                if (y < Size.Height)
                 {
                     // Update the current value and our index.
                     Current = StartIndex + Index;
@@ -170,10 +205,6 @@ namespace MushROMs
             private int GetIndex(int x, int y)
             {
                 return (y * RegionWidth) + x;
-            }
-
-            public void Dispose()
-            {
             }
         }
     }

@@ -1,16 +1,27 @@
 ﻿// <copyright file="CompressInfo.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections.Generic;
-using Helper;
 
 namespace Snes
 {
+    using System;
+    using System.Collections.Generic;
+    using Helper;
+
     public struct CompressInfo
     {
         private const int BitsPerByte = 8;
+
+        public CompressInfo(CompressCommand command, int value, int index, int length)
+        {
+            Command = command;
+            Value = value;
+            Index = index;
+            Length = length;
+        }
 
         public CompressCommand Command
         {
@@ -47,41 +58,25 @@ namespace Snes
                 var len = Length > 0x20 ? 2 : 1;
                 switch (Command)
                 {
-                    case CompressCommand.DirectCopy:
-                        return len + Length;
+                case CompressCommand.DirectCopy:
+                    return len + Length;
 
-                    case CompressCommand.RepeatedByte:
-                    case CompressCommand.IncrementingByte:
-                        return len + 1;
+                case CompressCommand.RepeatedByte:
+                case CompressCommand.IncrementingByte:
+                    return len + 1;
 
-                    case CompressCommand.RepeatedWord:
-                    case CompressCommand.CopySection:
-                        return len + 2;
+                case CompressCommand.RepeatedWord:
+                case CompressCommand.CopySection:
+                    return len + 2;
 
-                    default:
-                        throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
                 }
             }
         }
 
-        public CompressInfo(CompressCommand command, int value, int index, int length)
-        {
-            Command = command;
-            Value = value;
-            Index = index;
-            Length = length;
-        }
-
-        public override string ToString()
-        {
-            return SR.GetString(
-                "Index = {0}, Length = {1}, Command = {2}",
-                Index,
-                Length,
-                Command);
-        }
-
-        public static int GetTotalLength(IEnumerable<CompressInfo> collection)
+        public static int GetTotalLength(
+            IEnumerable<CompressInfo> collection)
         {
             if (collection is null)
             {
@@ -139,48 +134,57 @@ namespace Snes
                 var value = 0;
                 switch (command)
                 {
-                    case CompressCommand.RepeatedByte:
-                    case CompressCommand.IncrementingByte:
-                        value = src[sindex];
-                        break;
+                case CompressCommand.RepeatedByte:
+                case CompressCommand.IncrementingByte:
+                    value = src[sindex];
+                    break;
 
-                    case CompressCommand.RepeatedWord:
-                    case CompressCommand.CopySection:
-                        value = src[sindex] | (src[sindex + 1] << 8);
-                        break;
+                case CompressCommand.RepeatedWord:
+                case CompressCommand.CopySection:
+                    value = src[sindex] | (src[sindex + 1] << 8);
+                    break;
                 }
 
                 list.Add(new CompressInfo(command, value, dindex, clen));
 
                 switch (command)
                 {
-                    case CompressCommand.DirectCopy: // Direct byte copy
-                        dindex += clen;
-                        sindex += clen;
-                        continue;
-                    case CompressCommand.RepeatedByte: // Fill with one byte repeated
-                        dindex += clen;
-                        sindex++;
-                        continue;
-                    case CompressCommand.RepeatedWord: // Fill with two alternating bytes
-                        dindex += clen;
-                        sindex += 2;
-                        continue;
-                    case CompressCommand.IncrementingByte: // Fill with incrementing byte value
-                        dindex += clen;
-                        sindex++;
-                        continue;
-                    case CompressCommand.CopySection: // Copy data from previous section
-                        dindex += clen;
-                        sindex += 2;
-                        continue;
+                case CompressCommand.DirectCopy: // Direct byte copy
+                    dindex += clen;
+                    sindex += clen;
+                    continue;
+                case CompressCommand.RepeatedByte: // Fill with one byte repeated
+                    dindex += clen;
+                    sindex++;
+                    continue;
+                case CompressCommand.RepeatedWord: // Fill with two alternating bytes
+                    dindex += clen;
+                    sindex += 2;
+                    continue;
+                case CompressCommand.IncrementingByte: // Fill with incrementing byte value
+                    dindex += clen;
+                    sindex++;
+                    continue;
+                case CompressCommand.CopySection: // Copy data from previous section
+                    dindex += clen;
+                    sindex += 2;
+                    continue;
 
-                    default:
-                        throw new ArgumentException();
+                default:
+                    throw new ArgumentException();
                 }
             }
 
             return null;
+        }
+
+        public override string ToString()
+        {
+            return SR.GetString(
+                "Index = {0}, Length = {1}, Command = {2}",
+                Index,
+                Length,
+                Command);
         }
     }
 }

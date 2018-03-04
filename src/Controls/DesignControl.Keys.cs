@@ -1,10 +1,13 @@
-﻿using System;
+﻿// <copyright file="DesignControl.Keys.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
+// </copyright>
+
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Permissions;
+using System.Security;
 using System.Windows.Forms;
 
 namespace Controls
@@ -95,7 +98,7 @@ namespace Controls
             return base.IsInputKey(keyData);
         }
 
-        [UIPermission(SecurityAction.LinkDemand, Window = UIPermissionWindow.AllWindows)]
+        [SecuritySafeCritical]
         protected override bool ProcessDialogKey(Keys keyData)
         {
             if (FallbackOverrideInputKeys.Contains(keyData))

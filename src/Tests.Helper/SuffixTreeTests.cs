@@ -1,5 +1,8 @@
 ﻿// <copyright file="SuffixTreeTests.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -114,50 +117,50 @@ namespace Tests.Helper
 
             // Index of 0 should always return empty substring.
             var index = tree.GetLongestInternalSubstring(0);
-            Assert.AreEqual(index, SubstringPointer.Empty);
+            Assert.AreEqual(index, SubstringInfo.Empty);
 
             // Just do some simple checks with expected longest substrings.
             index = tree.GetLongestInternalSubstring(20);
-            Assert.AreEqual(index, SubstringPointer.FromStartAndLength(0, 6));
+            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(0, 6));
 
             index = tree.GetLongestInternalSubstring(30);
-            Assert.AreEqual(index, SubstringPointer.FromStartAndLength(2, 8));
+            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(2, 8));
 
             index = tree.GetLongestInternalSubstring(40);
-            Assert.AreEqual(index, SubstringPointer.FromStartAndLength(0, 8));
+            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(0, 8));
 
             // Find longest match with lowest index
             index = tree.GetLongestInternalSubstring(50);
-            Assert.AreEqual(index, SubstringPointer.FromStartAndLength(0, 8));
+            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(0, 8));
 
             index = tree.GetLongestInternalSubstring(60);
-            Assert.AreEqual(index, SubstringPointer.FromStartAndLength(50, 9));
+            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(50, 9));
 
             index = tree.GetLongestInternalSubstring(70);
-            Assert.AreEqual(index, SubstringPointer.FromStartAndLength(0, 9));
+            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(0, 9));
 
             // Look for reversed matches now.
             index = tree.GetLongestInternalSubstring(90);
-            Assert.AreEqual(index, SubstringPointer.FromStartAndLength(81, 4));
+            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(81, 4));
 
             index = tree.GetLongestInternalSubstring(100);
-            Assert.AreEqual(index, SubstringPointer.FromStartAndLength(82, 4));
+            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(82, 4));
 
             // No part of the array has started with 9, 8 yet.
             index = tree.GetLongestInternalSubstring(110);
-            Assert.AreEqual(index, SubstringPointer.FromStartAndLength(9, 1));
+            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(9, 1));
 
             // If we haven't encountered first number, return empty.
             index = tree.GetLongestInternalSubstring(120);
-            Assert.AreEqual(index, SubstringPointer.Empty);
+            Assert.AreEqual(index, SubstringInfo.Empty);
 
             // Find longest substring even if a shorter match occurred earlier.
             index = tree.GetLongestInternalSubstring(160);
-            Assert.AreEqual(index, SubstringPointer.FromStartAndLength(140, 9));
+            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(140, 9));
 
             // Allow overlap of substring if match continues to end of data.
             index = tree.GetLongestInternalSubstring(180);
-            Assert.AreEqual(index, SubstringPointer.FromStartAndLength(170, 20));
+            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(170, 20));
 
             // Throw on out of range.
             Assert.ThrowsException<ArgumentOutOfRangeException>(() =>

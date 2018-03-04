@@ -1,30 +1,70 @@
 ﻿// <copyright file="BoxSelection2D.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Helper;
 
 namespace MushROMs
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using static Helper.ThrowHelper;
+
     public sealed class BoxSelection2D : Selection2D
     {
-        private Range2D Range
+        public BoxSelection2D(
+            Point startPosition,
+            Size range)
+            : base(startPosition)
         {
-            get;
+            if (range.Width <= 0 || range.Height <= 0)
+            {
+                throw new ArgumentException();
+            }
+
+            Size = range;
+        }
+
+        public BoxSelection2D(
+            Point startPosition,
+            int width,
+            int height)
+            : base(startPosition)
+        {
+            if (width <= 0)
+            {
+                throw ValueNotGreaterThan(
+                    nameof(width),
+                    width);
+            }
+
+            if (height <= 0)
+            {
+                throw ValueNotGreaterThan(
+                    nameof(height),
+                    height);
+            }
+
+            Size = new Size(width, height);
         }
 
         public override int Count
         {
             get
             {
-                return Range.Area;
+                return Size.Width * Size.Height;
             }
         }
 
-        public override Position2D this[int index]
+        private Size Size
+        {
+            get;
+        }
+
+        public override Point this[int index]
         {
             get
             {
@@ -34,63 +74,42 @@ namespace MushROMs
                 }
 
                 var result = StartPosition;
-                result.X += index % Range.Width;
-                result.Y += index / Range.Width;
+                result.X += index % Size.Width;
+                result.Y += index / Size.Width;
 
                 return result;
             }
         }
 
-        public BoxSelection2D(Position2D startPosition, Range2D range)
-        {
-            if (range.Width <= 0 || range.Height <= 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(range),
-                    SR.ErrorLowerBoundExclusive(nameof(range), range, Range2D.Empty));
-            }
-
-            StartPosition = startPosition;
-            Range = range;
-        }
-
         public override Selection2D Copy()
         {
-            return new BoxSelection2D(StartPosition, Range);
+            return new BoxSelection2D(StartPosition, Size);
         }
 
-        public override bool Contains(Position2D position)
+        public override bool Contains(Point position)
         {
-            position -= StartPosition;
-            return Range.Contains(position);
+            var x = position.X - StartPosition.X;
+            var y = position.Y - StartPosition.Y;
+            var bounds = new Rectangle(Point.Empty, Size);
+            return bounds.Contains(x, y);
         }
 
-        public override IEnumerator<Position2D> GetEnumerator()
+        public override IEnumerator<Point> GetEnumerator()
         {
-            return new Enumerator(StartPosition, Range);
+            return new Enumerator(StartPosition, Size);
         }
 
-        private struct Enumerator : IEnumerator<Position2D>
+        private struct Enumerator : IEnumerator<Point>
         {
-            private Position2D StartPosition
+            public Enumerator(Point startPosition, Size range)
             {
-                get;
-                set;
+                StartPosition = startPosition;
+                Last = StartPosition + range;
+                Index = StartPosition;
+                Current = default;
             }
 
-            private Position2D Index
-            {
-                get;
-                set;
-            }
-
-            private Position2D Last
-            {
-                get;
-                set;
-            }
-
-            public Position2D Current
+            public Point Current
             {
                 get;
                 private set;
@@ -104,17 +123,28 @@ namespace MushROMs
                 }
             }
 
-            public Enumerator(Position2D startPosition, Range2D range)
+            private Point StartPosition
             {
-                StartPosition = startPosition;
-                Last = StartPosition + range;
-                Index = StartPosition;
-                Current = default(Position2D);
+                get;
+                set;
+            }
+
+            private Point Index
+            {
+                get;
+                set;
+            }
+
+            private Point Last
+            {
+                get;
+                set;
             }
 
             public void Reset()
             {
                 Index = StartPosition;
+                Current = default;
             }
 
             public bool MoveNext()
@@ -133,14 +163,14 @@ namespace MushROMs
                 if (y < Last.Y)
                 {
                     Current = Index;
-                    Index = new Position2D(x, y);
+                    Index = new Point(x, y);
                     return true;
                 }
 
                 return false;
             }
 
-            public void Dispose()
+            void IDisposable.Dispose()
             {
             }
         }

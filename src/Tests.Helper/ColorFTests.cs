@@ -1,10 +1,14 @@
 ﻿// <copyright file="ColorFTests.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
 using Helper;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using static Helper.MathHelper;
 
 namespace Tests.Helper
 {
@@ -12,109 +16,169 @@ namespace Tests.Helper
     public class ColorFTests
     {
         [TestMethod]
-        public void ColorFConsts()
+        public void LumaTotal()
         {
-            // We should have four channels, three non-alpha (RGB)
-            Assert.AreEqual(ColorF.NumberOfChannels, 4);
-            Assert.AreEqual(ColorF.NumberOfColorChannels, 3);
+            var total =
+                ColorF.LumaRedWeight +
+                ColorF.LumaGreenWeight +
+                ColorF.LumaBlueWeight;
 
             // Luma weights should sum to unity.
-            Assert.AreEqual(ColorF.LumaRedWeight + ColorF.LumaGreenWeight + ColorF.LumaBlueWeight, 1f);
-
-            // Humans see green the best and blue the worst.
-            Assert.IsTrue(
-                ColorF.LumaGreenWeight > ColorF.LumaRedWeight &&
-                ColorF.LumaRedWeight > ColorF.LumaBlueWeight);
+            Assert.AreEqual(total, 1f);
         }
 
         [TestMethod]
-        public void FromArgb()
+        public void LumaWeight()
+        {
+            // Humans see green the best and blue the worst.
+            Assert.IsTrue(ColorF.LumaGreenWeight > ColorF.LumaRedWeight);
+            Assert.IsTrue(ColorF.LumaRedWeight > ColorF.LumaBlueWeight);
+        }
+
+        [TestMethod]
+        public void EmptyColor()
         {
             // Test empty color.
             var color = ColorF.Empty;
             AssertArgb(color, 0, 0, 0, 0);
+        }
 
-            // Test alpha reassignment
-            color = ColorF.FromArgb(1, color);
+        [TestMethod]
+        public void AlphaWithEmpty()
+        {
+            var color = ColorF.FromArgb(1, ColorF.Empty);
             AssertArgb(color, 1, 0, 0, 0);
+        }
 
-            // red
-            color = ColorF.FromArgb(1, 0, 0);
+        [TestMethod]
+        public void RedProperties()
+        {
+            var color = ColorF.FromArgb(1, 0, 0);
             AssertArgb(color, 1, 1, 0, 0);
             Assert.AreEqual(color.Hue, 0);
             Assert.AreEqual(color.HueDegrees, 0);
             Assert.AreEqual(color.Saturation, 1);
+        }
 
-            // yellow
-            color = ColorF.FromArgb(0.75f, 1, 1, 0);
+        [TestMethod]
+        public void YellowProperties()
+        {
+            var color = ColorF.FromArgb(0.75f, 1, 1, 0);
             AssertArgb(color, 0.75f, 1, 1, 0);
             Assert.AreEqual(color.Hue, 1 / 6f);
             Assert.AreEqual(color.HueDegrees, 60f);
             Assert.AreEqual(color.Saturation, 1);
+        }
 
-            // green
-            color = ColorF.FromArgb(0.25f, 0, 1, 0);
+        [TestMethod]
+        public void GreenProperties()
+        {
+            var color = ColorF.FromArgb(0.25f, 0, 1, 0);
             AssertArgb(color, 0.25f, 0, 1, 0);
             Assert.AreEqual(color.Hue, 2 / 6f);
             Assert.AreEqual(color.HueDegrees, 120f);
             Assert.AreEqual(color.Saturation, 1);
+        }
 
-            // cyan
-            color = ColorF.FromArgb(1, 0, 0.5f, 0.5f);
+        [TestMethod]
+        public void CyanProperties()
+        {
+            var color = ColorF.FromArgb(1, 0, 0.5f, 0.5f);
             AssertArgb(color, 1, 0, 0.5f, 0.5f);
             Assert.AreEqual(color.Hue, 3 / 6f);
             Assert.AreEqual(color.HueDegrees, 180f);
             Assert.AreEqual(color.Saturation, 1);
+        }
 
-            // blue
-            color = ColorF.FromArgb(0.5f, 0, 0, 1);
+        [TestMethod]
+        public void BlueProperties()
+        {
+            var color = ColorF.FromArgb(0.5f, 0, 0, 1);
             AssertArgb(color, 0.5f, 0, 0, 1);
             Assert.AreEqual(color.Hue, 4 / 6f);
             Assert.AreEqual(color.HueDegrees, 240f);
             Assert.AreEqual(color.Saturation, 1);
+        }
 
-            // magenta
-            color = ColorF.FromArgb(0.5f, 0.75f, 0.25f, 0.75f);
+        [TestMethod]
+        public void MagentaProperties()
+        {
+            var color = ColorF.FromArgb(0.5f, 0.75f, 0.25f, 0.75f);
             AssertArgb(color, 0.5f, 0.75f, 0.25f, 0.75f);
             Assert.AreEqual(color.Hue, 5 / 6f);
             Assert.AreEqual(color.HueDegrees, 300f);
             Assert.AreEqual(color.Saturation, 0.5f);
+        }
 
+        [TestMethod]
+        public void AlphaNaN()
+        {
             Assert.ThrowsException<ArgumentException>(() =>
             {
                 ColorF.FromArgb(Single.NaN, ColorF.Empty);
             });
+        }
+
+        [TestMethod]
+        public void RedNaN()
+        {
             Assert.ThrowsException<ArgumentException>(() =>
             {
                 ColorF.FromArgb(Single.NaN, 0, 0);
             });
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                ColorF.FromArgb(0, Single.NaN, 0);
-            });
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                ColorF.FromArgb(0, 0, Single.NaN);
-            });
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                ColorF.FromArgb(Single.NaN, 0, 0, 0);
-            });
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                ColorF.FromArgb(0, Single.NaN, 0, 0);
-            });
+        }
+
+        [TestMethod]
+        public void GreenNaN()
+        {
             Assert.ThrowsException<ArgumentException>(() =>
             {
                 ColorF.FromArgb(0, 0, Single.NaN, 0);
             });
+        }
+
+        [TestMethod]
+        public void BlueNaN()
+        {
             Assert.ThrowsException<ArgumentException>(() =>
             {
-                ColorF.FromArgb(0, 0, 0, Single.NaN);
+                ColorF.FromArgb(1, 1, 1, Single.NaN);
             });
         }
 
-        private void AssertArgb(ColorF color, float alpha, float red, float green, float blue)
+        [TestMethod]
+        public void CyanNaN()
+        {
+            Assert.ThrowsException<ArgumentException>(() =>
+            {
+                ColorF.FromCmy(Single.NaN, 0, 0);
+            });
+        }
+
+        [TestMethod]
+        public void MagentaNaN()
+        {
+            Assert.ThrowsException<ArgumentException>(() =>
+            {
+                ColorF.FromCmy(1, 0, Single.NaN, 1);
+            });
+        }
+
+        [TestMethod]
+        public void YellowNaN()
+        {
+            Assert.ThrowsException<ArgumentException>(() =>
+            {
+                ColorF.FromCmy(Single.PositiveInfinity, 0, 1, Single.NaN);
+            });
+        }
+
+        private static void AssertArgb(
+            ColorF color,
+            float alpha,
+            float red,
+            float green,
+            float blue)
         {
             Assert.AreEqual(color.Alpha, alpha);
             Assert.AreEqual(color.Red, red);
@@ -125,8 +189,8 @@ namespace Tests.Helper
             Assert.AreEqual(color.Magenta, 1 - green);
             Assert.AreEqual(color.Yellow, 1 - blue);
 
-            var max = red > green ? red : (green > blue ? green : blue);
-            var min = red < green ? red : (green < blue ? green : blue);
+            var max = Max(red, green, blue);
+            var min = Min(red, green, blue);
             Assert.AreEqual(color.Max, max);
             Assert.AreEqual(color.Min, min);
 
@@ -139,61 +203,6 @@ namespace Tests.Helper
                 (ColorF.LumaBlueWeight * blue);
 
             Assert.AreEqual(color.Luma, luma);
-        }
-
-        [TestMethod]
-        public void FromAcmy()
-        {
-            // Test empty color.
-            var color = ColorF.Empty;
-            assertAcmy(0, 1, 1, 1);
-
-            // Test some colors
-            color = ColorF.FromCmy(1, 0, 0);
-            assertAcmy(1, 1, 0, 0);
-            Assert.AreEqual(color.Hue, 0.5f);
-            Assert.AreEqual(color.HueDegrees, 180);
-            Assert.AreEqual(color.Saturation, 1);
-
-            // Test FromArgb with defined alpha
-            color = ColorF.FromCmy(0.75f, 0, 1, 0);
-            assertAcmy(0.75f, 0, 1, 0);
-            Assert.AreEqual(color.Hue, 5 / 6f);
-            Assert.AreEqual(color.HueDegrees, 300f);
-
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                ColorF.FromCmy(Single.NaN, 0, 0);
-            });
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                ColorF.FromCmy(0, Single.NaN, 0);
-            });
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                ColorF.FromCmy(0, 0, Single.NaN);
-            });
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                ColorF.FromCmy(Single.NaN, 0, 0, 0);
-            });
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                ColorF.FromCmy(0, Single.NaN, 0, 0);
-            });
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                ColorF.FromCmy(0, 0, Single.NaN, 0);
-            });
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                ColorF.FromCmy(0, 0, 0, Single.NaN);
-            });
-
-            void assertAcmy(float alpha, float cyan, float magenta, float yellow)
-            {
-                AssertArgb(color, alpha, 1 - cyan, 1 - magenta, 1 - yellow);
-            }
         }
     }
 }

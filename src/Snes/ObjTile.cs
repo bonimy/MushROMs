@@ -1,12 +1,15 @@
 ﻿// <copyright file="ObjTile.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using Helper;
 
 namespace Snes
 {
+    using System;
+    using Helper;
+
     public struct ObjTile : IEquatable<ObjTile>
     {
         public const int SizeOf = sizeof(ushort);
@@ -19,11 +22,16 @@ namespace Snes
         private const int FlipBitShift = 14;
         private const int FlipMask = 3;
 
-        private ushort _value;
+        private ushort value;
+
+        private ObjTile(int value)
+        {
+            this.value = (ushort)value;
+        }
 
         public int Value
         {
-            get { return _value; }
+            get { return value; }
             set { this = new ObjTile(value); }
         }
 
@@ -129,9 +137,24 @@ namespace Snes
             }
         }
 
-        private ObjTile(int value)
+        public static implicit operator int(ObjTile tile)
         {
-            _value = (ushort)value;
+            return tile.Value;
+        }
+
+        public static implicit operator ObjTile(int value)
+        {
+            return new ObjTile(value);
+        }
+
+        public static bool operator ==(ObjTile left, ObjTile right)
+        {
+            return left.Value == right.Value;
+        }
+
+        public static bool operator !=(ObjTile left, ObjTile right)
+        {
+            return left.Value != right.Value;
         }
 
         public ObjTile FlipX()
@@ -171,26 +194,6 @@ namespace Snes
         public override string ToString()
         {
             return SR.GetString(Value, "X4");
-        }
-
-        public static implicit operator int(ObjTile tile)
-        {
-            return tile.Value;
-        }
-
-        public static implicit operator ObjTile(int value)
-        {
-            return new ObjTile(value);
-        }
-
-        public static bool operator ==(ObjTile left, ObjTile right)
-        {
-            return left.Value == right.Value;
-        }
-
-        public static bool operator !=(ObjTile left, ObjTile right)
-        {
-            return left.Value != right.Value;
         }
     }
 }

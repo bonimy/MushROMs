@@ -1,17 +1,20 @@
 ﻿// <copyright file="UndoFactory.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections.Generic;
 
 namespace Helper
 {
-    public class UndoFactory
+    using System;
+    using System.Collections.Generic;
+
+    public class UndoFactory : IUndoFactory
     {
-        private List<State> History
+        public UndoFactory()
         {
-            get;
+            History = new List<State>();
         }
 
         public int Count
@@ -28,7 +31,7 @@ namespace Helper
             private set;
         }
 
-        public virtual bool CanUndo
+        public bool CanUndo
         {
             get
             {
@@ -36,7 +39,7 @@ namespace Helper
             }
         }
 
-        public virtual bool CanRedo
+        public bool CanRedo
         {
             get
             {
@@ -44,9 +47,9 @@ namespace Helper
             }
         }
 
-        public UndoFactory()
+        private List<State> History
         {
-            History = new List<State>();
+            get;
         }
 
         public void Add(Action undo, Action redo)
@@ -74,32 +77,30 @@ namespace Helper
         {
             if (CanUndo)
             {
-                // We have to check this any since CanUndo can be overridden.
-                if (Index <= 0)
-                {
-                    throw new InvalidOperationException();
-                }
-
-                History[--Index].Undo();
+                return;
             }
+
+            History[--Index].Undo();
         }
 
         public void Redo()
         {
-            if (CanRedo)
+            if (!CanRedo)
             {
-                // We have to check this any since CanRedo can be overridden.
-                if (Index >= Count)
-                {
-                    throw new InvalidOperationException();
-                }
-
-                History[Index++].Redo();
+                return;
             }
+
+            History[Index++].Redo();
         }
 
         private struct State
         {
+            public State(Action undo, Action redo)
+            {
+                Undo = undo;
+                Redo = redo;
+            }
+
             public Action Undo
             {
                 get;
@@ -108,12 +109,6 @@ namespace Helper
             public Action Redo
             {
                 get;
-            }
-
-            public State(Action undo, Action redo)
-            {
-                Undo = undo;
-                Redo = redo;
             }
         }
     }

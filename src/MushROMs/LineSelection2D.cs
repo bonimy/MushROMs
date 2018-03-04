@@ -1,24 +1,41 @@
 ﻿// <copyright file="LineSelection2D.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Helper;
 
 namespace MushROMs
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using static Helper.ThrowHelper;
+
     public sealed class LineSelection2D : Selection2D
     {
-        private int Length
+        public LineSelection2D(
+            Point startPosition,
+            int regionWidth,
+            int length)
+            : base(startPosition)
         {
-            get;
-        }
+            if (length < 0)
+            {
+                throw ValueNotGreaterThanEqualTo(
+                    nameof(length),
+                    length);
+            }
 
-        private int RegionWidth
-        {
-            get;
+            if (regionWidth <= 0)
+            {
+                throw ValueNotGreaterThan(
+                    nameof(regionWidth),
+                    regionWidth);
+            }
+
+            Length = length;
         }
 
         public override int Count
@@ -29,42 +46,36 @@ namespace MushROMs
             }
         }
 
-        public override Position2D this[int index]
+        private int Length
+        {
+            get;
+        }
+
+        private int RegionWidth
+        {
+            get;
+        }
+
+        public override Point this[int index]
         {
             get
             {
                 if ((uint)index >= (uint)Length)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index));
+                    throw ValueNotInArrayBounds(
+                        nameof(index),
+                        index,
+                        Count);
                 }
 
-                var start = (StartPosition.Y * RegionWidth) + StartPosition.X;
-                start += index;
+                index += StartPosition.X;
+                index += StartPosition.Y * RegionWidth;
 
-                return new Position2D(
-                    index % RegionWidth,
-                    index / RegionWidth);
+                var x = index % RegionWidth;
+                var y = index / RegionWidth;
+
+                return new Point(x, y);
             }
-        }
-
-        public LineSelection2D(Position2D startPosition, int regionWidth, int length)
-        {
-            if (length < 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(length),
-                    SR.ErrorLowerBoundInclusive(nameof(length), length, 0));
-            }
-
-            if (regionWidth <= 0)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(regionWidth),
-                    SR.ErrorLowerBoundExclusive(nameof(regionWidth), regionWidth, 0));
-            }
-
-            StartPosition = startPosition;
-            Length = length;
         }
 
         public override Selection2D Copy()
@@ -72,45 +83,36 @@ namespace MushROMs
             return new LineSelection2D(StartPosition, RegionWidth, Length);
         }
 
-        public override bool Contains(Position2D position)
+        public override bool Contains(Point position)
         {
-            position -= StartPosition;
-            var index = (position.Y * RegionWidth) + position.X;
+            var x = position.X - StartPosition.X;
+            var y = position.Y - StartPosition.Y;
+            var index = (y * RegionWidth) + x;
             return index >= 0 && index < Length;
         }
 
-        public override IEnumerator<Position2D> GetEnumerator()
+        public override IEnumerator<Point> GetEnumerator()
         {
             return new Enumerator(StartPosition, RegionWidth, Length);
         }
 
-        private struct Enumerator : IEnumerator<Position2D>
+        private struct Enumerator : IEnumerator<Point>
         {
-            private int StartIndex
+            public Enumerator(
+                Point startPosition,
+                int regionWidth,
+                int length)
             {
-                get;
-                set;
+                StartIndex =
+                    (startPosition.Y * regionWidth) + startPosition.X;
+
+                RegionWidth = regionWidth;
+                Last = StartIndex + length;
+                Index = StartIndex;
+                Current = default;
             }
 
-            private int RegionWidth
-            {
-                get;
-                set;
-            }
-
-            private int Index
-            {
-                get;
-                set;
-            }
-
-            private int Last
-            {
-                get;
-                set;
-            }
-
-            public Position2D Current
+            public Point Current
             {
                 get;
                 private set;
@@ -124,35 +126,48 @@ namespace MushROMs
                 }
             }
 
-            public Enumerator(Position2D startPosition, int regionWidth, int length)
+            private int StartIndex
             {
-                StartIndex = (startPosition.Y * regionWidth) + startPosition.X;
-                RegionWidth = regionWidth;
-                Last = StartIndex + length;
-                Index = StartIndex;
-                Current = default(Position2D);
+                get;
+            }
+
+            private int RegionWidth
+            {
+                get;
+            }
+
+            private int Index
+            {
+                get;
+                set;
+            }
+
+            private int Last
+            {
+                get;
             }
 
             public void Reset()
             {
                 Index = StartIndex;
+                Current = default;
             }
 
             public bool MoveNext()
             {
-                if (Index < Last)
+                if (Index >= Last)
                 {
-                    Current = new Position2D(
-                        Index % RegionWidth,
-                        Index / RegionWidth);
-                    Index++;
-                    return true;
+                    return false;
                 }
 
-                return false;
+                var x = Index % RegionWidth;
+                var y = Index / RegionWidth;
+                Current = new Point(x, y);
+                Index++;
+                return true;
             }
 
-            public void Dispose()
+            void IDisposable.Dispose()
             {
             }
         }

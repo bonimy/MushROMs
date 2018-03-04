@@ -1,4 +1,11 @@
-﻿using System;
+﻿// <copyright file="DesignControl.Mouse.cs" company="Public Domain">
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
+// </copyright>
+
+using System;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;

@@ -1,29 +1,36 @@
 ﻿// <copyright file="Color15BppBgr.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Drawing;
-using System.Text;
-using static System.Math;
-
-namespace Helper.PixelFormats
+namespace Helper.PixelFormat
 {
+    using System;
+    using System.Drawing;
+    using System.Text;
+    using static System.Math;
+
     public struct Color15BppBgr : IEquatable<Color15BppBgr>
     {
         public const int SizeOf = sizeof(short);
 
-        public static readonly Color15BppBgr Empty = new Color15BppBgr();
+        public const int LowIndex = 0;
+
+        public const int HighIndex = 1;
+
+        public static readonly Color15BppBgr Empty = default;
 
         private const int BitsPerByte = 8;
 
         private const int NumberOfChannels = 3;
 
-        public const int RedIndex = 0;
+        private const int RedIndex = 0;
 
-        public const int GreenIndex = 1;
+        private const int GreenIndex = 1;
 
-        public const int BlueIndex = 2;
+        private const int BlueIndex = 2;
 
         private const int BitsPerChannel = 5;
 
@@ -43,11 +50,29 @@ namespace Helper.PixelFormats
 
         private const int ColorMask = RedMask | GreenMask | BlueMask;
 
-        private const int HighMask = Byte.MaxValue << BitsPerByte;
+        private const int HighMask = Byte.MaxValue << (BitsPerByte * HighIndex);
 
-        private const int LowMask = Byte.MaxValue;
+        private const int LowMask = Byte.MaxValue << (BitsPerByte * LowIndex);
 
         private ushort _value;
+
+        public Color15BppBgr(byte low, byte high)
+            : this((ushort)(low | (high << BitsPerByte)))
+        {
+        }
+
+        public Color15BppBgr(int red, int green, int blue)
+        {
+            _value = (ushort)(
+                ((red & ChannelMask) << RedShift) |
+                ((green & ChannelMask) << GreenShift) |
+                ((blue & ChannelMask) << BlueShift));
+        }
+
+        private Color15BppBgr(ushort value)
+        {
+            _value = value;
+        }
 
         public int Value
         {
@@ -146,110 +171,6 @@ namespace Helper.PixelFormats
             }
         }
 
-        public byte this[int index]
-        {
-            get
-            {
-                switch (index)
-                {
-                    case RedIndex:
-                        return Red;
-
-                    case GreenIndex:
-                        return Green;
-
-                    case BlueIndex:
-                        return Blue;
-
-                    default:
-                        throw new ArgumentOutOfRangeException(
-                            nameof(index),
-                            SR.ErrorArrayBounds(nameof(index), index, NumberOfChannels));
-                }
-            }
-
-            set
-            {
-                switch (index)
-                {
-                    case RedIndex:
-                        Red = value;
-                        return;
-
-                    case GreenIndex:
-                        Green = value;
-                        return;
-
-                    case BlueIndex:
-                        Blue = value;
-                        return;
-
-                    default:
-                        throw new ArgumentOutOfRangeException(
-                            nameof(index),
-                            SR.ErrorArrayBounds(nameof(index), index, NumberOfChannels));
-                }
-            }
-        }
-
-        private Color15BppBgr(ushort value)
-        {
-            _value = value;
-        }
-
-        public Color15BppBgr(byte low, byte high) :
-            this((ushort)(low | (high << BitsPerByte)))
-        {
-        }
-
-        public Color15BppBgr(int red, int green, int blue)
-        {
-            _value = (ushort)(
-                ((red & ChannelMask) << RedShift) |
-                ((green & ChannelMask) << GreenShift) |
-                ((blue & ChannelMask) << BlueShift));
-        }
-
-        public bool Equals(Color15BppBgr obj)
-        {
-            return Value.Equals(obj.Value);
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is Color15BppBgr value)
-            {
-                return Equals(value);
-            }
-
-            return false;
-        }
-
-        public override int GetHashCode()
-        {
-            // We base equality on the proper value, not the base value.
-            return ProperValue.GetHashCode();
-        }
-
-        public override string ToString()
-        {
-            var sb = new StringBuilder();
-            sb.Append('{');
-            sb.Append(nameof(Red));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Red));
-            sb.Append(", ");
-            sb.Append(nameof(Green));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Green));
-            sb.Append(", ");
-            sb.Append(nameof(Blue));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Blue));
-            sb.Append('}');
-            return sb.ToString();
-        }
-
         public static explicit operator Color15BppBgr(int value)
         {
             return new Color15BppBgr((ushort)value);
@@ -260,7 +181,8 @@ namespace Helper.PixelFormats
             return color15.Value;
         }
 
-        public static explicit operator Color15BppBgr(Color24BppRgb color24)
+        public static explicit operator Color15BppBgr(
+            Color24BppRgb color24)
         {
             return new Color15BppBgr(
                 color24.Red >> (BitsPerByte - BitsPerChannel),
@@ -268,7 +190,8 @@ namespace Helper.PixelFormats
                 color24.Blue >> (BitsPerByte - BitsPerChannel));
         }
 
-        public static implicit operator Color24BppRgb(Color15BppBgr color15)
+        public static implicit operator Color24BppRgb(
+            Color15BppBgr color15)
         {
             return new Color24BppRgb(
                 color15.Red << (BitsPerByte - BitsPerChannel),
@@ -276,7 +199,8 @@ namespace Helper.PixelFormats
                 color15.Blue << (BitsPerByte - BitsPerChannel));
         }
 
-        public static explicit operator Color15BppBgr(Color32BppArgb color32)
+        public static explicit operator Color15BppBgr(
+            Color32BppArgb color32)
         {
             return new Color15BppBgr(
                 color32.Red >> (BitsPerByte - BitsPerChannel),
@@ -284,7 +208,8 @@ namespace Helper.PixelFormats
                 color32.Blue >> (BitsPerByte - BitsPerChannel));
         }
 
-        public static implicit operator Color32BppArgb(Color15BppBgr color15)
+        public static implicit operator Color32BppArgb(
+            Color15BppBgr color15)
         {
             return new Color32BppArgb(
                 color15.Red << (BitsPerByte - BitsPerChannel),
@@ -324,14 +249,58 @@ namespace Helper.PixelFormats
                 color15.Blue / (float)ChannelMask);
         }
 
-        public static bool operator ==(Color15BppBgr left, Color15BppBgr right)
+        public static bool operator ==(
+            Color15BppBgr left,
+            Color15BppBgr right)
         {
             return left.Equals(right);
         }
 
-        public static bool operator !=(Color15BppBgr left, Color15BppBgr right)
+        public static bool operator !=(
+            Color15BppBgr left,
+            Color15BppBgr right)
         {
             return !(left == right);
+        }
+
+        public bool Equals(Color15BppBgr obj)
+        {
+            return ProperValue.Equals(obj.ProperValue);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Color15BppBgr value)
+            {
+                return Equals(value);
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            // We base equality on the proper value, not the base value.
+            return ProperValue;
+        }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.Append('{');
+            sb.Append(nameof(Red));
+            sb.Append(": ");
+            sb.Append(SR.GetString(Red));
+            sb.Append(", ");
+            sb.Append(nameof(Green));
+            sb.Append(": ");
+            sb.Append(SR.GetString(Green));
+            sb.Append(", ");
+            sb.Append(nameof(Blue));
+            sb.Append(": ");
+            sb.Append(SR.GetString(Blue));
+            sb.Append('}');
+            return sb.ToString();
         }
     }
 }

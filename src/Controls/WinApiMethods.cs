@@ -1,11 +1,14 @@
 ﻿// <copyright file="WinApiMethods.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
+using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using static Controls.SafeNativeMethods;
 using static Controls.UnsafeNativeMethods;
 
 namespace Controls
@@ -31,9 +34,6 @@ namespace Controls
         private const uint SwpNoSendChanging = 0x0400;
 
         private const int SmCenterXPaddedBorder = 92;
-
-        [DllImport("user32.dll")]
-        private static extern int GetSystemMetrics(int index);
 
         public static int PaddedBorderWidth
         {
@@ -73,47 +73,55 @@ namespace Controls
 
             switch (value)
             {
-                case BorderStyle.Fixed3D:
-                    SetWindowLong(window, GwlStyle, style);
-                    SetWindowLong(window, GwlExStyle, exstyle | WsExClientEdge);
-                    return;
+            case BorderStyle.Fixed3D:
+                SetWindowLong(window, GwlStyle, style);
+                SetWindowLong(window, GwlExStyle, exstyle | WsExClientEdge);
+                return;
 
-                case BorderStyle.FixedSingle:
-                    SetWindowLong(window, GwlStyle, style | WsBorder);
-                    SetWindowLong(window, GwlExStyle, exstyle);
-                    return;
+            case BorderStyle.FixedSingle:
+                SetWindowLong(window, GwlStyle, style | WsBorder);
+                SetWindowLong(window, GwlExStyle, exstyle);
+                return;
 
-                case BorderStyle.None:
-                    SetWindowLong(window, GwlStyle, style);
-                    SetWindowLong(window, GwlExStyle, exstyle);
-                    return;
-
-                default:
-                    return;
+            case BorderStyle.None:
+                SetWindowLong(window, GwlStyle, style);
+                SetWindowLong(window, GwlExStyle, exstyle);
+                return;
             }
         }
 
+        /// <summary>
+        /// Do not call this method in any constructors that override the <see cref="Control"/> class. It causes undefined behavior that is hard to track.
+        /// </summary>
         public static Rectangle GetWindowRectangle(IWin32Window window)
         {
-            // Do not call this method in any constructors that override the Control class.
             return GetWindowRect(window);
         }
 
         public static Size GetBorderSize(IWin32Window window)
         {
-            switch (GetBorderStyle(window))
+            var borderStyle = GetBorderStyle(window);
+            return GetBorderSize(borderStyle);
+        }
+
+        public static Size GetBorderSize(BorderStyle borderStyle)
+        {
+            switch (borderStyle)
             {
-                case BorderStyle.None:
-                    return Size.Empty;
+            case BorderStyle.None:
+                return Size.Empty;
 
-                case BorderStyle.FixedSingle:
-                    return SystemInformation.BorderSize;
+            case BorderStyle.FixedSingle:
+                return SystemInformation.BorderSize;
 
-                case BorderStyle.Fixed3D:
-                    return SystemInformation.Border3DSize;
+            case BorderStyle.Fixed3D:
+                return SystemInformation.Border3DSize;
 
-                default:
-                    throw new ArgumentException();
+            default:
+                throw new InvalidEnumArgumentException(
+                    nameof(borderStyle),
+                    (int)borderStyle,
+                    typeof(BorderStyle));
             }
         }
 

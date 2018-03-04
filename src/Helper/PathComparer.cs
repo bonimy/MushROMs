@@ -1,21 +1,26 @@
 ﻿// <copyright file="PathComparer.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.IO;
 
 namespace Helper
 {
+    using System;
+    using System.IO;
+
     public sealed class PathComparer : StringModifierComparer
     {
-        public static readonly PathComparer DefaultComparer = new PathComparer();
+        public static readonly PathComparer Default = new PathComparer();
 
-        private PathComparer() : this(OrdinalIgnoreCase)
+        public PathComparer(StringComparer baseComparer)
+            : base(baseComparer)
         {
         }
 
-        public PathComparer(StringComparer baseComparer) : base(baseComparer)
+        private PathComparer()
+            : this(OrdinalIgnoreCase)
         {
         }
 

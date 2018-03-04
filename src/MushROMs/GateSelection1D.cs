@@ -1,26 +1,32 @@
 ﻿// <copyright file="GateSelection1D.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
-
-using System;
-using System.Collections.Generic;
 
 namespace MushROMs
 {
-    public delegate bool GateMethod(bool left, bool right);
+    using System;
+    using System.Collections.Generic;
 
     public sealed class GateSelection1D : Selection1D
     {
-        private IReadOnlyList<int> SelectedIndexes
+        public GateSelection1D(
+            ISelection1D left,
+            ISelection1D right,
+            Func<bool, bool, bool> rule)
+            : base(GetStartIndex(left, right))
         {
-            get;
-            set;
+            SelectedIndexes = GetSelectedIndexes(left, right, rule);
+            HashIndexes = new HashSet<int>(SelectedIndexes);
         }
 
-        private HashSet<int> HashIndexes
+        private GateSelection1D(GateSelection1D selection)
+            : base(selection.StartIndex)
         {
-            get;
-            set;
+            SelectedIndexes = new List<int>(selection);
+            HashIndexes = new HashSet<int>(selection);
         }
 
         public override int Count
@@ -31,6 +37,16 @@ namespace MushROMs
             }
         }
 
+        private IReadOnlyList<int> SelectedIndexes
+        {
+            get;
+        }
+
+        private ICollection<int> HashIndexes
+        {
+            get;
+        }
+
         public override int this[int index]
         {
             get
@@ -39,7 +55,24 @@ namespace MushROMs
             }
         }
 
-        public GateSelection1D(Selection1D left, Selection1D right, GateMethod rule)
+        public override ISelection1D Copy()
+        {
+            return new GateSelection1D(this);
+        }
+
+        public override bool Contains(int index)
+        {
+            return HashIndexes.Contains(index);
+        }
+
+        public override IEnumerator<int> GetEnumerator()
+        {
+            return SelectedIndexes.GetEnumerator();
+        }
+
+        private static int GetStartIndex(
+            ISelection1D left,
+            ISelection1D right)
         {
             if (left is null)
             {
@@ -51,68 +84,28 @@ namespace MushROMs
                 throw new ArgumentNullException(nameof(right));
             }
 
-            if (rule is null)
+            if (left.Count == 0)
             {
-                throw new ArgumentNullException(nameof(rule));
+                return right.StartIndex;
             }
 
-            if (left is EmptySelection1D)
+            if (right.Count == 0)
             {
-                StartIndex = right.StartIndex;
-            }
-            else if (right is EmptySelection1D)
-            {
-                StartIndex = left.StartIndex;
-            }
-            else
-            {
-                StartIndex = Math.Min(left.StartIndex, right.StartIndex);
+                return left.StartIndex;
             }
 
-            InitializeSelectedIndexes(left, right, rule);
+            return Math.Min(left.StartIndex, right.StartIndex);
         }
 
-        private GateSelection1D(GateSelection1D selection)
+        private static IReadOnlyList<int> GetSelectedIndexes(
+            ISelection1D left,
+            ISelection1D right,
+            Func<bool, bool, bool> rule)
         {
-            if (selection is null)
-            {
-                throw new ArgumentNullException(nameof(selection));
-            }
+            // Get all indexes from left selection that fit the binary rule.
+            var result = GetLeftIndexes(left, right, rule);
 
-            StartIndex = selection.StartIndex;
-
-            SelectedIndexes = new List<int>(selection);
-            HashIndexes = new HashSet<int>(selection);
-        }
-
-        public override Selection1D Copy()
-        {
-            return new GateSelection1D(this);
-        }
-
-        public override bool Contains(int index)
-        {
-            return HashIndexes.Contains(index);
-        }
-
-        private void InitializeSelectedIndexes(Selection1D left, Selection1D right, GateMethod rule)
-        {
-            var result = new List<int>(left.Count + right.Count);
-
-            // Add the left indexes.
-            foreach (var index in left)
-            {
-                // Check if right selection contains an index from left selection.
-                var contains = right.Contains(index);
-
-                // Add index if fits the binary selection rule.
-                if (rule(true, contains))
-                {
-                    result.Add(index);
-                }
-            }
-
-            // The hash set saves all indexes we've added in the first comparison.
+            // Hash the current results.
             var hash = new HashSet<int>(result);
 
             // Add the right indexes.
@@ -127,20 +120,42 @@ namespace MushROMs
                 // Check if left selection contains an index from right selection.
                 var contains = left.Contains(index);
 
-                // Add index if fits the binary selection rule.
+                // Add index if it fits the binary selection rule.
                 if (rule(contains, true))
                 {
                     result.Add(index);
                 }
             }
 
-            SelectedIndexes = result;
-            HashIndexes = new HashSet<int>(SelectedIndexes);
+            return result;
         }
 
-        public override IEnumerator<int> GetEnumerator()
+        private static List<int> GetLeftIndexes(
+            ISelection1D left,
+            ISelection1D right,
+            Func<bool, bool, bool> rule)
         {
-            return SelectedIndexes.GetEnumerator();
+            if (rule is null)
+            {
+                throw new ArgumentNullException(nameof(rule));
+            }
+
+            var result = new List<int>(left.Count + right.Count);
+
+            // Add the left indexes.
+            foreach (var index in left)
+            {
+                // Check if right selection contains an index from left.
+                var contains = right.Contains(index);
+
+                // Add index if it fits the binary selection rule.
+                if (rule(true, contains))
+                {
+                    result.Add(index);
+                }
+            }
+
+            return result;
         }
     }
 }

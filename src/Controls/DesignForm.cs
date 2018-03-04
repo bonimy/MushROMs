@@ -1,5 +1,8 @@
 ﻿// <copyright file="DesignForm.cs" company="Public Domain">
-//     Copyright (c) 2018 Nelson Garcia.
+//     Copyright (c) 2018 Nelson Garcia. All rights reserved
+//     Licensed under GNU Affero General Public License.
+//     See LICENSE in project root for full license information, or visit
+//     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
 using System;
@@ -7,7 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Security.Permissions;
+using System.Security;
 using System.Windows.Forms;
 
 namespace Controls
@@ -18,18 +21,18 @@ namespace Controls
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        private IReadOnlyDictionary<int, ProcessMessage> ProcedureOverrides
+        private IReadOnlyDictionary<int, PreprocessMessageCallback> ProcedureOverrides
         {
             get;
         }
 
         [Browsable(true)]
         [Description("Preprocess the window rectangle before applying it during a resize operation.")]
-        public event EventHandler<EventArgs<Rectangle>> AdjustWindowBounds;
+        public event EventHandler<RectangleEventArgs> AdjustWindowBounds;
 
         [Browsable(true)]
         [Description("Preprocess the window size before applying it during a resize operation.")]
-        public event EventHandler<EventArgs<Size>> AdjustWindowSize;
+        public event EventHandler<RectangleEventArgs> AdjustWindowSize;
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -87,7 +90,7 @@ namespace Controls
         {
             KeyPreview = true;
 
-            ProcedureOverrides = new Dictionary<int, ProcessMessage>()
+            ProcedureOverrides = new Dictionary<int, PreprocessMessageCallback>()
             {
                 { WindowMessages.Size, ProcessSize },
                 { WindowMessages.Sizing, ProcessSizing }
@@ -104,9 +107,7 @@ namespace Controls
             return base.IsInputKey(keyData);
         }
 
-        [UIPermission(
-            SecurityAction.LinkDemand,
-            Window = UIPermissionWindow.AllWindows)]
+        [SecuritySafeCritical]
         protected override bool ProcessDialogKey(Keys keyData)
         {
             if (FallbackOverrideInputKeys.Contains(keyData))
@@ -117,9 +118,7 @@ namespace Controls
             return base.ProcessDialogKey(keyData);
         }
 
-        [SecurityPermission(
-            SecurityAction.LinkDemand,
-            Flags = SecurityPermissionFlag.UnmanagedCode)]
+        [SecuritySafeCritical]
         protected override void DefWndProc(ref Message m)
         {
             if (ProcedureOverrides.TryGetValue(m.Msg, out var action))
@@ -142,10 +141,10 @@ namespace Controls
                     clientSize,
                     WindowPadding);
 
-                var e = new EventArgs<Size>(windowSize);
+                var e = new RectangleEventArgs(windowSize);
                 OnAdjustWindowSize(e);
 
-                var adjustedWindowSize = e.Data;
+                var adjustedWindowSize = e.Size;
 
                 var adjustedClientSize = WinApiMethods.DeflateSize(
                     adjustedWindowSize,
@@ -159,22 +158,22 @@ namespace Controls
 
         private void ProcessSizing(ref Message m)
         {
-            var windowBounds = Marshal.PtrToStructure<WinAPIRectangle>(m.LParam);
+            var windowBounds = Marshal.PtrToStructure<WinApiRectangle>(m.LParam);
 
-            var e = new EventArgs<Rectangle>(windowBounds);
+            var e = new RectangleEventArgs(windowBounds);
             OnAdjustWindowBounds(e);
 
-            WinAPIRectangle adjustedWindowBounds = e.Data;
+            WinApiRectangle adjustedWindowBounds = e.Rectangle;
 
             Marshal.StructureToPtr(adjustedWindowBounds, m.LParam, false);
         }
 
-        protected virtual void OnAdjustWindowBounds(EventArgs<Rectangle> e)
+        protected virtual void OnAdjustWindowBounds(RectangleEventArgs e)
         {
             AdjustWindowBounds?.Invoke(this, e);
         }
 
-        protected virtual void OnAdjustWindowSize(EventArgs<Size> e)
+        protected virtual void OnAdjustWindowSize(RectangleEventArgs e)
         {
             AdjustWindowSize?.Invoke(this, e);
         }
@@ -193,33 +192,33 @@ namespace Controls
         {
             switch (formBorderStyle)
             {
-                case FormBorderStyle.None:
-                    return Size.Empty;
+            case FormBorderStyle.None:
+                return Size.Empty;
 
-                case FormBorderStyle.FixedSingle:
-                case FormBorderStyle.FixedDialog:
-                case FormBorderStyle.Sizable:
-                    return
-                        SystemInformation.FrameBorderSize +
-                        WinApiMethods.PaddedBorderSize;
+            case FormBorderStyle.FixedSingle:
+            case FormBorderStyle.FixedDialog:
+            case FormBorderStyle.Sizable:
+                return
+                    SystemInformation.FrameBorderSize +
+                    WinApiMethods.PaddedBorderSize;
 
-                case FormBorderStyle.FixedToolWindow:
-                case FormBorderStyle.SizableToolWindow:
-                    return
-                        SystemInformation.FixedFrameBorderSize +
-                        WinApiMethods.PaddedBorderSize;
+            case FormBorderStyle.FixedToolWindow:
+            case FormBorderStyle.SizableToolWindow:
+                return
+                    SystemInformation.FixedFrameBorderSize +
+                    WinApiMethods.PaddedBorderSize;
 
-                case FormBorderStyle.Fixed3D:
-                    return
-                        SystemInformation.FrameBorderSize +
-                        SystemInformation.Border3DSize +
-                        WinApiMethods.PaddedBorderSize;
+            case FormBorderStyle.Fixed3D:
+                return
+                    SystemInformation.FrameBorderSize +
+                    SystemInformation.Border3DSize +
+                    WinApiMethods.PaddedBorderSize;
 
-                default:
-                    throw new InvalidEnumArgumentException(
-                        nameof(formBorderStyle),
-                        (int)formBorderStyle,
-                        typeof(FormBorderStyle));
+            default:
+                throw new InvalidEnumArgumentException(
+                    nameof(formBorderStyle),
+                    (int)formBorderStyle,
+                    typeof(FormBorderStyle));
             }
         }
 
@@ -243,24 +242,24 @@ namespace Controls
         {
             switch (formBorderStyle)
             {
-                case FormBorderStyle.None:
-                    return 0;
+            case FormBorderStyle.None:
+                return 0;
 
-                case FormBorderStyle.FixedSingle:
-                case FormBorderStyle.Fixed3D:
-                case FormBorderStyle.FixedDialog:
-                case FormBorderStyle.Sizable:
-                    return SystemInformation.CaptionHeight;
+            case FormBorderStyle.FixedSingle:
+            case FormBorderStyle.Fixed3D:
+            case FormBorderStyle.FixedDialog:
+            case FormBorderStyle.Sizable:
+                return SystemInformation.CaptionHeight;
 
-                case FormBorderStyle.FixedToolWindow:
-                case FormBorderStyle.SizableToolWindow:
-                    return SystemInformation.ToolWindowCaptionHeight;
+            case FormBorderStyle.FixedToolWindow:
+            case FormBorderStyle.SizableToolWindow:
+                return SystemInformation.ToolWindowCaptionHeight;
 
-                default:
-                    throw new InvalidEnumArgumentException(
-                        nameof(formBorderStyle),
-                        (int)formBorderStyle,
-                        typeof(FormBorderStyle));
+            default:
+                throw new InvalidEnumArgumentException(
+                    nameof(formBorderStyle),
+                    (int)formBorderStyle,
+                    typeof(FormBorderStyle));
             }
         }
     }
