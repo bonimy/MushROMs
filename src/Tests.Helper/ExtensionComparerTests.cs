@@ -12,185 +12,137 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace Tests.Helper
 {
     [TestClass]
-    public class ExtensionComparerTests
+    public class ExtensionComparerTests : StringComparerTests
     {
-        [TestMethod]
-        public void ExtensionComparerConstructors()
+        protected sealed override StringComparer DefaultComparer
         {
-            // Default constructor should never throw.
-            var comparer = ExtensionComparer.Default;
+            get
+            {
+                return ExtensionComparer.Default;
+            }
+        }
 
+        public void DefaultBaseComparer()
+        {
             // Ensure we are using our expected base comparer.
             Assert.AreEqual(
-                comparer.BaseComparer,
+                ExtensionComparer.Default.BaseComparer,
                 StringComparer.OrdinalIgnoreCase);
+        }
 
+        [TestMethod]
+        public void CustomBaseComparer()
+        {
             // Ensure the base comparer is accepted by the constructor.
-            comparer = new ExtensionComparer(StringComparer.Ordinal);
-            Assert.AreEqual(comparer.BaseComparer, StringComparer.Ordinal);
+            var comparer = new ExtensionComparer(
+                StringComparer.Ordinal);
 
+            Assert.AreEqual(
+                comparer.BaseComparer,
+                StringComparer.Ordinal);
+        }
+
+        [TestMethod]
+        public void NullBaseComparer()
+        {
             Assert.ThrowsException<ArgumentNullException>(() =>
             {
-                comparer = new ExtensionComparer(null);
+                new ExtensionComparer(null);
             });
         }
 
         [TestMethod]
-        public void ExtensionComparerEquality()
+        public void ExtCaseMatch()
         {
-            // Everything in this list is expected to compare to equal
-            // with the default extension comparer.
-            var compareAsEqual = new Parameters[]
-            {
-                new Parameters(".exe", ".exe"),
-                new Parameters(".BIN", ".bin"),
-                new Parameters(".Txt", ".TXT"),
-                new Parameters(".png", "Image.png"),
-                new Parameters(@"C:\path\to\..\file.doc", "Document.doc"),
-                new Parameters("No extension", "Any text here is fine without a period"),
-                new Parameters("No extension", String.Empty)
-            };
-
-            var comparer = ExtensionComparer.Default;
-
-            foreach (var parameter in compareAsEqual)
-            {
-                var left = parameter.Left;
-                var right = parameter.Right;
-
-                var comparison = comparer.Compare(left, right);
-                var message = SR.GetString(
-                    "Comparison of \"{0}\" and \"{1}\" returned {2} (expected 0).",
-                    left,
-                    right,
-                    comparison);
-
-                Assert.AreEqual(0, comparison, message);
-
-                var equality = comparer.Equals(left, right);
-                message = SR.GetString(
-                     "Extension equality of \"{0}\" and \"{1}\" returned false (expected  true).",
-                     left,
-                     right);
-
-                Assert.IsTrue(equality, message);
-
-                // Equal parameters should have equal hashes.
-                var leftHash = comparer.GetHashCode(left);
-                var rightHash = comparer.GetHashCode(right);
-                message = SR.GetString(
-                    "Hash code of extensions of \"{0}\" and \"{1}\" are unequal  expected equal).",
-                    left,
-                    right);
-
-                Assert.AreEqual(leftHash, rightHash, message);
-            }
+            AssertEquality(
+                ".exe",
+                ".exe");
         }
 
         [TestMethod]
-        public void ExtensionComparerInequality()
+        public void ExtInvariantCaseMatch()
         {
-            // Everything in this list is expected to compare to unequal
-            // with the default extension comparer.
-            var compareAsUnequal = new Parameters[]
-            {
-                new Parameters(".exe", ".app"),
-                new Parameters(".bin", "bin"),
-                new Parameters(".txt", ".ini"),
-                new Parameters(".jpg", "Image.png"),
-                new Parameters(@"C:\path\to\..\file.doc", "Document.docx")
-            };
-
-            var comparer = ExtensionComparer.Default;
-
-            foreach (var parameter in compareAsUnequal)
-            {
-                var left = parameter.Left;
-                var right = parameter.Right;
-
-                var comparison = comparer.Compare(left, right);
-                var message = SR.GetString(
-                    "Extension comparison of \"{0}\" and \"{1}\" returned 0 (expected   nonzero).",
-                    left,
-                    right);
-
-                Assert.AreNotEqual(0, comparison, message);
-
-                var equality = comparer.Equals(left, right);
-                message = SR.GetString(
-                    "Extension equality of \"{0}\" and \"{1}\" returned true (expected  false).",
-                    left,
-                    right);
-
-                Assert.IsFalse(equality, message);
-
-                // Note we do not compare hash codes. Unequal extensions do not
-                // guarantee unequal hash codes.
-            }
+            AssertEquality(
+                ".BIN",
+                ".bin");
         }
 
         [TestMethod]
-        public void ExtensionComparerExceptions()
+        public void ExtToNameCaseMatch()
         {
-            var comparer = ExtensionComparer.Default;
-
-            // Illegal path chars should always throw.
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                comparer.Compare(">file.exe", ".exe");
-            });
-
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                comparer.Equals("|pipe.bin", "pipe.bin");
-            });
-
-            Assert.ThrowsException<ArgumentException>(() =>
-            {
-                comparer.GetHashCode("a\t.tab");
-            });
-
-            // Empty strings are okay.
-            comparer.Compare(String.Empty, String.Empty);
-            comparer.Equals(String.Empty, ".exe");
-            comparer.GetHashCode(String.Empty);
-
-            // null strings are forbidden
-            Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                comparer.Compare(null, ".exe");
-            });
-
-            Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                comparer.Equals(null, ".bin");
-            });
-
-            Assert.ThrowsException<ArgumentNullException>(() =>
-            {
-                comparer.GetHashCode(null);
-            });
+            AssertEquality(
+                ".png",
+                "Image.png");
         }
 
-        private struct Parameters
+        [TestMethod]
+        public void NameToNameInvariantCaseMatch()
         {
-            public string Left
-            {
-                get;
-                private set;
-            }
+            AssertEquality(
+                "Notes.Txt",
+                "README.TXT");
+        }
 
-            public string Right
-            {
-                get;
-                private set;
-            }
+        [TestMethod]
+        public void FullPathInvariantCaseMatch()
+        {
+            AssertEquality(
+                @"C:\path\to\..\file.doc",
+                "Document.doc");
+        }
 
-            public Parameters(string left, string right)
-            {
-                Left = left;
-                Right = right;
-            }
+        [TestMethod]
+        public void NoExtension()
+        {
+            AssertEquality(
+                "No extension",
+                "Any text here is fine without a period");
+        }
+
+        [TestMethod]
+        public void NoExtensionToEmptyString()
+        {
+            AssertEquality(
+                "No extension",
+                String.Empty);
+        }
+
+        [TestMethod]
+        public void CompareToNullString()
+        {
+            // TODO: Determine nehavior for null strings.
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public void CompareToInvalidString()
+        {
+            // TODO: Determine behavior for ill-formed strings.
+            Assert.Inconclusive();
+        }
+
+        [TestMethod]
+        public void TrivialInequality()
+        {
+            AssertInequality(
+                ".exe",
+                ".app");
+        }
+
+        [TestMethod]
+        public void ExtensionVsNameOfExtension()
+        {
+            AssertInequality(
+                ".bin",
+                "bin");
+        }
+
+        [TestMethod]
+        public void NameWithDifferentExtension()
+        {
+            AssertInequality(
+                "Image.png",
+                "Image.jpg");
         }
     }
 }

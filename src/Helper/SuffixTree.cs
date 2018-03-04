@@ -109,6 +109,11 @@ namespace Helper
 
         public SubstringInfo GetLongestInternalSubstring(int index)
         {
+            if (Size == 0)
+            {
+                throw new InvalidOperationException();
+            }
+
             if (index < 0 || index >= Size - 1)
             {
                 throw ValueNotInArrayBounds(
@@ -193,9 +198,16 @@ namespace Helper
         {
             if (start < 0)
             {
-                throw ValueNotGreaterThan(
+                throw ValueNotGreaterThanEqualTo(
                     nameof(start),
                     start);
+            }
+
+            if (length < 0)
+            {
+                throw ValueNotGreaterThanEqualTo(
+                    nameof(length),
+                    length);
             }
 
             if (start + size > length)
@@ -251,10 +263,7 @@ namespace Helper
             Remainder++;
             while (UpdatePosition(value))
             {
-                if (Remainder > 0)
-                {
-                    break;
-                }
+                continue;
             }
         }
 
@@ -300,9 +309,8 @@ namespace Helper
                 AddLink(branch);
             }
 
-            Remainder--;
             UpdateActiveNode();
-            return true;
+            return --Remainder > 0;
         }
 
         private bool StillUpdating(Node stem, int value)
@@ -344,7 +352,7 @@ namespace Helper
             }
 
             ActiveLength--;
-            ActivePosition = Position - Remainder + 1;
+            ActivePosition = Position - Remainder + 2;
         }
 
         private void AddLink(Node node)
@@ -418,7 +426,11 @@ namespace Helper
             {
                 get
                 {
-                    return (End == -1 ? Tree.Position : End) - Start;
+                    var last = End == EndOfData
+                        ? Tree.Position
+                        : End;
+
+                    return last - Start;
                 }
             }
 

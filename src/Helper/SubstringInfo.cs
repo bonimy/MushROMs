@@ -20,6 +20,11 @@ namespace Helper
 
         public static readonly SubstringInfo Empty = default;
 
+        public SubstringInfo(int start)
+            : this(start, EndOfString)
+        {
+        }
+
         public SubstringInfo(int start, int end)
         {
             if (start < 0)
@@ -31,7 +36,11 @@ namespace Helper
 
             if (end < start && end != EndOfString)
             {
-                throw new ArgumentException();
+                throw InvalidSubstringInfoParameter(
+                    nameof(end),
+                    end,
+                    start,
+                    nameof(SubstringInfo.EndOfString));
             }
 
             Start = start;
@@ -84,7 +93,10 @@ namespace Helper
 
             if (length < 0)
             {
-                throw new ArgumentException();
+                throw InvalidSubstringInfoParameter(
+                    nameof(length),
+                    length,
+                    nameof(SubstringInfo.EndOfString));
             }
 
             return new SubstringInfo(start, start + length);
@@ -99,7 +111,10 @@ namespace Helper
 
             if (length < 0)
             {
-                throw new ArgumentException();
+                throw InvalidSubstringInfoParameter(
+                    nameof(length),
+                    length,
+                    nameof(SubstringInfo.EndOfString));
             }
 
             if (end == EndOfString)
@@ -112,40 +127,39 @@ namespace Helper
 
             if (end < length)
             {
-                throw new ArgumentException();
+                throw InvalidSubstringInfoParameter(
+                    nameof(end),
+                    end,
+                    length,
+                    nameof(SubstringInfo.EndOfString));
             }
 
             return new SubstringInfo(end - length, end);
         }
 
-        public string GetSubstring(string value)
+        public string GetSubstring(string text)
         {
-            if (value is null)
+            if (text is null)
             {
-                throw new ArgumentNullException(nameof(value));
+                throw new ArgumentNullException(nameof(text));
             }
 
             if (Length == EndOfString)
             {
-                return value.Substring(Start);
-            }
-
-            if (End > value.Length)
-            {
-                throw new ArgumentException();
+                return text.Substring(Start);
             }
 
             if (Start == EndOfString)
             {
                 if (End == EndOfString)
                 {
-                    return value.Substring(value.Length - Length);
+                    return text.Substring(text.Length - Length);
                 }
 
-                return value.Substring(End - Length);
+                return text.Substring(End - Length);
             }
 
-            return value.Substring(Start, Length);
+            return text.Substring(Start, Length);
         }
 
         public bool Equals(SubstringInfo obj)

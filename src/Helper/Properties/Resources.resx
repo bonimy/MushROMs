@@ -120,13 +120,9 @@
   <data name="EndOfString" xml:space="preserve">
     <value>End of string</value>
   </data>
-  <data name="ErrorStringSubstringSize" xml:space="preserve">
-    <value>Parameter '{0}' is a string of insufficient size to get a substring with index '{1}' and length '{2}'.</value>
-    <comment>0 - paramName, 1 - startIndex, 2 - length</comment>
-  </data>
-  <data name="ErrorSubstringPointerLength" xml:space="preserve">
-    <value>Parameter '{0}' is less than zero and not equal to the EndOfString value '-1'.\nValue given: {1}</value>
-    <comment>0 - paramName, 1 - value</comment>
+  <data name="ErrorSubstringInfoParameter" xml:space="preserve">
+    <value>Value of '{1}' is not valid for '{0}'. '{0}' cannot be less than {2} unless it is equal to {3}.</value>
+    <comment>0 - paramName; 1 - actualValue; 2 - valid; 3 - specialValue</comment>
   </data>
   <data name="ErrorValueIsInfinity" xml:space="preserve">
     <value>Parameter {0} is infinite. A finite value was expected.</value>
@@ -138,22 +134,22 @@
   </data>
   <data name="ErrorValueNotGreaterThan" xml:space="preserve">
     <value>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than {2}.</value>
-    <comment>0 - paramName; 1 - value; 2 - valid</comment>
+    <comment>0 - paramName; 1 - actualValue; 2 - valid</comment>
   </data>
   <data name="ErrorValueNotGreaterThanOrEqualTo" xml:space="preserve">
     <value>Value of '{1}' is not valid for '{0}'. '{0}' must be greater than or equal to {2}.</value>
-    <comment>0 - paramName; 1 - value; 2 - valid</comment>
+    <comment>0 - paramName; 1 - actualValue; 2 - valid</comment>
   </data>
   <data name="ErrorValueNotInArrayBounds" xml:space="preserve">
     <value>Value of '{1}' is not valid for '{0}'. '{0}' cannot be negative and must be and less than '{2}'.</value>
-    <comment>0 - paramName; 1 - value; 2 - valid</comment>
+    <comment>0 - paramName; 1 - actualValue; 2 - valid</comment>
   </data>
   <data name="ErrorValueNotLessThan" xml:space="preserve">
     <value>Value of '{1}' is not valid for '{0}'. '{0}' must be less than {2}.</value>
-    <comment>0 - paramName; 1 - value; 2 - valid</comment>
+    <comment>0 - paramName; 1 - actualValue; 2 - valid</comment>
   </data>
   <data name="ErrorValueNotLessThanOrEqualTo" xml:space="preserve">
     <value>Value of '{1}' is not valid for '{0}'. '{0}' must be less than or equal to {2}.</value>
-    <comment>0 - paramName; 1 - value; 2 - valid</comment>
+    <comment>0 - paramName; 1 - actualValue; 2 - valid</comment>
   </data>
 </root>
