@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PreprocessedTextTests.cs" />
+    <Compile Include="WhiteTrimmedTextTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -12,7 +12,6 @@ namespace Tests.Assembler
         {
             var preprocessed = new PreprocessedText(String.Empty);
 
-            Assert.AreEqual(preprocessed.Length, 0);
             Assert.AreEqual(preprocessed.ToString(), String.Empty);
         }
 
@@ -38,7 +37,9 @@ namespace Tests.Assembler
         public void LimitOneTrailingNewLine()
         {
             // Don't append if newline already exists.
-            var preprocessed = new PreprocessedText("Hello\nWorld!\n");
+            var preprocessed = new PreprocessedText(
+                "Hello\nWorld!\n");
+
             var text = preprocessed.ToString();
             Assert.AreEqual(text, "Hello\nWorld!\n");
         }
