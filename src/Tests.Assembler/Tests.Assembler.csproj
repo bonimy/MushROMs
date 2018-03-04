@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PreprocessedTextTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
