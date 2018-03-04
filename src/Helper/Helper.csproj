@@ -10,8 +10,9 @@
     <PackageLicenseUrl>https://www.gnu.org/licenses/#AGPL</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/bonimy/MushROMs/tree/master/src/Helper</PackageProjectUrl>
     <RepositoryUrl>https://github.com/bonimy/MushROMs</RepositoryUrl>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\helper.pfx</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

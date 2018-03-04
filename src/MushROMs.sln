@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MushROMs", "MushROMs\MushRO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.MushROMs", "Tests.MushROMs\Tests.MushROMs.csproj", "{650633D5-C7A2-4D77-9704-F27B47764681}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CFA48895-4878-43F2-8D2E-FE6BB3C82F10}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{22A64BBC-F8F0-4FA3-A8BE-7190659C606F}"
 	ProjectSection(SolutionItems) = preProject
 		MushROMs.ruleset = MushROMs.ruleset
 		MushROMs.sln.licenseheader = MushROMs.sln.licenseheader

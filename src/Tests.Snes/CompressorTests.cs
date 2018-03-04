@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Snes;
 using Tests.Snes.Properties;
@@ -18,8 +19,10 @@ namespace Tests.Snes
     {
         private static readonly Compressor Compressor = Compressor.Default;
 
+        private static readonly byte[] Uncompressable = CreateUncompressedData();
+
         [TestMethod]
-        public void SmallCompressorTests()
+        public void TrivialRepeatedBytes()
         {
             /*
             To maximize compressed data space and decompression time, we need to examine several edge cases. For example, the minimum number of bytes to reduce space for a repeating byte sequence is three bytes.
@@ -28,10 +31,14 @@ namespace Tests.Snes
             best:   22 00 - Using repeating byte compression
             alt:    02 00 00 00 - Direct copy costs space
             */
-            var data = new byte[] { 0x00, 0x00, 0x00 };
-            var best = new byte[] { 0x22, 0x00, 0xFF };
-            AssertData();
+            AssertCompressionQuality(
+                new byte[] { 0x00, 0x00, 0x00 },
+                new byte[] { 0x22, 0x00, 0xFF });
+        }
 
+        [TestMethod]
+        public void RepeatedBytesBetweenUncompressable()
+        {
             /*
              However, if there is an uncompressable byte before and after the data, we have two options that take the same amount of space. The single direct copy is preferred since it reduces the total number of commands for the decompressor.
 
@@ -39,148 +46,163 @@ namespace Tests.Snes
              best:  04 01 00 00 00 10 - One continuous direct copy
              alt:   00 01|22 00|00 10 - Direct copy, repeating, and direct copy
             */
-            data = new byte[] { 0x01, 0x00, 0x00, 0x00, 0x10 };
-            best = new byte[] { 0x04, 0x01, 0x00, 0x00, 0x00, 0x10, 0xFF };
-            AssertData();
+            AssertCompressionQuality(
+                new byte[] { 0x01, 0x00, 0x00, 0x00, 0x10 },
+                new byte[] { 0x04, 0x01, 0x00, 0x00, 0x00, 0x10, 0xFF });
+        }
 
+        [TestMethod]
+        public void RepeatedBytesBeforeUncompressable()
+        {
             /*
-            If just one side is uncompressable, then doing the repeated bytes saves space.
+            If just the right side is uncompressable, then doing the repeated bytes saves space.
 
             data:   00 00 00 10
             best:   22 00|00 10
             alt:    03 00 00 00 10
+            */
+            AssertCompressionQuality(
+                new byte[] { 0x00, 0x00, 0x00, 0x10 },
+                new byte[] { 0x22, 0x00, 0x00, 0x10, 0xFF });
+        }
+
+        [TestMethod]
+        public void RepeatedBytesAfterUncompressable()
+        {
+            /*
+            If just the left side is uncompressable, then doing the repeated bytes saves space.
 
             data:   01 00 00 00
             best:   00 01|22 00
             alt:    03 01 00 00 00
+            */
+            AssertCompressionQuality(
+                new byte[] { 0x01, 0x00, 0x00, 0x00 },
+                new byte[] { 0x00, 0x01, 0x22, 0x00, 0xFF });
+        }
+
+        [TestMethod]
+        public void RepeatedBytesAfterUncompressableRepeated()
+        {
+            /*
+            The "one side uncompressable" and "both sides uncompressable" rules apply even when next to each other.
 
             data:   00 00 00 01 00 00 00 02
             best:   22 00|04 01 00 00 00 02
             alt:    22 00|00 01|22 00|00 01
             */
-            data = new byte[] { 0x00, 0x00, 0x00, 0x10 };
-            best = new byte[] { 0x22, 0x00, 0x00, 0x10, 0xFF };
-            AssertData();
+            AssertCompressionQuality(
+                new byte[] { 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02 },
+                new byte[] { 0x22, 0x00, 0x04, 0x01, 0x00, 0x00, 0x00, 0x02, 0xFF });
+        }
 
-            data = new byte[] { 0x01, 0x00, 0x00, 0x00 };
-            best = new byte[] { 0x00, 0x01, 0x22, 0x00, 0xFF };
-            AssertData();
-
+        [TestMethod]
+        public void RepeatedBytesBeforeUncompressableRepeated()
+        {
             /*
             The "one side uncompressable" and "both sides uncompressable" rules apply even when next to each other.
 
-            data:   00 00 00 01 00 00 00 02
-            best:   12 00|04 01 00 00 00 02
-            alt:    12 00|00 01|12 00|00 01
+            data:   01 00 00 00 02 00 00 00
+            best:   04 01 00 00 00 02|22 00
+            alt:    00 01|22 00|00 02|22 00
             */
-            data = new byte[] { 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x02 };
-            best = new byte[] { 0x22, 0x00, 0x04, 0x01, 0x00, 0x00, 0x00, 0x02, 0xFF };
-            AssertData();
+            AssertCompressionQuality(
+                new byte[] { 0x01, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00 },
+                new byte[] { 0x04, 0x01, 0x00, 0x00, 0x00, 0x02, 0x22, 0x00, 0xFF });
+        }
 
-            // 4096 bytes of data that has no patterns that can be compressed.
-            var uncompressable = CreateUncompressedData();
-
-            best = Compressor.Compress(uncompressable);
-            AssertArrayEquality(uncompressable, Compressor.Decompress(best));
-
-            data = new byte[0x1000];
-            best = Compressor.Compress(data);
-            AssertArrayEquality(data, Compressor.Decompress(best));
-
-            for (var i = 0; i < data.Length; i++)
-            {
-                data[i] = (byte)i;
-            }
-
-            best = Compressor.Compress(data);
-            AssertArrayEquality(data, Compressor.Decompress(best));
-
-            data = new byte[0x1000];
-            for (var i = 1; i < data.Length; i += 2)
-            {
-                data[i] = 0xFF;
-            }
-
-            best = Compressor.Compress(data);
-            AssertArrayEquality(data, Compressor.Decompress(best));
-
-            for (var i = 0; i < 0x800; i++)
-            {
-                data[i] = data[i + 0x800] = uncompressable[i];
-            }
-
-            best = Compressor.Compress(data);
-            AssertArrayEquality(data, Compressor.Decompress(best));
-
+        [TestMethod]
+        public void RepeatedBetweenUncomppressableLongTotal()
+        {
             /*
             We run into more edge case pain when one or both sides of uncompressable data is over 32 bytes, when we get into long commands.
 
             When both sides are uncompressable, each side is less than 32 bytes, but the total section size is greater than 32 bytes, inserting the repeated byte copy saves space.
 
             data:   [n <= 0x20 bytes] 00 00 00 [m <= 0x20 bytes] : n + m + 3 > 0x20
-            best:   0n [n bytes]|22 00|0m [m bytes] = (1 + n) + 2 + (1 + m) bytes
-            alt:    xx xx [n + m + 3 bytes]         = (2 + n + m + 3) bytes
+            best:   0n [n bytes]|22 00|0m [m bytes] = (1 + n) + 2 +(1 + m) bytes
+            alt:    xx xx [n + m + 3 bytes]         =  2 +(n + m + 3) bytes
             */
 
-            int n = 0x10, m = 0x10;
-            data = new byte[n + 3 + m];
-            var expected = new byte[(1 + n) + 2 + (1 + m) + 1];
+            // Specify the sizes of the uncompressed data's left and right uncompressable sequences.
+            var leftUncompressedSize = 0x10;
+            var repeatedByteSize = 3;
+            var rightUncompressedSize = 0x10;
 
-            expected[0] = (byte)(n - 1);
+            var uncompressedData = CreateRepeatedBetweenUncompressable(
+                leftUncompressedSize,
+                repeatedByteSize,
+                rightUncompressedSize);
 
-            for (var i = 0; i < n; i++)
+            var leftCompressedSize = leftUncompressedSize + 1;
+            var rightCompressedSize = rightUncompressedSize + 1;
+
+            var compressedSize = leftCompressedSize
+                + 2
+                + rightCompressedSize
+                + 1;
+
+            var expectedCompressedData = new byte[compressedSize];
+            using (var stream = new MemoryStream(expectedCompressedData))
             {
-                data[i] = uncompressable[i];
-                expected[1 + i] = uncompressable[i];
+                stream.WriteByte(
+                    (byte)(leftUncompressedSize - 1));
+
+                stream.Write(
+                    Uncompressable,
+                    0,
+                    leftUncompressedSize);
+
+                stream.WriteByte(
+                    (byte)(0x20 | (repeatedByteSize - 1)));
+
+                stream.Seek(1, SeekOrigin.Current);
+
+                stream.WriteByte(
+                    (byte)(rightUncompressedSize - 1));
+
+                stream.Write(
+                    Uncompressable,
+                    leftUncompressedSize,
+                    rightUncompressedSize);
+
+                stream.WriteByte(0xFF);
             }
 
-            expected[1 + n] = 0x22;
+            AssertCompressionQuality(
+                uncompressedData,
+                expectedCompressedData);
+        }
 
-            expected[(1 + n) + 2] = (byte)(m - 1);
-
-            for (var i = 0; i < m; i++)
-            {
-                data[i + 3 + n] = uncompressable[n + i];
-                expected[(1 + n) + 2 + (1 + i)] = uncompressable[n + i];
-            }
-
-            expected[(1 + n) + 2 + (1 + m)] = 0xFF;
-
-            AssertArrayEquality(expected, Compressor.Compress(data));
-
+        [TestMethod]
+        public void RepeatedBetweenLeftLongUncompressable()
+        {
             /*
-            When both sides are uncompressable, one side is less than 32 bytes, but the other size is greater than 32 bytes, the full direct copy uses as many bytes as inserting the repeating byte copy, but the full direct copy uses less commands, so it is preferred.
+            When both sides are uncompressable, right side is less than 32 bytes, but left side is greater than 32 bytes, the full direct copy uses as many bytes as inserting the repeating byte copy, but the full direct copy uses less commands, so it is preferred.
 
             data:   [n > 0x20] 00 00 00 [m <= 0x20]
             best:   xx xx [n + m + 3 bytes]             = (2 + n + m + 3) bytes
-            alt:    xx xx [n bytes]|12 00|0m [m bytes]  = (2 + n) + 2 + (1 + m) bytes
+            alt:    xx xx [n bytes]|12 00|0m [m bytes]  = (2 + n)+ 2 +(1 + m) bytes
             */
+            AssertRepeatedBetweenLongUncompressable(0x21, 3, 0x04);
+        }
 
-            n = 0x21;
-            m = 0x1;
-            data = new byte[n + 3 + m];
-            expected = new byte[(2 + n + 3 + m) + 1];
+        [TestMethod]
+        public void RepeatedBetweenRightLongUncompressable()
+        {
+            /*
+            When both sides are uncompressable, left side is less than 32 bytes, but right side is greater than 32 bytes, the full direct copy uses as many bytes as inserting the repeating byte copy, but the full direct copy uses less commands, so it is preferred.
 
-            var total = n + m + 3 - 1;
-            expected[0] = (byte)(0xE0 | (total >> 8));
-            expected[1] = (byte)total;
+            data:   [n <= 0x20] 00 00 00 [m > 0x20]
+            best:   xx xx [n + m + 3 bytes]             = (2 + n + m + 3) bytes
+            alt:    xx xx [n bytes]|12 00|0m [m bytes]  = (2 + n)+ 2 +(1 + m) bytes
+            */
+            AssertRepeatedBetweenLongUncompressable(0x04, 3, 0x21);
+        }
 
-            for (var i = 0; i < n; i++)
-            {
-                data[i] = uncompressable[i];
-                expected[2 + i] = uncompressable[i];
-            }
-
-            for (var i = 0; i < m; i++)
-            {
-                data[i + 3 + n] = uncompressable[n + i];
-                expected[2 + n + 3 + i] = uncompressable[n + i];
-            }
-
-            expected[2 + n + 3 + m] = 0xFF;
-
-            AssertArrayEquality(expected, Compressor.Compress(data));
-
+        [TestMethod]
+        public void RepeatedBetweenBothLongUncompressable()
+        {
             /*
             When both sides are uncompressable and greater than 32 bytes, the repeating byte command must be at least four bytes
 
@@ -188,37 +210,97 @@ namespace Tests.Snes
             best:   xx xx [n bytes]|12 00|xx xx [m bytes] - n + m + 6 bytes
             alt:    xx xx [n + m + 3 bytes] - n + m + 5 bytes
             */
+            AssertRepeatedBetweenLongUncompressable(0x24, 4, 0x21);
+        }
 
-            n = 0x21;
-            m = 0x21;
-            data = new byte[n + 4 + m];
-            expected = new byte[(2 + n + 4 + m) + 1];
+        private static byte[] CreateRepeatedBetweenUncompressable(
+            int leftUncompressedSize,
+            int repeatedByteSize,
+            int rightUncompressedSize)
+        {
+            var totalSize = leftUncompressedSize
+                + repeatedByteSize
+                + rightUncompressedSize;
 
-            total = n + m + 4 - 1;
-            expected[0] = (byte)(0xE0 | (total >> 8));
-            expected[1] = (byte)total;
-
-            for (var i = 0; i < n; i++)
+            var result = new byte[totalSize];
+            using (var stream = new MemoryStream(result))
             {
-                data[i] = uncompressable[i];
-                expected[2 + i] = uncompressable[i];
+                stream.Write(
+                    Uncompressable,
+                    0,
+                    leftUncompressedSize);
+
+                stream.Seek(
+                    repeatedByteSize,
+                    SeekOrigin.Current);
+
+                stream.Write(
+                    Uncompressable,
+                    leftUncompressedSize,
+                    rightUncompressedSize);
             }
 
-            for (var i = 0; i < m; i++)
+            return result;
+        }
+
+        private static void AssertRepeatedBetweenLongUncompressable(
+            int leftUncompressedSize,
+            int repeatedByteSize,
+            int rightUncompressedSize)
+        {
+            var uncompressedData = CreateRepeatedBetweenUncompressable(
+                leftUncompressedSize,
+                repeatedByteSize,
+                rightUncompressedSize);
+
+            var compressedSize = 2
+                + leftUncompressedSize
+                + repeatedByteSize
+                + rightUncompressedSize
+                + 1;
+
+            var expectedCompressedData = new byte[compressedSize];
+            using (var stream = new MemoryStream(expectedCompressedData))
             {
-                data[i + 4 + n] = uncompressable[n + i];
-                expected[2 + n + 4 + i] = uncompressable[n + i];
+                var writeSize = uncompressedData.Length - 1;
+                stream.WriteByte(
+                    (byte)(0xE0 | (writeSize >> 8)));
+
+                stream.WriteByte(
+                    (byte)writeSize);
+
+                stream.Write(
+                    Uncompressable,
+                    0,
+                    leftUncompressedSize);
+
+                stream.Seek(
+                    repeatedByteSize,
+                    SeekOrigin.Current);
+
+                stream.Write(
+                    Uncompressable,
+                    leftUncompressedSize,
+                    rightUncompressedSize);
+
+                stream.WriteByte(0xFF);
             }
 
-            expected[2 + n + 4 + m] = 0xFF;
+            AssertCompressionQuality(
+                uncompressedData,
+                expectedCompressedData);
+        }
 
-            AssertArrayEquality(expected, Compressor.Compress(data));
+        private static void AssertCompressionQuality(
+            byte[] uncompressedData,
+            byte[] expectedCompressedData)
+        {
+            var compressedData = Compressor.Compress(
+                uncompressedData);
 
-            void AssertData()
-            {
-                var compressed = Compressor.Compress(data);
-                AssertArrayEquality(best, compressed);
-            }
+            CollectionAssert.AreEqual(
+                compressedData,
+                expectedCompressedData);
         }
 
         private static byte[] CreateUncompressedData()
