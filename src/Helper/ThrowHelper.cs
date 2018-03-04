@@ -15,215 +15,270 @@ namespace Helper
     {
         public static ArgumentOutOfRangeException ValueNotGreaterThan(
             string paramName,
-            object value)
+            object actualValue)
         {
-            return ValueNotGreaterThan(paramName, value, 0);
+            return ValueNotGreaterThan(
+                paramName,
+                actualValue,
+                0);
         }
 
         public static ArgumentOutOfRangeException ValueNotGreaterThan(
             string paramName,
-            object value,
+            object actualValue,
             object valid)
         {
             var message = ErrorValueNotGreaterThan(
                 paramName,
-                value,
+                actualValue,
                 valid);
 
             return new ArgumentOutOfRangeException(
                 paramName,
+                actualValue,
                 message);
         }
 
-        public static ArgumentOutOfRangeException ValueNotGreaterThanEqualTo(
+        public static ArgumentOutOfRangeException
+            ValueNotGreaterThanEqualTo(
             string paramName,
-            object value)
+            object actualValue)
         {
-            return ValueNotGreaterThanEqualTo(paramName, value, 0);
+            return ValueNotGreaterThanEqualTo(
+                paramName,
+                actualValue,
+                0);
         }
 
-        public static ArgumentOutOfRangeException ValueNotGreaterThanEqualTo(
+        public static ArgumentOutOfRangeException
+            ValueNotGreaterThanEqualTo(
             string paramName,
-            object value,
+            object actualValue,
             object valid)
         {
             var message = ErrorValueNotGreaterThanOrEqualTo(
                 paramName,
-                value,
+                actualValue,
                 valid);
 
             return new ArgumentOutOfRangeException(
                 paramName,
+                actualValue,
                 message);
         }
 
         public static ArgumentOutOfRangeException ValueNotLessThan(
             string paramName,
-            object value)
+            object actualValue)
         {
-            return ValueNotLessThan(paramName, value, 0);
+            return ValueNotLessThan(
+                paramName,
+                actualValue,
+                0);
         }
 
         public static ArgumentOutOfRangeException ValueNotLessThan(
             string paramName,
-            object value,
+            object actualValue,
             object valid)
         {
             var message = ErrorValueNotLessThan(
                 paramName,
-                value,
+                actualValue,
                 valid);
 
             return new ArgumentOutOfRangeException(
                 paramName,
+                actualValue,
                 message);
         }
 
-        public static ArgumentOutOfRangeException ValueNotLessThanEqualTo(
+        public static ArgumentOutOfRangeException
+            ValueNotLessThanEqualTo(
             string paramName,
-            object value)
+            object actualValue)
         {
-            return ValueNotLessThanEqualTo(paramName, value, 0);
+            return ValueNotLessThanEqualTo(
+                paramName,
+                actualValue,
+                0);
         }
 
-        public static ArgumentOutOfRangeException ValueNotLessThanEqualTo(
+        public static ArgumentOutOfRangeException
+            ValueNotLessThanEqualTo(
             string paramName,
-            object value,
+            object actualValue,
             object valid)
         {
             var message = ErrorValueNotLessThanOrEqualTo(
                 paramName,
-                value,
+                actualValue,
                 valid);
 
             return new ArgumentOutOfRangeException(
                 paramName,
+                actualValue,
                 message);
         }
 
-        public static ArgumentOutOfRangeException ValueNotInArrayBounds(
+        public static ArgumentOutOfRangeException
+            ValueNotInArrayBounds(
             string paramName,
-            int value,
+            int actualValue,
             int arraySize)
         {
             var message = ErrorValueNotInArrayBounds(
                 paramName,
-                value,
+                actualValue,
                 arraySize);
 
-            throw new ArgumentOutOfRangeException(
+            return new ArgumentOutOfRangeException(
                 paramName,
+                actualValue,
                 message);
         }
 
-        public static ArgumentException ValueIsNaN(string paramName)
+        public static ArgumentException ValueIsNaN(
+            string paramName)
         {
             var message = ErrorValueIsNaN(paramName);
 
-            throw new ArgumentException(
+            return new ArgumentException(
                 message,
                 paramName);
         }
 
-        public static ArgumentException ValueIsInfinite(string paramName)
+        public static ArgumentException ValueIsInfinite(
+            string paramName)
         {
-            var message = ErrorValueIsInfinite(paramName);
+            var message = ErrorValueIsInfinite(
+                paramName);
 
-            throw new ArgumentException(
+            return new ArgumentException(
                 message,
                 paramName);
+        }
+
+        public static ArgumentOutOfRangeException
+            InvalidSubstringInfoParameter(
+            string paramName,
+            object actualValue,
+            object specialValue)
+        {
+            return InvalidSubstringInfoParameter(
+                paramName,
+                actualValue,
+                0,
+                specialValue);
+        }
+
+        public static ArgumentOutOfRangeException
+            InvalidSubstringInfoParameter(
+            string paramName,
+            object actualValue,
+            object valid,
+            object specialValue)
+        {
+            var message = ErrorSubstringInfoParameter(
+                paramName,
+                actualValue,
+                valid,
+                specialValue);
+
+            return new ArgumentOutOfRangeException(
+                paramName,
+                actualValue,
+                message);
         }
 
         private static string ErrorValueNotGreaterThanOrEqualTo(
             string paramName,
-            object value,
+            object actualValue,
             object valid)
         {
             return GetString(
                 Resources.ErrorValueNotGreaterThanOrEqualTo,
                 paramName,
-                value,
+                actualValue,
                 valid);
         }
 
         private static string ErrorValueNotLessThanOrEqualTo(
             string paramName,
-            object value,
+            object actualValue,
             object valid)
         {
             return GetString(
                 Resources.ErrorValueNotLessThanOrEqualTo,
                 paramName,
-                value,
+                actualValue,
                 valid);
         }
 
         private static string ErrorValueNotGreaterThan(
             string paramName,
-            object value,
+            object actualValue,
             object valid)
         {
             return GetString(
                 Resources.ErrorValueNotGreaterThan,
                 paramName,
-                value,
+                actualValue,
                 valid);
         }
 
         private static string ErrorValueNotLessThan(
             string paramName,
-            object value,
+            object actualValue,
             object valid)
         {
             return GetString(
                 Resources.ErrorValueNotLessThan,
                 paramName,
-                value,
+                actualValue,
                 valid);
         }
 
         private static string ErrorValueNotInArrayBounds(
             string paramName,
-            int value,
+            int actualValue,
             int arraySize)
         {
             return GetString(
                 Resources.ErrorValueNotInArrayBounds,
                 paramName,
-                value,
+                actualValue,
                 arraySize);
         }
 
-        private static string ErrorStringSubstringSize(
-            string paramName,
-            int startIndex,
-            int length)
+        private static string ErrorValueIsNaN(
+            string paramName)
         {
             return GetString(
-                Resources.ErrorStringSubstringSize,
-                paramName,
-                startIndex,
-                length);
+                Resources.ErrorValueIsNaN,
+                paramName);
         }
 
-        private static string ErrorSubstringPointerLength(
-            string paramName,
-            int value)
+        private static string ErrorValueIsInfinite(
+            string paramName)
         {
             return GetString(
-                Resources.ErrorSubstringPointerLength,
+                Resources.ErrorValueIsInfinity,
+                paramName);
+        }
+
+        private static string ErrorSubstringInfoParameter(
+            string paramName,
+            object actualValue,
+            object valid,
+            object specialValue)
+        {
+            return GetString(
+                Resources.ErrorSubstringInfoParameter,
                 paramName,
-                value);
-        }
-
-        private static string ErrorValueIsNaN(string paramName)
-        {
-            return GetString(Resources.ErrorValueIsNaN, paramName);
-        }
-
-        private static string ErrorValueIsInfinite(string paramName)
-        {
-            return GetString(Resources.ErrorValueIsInfinity, paramName);
+                actualValue,
+                valid,
+                specialValue);
         }
     }
 }

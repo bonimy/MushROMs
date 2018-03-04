@@ -29,9 +29,14 @@ namespace Helper
 
         public override sealed int Compare(string x, string y)
         {
-            if (BaseComparer.Equals(x, y))
+            if (ReferenceEquals(x, y))
             {
                 return 0;
+            }
+
+            if (x is null || y is null)
+            {
+                return BaseComparer.Compare(x, y);
             }
 
             var modifiedX = StringModifier(x);
