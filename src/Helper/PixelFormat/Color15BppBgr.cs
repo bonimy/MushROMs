@@ -11,6 +11,7 @@ namespace Helper.PixelFormat
     using System.Drawing;
     using System.Text;
     using static System.Math;
+    using static SR;
 
     public struct Color15BppBgr : IEquatable<Color15BppBgr>
     {
@@ -40,6 +41,8 @@ namespace Helper.PixelFormat
 
         private const int BlueShift = BitsPerChannel * BlueIndex;
 
+        private const int BitShift = BitsPerByte - BitsPerChannel;
+
         private const int ChannelMask = (1 << BitsPerChannel) - 1;
 
         private const int RedMask = ChannelMask << RedShift;
@@ -50,9 +53,11 @@ namespace Helper.PixelFormat
 
         private const int ColorMask = RedMask | GreenMask | BlueMask;
 
-        private const int HighMask = Byte.MaxValue << (BitsPerByte * HighIndex);
+        private const int HighMask =
+            Byte.MaxValue << (BitsPerByte * HighIndex);
 
-        private const int LowMask = Byte.MaxValue << (BitsPerByte * LowIndex);
+        private const int LowMask =
+            Byte.MaxValue << (BitsPerByte * LowIndex);
 
         private ushort _value;
 
@@ -185,52 +190,52 @@ namespace Helper.PixelFormat
             Color24BppRgb color24)
         {
             return new Color15BppBgr(
-                color24.Red >> (BitsPerByte - BitsPerChannel),
-                color24.Green >> (BitsPerByte - BitsPerChannel),
-                color24.Blue >> (BitsPerByte - BitsPerChannel));
+                color24.Red >> BitShift,
+                color24.Green >> BitShift,
+                color24.Blue >> BitShift);
         }
 
         public static implicit operator Color24BppRgb(
             Color15BppBgr color15)
         {
             return new Color24BppRgb(
-                color15.Red << (BitsPerByte - BitsPerChannel),
-                color15.Green << (BitsPerByte - BitsPerChannel),
-                color15.Blue << (BitsPerByte - BitsPerChannel));
+                color15.Red << BitShift,
+                color15.Green << BitShift,
+                color15.Blue << BitShift);
         }
 
         public static explicit operator Color15BppBgr(
             Color32BppArgb color32)
         {
             return new Color15BppBgr(
-                color32.Red >> (BitsPerByte - BitsPerChannel),
-                color32.Green >> (BitsPerByte - BitsPerChannel),
-                color32.Blue >> (BitsPerByte - BitsPerChannel));
+                color32.Red >> BitShift,
+                color32.Green >> BitShift,
+                color32.Blue >> BitShift);
         }
 
         public static implicit operator Color32BppArgb(
             Color15BppBgr color15)
         {
             return new Color32BppArgb(
-                color15.Red << (BitsPerByte - BitsPerChannel),
-                color15.Green << (BitsPerByte - BitsPerChannel),
-                color15.Blue << (BitsPerByte - BitsPerChannel));
+                color15.Red << BitShift,
+                color15.Green << BitShift,
+                color15.Blue << BitShift);
         }
 
         public static explicit operator Color15BppBgr(Color color)
         {
             return new Color15BppBgr(
-                color.R >> (BitsPerByte - BitsPerChannel),
-                color.G >> (BitsPerByte - BitsPerChannel),
-                color.B >> (BitsPerByte - BitsPerChannel));
+                color.R >> BitShift,
+                color.G >> BitShift,
+                color.B >> BitShift);
         }
 
         public static implicit operator Color(Color15BppBgr color15)
         {
             return Color.FromArgb(
-                color15.Red << (BitsPerByte - BitsPerChannel),
-                color15.Green << (BitsPerByte - BitsPerChannel),
-                color15.Blue << (BitsPerByte - BitsPerChannel));
+                color15.Red << BitShift,
+                color15.Green << BitShift,
+                color15.Blue << BitShift);
         }
 
         public static explicit operator Color15BppBgr(ColorF colorF)
@@ -286,21 +291,11 @@ namespace Helper.PixelFormat
 
         public override string ToString()
         {
-            var sb = new StringBuilder();
-            sb.Append('{');
-            sb.Append(nameof(Red));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Red));
-            sb.Append(", ");
-            sb.Append(nameof(Green));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Green));
-            sb.Append(", ");
-            sb.Append(nameof(Blue));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Blue));
-            sb.Append('}');
-            return sb.ToString();
+            return GetString(
+                "{{R:{0},G:{1},B:{2}}}",
+                Red,
+                Green,
+                Blue);
         }
     }
 }
