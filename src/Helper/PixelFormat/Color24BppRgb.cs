@@ -12,6 +12,7 @@ namespace Helper.PixelFormat
     using System.Runtime.InteropServices;
     using System.Text;
     using static System.Math;
+    using static SR;
 
     [StructLayout(LayoutKind.Explicit, Size = 3)]
     public struct Color24BppRgb : IEquatable<Color24BppRgb>
@@ -209,21 +210,11 @@ namespace Helper.PixelFormat
 
         public override string ToString()
         {
-            var sb = new StringBuilder();
-            sb.Append('{');
-            sb.Append(nameof(Red));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Red));
-            sb.Append(", ");
-            sb.Append(nameof(Green));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Green));
-            sb.Append(", ");
-            sb.Append(nameof(Blue));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Blue));
-            sb.Append('}');
-            return sb.ToString();
+            return GetString(
+                "{{R:{0},G:{1},B:{2}}}",
+                Red,
+                Green,
+                Blue);
         }
     }
 }
