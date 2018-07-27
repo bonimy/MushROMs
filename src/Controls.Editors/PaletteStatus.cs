@@ -10,7 +10,7 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using Controls.Editors.Properties;
 using Helper.PixelFormat;
-using static Helper.SR;
+using static Helper.StringHelper;
 
 namespace Controls.Editors
 {

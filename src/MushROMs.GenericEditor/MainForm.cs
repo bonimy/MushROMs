@@ -13,6 +13,7 @@ namespace MushROMs.GenericEditor
     using System.Drawing;
     using System.Windows.Forms;
     using Helper;
+    using static Helper.StringHelper;
 
     public sealed partial class MainForm : Form
     {
@@ -287,7 +288,7 @@ namespace MushROMs.GenericEditor
                 for (var i = 0; i < RecentFiles.Count; i++)
                 {
                     var file = RecentFiles[i];
-                    var text = SR.GetString("{0}. {1}", i + 1, file);
+                    var text = GetString("{0}. {1}", i + 1, file);
 
                     var tsi = new ToolStripMenuItem(text)
                     {
