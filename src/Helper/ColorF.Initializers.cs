@@ -9,35 +9,46 @@ namespace Helper
 {
     using System;
     using System.Collections.Generic;
-    using static Helper.MathHelper;
-    using static Helper.ThrowHelper;
+    using System.Collections.ObjectModel;
+    using static MathHelper;
     using static System.Math;
+    using static ThrowHelper;
 
     public partial struct ColorF
     {
-        private static readonly IReadOnlyList<RgbFromHueAndChromaCallback> GetRgbFromInterval = new List<RgbFromHueAndChromaCallback>()
-        {
-            (chroma, hue) => (chroma, chroma * hue, 0),
-            (chroma, hue) => (chroma * (2 - hue), chroma, 0),
-            (chroma, hue) => (0, chroma, chroma * (hue - 2)),
-            (chroma, hue) => (0, chroma, chroma * (hue - 2)),
-            (chroma, hue) => (chroma * (hue - 4), 0, chroma),
-            (chroma, hue) => (chroma, 0, chroma * (6 - hue)),
-        };
+        private static readonly IReadOnlyList
+            <HueChromaConverterCallback> GetRgbFromInterval =
+            new ReadOnlyCollection<HueChromaConverterCallback>(
+                new List<HueChromaConverterCallback>()
+                {
+                    (chroma, hue) => (chroma, chroma * hue, 0),
+                    (chroma, hue) => (chroma * (2 - hue), chroma, 0),
+                    (chroma, hue) => (0, chroma, chroma * (hue - 2)),
+                    (chroma, hue) => (0, chroma, chroma * (hue - 2)),
+                    (chroma, hue) => (chroma * (hue - 4), 0, chroma),
+                    (chroma, hue) => (chroma, 0, chroma * (6 - hue)),
+                });
 
         private delegate (float red, float green, float blue)
-            RgbFromHueAndChromaCallback(
+            HueChromaConverterCallback(
             float hue,
             float chroma);
 
-        public static ColorF FromArgb(float red, float green, float blue)
+        public static ColorF FromArgb(
+            float red,
+            float green,
+            float blue)
         {
             return FromArgb(1, red, green, blue);
         }
 
         public static ColorF FromArgb(float alpha, ColorF color)
         {
-            return FromArgb(alpha, color.Red, color.Green, color.Green);
+            return FromArgb(
+                alpha,
+                color.Red,
+                color.Green,
+                color.Blue);
         }
 
         public static ColorF FromArgb(

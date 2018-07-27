@@ -7,5 +7,7 @@
 
 namespace Helper
 {
-    public delegate ColorF ColorBlendCallback(ColorF top, ColorF bottom);
+    public delegate ColorF ColorBlendCallback(
+        ColorF top,
+        ColorF bottom);
 }

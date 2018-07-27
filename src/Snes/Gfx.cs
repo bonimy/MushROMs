@@ -18,8 +18,8 @@ namespace Snes
     public class Gfx : IReadOnlyList<byte>
     {
         public Gfx(int size, GraphicsFormat graphicsFormat)
-            : this(new byte[size * GfxTile.BytesPerTile(graphicsFormat)])
         {
+            Data = CreateByteData(size, graphicsFormat);
         }
 
         public Gfx(byte[] data)
@@ -66,6 +66,14 @@ namespace Snes
             {
                 Data[index] = value;
             }
+        }
+
+        public static byte[] CreateByteData(
+            int size,
+            GraphicsFormat graphicsFormat)
+        {
+            var bytesPerTile = GfxTile.BytesPerTile(graphicsFormat);
+            return new byte[size * bytesPerTile];
         }
 
         public GfxData CreateGfxFromSelection(
@@ -176,7 +184,10 @@ namespace Snes
             var unitSize = GfxTile.BytesPerTile(graphicsFormat);
             var area = view.Width * view.Height;
 
-            var totalLength = Math.Min(unitSize * area, Count - startAddress);
+            var totalLength = Math.Min(
+                unitSize * area,
+                Count - startAddress);
+
             var totalTiles = totalLength / unitSize;
 
             unsafe
@@ -188,7 +199,11 @@ namespace Snes
                     totalTiles,
                     i =>
                 {
-                    var tile = new GfxTile(Data, i + startAddress, graphicsFormat);
+                    var tile = new GfxTile(
+                        Data,
+                        i + startAddress,
+                        graphicsFormat);
+
                     var dots = (byte*)&tile;
 
                     var dest = pixels +
@@ -196,13 +211,22 @@ namespace Snes
                     ((i / view.Width) * cellHeight);
 
                     // Lets hope the compiler is smart enough to unroll the outer loops.
-                    for (var y = GfxTile.PlanesPerTile; --y >= 0; dest += plane)
+                    for (
+                        var y = GfxTile.PlanesPerTile;
+                        --y >= 0;
+                        dest += plane)
                     {
-                        for (var x = GfxTile.DotsPerPlane; --x >= 0; dest -= dot, dots++)
+                        for (
+                            var x = GfxTile.DotsPerPlane;
+                            --x >= 0;
+                            dest -= dot, dots++)
                         {
                             var color = colors[dots[0]];
 
-                            for (var j = zoom.Height; --j >= 0; dest += window.Width)
+                            for (
+                                var j = zoom.Height;
+                                --j >= 0;
+                                dest += window.Width)
                             {
                                 for (var k = zoom.Width; --k >= 0;)
                                 {

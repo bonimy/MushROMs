@@ -127,7 +127,8 @@ namespace MushROMs
             public EditorCollection(EditorSelector editorSelector)
             {
                 EditorSelector = editorSelector ??
-                    throw new ArgumentNullException(nameof(editorSelector));
+                    throw new ArgumentNullException(
+                        nameof(editorSelector));
 
                 Editors = new HashSet<IEditor>();
             }

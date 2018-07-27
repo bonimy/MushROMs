@@ -9,7 +9,6 @@ namespace Snes
 {
     public enum GraphicsFormat
     {
-        None = 0,
         Format1Bpp8x8 = 0x11,
         Format2BppNes = 0x22,
         Format2BppGb = 0x32,

@@ -32,7 +32,8 @@ namespace MushROMs
             {
                 if (index != 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(index));
                 }
 
                 return StartIndex;

@@ -97,8 +97,11 @@ namespace Snes
             for (var i = selection.Count; --i >= 0;)
             {
                 var startIndex = selection[i] * Color15BppBgr.SizeOf;
-                this[startIndex + Color15BppBgr.LowIndex] = paletteData[i].Low;
-                this[startIndex + Color15BppBgr.HighIndex] = paletteData[i].High;
+                var lowIndex = startIndex + Color15BppBgr.LowIndex;
+                var highIndex = startIndex + Color15BppBgr.HighIndex;
+
+                this[lowIndex] = paletteData[i].Low;
+                this[highIndex] = paletteData[i].High;
             }
         }
 

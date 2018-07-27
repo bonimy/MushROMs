@@ -9,7 +9,7 @@ namespace Helper
 {
     using System;
     using Helper.Properties;
-    using static Helper.SR;
+    using static Helper.StringHelper;
 
     public static class ThrowHelper
     {

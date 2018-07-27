@@ -10,8 +10,8 @@ namespace Helper
     using System;
     using System.Diagnostics;
     using Helper.Properties;
-    using static Helper.SR;
-    using static Helper.ThrowHelper;
+    using static StringHelper;
+    using static ThrowHelper;
 
     [DebuggerDisplay("Start = {Start}, Length = {Length}")]
     public struct SubstringInfo : IEquatable<SubstringInfo>
@@ -40,7 +40,7 @@ namespace Helper
                     nameof(end),
                     end,
                     start,
-                    nameof(SubstringInfo.EndOfString));
+                    nameof(EndOfString));
             }
 
             Start = start;
@@ -84,7 +84,9 @@ namespace Helper
             return !(left == right);
         }
 
-        public static SubstringInfo FromStartAndLength(int start, int length)
+        public static SubstringInfo FromStartAndLength(
+            int start,
+            int length)
         {
             if (length == EndOfString)
             {
@@ -96,13 +98,15 @@ namespace Helper
                 throw InvalidSubstringInfoParameter(
                     nameof(length),
                     length,
-                    nameof(SubstringInfo.EndOfString));
+                    nameof(EndOfString));
             }
 
             return new SubstringInfo(start, start + length);
         }
 
-        public static SubstringInfo FromLengthAndEnd(int length, int end)
+        public static SubstringInfo FromLengthAndEnd(
+            int length,
+            int end)
         {
             if (length == EndOfString)
             {
@@ -114,7 +118,7 @@ namespace Helper
                 throw InvalidSubstringInfoParameter(
                     nameof(length),
                     length,
-                    nameof(SubstringInfo.EndOfString));
+                    nameof(EndOfString));
             }
 
             if (end == EndOfString)
@@ -131,7 +135,7 @@ namespace Helper
                     nameof(end),
                     end,
                     length,
-                    nameof(SubstringInfo.EndOfString));
+                    nameof(EndOfString));
             }
 
             return new SubstringInfo(end - length, end);

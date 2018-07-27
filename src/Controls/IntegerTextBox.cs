@@ -5,14 +5,14 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.ComponentModel;
-using System.Globalization;
-using System.Windows.Forms;
-using Helper;
-
 namespace Controls
 {
+    using System;
+    using System.ComponentModel;
+    using System.Globalization;
+    using System.Windows.Forms;
+    using static Helper.StringHelper;
+
     [DefaultEvent("ValueChanged")]
     [DefaultProperty("Value")]
     [Description("A text box that only accepts integer values.")]
@@ -94,7 +94,7 @@ namespace Controls
 
         public IntegerTextBox()
         {
-            Text = SR.GetString(FallbackValue);
+            Text = GetString(FallbackValue);
             CharacterCasing = FallbackCharacterCasing;
         }
 
@@ -110,7 +110,7 @@ namespace Controls
             _value = value;
 
             // Parse the value.
-            Text = SR.GetString(Value, AllowHex ? "X" : String.Empty);
+            Text = GetString(Value, AllowHex ? "X" : String.Empty);
             OnValueChanged(EventArgs.Empty);
         }
 

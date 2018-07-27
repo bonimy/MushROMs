@@ -11,7 +11,8 @@ namespace Helper
     using System.Collections;
     using System.Collections.Generic;
 
-    public class BijectiveMap<TKey, TValue> : IBijectiveMap<TKey, TValue>
+    public class BijectiveMap<TKey, TValue> :
+        IBijectiveMap<TKey, TValue>
     {
         public BijectiveMap()
             : this(0, null, null)
@@ -181,8 +182,10 @@ namespace Helper
 
             set
             {
-                Remove(key);
-                Reverse.Remove(value);
+                if (Remove(key))
+                {
+                    Reverse.Remove(value);
+                }
 
                 KeyDictionary[key] = value;
                 ValueDictionary[value] = key;

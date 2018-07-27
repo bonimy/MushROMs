@@ -9,6 +9,7 @@ namespace MushROMs
 {
     using System;
     using System.Collections.Generic;
+    using static System.Math;
 
     public sealed class GateSelection1D : Selection1D
     {
@@ -94,7 +95,7 @@ namespace MushROMs
                 return left.StartIndex;
             }
 
-            return Math.Min(left.StartIndex, right.StartIndex);
+            return Min(left.StartIndex, right.StartIndex);
         }
 
         private static IReadOnlyList<int> GetSelectedIndexes(

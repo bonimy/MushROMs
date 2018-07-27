@@ -7,5 +7,7 @@
 
 namespace Helper
 {
-    public delegate float ChannelBlendCallback(float top, float bottom);
+    public delegate float ChannelBlendCallback(
+        float top,
+        float bottom);
 }

@@ -13,7 +13,8 @@ namespace MushROMs
 
     public abstract class Selection1D : ISelection1D
     {
-        public static readonly ISelection1D Empty = new EmptySelection1D();
+        public static readonly ISelection1D Empty =
+            new EmptySelection1D();
 
         protected Selection1D(int startIndex)
         {

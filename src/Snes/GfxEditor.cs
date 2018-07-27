@@ -9,10 +9,15 @@ namespace Snes
 {
     using System;
     using MushROMs;
+    using static System.IO.Path;
 
     public class GfxEditor : Editor
     {
+        public const string FallbackExtension = ".chr";
+
         private static int _untitledNumber = 0;
+
+        private static string _defaultExtension = FallbackExtension;
 
         public GfxEditor(Gfx gfx)
             : this(gfx, NextUntitledPath())
@@ -24,6 +29,26 @@ namespace Snes
         {
             Gfx = gfx ??
                 throw new ArgumentNullException(nameof(gfx));
+        }
+
+        public static string DefaultExtension
+        {
+            get
+            {
+                return _defaultExtension;
+            }
+
+            set
+            {
+                try
+                {
+                    _defaultExtension = GetExtension(value);
+                }
+                catch (ArgumentException)
+                {
+                    _defaultExtension = FallbackExtension;
+                }
+            }
         }
 
         public Gfx Gfx
@@ -218,7 +243,8 @@ namespace Snes
         private static string NextUntitledPath()
         {
             return NextUntitledPath(
-                "GFX{0}.chr",
+                "GFX",
+                ".chr",
                 ref _untitledNumber);
         }
 

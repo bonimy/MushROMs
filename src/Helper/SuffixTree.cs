@@ -21,7 +21,7 @@ namespace Helper
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
-    using static Helper.ThrowHelper;
+    using static ThrowHelper;
 
     public class SuffixTree
     {
@@ -34,7 +34,9 @@ namespace Helper
         public SuffixTree()
         {
             // Create a large node collection now to save time in the future.
-            Nodes = new NodeCollection(this, FallbakNodeCollectionSize);
+            Nodes = new NodeCollection(
+                this,
+                FallbakNodeCollectionSize);
 
             Root = new RootNode(this);
         }
@@ -140,7 +142,9 @@ namespace Helper
                 // update status to current node's position.
                 i += node.Length;
                 length += node.Length;
-                result = SubstringInfo.FromLengthAndEnd(length, node.End);
+                result = SubstringInfo.FromLengthAndEnd(
+                    length,
+                    node.End);
             }
 
             return result;
@@ -177,7 +181,11 @@ namespace Helper
             CreateTree(data, length, 0, length);
         }
 
-        public void CreateTree(IntPtr data, int length, int start, int size)
+        public void CreateTree(
+            IntPtr data,
+            int length,
+            int start,
+            int size)
         {
             if (data == IntPtr.Zero)
             {
@@ -299,7 +307,9 @@ namespace Helper
                 }
 
                 // Redefine active node as a branch. It will branch to the original substring and the new substring.
-                var branch = Nodes.Add(stem.Start, stem.Start + ActiveLength);
+                var activeEnd = stem.Start + ActiveLength;
+                var branch = Nodes.Add(stem.Start, activeEnd);
+
                 ActiveNode[activeValue] = branch;
 
                 var leaf = Nodes.Add(Position, EndOfData);
@@ -438,7 +448,9 @@ namespace Helper
             {
                 get
                 {
-                    return SubstringInfo.FromStartAndLength(Start, Length);
+                    return SubstringInfo.FromStartAndLength(
+                        Start,
+                        Length);
                 }
             }
 

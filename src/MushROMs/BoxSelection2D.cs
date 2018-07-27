@@ -70,7 +70,8 @@ namespace MushROMs
             {
                 if ((uint)index >= (uint)Count)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(index));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(index));
                 }
 
                 var result = StartPosition;

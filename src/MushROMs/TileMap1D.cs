@@ -10,6 +10,7 @@ namespace MushROMs
     using System;
     using System.Drawing;
     using static Helper.ThrowHelper;
+    using static System.Math;
 
     public class TileMap1D : TileMap
     {
@@ -61,7 +62,7 @@ namespace MushROMs
             get
             {
                 var area = ViewWidth * ViewHeight;
-                return Math.Min(GridSize - ZeroTile, area);
+                return Min(GridSize - ZeroTile, area);
             }
         }
 
@@ -202,7 +203,11 @@ namespace MushROMs
 
         public int GetGridTile(int viewTileX, int viewTileY)
         {
-            return GetGridTile(viewTileX, viewTileY, ViewWidth, ZeroTile);
+            return GetGridTile(
+                viewTileX,
+                viewTileY,
+                ViewWidth,
+                ZeroTile);
         }
 
         private static void AssertViewWidth(int viewWidth)

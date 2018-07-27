@@ -1,4 +1,4 @@
-﻿// <copyright file="SR.cs" company="Public Domain">
+﻿// <copyright file="StringHelper.cs" company="Public Domain">
 //     Copyright (c) 2018 Nelson Garcia. All rights reserved
 //     Licensed under GNU Affero General Public License.
 //     See LICENSE in project root for full license information, or visit
@@ -10,7 +10,7 @@ namespace Helper
     using System;
     using System.Globalization;
 
-    public static class SR
+    public static class StringHelper
     {
         private static CultureInfo CurrentCulture
         {
@@ -28,7 +28,9 @@ namespace Helper
             }
         }
 
-        public static string GetString(string format, params object[] args)
+        public static string GetString(
+            string format,
+            params object[] args)
         {
             return String.Format(CurrentCulture, format, args);
         }
@@ -38,7 +40,9 @@ namespace Helper
             return GetString(value, null);
         }
 
-        public static string GetString(IFormattable value, string format)
+        public static string GetString(
+            IFormattable value,
+            string format)
         {
             if (value is null)
             {
@@ -48,7 +52,9 @@ namespace Helper
             return value.ToString(format, CurrentCulture);
         }
 
-        public static string GetUIString(string format, params object[] args)
+        public static string GetUIString(
+            string format,
+            params object[] args)
         {
             return String.Format(CurrentUICulture, format, args);
         }
@@ -58,7 +64,9 @@ namespace Helper
             return GetUIString(value, null);
         }
 
-        public static string GetUIString(IFormattable value, string format)
+        public static string GetUIString(
+            IFormattable value,
+            string format)
         {
             if (value is null)
             {

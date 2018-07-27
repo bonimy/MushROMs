@@ -25,6 +25,7 @@
     <CodeAnalysisRuleSet>..\MushROMs.ruleset</CodeAnalysisRuleSet>
     <DocumentationFile>bin\Debug\Controls.xml</DocumentationFile>
     <NoWarn>CS1591;</NoWarn>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -36,6 +37,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <DocumentationFile>bin\Release\Controls.xml</DocumentationFile>
     <NoWarn>CS1591;</NoWarn>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>false</SignAssembly>

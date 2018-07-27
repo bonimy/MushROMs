@@ -96,18 +96,20 @@ namespace Tests.Helper
             }
 
             // Tree should end with termination value.
-            Assert.AreEqual(tree[data.Length], SuffixTree.TerminationValue);
+            Assert.AreEqual(
+                tree[data.Length],
+                SuffixTree.TerminationValue);
 
             // Tree should accept range within array.
-            var start = 20;
+            var first = 20;
             var size = 50;
 
             // Constructed tree should be reassignable (this practice is preferred).
-            tree.CreateTree(data, start, size);
+            tree.CreateTree(data, first, size);
             Assert.AreEqual(tree.Size, size + 1);
             for (var i = 0; i < size; i++)
             {
-                Assert.AreEqual(data[start + i], tree[i]);
+                Assert.AreEqual(data[first + i], tree[i]);
             }
 
             Assert.AreEqual(tree[size], SuffixTree.TerminationValue);
@@ -121,34 +123,34 @@ namespace Tests.Helper
 
             // Just do some simple checks with expected longest substrings.
             index = tree.GetLongestInternalSubstring(20);
-            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(0, 6));
+            Assert.AreEqual(index, StartAndLength(0, 6));
 
             index = tree.GetLongestInternalSubstring(30);
-            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(2, 8));
+            Assert.AreEqual(index, StartAndLength(2, 8));
 
             index = tree.GetLongestInternalSubstring(40);
-            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(0, 8));
+            Assert.AreEqual(index, StartAndLength(0, 8));
 
             // Find longest match with lowest index
             index = tree.GetLongestInternalSubstring(50);
-            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(0, 8));
+            Assert.AreEqual(index, StartAndLength(0, 8));
 
             index = tree.GetLongestInternalSubstring(60);
-            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(50, 9));
+            Assert.AreEqual(index, StartAndLength(50, 9));
 
             index = tree.GetLongestInternalSubstring(70);
-            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(0, 9));
+            Assert.AreEqual(index, StartAndLength(0, 9));
 
             // Look for reversed matches now.
             index = tree.GetLongestInternalSubstring(90);
-            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(81, 4));
+            Assert.AreEqual(index, StartAndLength(81, 4));
 
             index = tree.GetLongestInternalSubstring(100);
-            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(82, 4));
+            Assert.AreEqual(index, StartAndLength(82, 4));
 
             // No part of the array has started with 9, 8 yet.
             index = tree.GetLongestInternalSubstring(110);
-            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(9, 1));
+            Assert.AreEqual(index, StartAndLength(9, 1));
 
             // If we haven't encountered first number, return empty.
             index = tree.GetLongestInternalSubstring(120);
@@ -156,11 +158,11 @@ namespace Tests.Helper
 
             // Find longest substring even if a shorter match occurred earlier.
             index = tree.GetLongestInternalSubstring(160);
-            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(140, 9));
+            Assert.AreEqual(index, StartAndLength(140, 9));
 
             // Allow overlap of substring if match continues to end of data.
             index = tree.GetLongestInternalSubstring(180);
-            Assert.AreEqual(index, SubstringInfo.FromStartAndLength(170, 20));
+            Assert.AreEqual(index, StartAndLength(170, 20));
 
             // Throw on out of range.
             Assert.ThrowsException<ArgumentOutOfRangeException>(() =>
@@ -171,6 +173,11 @@ namespace Tests.Helper
             {
                 tree.GetLongestInternalSubstring(data.Length);
             });
+
+            SubstringInfo StartAndLength(int start, int length)
+            {
+                return SubstringInfo.FromStartAndLength(start, length);
+            }
         }
     }
 }

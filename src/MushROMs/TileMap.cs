@@ -15,7 +15,7 @@ namespace MushROMs
     {
         public static readonly Size FallbackTileSize = new Size(8, 8);
         public static readonly Size FallbackZoomSize = new Size(2, 2);
-        public static readonly Size FallbackViewSize = new Size(0x10, 8);
+        public static readonly Size FallbackViewSize = new Size(16, 8);
 
         private Size tileSize;
         private Size zoomSize;

@@ -28,12 +28,15 @@ namespace Helper
         {
         }
 
-        public ExtensionDictionary(ExtensionDictionary<TValue> dictionary)
+        public ExtensionDictionary(
+            ExtensionDictionary<TValue> dictionary)
             : base(dictionary)
         {
         }
 
-        public ExtensionDictionary(int capacity, ExtensionComparer comparer)
+        public ExtensionDictionary(
+            int capacity,
+            ExtensionComparer comparer)
             : base(capacity, comparer ?? ExtensionComparer.Default)
         {
         }
@@ -67,7 +70,10 @@ namespace Helper
             }
             catch (ArgumentException ex)
             {
-                throw new ArgumentException(ex.Message, nameof(key), ex);
+                throw new ArgumentException(
+                    ex.Message,
+                    nameof(key),
+                    ex);
             }
         }
     }

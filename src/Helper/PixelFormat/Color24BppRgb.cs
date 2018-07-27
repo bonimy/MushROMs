@@ -10,9 +10,8 @@ namespace Helper.PixelFormat
     using System;
     using System.Drawing;
     using System.Runtime.InteropServices;
-    using System.Text;
+    using static StringHelper;
     using static System.Math;
-    using static SR;
 
     [StructLayout(LayoutKind.Explicit, Size = 3)]
     public struct Color24BppRgb : IEquatable<Color24BppRgb>

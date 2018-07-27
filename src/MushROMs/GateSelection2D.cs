@@ -10,6 +10,7 @@ namespace MushROMs
     using System;
     using System.Collections.Generic;
     using System.Drawing;
+    using static System.Math;
 
     public sealed class GateSelection2D : Selection2D
     {
@@ -95,8 +96,8 @@ namespace MushROMs
                 return left.StartPosition;
             }
 
-            var x = Math.Min(left.StartPosition.X, right.StartPosition.X);
-            var y = Math.Min(left.StartPosition.Y, right.StartPosition.Y);
+            var x = Min(left.StartPosition.X, right.StartPosition.X);
+            var y = Min(left.StartPosition.Y, right.StartPosition.Y);
             return new Point(x, y);
         }
 

@@ -10,7 +10,8 @@ namespace Helper
     using System;
     using System.Runtime.Serialization;
 
-    public class PathDictionary<TValue> : AssertDictionary<string, TValue>
+    public class PathDictionary<TValue> :
+        AssertDictionary<string, TValue>
     {
         public PathDictionary()
             : base(PathComparer.Default)
@@ -66,7 +67,10 @@ namespace Helper
             }
             catch (ArgumentException ex)
             {
-                throw new ArgumentException(ex.Message, nameof(key), ex);
+                throw new ArgumentException(
+                    ex.Message,
+                    nameof(key),
+                    ex);
             }
         }
     }
