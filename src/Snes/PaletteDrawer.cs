@@ -145,9 +145,12 @@ namespace Snes
             int GetSpan()
             {
                 var usableDataSize = Palette.Count - Offset;
-                var usableColorSize = usableDataSize / Color15BppBgr.SizeOf;
+                var usableColorSize =
+                    usableDataSize / Color15BppBgr.SizeOf;
+
                 var viewTileSize = viewWidth * viewHeight;
                 var gridSize = usableColorSize - StartIndex;
+
                 return Math.Min(viewTileSize, gridSize);
             }
         }

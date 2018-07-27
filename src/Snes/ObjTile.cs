@@ -8,18 +8,18 @@
 namespace Snes
 {
     using System;
-    using Helper;
+    using static Helper.StringHelper;
 
     public struct ObjTile : IEquatable<ObjTile>
     {
         public const int SizeOf = sizeof(ushort);
 
         private const int TileIndexMask = 0x3FF;
-        private const int PaletteNumberBitShift = 10;
-        private const int PaletteNumberMask = 7;
-        private const int PriorityBitShift = 13;
+        private const int PaletteOffset = 10;
+        private const int PaletteMask = 7;
+        private const int PriorityOffset = 13;
         private const int PriorityMask = 1;
-        private const int FlipBitShift = 14;
+        private const int FlipOffset = 14;
         private const int FlipMask = 3;
 
         private ushort value;
@@ -31,8 +31,15 @@ namespace Snes
 
         public int Value
         {
-            get { return value; }
-            set { this = new ObjTile(value); }
+            get
+            {
+                return value;
+            }
+
+            set
+            {
+                this.value = (ushort)value;
+            }
         }
 
         public int TileIndex
@@ -53,13 +60,13 @@ namespace Snes
         {
             get
             {
-                return (Value >> PaletteNumberBitShift) & PaletteNumberMask;
+                return (Value >> PaletteOffset) & PaletteMask;
             }
 
             set
             {
-                Value &= ~(PaletteNumberMask << PaletteNumberBitShift);
-                Value |= (value & PaletteNumberMask) << PaletteNumberBitShift;
+                Value &= ~(PaletteMask << PaletteOffset);
+                Value |= (value & PaletteMask) << PaletteOffset;
             }
         }
 
@@ -67,18 +74,19 @@ namespace Snes
         {
             get
             {
-                return (LayerPriority)((Value >> PriorityBitShift) & PriorityMask);
+                return (LayerPriority)(
+                    (Value >> PriorityOffset) & PriorityMask);
             }
 
             set
             {
                 if (value != LayerPriority.Priority0)
                 {
-                    Value |= PriorityMask << PriorityBitShift;
+                    Value |= PriorityMask << PriorityOffset;
                 }
                 else
                 {
-                    Value &= ~PriorityMask << PriorityBitShift;
+                    Value &= ~PriorityMask << PriorityOffset;
                 }
             }
         }
@@ -87,13 +95,13 @@ namespace Snes
         {
             get
             {
-                return (TileFlipMode)((Value >> FlipBitShift) & FlipMask);
+                return (TileFlipMode)((Value >> FlipOffset) & FlipMask);
             }
 
             set
             {
-                Value &= ~(FlipMask << FlipBitShift);
-                Value |= ((int)value & FlipMask) << FlipBitShift;
+                Value &= ~(FlipMask << FlipOffset);
+                Value |= ((int)value & FlipMask) << FlipOffset;
             }
         }
 
@@ -101,7 +109,8 @@ namespace Snes
         {
             get
             {
-                return (TileFlipMode & TileFlipMode.FlipHorizontal) != 0;
+                return
+                    (TileFlipMode & TileFlipMode.FlipHorizontal) != 0;
             }
 
             set
@@ -149,7 +158,7 @@ namespace Snes
 
         public static bool operator ==(ObjTile left, ObjTile right)
         {
-            return left.Value == right.Value;
+            return left.Equals(right);
         }
 
         public static bool operator !=(ObjTile left, ObjTile right)
@@ -171,9 +180,9 @@ namespace Snes
             return tile;
         }
 
-        public bool Equals(ObjTile obj)
+        public bool Equals(ObjTile other)
         {
-            return Value.Equals(obj.Value);
+            return Value.Equals(other.Value);
         }
 
         public override bool Equals(object obj)
@@ -193,7 +202,7 @@ namespace Snes
 
         public override string ToString()
         {
-            return SR.GetString(Value, "X4");
+            return GetString(Value, "X4");
         }
     }
 }

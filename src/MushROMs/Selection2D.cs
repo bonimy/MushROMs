@@ -14,7 +14,8 @@ namespace MushROMs
 
     public abstract class Selection2D : ISelection2D
     {
-        public static readonly ISelection2D Empty = new EmptySelection2D();
+        public static readonly ISelection2D Empty =
+            new EmptySelection2D();
 
         protected Selection2D(Point startPosition)
         {

@@ -5,14 +5,14 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Runtime.Serialization;
-using System.Security;
-using Controls.Properties;
-using Helper;
-
 namespace Controls
 {
+    using System;
+    using System.Runtime.Serialization;
+    using System.Security;
+    using Controls.Properties;
+    using static Helper.StringHelper;
+
     [Serializable]
     public class ErrorCodeException : Exception
     {
@@ -64,7 +64,7 @@ namespace Controls
 
         private static string GetErrorCodeMessage(int value)
         {
-            return SR.GetString(Resources.ErrorCodeMessage, (uint)value);
+            return GetString(Resources.ErrorCodeMessage, (uint)value);
         }
 
         [SecurityCritical]

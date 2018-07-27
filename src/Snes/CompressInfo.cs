@@ -9,13 +9,17 @@ namespace Snes
 {
     using System;
     using System.Collections.Generic;
-    using Helper;
+    using static Helper.StringHelper;
 
     public struct CompressInfo
     {
         private const int BitsPerByte = 8;
 
-        public CompressInfo(CompressCommand command, int value, int index, int length)
+        public CompressInfo(
+            CompressCommand command,
+            int value,
+            int index,
+            int length)
         {
             Command = command;
             Value = value;
@@ -58,19 +62,19 @@ namespace Snes
                 var len = Length > 0x20 ? 2 : 1;
                 switch (Command)
                 {
-                case CompressCommand.DirectCopy:
-                    return len + Length;
+                    case CompressCommand.DirectCopy:
+                        return len + Length;
 
-                case CompressCommand.RepeatedByte:
-                case CompressCommand.IncrementingByte:
-                    return len + 1;
+                    case CompressCommand.RepeatedByte:
+                    case CompressCommand.IncrementingByte:
+                        return len + 1;
 
-                case CompressCommand.RepeatedWord:
-                case CompressCommand.CopySection:
-                    return len + 2;
+                    case CompressCommand.RepeatedWord:
+                    case CompressCommand.CopySection:
+                        return len + 2;
 
-                default:
-                    throw new ArgumentException();
+                    default:
+                        throw new ArgumentException();
                 }
             }
         }
@@ -92,7 +96,9 @@ namespace Snes
             return result;
         }
 
-        public static List<CompressInfo> GetCompressList(byte[] src, int index)
+        public static List<CompressInfo> GetCompressList(
+            byte[] src,
+            int index)
         {
             var list = new List<CompressInfo>();
 
@@ -113,7 +119,9 @@ namespace Snes
                 if (command == CompressCommand.LongCommand)
                 {
                     // Get new command
-                    command = (CompressCommand)((src[sindex] >> 2) & 0x07);
+                    command =
+                        (CompressCommand)((src[sindex] >> 2) & 0x07);
+
                     if (command == CompressCommand.LongCommand)
                     {
                         throw new ArgumentException();
@@ -134,44 +142,59 @@ namespace Snes
                 var value = 0;
                 switch (command)
                 {
-                case CompressCommand.RepeatedByte:
-                case CompressCommand.IncrementingByte:
-                    value = src[sindex];
-                    break;
+                    case CompressCommand.RepeatedByte:
+                    case CompressCommand.IncrementingByte:
+                        value = src[sindex];
+                        break;
 
-                case CompressCommand.RepeatedWord:
-                case CompressCommand.CopySection:
-                    value = src[sindex] | (src[sindex + 1] << 8);
-                    break;
+                    case CompressCommand.RepeatedWord:
+                    case CompressCommand.CopySection:
+                        value = src[sindex] | (src[sindex + 1] << 8);
+                        break;
                 }
 
-                list.Add(new CompressInfo(command, value, dindex, clen));
+                var compressInfo = new CompressInfo(
+                    command,
+                    value,
+                    dindex,
+                    clen);
+
+                list.Add(compressInfo);
 
                 switch (command)
                 {
-                case CompressCommand.DirectCopy: // Direct byte copy
-                    dindex += clen;
-                    sindex += clen;
-                    continue;
-                case CompressCommand.RepeatedByte: // Fill with one byte repeated
-                    dindex += clen;
-                    sindex++;
-                    continue;
-                case CompressCommand.RepeatedWord: // Fill with two alternating bytes
-                    dindex += clen;
-                    sindex += 2;
-                    continue;
-                case CompressCommand.IncrementingByte: // Fill with incrementing byte value
-                    dindex += clen;
-                    sindex++;
-                    continue;
-                case CompressCommand.CopySection: // Copy data from previous section
-                    dindex += clen;
-                    sindex += 2;
-                    continue;
+                    // Direct byte copy
+                    case CompressCommand.DirectCopy:
+                        dindex += clen;
+                        sindex += clen;
+                        continue;
 
-                default:
-                    throw new ArgumentException();
+                    // Fill with one byte repeated
+                    case CompressCommand.RepeatedByte:
+                        dindex += clen;
+                        sindex++;
+                        continue;
+
+                    // Fill with two alternating bytes
+                    case CompressCommand.RepeatedWord:
+                        dindex += clen;
+                        sindex += 2;
+                        continue;
+
+                    // Fill with incrementing byte value
+                    case CompressCommand.IncrementingByte:
+                        dindex += clen;
+                        sindex++;
+                        continue;
+
+                    // Copy data from previous section
+                    case CompressCommand.CopySection:
+                        dindex += clen;
+                        sindex += 2;
+                        continue;
+
+                    default:
+                        throw new ArgumentException();
                 }
             }
 
@@ -180,7 +203,7 @@ namespace Snes
 
         public override string ToString()
         {
-            return SR.GetString(
+            return GetString(
                 "Index = {0}, Length = {1}, Command = {2}",
                 Index,
                 Length,

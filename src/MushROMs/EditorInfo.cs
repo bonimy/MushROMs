@@ -23,12 +23,15 @@ namespace MushROMs
             string displayName,
             string description)
         {
-            if (editorType == null)
+            if (editorType is null)
             {
                 throw new ArgumentNullException(nameof(editorType));
             }
 
-            if (editorType.GetInterface(typeof(IEditor).FullName) == null)
+            var interfaceType = editorType.GetInterface(
+                typeof(IEditor).FullName);
+
+            if (interfaceType is null)
             {
                 throw new ArgumentException();
             }

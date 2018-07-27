@@ -5,21 +5,20 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Text;
-using Helper;
-
 namespace Controls
 {
+    using System;
+    using System.Drawing;
+    using System.Runtime.InteropServices;
+    using static Helper.StringHelper;
+
     /// <summary>
     /// A rectangle structure whose data layout is consistent with the RECTANGLE struct used in the Windows API.
     /// </summary>
     [StructLayout(LayoutKind.Sequential)]
     public struct WinApiRectangle : IEquatable<WinApiRectangle>
     {
-        public static readonly WinApiRectangle Empty = new WinApiRectangle();
+        public static readonly WinApiRectangle Empty = default;
 
         public int Left
         {
@@ -159,25 +158,12 @@ namespace Controls
 
         public override string ToString()
         {
-            var sb = new StringBuilder();
-            sb.Append('{');
-            sb.Append(nameof(Left));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Left));
-            sb.Append(", ");
-            sb.Append(nameof(Top));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Top));
-            sb.Append(", ");
-            sb.Append(nameof(Right));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Right));
-            sb.Append(", ");
-            sb.Append(nameof(Bottom));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Bottom));
-            sb.Append('}');
-            return sb.ToString();
+            return GetString(
+                "{{L:{0},T:{1},R:{2},B:{3}}}",
+                Left,
+                Top,
+                Right,
+                Bottom);
         }
 
         public static implicit operator WinApiRectangle(Rectangle rectangle)

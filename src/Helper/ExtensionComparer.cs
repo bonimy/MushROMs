@@ -12,7 +12,8 @@ namespace Helper
 
     public sealed class ExtensionComparer : StringModifierComparer
     {
-        public static readonly ExtensionComparer Default = new ExtensionComparer();
+        public static readonly ExtensionComparer Default =
+            new ExtensionComparer();
 
         public ExtensionComparer(StringComparer baseComparer)
             : base(baseComparer)

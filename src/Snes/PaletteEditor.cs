@@ -11,10 +11,15 @@ namespace Snes
     using Helper;
     using Helper.PixelFormat;
     using MushROMs;
+    using static System.IO.Path;
 
     public class PaletteEditor : Editor
     {
+        public const string FallbackExtension = ".rpf";
+
         private static int _untitledNumber = 0;
+
+        private static string _defaultExtension = FallbackExtension;
 
         public PaletteEditor(Palette palette)
             : this(palette, NextUntitledPath())
@@ -26,6 +31,26 @@ namespace Snes
         {
             Palette = palette ??
                 throw new ArgumentNullException(nameof(palette));
+        }
+
+        public static string DefaultExtension
+        {
+            get
+            {
+                return _defaultExtension;
+            }
+
+            set
+            {
+                try
+                {
+                    _defaultExtension = GetExtension(value);
+                }
+                catch (ArgumentException)
+                {
+                    _defaultExtension = FallbackExtension;
+                }
+            }
         }
 
         public Palette Palette
@@ -150,7 +175,8 @@ namespace Snes
         private static string NextUntitledPath()
         {
             return NextUntitledPath(
-                "Palette{0}.rpf",
+                "Palette",
+                ".rpf",
                 ref _untitledNumber);
         }
 

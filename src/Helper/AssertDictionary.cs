@@ -36,7 +36,8 @@ namespace Helper
             BaseDictionary = new Dictionary<TKey, TValue>();
         }
 
-        protected AssertDictionary(AssertDictionary<TKey, TValue> dictionary)
+        protected AssertDictionary(
+            AssertDictionary<TKey, TValue> dictionary)
         {
             BaseDictionary = new Dictionary<TKey, TValue>(dictionary);
         }
@@ -55,21 +56,27 @@ namespace Helper
             AssertDictionary<TKey, TValue> dictionary,
             IEqualityComparer<TKey> comparer)
         {
-            BaseDictionary = new Dictionary<TKey, TValue>(dictionary, comparer);
+            BaseDictionary = new Dictionary<TKey, TValue>(
+                dictionary,
+                comparer);
         }
 
         protected AssertDictionary(
             int capacity,
             IEqualityComparer<TKey> comparer)
         {
-            BaseDictionary = new Dictionary<TKey, TValue>(capacity, comparer);
+            BaseDictionary = new Dictionary<TKey, TValue>(
+                capacity,
+                comparer);
         }
 
         protected AssertDictionary(
             SerializationInfo info,
             StreamingContext context)
         {
-            BaseDictionary = new SerializationDictionary(info, context);
+            BaseDictionary = new SerializationDictionary(
+                info,
+                context);
         }
 
         bool IDictionary.IsReadOnly
@@ -373,7 +380,8 @@ namespace Helper
             BaseDictionary.OnDeserialization(sender);
         }
 
-        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
+        IEnumerator<KeyValuePair<TKey, TValue>>
+            IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
         {
             return GetEnumerator();
         }
@@ -390,7 +398,8 @@ namespace Helper
 
         protected abstract void AssertKey(TKey key);
 
-        private protected class SerializationDictionary : Dictionary<TKey, TValue>
+        private protected class SerializationDictionary :
+            Dictionary<TKey, TValue>
         {
             public SerializationDictionary(
                 SerializationInfo info,

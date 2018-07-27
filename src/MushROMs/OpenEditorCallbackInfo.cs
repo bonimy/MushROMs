@@ -17,7 +17,8 @@ namespace MushROMs
             string description)
         {
             OpenEditorMethod = openEditorMethod ??
-                throw new ArgumentNullException(nameof(openEditorMethod));
+                throw new ArgumentNullException(
+                    nameof(openEditorMethod));
 
             DisplayName = displayName;
             Description = description;

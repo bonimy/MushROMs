@@ -95,7 +95,10 @@ namespace Snes
 
         public GfxSelection Move(int startAddress)
         {
-            return new GfxSelection(Selection, startAddress, GraphicsFormat);
+            return new GfxSelection(
+                Selection,
+                startAddress,
+                GraphicsFormat);
         }
 
         ISelection1D ISelection1D.Copy()

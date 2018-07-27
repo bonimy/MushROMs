@@ -14,11 +14,14 @@ namespace Snes
 
     public abstract class PaletteFormatter
     {
-        public static readonly PaletteFormatter Rpf = new RpfFormatter();
+        public static readonly PaletteFormatter Rpf =
+            new RpfFormatter();
 
-        public static readonly PaletteFormatter Tpl = new TplFormatter();
+        public static readonly PaletteFormatter Tpl =
+            new TplFormatter();
 
-        public static readonly PaletteFormatter Pal = new PalFormatter();
+        public static readonly PaletteFormatter Pal =
+            new PalFormatter();
 
         public abstract Palette CreatePalette(byte[] data);
 
@@ -87,7 +90,10 @@ namespace Snes
 
             private bool CompareHeader(byte[] data)
             {
-                var header = Encoding.ASCII.GetString(data, 0, TplHeader.Length);
+                var header = Encoding.ASCII.GetString(
+                    data,
+                    0,
+                    TplHeader.Length);
 
                 return String.Equals(header, TplHeader);
             }
@@ -142,16 +148,16 @@ namespace Snes
                 var data = new byte[size * Color24BppRgb.SizeOf];
                 for (var i = size; --i >= 0;)
                 {
-                    var index2 = i * Color15BppBgr.SizeOf;
+                    var i2 = i * Color15BppBgr.SizeOf;
                     var color16 = new Color15BppBgr(
-                    palette[index2 + 0],
-                    palette[index2 + 1]);
+                    palette[i2 + 0],
+                    palette[i2 + 1]);
 
-                    var index3 = i * Color24BppRgb.SizeOf;
+                    var i3 = i * Color24BppRgb.SizeOf;
                     Color24BppRgb color24 = color16;
-                    data[index3 + Color24BppRgb.RedIndex] = color24.Red;
-                    data[index3 + Color24BppRgb.GreenIndex] = color24.Green;
-                    data[index3 + Color24BppRgb.BlueIndex] = color24.Blue;
+                    data[i3 + Color24BppRgb.RedIndex] = color24.Red;
+                    data[i3 + Color24BppRgb.GreenIndex] = color24.Green;
+                    data[i3 + Color24BppRgb.BlueIndex] = color24.Blue;
                 }
 
                 return data;

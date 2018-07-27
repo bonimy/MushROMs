@@ -10,7 +10,8 @@ namespace MushROMs
     using System;
     using System.IO;
     using Helper;
-    using IOPath = System.IO.Path;
+    using static Helper.StringHelper;
+    using static System.IO.Path;
 
     public abstract class Editor : IEditor
     {
@@ -44,7 +45,7 @@ namespace MushROMs
                     return;
                 }
 
-                path = IOPath.GetFullPath(value);
+                path = GetFullPath(value);
                 OnPathChanged(EventArgs.Empty);
             }
         }
@@ -218,17 +219,21 @@ namespace MushROMs
 
         public override string ToString()
         {
-            return IOPath.GetFileName(Path);
+            return GetFileName(Path);
         }
 
         protected static string NextUntitledPath(
-            string format,
+            string name,
+            string extension,
             ref int number)
         {
             string path;
             do
             {
-                path = SR.GetString("Palette{0}.rpf", ++number);
+                path = Combine(
+                    name,
+                    extension,
+                    (++number).ToString());
             }
             while (File.Exists(path));
 

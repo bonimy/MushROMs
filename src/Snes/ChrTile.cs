@@ -8,18 +8,18 @@
 namespace Snes
 {
     using System;
-    using Helper;
+    using static Helper.StringHelper;
 
     public struct ChrTile : IEquatable<ChrTile>
     {
         public const int Size = sizeof(ushort);
 
         private const int TileIndexMask = 0x1FF;
-        private const int PaletteNumberBitShift = 9;
-        private const int PaletteNumberMask = 7;
-        private const int PriorityBitShift = 12;
+        private const int PaletteOffset = 9;
+        private const int PaletteMask = 7;
+        private const int PriorityOffset = 12;
         private const int PriorityMask = 3;
-        private const int FlipBitShift = 14;
+        private const int FlipOffset = 14;
         private const int FlipMask = 3;
 
         private ushort value;
@@ -38,7 +38,7 @@ namespace Snes
 
             set
             {
-                this = new ChrTile(value);
+                this.value = (ushort)value;
             }
         }
 
@@ -56,17 +56,17 @@ namespace Snes
             }
         }
 
-        public int PaletteNumber
+        public int PaletteIndex
         {
             get
             {
-                return (Value >> PaletteNumberBitShift) & PaletteNumberMask;
+                return (Value >> PaletteOffset) & PaletteMask;
             }
 
             set
             {
-                Value &= ~(PaletteNumberMask << PaletteNumberBitShift);
-                Value |= (value & PaletteNumberMask) << PaletteNumberBitShift;
+                Value &= ~(PaletteMask << PaletteOffset);
+                Value |= (value & PaletteMask) << PaletteOffset;
             }
         }
 
@@ -74,13 +74,14 @@ namespace Snes
         {
             get
             {
-                return (LayerPriority)((Value >> PriorityBitShift) & PriorityMask);
+                return (LayerPriority)(
+                    (Value >> PriorityOffset) & PriorityMask);
             }
 
             set
             {
-                Value &= ~(PriorityMask << PriorityBitShift);
-                Value |= ((int)value & PriorityMask) << PriorityBitShift;
+                Value &= ~(PriorityMask << PriorityOffset);
+                Value |= ((int)value & PriorityMask) << PriorityOffset;
             }
         }
 
@@ -88,13 +89,13 @@ namespace Snes
         {
             get
             {
-                return (TileFlipMode)((Value >> FlipBitShift) & FlipMask);
+                return (TileFlipMode)((Value >> FlipOffset) & FlipMask);
             }
 
             set
             {
-                Value &= ~(FlipMask << FlipBitShift);
-                Value |= ((int)value & FlipMask) << FlipBitShift;
+                Value &= ~(FlipMask << FlipOffset);
+                Value |= ((int)value & FlipMask) << FlipOffset;
             }
         }
 
@@ -140,7 +141,7 @@ namespace Snes
 
         public override string ToString()
         {
-            return SR.GetString(Value, "X4");
+            return GetString(Value, "X4");
         }
     }
 }

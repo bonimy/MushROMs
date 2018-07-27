@@ -9,9 +9,8 @@ namespace Helper.PixelFormat
 {
     using System;
     using System.Drawing;
-    using System.Text;
+    using static StringHelper;
     using static System.Math;
-    using static SR;
 
     public struct Color15BppBgr : IEquatable<Color15BppBgr>
     {

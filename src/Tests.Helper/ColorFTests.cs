@@ -28,14 +28,6 @@ namespace Tests.Helper
         }
 
         [TestMethod]
-        public void LumaWeight()
-        {
-            // Humans see green the best and blue the worst.
-            Assert.IsTrue(ColorF.LumaGreenWeight > ColorF.LumaRedWeight);
-            Assert.IsTrue(ColorF.LumaRedWeight > ColorF.LumaBlueWeight);
-        }
-
-        [TestMethod]
         public void EmptyColor()
         {
             // Test empty color.
@@ -169,7 +161,11 @@ namespace Tests.Helper
         {
             Assert.ThrowsException<ArgumentException>(() =>
             {
-                ColorF.FromCmy(Single.PositiveInfinity, 0, 1, Single.NaN);
+                ColorF.FromCmy(
+                    Single.PositiveInfinity,
+                    0,
+                    1,
+                    Single.NaN);
             });
         }
 

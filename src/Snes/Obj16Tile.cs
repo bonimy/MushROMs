@@ -8,7 +8,7 @@
 namespace Snes
 {
     using System;
-    using Helper;
+    using static Helper.StringHelper;
 
     public struct Obj16Tile : IEquatable<Obj16Tile>
     {
@@ -63,20 +63,21 @@ namespace Snes
             {
                 switch (index)
                 {
-                case TopLeftIndex:
-                    return TopLeft;
+                    case TopLeftIndex:
+                        return TopLeft;
 
-                case BottomLeftIndex:
-                    return TopRight;
+                    case BottomLeftIndex:
+                        return TopRight;
 
-                case TopRightIndex:
-                    return BottomLeft;
+                    case TopRightIndex:
+                        return BottomLeft;
 
-                case BottomRightIndex:
-                    return BottomRight;
+                    case BottomRightIndex:
+                        return BottomRight;
 
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(index));
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(index));
                 }
             }
 
@@ -84,35 +85,32 @@ namespace Snes
             {
                 switch (index)
                 {
-                case TopLeftIndex:
-                    TopLeft = value;
-                    return;
+                    case TopLeftIndex:
+                        TopLeft = value;
+                        return;
 
-                case BottomLeftIndex:
-                    TopRight = value;
-                    return;
+                    case BottomLeftIndex:
+                        TopRight = value;
+                        return;
 
-                case TopRightIndex:
-                    BottomLeft = value;
-                    return;
+                    case TopRightIndex:
+                        BottomLeft = value;
+                        return;
 
-                case BottomRightIndex:
-                    BottomRight = value;
-                    return;
+                    case BottomRightIndex:
+                        BottomRight = value;
+                        return;
 
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(index));
+                    default:
+                        throw new ArgumentOutOfRangeException(
+                            nameof(index));
                 }
             }
         }
 
         public static bool operator ==(Obj16Tile left, Obj16Tile right)
         {
-            return
-                left.TopLeft == right.TopLeft &&
-                left.TopRight == right.TopRight &&
-                left.BottomLeft == right.BottomLeft &&
-                left.BottomRight == right.BottomRight;
+            return left.Equals(right);
         }
 
         public static bool operator !=(Obj16Tile left, Obj16Tile right)
@@ -150,7 +148,11 @@ namespace Snes
 
         public bool Equals(Obj16Tile other)
         {
-            return this == other;
+            return
+                TopLeft.Equals(other.TopLeft) &&
+                TopRight.Equals(other.TopRight) &&
+                BottomLeft.Equals(other.BottomLeft) &&
+                BottomRight.Equals(other.BottomRight);
         }
 
         public override bool Equals(object obj)
@@ -171,12 +173,12 @@ namespace Snes
 
         public override string ToString()
         {
-            return SR.GetString(
+            return GetString(
                 "{0}-{1}-{2}-{3}",
-                TopLeft.Value.ToString("X4"),
-                TopRight.Value.ToString("X4"),
-                BottomLeft.Value.ToString("X4"),
-                BottomRight.Value.ToString("X4"));
+                TopLeft,
+                TopRight,
+                BottomLeft,
+                BottomRight);
         }
     }
 }

@@ -85,7 +85,7 @@ namespace Snes
 
         public void Empty()
         {
-            AlterTiles(tile => default(GfxTile));
+            AlterTiles(tile => default);
         }
 
         public void FlipX()
@@ -115,7 +115,8 @@ namespace Snes
 
         public void ReplaceColor(byte original, byte replacement)
         {
-            AlterTiles(tile => tile.ReplaceColor(original, replacement));
+            AlterTiles(
+                tile => tile.ReplaceColor(original, replacement));
         }
 
         public void SwapColors(byte color1, byte color2)

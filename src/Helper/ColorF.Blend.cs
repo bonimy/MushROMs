@@ -9,36 +9,40 @@ namespace Helper
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.ComponentModel;
     using static System.Math;
 
     public partial struct ColorF
     {
-        private static readonly IReadOnlyDictionary<BlendMode, ColorBlendCallback> BlendDictionary = new Dictionary<BlendMode, ColorBlendCallback>()
-        {
-            { BlendMode.Alpha, AlphaBlend },
-            { BlendMode.Grayscale, Grayscale },
-            { BlendMode.Multiply, Multiply },
-            { BlendMode.Screen, Screen },
-            { BlendMode.Overlay, Overlay },
-            { BlendMode.HardLight, HardLight },
-            { BlendMode.SoftLight, SoftLight },
-            { BlendMode.ColorDodge, ColorDodge },
-            { BlendMode.LinearDodge, LinearDodge },
-            { BlendMode.ColorBurn, ColorBurn },
-            { BlendMode.LinearBurn, LinearBurn },
-            { BlendMode.VividLight, VividLight },
-            { BlendMode.LinearLight, LinearLight },
-            { BlendMode.Difference, Difference },
-            { BlendMode.Darken, Darken },
-            { BlendMode.Lighten, Lighten },
-            { BlendMode.DarkerColor, DarkerColor },
-            { BlendMode.LighterColor, LighterColor },
-            { BlendMode.Hue, HueBlend },
-            { BlendMode.Saturation, SaturationBlend },
-            { BlendMode.Luminosity, LuminosityBlend },
-            { BlendMode.Divide, Divide }
-        };
+        private static readonly IReadOnlyDictionary
+            <BlendMode, ColorBlendCallback> BlendDictionary =
+            new ReadOnlyDictionary<BlendMode, ColorBlendCallback>(
+                new Dictionary<BlendMode, ColorBlendCallback>()
+                {
+                    { BlendMode.Alpha, AlphaBlend },
+                    { BlendMode.Grayscale, Grayscale },
+                    { BlendMode.Multiply, Multiply },
+                    { BlendMode.Screen, Screen },
+                    { BlendMode.Overlay, Overlay },
+                    { BlendMode.HardLight, HardLight },
+                    { BlendMode.SoftLight, SoftLight },
+                    { BlendMode.ColorDodge, ColorDodge },
+                    { BlendMode.LinearDodge, LinearDodge },
+                    { BlendMode.ColorBurn, ColorBurn },
+                    { BlendMode.LinearBurn, LinearBurn },
+                    { BlendMode.VividLight, VividLight },
+                    { BlendMode.LinearLight, LinearLight },
+                    { BlendMode.Difference, Difference },
+                    { BlendMode.Darken, Darken },
+                    { BlendMode.Lighten, Lighten },
+                    { BlendMode.DarkerColor, DarkerColor },
+                    { BlendMode.LighterColor, LighterColor },
+                    { BlendMode.Hue, HueBlend },
+                    { BlendMode.Saturation, SaturationBlend },
+                    { BlendMode.Luminosity, LuminosityBlend },
+                    { BlendMode.Divide, Divide }
+                });
 
         public static ColorF Blend(
             ColorF top,

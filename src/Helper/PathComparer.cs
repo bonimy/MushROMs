@@ -12,7 +12,8 @@ namespace Helper
 
     public sealed class PathComparer : StringModifierComparer
     {
-        public static readonly PathComparer Default = new PathComparer();
+        public static readonly PathComparer Default =
+            new PathComparer();
 
         public PathComparer(StringComparer baseComparer)
             : base(baseComparer)

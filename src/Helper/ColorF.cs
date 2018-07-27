@@ -9,9 +9,9 @@ namespace Helper
 {
     using System;
     using System.Drawing;
-    using System.Text;
     using Helper.PixelFormat;
     using static Helper.MathHelper;
+    using static StringHelper;
     using static System.Diagnostics.Debug;
     using static System.Math;
 
@@ -294,25 +294,12 @@ namespace Helper
 
         public override string ToString()
         {
-            var sb = new StringBuilder();
-            sb.Append('{');
-            sb.Append(nameof(Alpha));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Alpha));
-            sb.Append(", ");
-            sb.Append(nameof(Red));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Red));
-            sb.Append(", ");
-            sb.Append(nameof(Green));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Green));
-            sb.Append(", ");
-            sb.Append(nameof(Blue));
-            sb.Append(": ");
-            sb.Append(SR.GetString(Blue));
-            sb.Append('}');
-            return sb.ToString();
+            return GetString(
+                "{{A:{0},R:{1},G:{2},B:{3}}}",
+                Alpha,
+                Red,
+                Green,
+                Blue);
         }
     }
 }
