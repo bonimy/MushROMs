@@ -5,13 +5,13 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Windows.Forms;
+
     partial class DesignControl
     {
         public static readonly Point MouseOutOfRange = new Point(
@@ -21,7 +21,8 @@ namespace Controls
         // This event is overridden so it can be browsable in the designer.
         [Browsable(true)]
         [Category("Mouse")]
-        [Description("Occurs when the mouse wheel moves while the control has focus.")]
+        [Description("Occurs when the mouse wheel moves while the " +
+            "control has focus.")]
         public new event MouseEventHandler MouseWheel
         {
             add
@@ -36,7 +37,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public bool MouseHovering
         {
             get;
@@ -44,7 +46,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public Point CurrentMousePosition
         {
             get;
@@ -52,7 +55,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public Point PreviousMousePosition
         {
             get;
@@ -60,7 +64,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public static MouseButtons CurrentMouseButtons
         {
             get;
@@ -68,7 +73,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public static MouseButtons PreviousMouseButtons
         {
             get;
@@ -76,7 +82,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public static MouseButtons ActiveMouseButtons
         {
             get;
@@ -100,11 +107,13 @@ namespace Controls
                 (int)m.LParam & 0xFFFF,
                 (int)m.LParam >> 0x10);
 
-            MouseHovering = PreviousMousePosition == CurrentMousePosition;
+            MouseHovering =
+                PreviousMousePosition == CurrentMousePosition;
 
             PreviousMouseButtons = CurrentMouseButtons;
             CurrentMouseButtons = MouseButtons;
-            ActiveMouseButtons = CurrentMouseButtons & ~PreviousMouseButtons;
+            ActiveMouseButtons =
+                CurrentMouseButtons & ~PreviousMouseButtons;
         }
     }
 }

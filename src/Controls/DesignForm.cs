@@ -5,37 +5,45 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Runtime.InteropServices;
+    using System.Security;
+    using System.Windows.Forms;
+
     public class DesignForm : Form
     {
-        internal static readonly ICollection<Keys> FallbackOverrideInputKeys = DesignControl.FallbackOverrideInputKeys;
+        internal static readonly ICollection<Keys>
+            FallbackOverrideInputKeys =
+            DesignControl.FallbackOverrideInputKeys;
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        private IReadOnlyDictionary<int, PreprocessMessageCallback> ProcedureOverrides
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
+        private IReadOnlyDictionary<int, PreprocessMessageCallback>
+            ProcedureOverrides
         {
             get;
         }
 
         [Browsable(true)]
-        [Description("Preprocess the window rectangle before applying it during a resize operation.")]
-        public event EventHandler<RectangleEventArgs> AdjustWindowBounds;
+        [Description("Preprocess the window rectangle before " +
+            "applying it during a resize operation.")]
+        public event EventHandler<RectangleEventArgs>
+            AdjustWindowBounds;
 
         [Browsable(true)]
-        [Description("Preprocess the window size before applying it during a resize operation.")]
+        [Description("Preprocess the window size before applying it " +
+            "during a resize operation.")]
         public event EventHandler<RectangleEventArgs> AdjustWindowSize;
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public Size FormBorderSize
         {
             get
@@ -45,7 +53,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public int CaptionHeight
         {
             get
@@ -55,7 +64,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public Padding BorderPadding
         {
             get
@@ -65,7 +75,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public Padding WindowPadding
         {
             get
@@ -77,7 +88,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public Rectangle AbsoluteCoordinates
         {
             get
@@ -90,7 +102,8 @@ namespace Controls
         {
             KeyPreview = true;
 
-            ProcedureOverrides = new Dictionary<int, PreprocessMessageCallback>()
+            ProcedureOverrides =
+                new Dictionary<int, PreprocessMessageCallback>()
             {
                 { WindowMessages.Size, ProcessSize },
                 { WindowMessages.Sizing, ProcessSizing }
@@ -158,22 +171,28 @@ namespace Controls
 
         private void ProcessSizing(ref Message m)
         {
-            var windowBounds = Marshal.PtrToStructure<WinApiRectangle>(m.LParam);
+            var windowBounds = Marshal.PtrToStructure<WinApiRectangle>(
+                m.LParam);
 
             var e = new RectangleEventArgs(windowBounds);
             OnAdjustWindowBounds(e);
 
             WinApiRectangle adjustedWindowBounds = e.Rectangle;
 
-            Marshal.StructureToPtr(adjustedWindowBounds, m.LParam, false);
+            Marshal.StructureToPtr(
+                adjustedWindowBounds,
+                m.LParam,
+                false);
         }
 
-        protected virtual void OnAdjustWindowBounds(RectangleEventArgs e)
+        protected virtual void OnAdjustWindowBounds(
+            RectangleEventArgs e)
         {
             AdjustWindowBounds?.Invoke(this, e);
         }
 
-        protected virtual void OnAdjustWindowSize(RectangleEventArgs e)
+        protected virtual void OnAdjustWindowSize(
+            RectangleEventArgs e)
         {
             AdjustWindowSize?.Invoke(this, e);
         }
@@ -188,44 +207,49 @@ namespace Controls
             return GetFormBorderSize(form.FormBorderStyle);
         }
 
-        public static Size GetFormBorderSize(FormBorderStyle formBorderStyle)
+        public static Size GetFormBorderSize(
+            FormBorderStyle formBorderStyle)
         {
             switch (formBorderStyle)
             {
-            case FormBorderStyle.None:
-                return Size.Empty;
+                case FormBorderStyle.None:
+                    return Size.Empty;
 
-            case FormBorderStyle.FixedSingle:
-            case FormBorderStyle.FixedDialog:
-            case FormBorderStyle.Sizable:
-                return
-                    SystemInformation.FrameBorderSize +
-                    WinApiMethods.PaddedBorderSize;
+                case FormBorderStyle.FixedSingle:
+                case FormBorderStyle.FixedDialog:
+                case FormBorderStyle.Sizable:
+                    return
+                        SystemInformation.FrameBorderSize +
+                        WinApiMethods.PaddedBorderSize;
 
-            case FormBorderStyle.FixedToolWindow:
-            case FormBorderStyle.SizableToolWindow:
-                return
-                    SystemInformation.FixedFrameBorderSize +
-                    WinApiMethods.PaddedBorderSize;
+                case FormBorderStyle.FixedToolWindow:
+                case FormBorderStyle.SizableToolWindow:
+                    return
+                        SystemInformation.FixedFrameBorderSize +
+                        WinApiMethods.PaddedBorderSize;
 
-            case FormBorderStyle.Fixed3D:
-                return
-                    SystemInformation.FrameBorderSize +
-                    SystemInformation.Border3DSize +
-                    WinApiMethods.PaddedBorderSize;
+                case FormBorderStyle.Fixed3D:
+                    return
+                        SystemInformation.FrameBorderSize +
+                        SystemInformation.Border3DSize +
+                        WinApiMethods.PaddedBorderSize;
 
-            default:
-                throw new InvalidEnumArgumentException(
-                    nameof(formBorderStyle),
-                    (int)formBorderStyle,
-                    typeof(FormBorderStyle));
+                default:
+                    throw new InvalidEnumArgumentException(
+                        nameof(formBorderStyle),
+                        (int)formBorderStyle,
+                        typeof(FormBorderStyle));
             }
         }
 
         public static Padding GetFormBorderPadding(Form form)
         {
             var sz = GetFormBorderSize(form);
-            return new Padding(sz.Width, sz.Height, sz.Width, sz.Height);
+            return new Padding(
+                sz.Width,
+                sz.Height,
+                sz.Width,
+                sz.Height);
         }
 
         public static int GetCaptionHeight(Form form)
@@ -238,28 +262,29 @@ namespace Controls
             return GetCaptionHeight(form.FormBorderStyle);
         }
 
-        public static int GetCaptionHeight(FormBorderStyle formBorderStyle)
+        public static int GetCaptionHeight(
+            FormBorderStyle formBorderStyle)
         {
             switch (formBorderStyle)
             {
-            case FormBorderStyle.None:
-                return 0;
+                case FormBorderStyle.None:
+                    return 0;
 
-            case FormBorderStyle.FixedSingle:
-            case FormBorderStyle.Fixed3D:
-            case FormBorderStyle.FixedDialog:
-            case FormBorderStyle.Sizable:
-                return SystemInformation.CaptionHeight;
+                case FormBorderStyle.FixedSingle:
+                case FormBorderStyle.Fixed3D:
+                case FormBorderStyle.FixedDialog:
+                case FormBorderStyle.Sizable:
+                    return SystemInformation.CaptionHeight;
 
-            case FormBorderStyle.FixedToolWindow:
-            case FormBorderStyle.SizableToolWindow:
-                return SystemInformation.ToolWindowCaptionHeight;
+                case FormBorderStyle.FixedToolWindow:
+                case FormBorderStyle.SizableToolWindow:
+                    return SystemInformation.ToolWindowCaptionHeight;
 
-            default:
-                throw new InvalidEnumArgumentException(
-                    nameof(formBorderStyle),
-                    (int)formBorderStyle,
-                    typeof(FormBorderStyle));
+                default:
+                    throw new InvalidEnumArgumentException(
+                        nameof(formBorderStyle),
+                        (int)formBorderStyle,
+                        typeof(FormBorderStyle));
             }
         }
     }

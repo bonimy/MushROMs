@@ -23,7 +23,8 @@ namespace MushROMs.GenericEditor
 
             RecentFiles = new RecentFileCollection(this);
 
-            EventHandlerCallbacks = new Dictionary<ToolStripItem, Func<EventHandler>>()
+            EventHandlerCallbacks =
+                new Dictionary<ToolStripItem, Func<EventHandler>>()
             {
                 { tsmNewFile, () => NewFileClick },
                 { tsmOpenFile, () => OpenFileClick },
@@ -267,7 +268,8 @@ namespace MushROMs.GenericEditor
             get;
         }
 
-        private IReadOnlyDictionary<ToolStripItem, Func<EventHandler>> EventHandlerCallbacks
+        private IReadOnlyDictionary<ToolStripItem, Func<EventHandler>>
+            EventHandlerCallbacks
         {
             get;
         }
@@ -311,7 +313,9 @@ namespace MushROMs.GenericEditor
             OpenRecentClick?.Invoke(this, recentFileArgs);
         }
 
-        private void OpenRecent_ToolStripButtonClick(object sender, EventArgs e)
+        private void OpenRecent_ToolStripButtonClick(
+            object sender,
+            EventArgs e)
         {
             var control = toolStrip;
             var bounds = tsbOpenRecent.Bounds;

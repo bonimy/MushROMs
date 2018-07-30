@@ -5,22 +5,24 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Security;
-using System.Windows.Forms;
-using static System.Diagnostics.Debug;
-
 namespace Controls
 {
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Security;
+    using System.Windows.Forms;
+    using static System.Diagnostics.Debug;
+
     [DefaultEvent("Paint")]
     [Description("Provides a control to be used for design purposes.")]
     public partial class DesignControl : UserControl
     {
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        private IReadOnlyDictionary<int, PreprocessMessageCallback> ProcedureOverrides
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
+        private IReadOnlyDictionary<int, PreprocessMessageCallback>
+            ProcedureOverrides
         {
             get;
         }
@@ -43,7 +45,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public int ClientWidth
         {
             get
@@ -58,7 +61,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public int ClientHeight
         {
             get
@@ -73,37 +77,43 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public Size BorderSize
         {
             get
             {
                 switch (BorderStyle)
                 {
-                case BorderStyle.None:
-                    return Size.Empty;
+                    case BorderStyle.None:
+                        return Size.Empty;
 
-                case BorderStyle.FixedSingle:
-                    return SystemInformation.BorderSize;
+                    case BorderStyle.FixedSingle:
+                        return SystemInformation.BorderSize;
 
-                case BorderStyle.Fixed3D:
-                    return SystemInformation.Border3DSize;
+                    case BorderStyle.Fixed3D:
+                        return SystemInformation.Border3DSize;
 
-                default:
-                    Assert(false);
-                    return Size.Empty;
+                    default:
+                        Assert(false);
+                        return Size.Empty;
                 }
             }
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public Padding BorderPadding
         {
             get
             {
                 var sz = BorderSize;
-                return new Padding(sz.Width, sz.Height, sz.Width, sz.Height);
+                return new Padding(
+                    sz.Width,
+                    sz.Height,
+                    sz.Width,
+                    sz.Height);
             }
         }
 
@@ -113,7 +123,8 @@ namespace Controls
             ResizeRedraw = true;
             BorderStyle = BorderStyle.FixedSingle;
 
-            ProcedureOverrides = new Dictionary<int, PreprocessMessageCallback>()
+            ProcedureOverrides =
+                new Dictionary<int, PreprocessMessageCallback>()
             {
                 { WindowMessages.KeyDown, ProcessKeyDown },
                 { WindowMessages.SystemKeyDown, ProcessKeyDown },

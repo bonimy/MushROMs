@@ -5,14 +5,14 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Drawing;
-using System.Runtime.InteropServices;
-using System.Security;
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System;
+    using System.Drawing;
+    using System.Runtime.InteropServices;
+    using System.Security;
+    using System.Windows.Forms;
+
     internal static class UnsafeNativeMethods
     {
         internal static int LastWin32Error
@@ -23,7 +23,9 @@ namespace Controls
 
         [SecurityCritical]
         [DllImport("user32.dll", SetLastError = true)]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        private static extern int GetWindowLong(
+            IntPtr hWnd,
+            int nIndex);
 
         [SecurityCritical]
         [DllImport("user32.dll", SetLastError = true)]
@@ -38,7 +40,9 @@ namespace Controls
             IntPtr hWnd,
             WinApiRectangle* lpRect);
 
-        internal static int GetWindowLong(IWin32Window window, int index)
+        internal static int GetWindowLong(
+            IWin32Window window,
+            int index)
         {
             if (window is null)
             {

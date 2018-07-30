@@ -5,9 +5,9 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System.Windows.Forms;
+
     public delegate void PreprocessMessageCallback(ref Message m);
 }

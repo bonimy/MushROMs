@@ -5,14 +5,14 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using MushROMs;
-using static Helper.ThrowHelper;
-
 namespace Controls
 {
+    using System;
+    using System.Drawing;
+    using System.Drawing.Drawing2D;
+    using MushROMs;
+    using static Helper.ThrowHelper;
+
     public class TileMapControl1D : TileMapControl
     {
         private int _gridSize;
@@ -108,7 +108,11 @@ namespace Controls
                 for (var x = ViewWidth; --x >= 0;)
                 {
                     var index = GetGridTile(new Point(x, y));
-                    if (selection.Contains(index) && GridContainsTile(index))
+                    var isInSelection =
+                        selection.Contains(index) &&
+                        GridContainsTile(index);
+
+                    if (isInSelection)
                     {
                         var edges = new Point[]
                         {
@@ -133,10 +137,13 @@ namespace Controls
                         for (var i = edges.Length; --i >= 0;)
                         {
                             var index2 = GetGridTile(edges[i]);
-                            if (!selection.Contains(index2) || !GridContainsTile(index2))
+                            if (!selection.Contains(index2) ||
+                                !GridContainsTile(index2))
                             {
                                 path.StartFigure();
-                                path.AddLine(corners[((i - 1) & 3)], corners[i]);
+                                path.AddLine(
+                                    corners[((i - 1) & 3)],
+                                    corners[i]);
                             }
                         }
                     }
@@ -247,7 +254,10 @@ namespace Controls
             return GetViewTile(gridTile, viewWidth, 0);
         }
 
-        public static int GetViewTileX(int gridTile, int viewWidth, int zeroIndex)
+        public static int GetViewTileX(
+            int gridTile,
+            int viewWidth,
+            int zeroIndex)
         {
             if (viewWidth <= 0)
             {
@@ -259,7 +269,10 @@ namespace Controls
             return (gridTile - zeroIndex) % viewWidth;
         }
 
-        public static int GetViewTileY(int gridTile, int viewWidth, int zeroIndex)
+        public static int GetViewTileY(
+            int gridTile,
+            int viewWidth,
+            int zeroIndex)
         {
             if (viewWidth <= 0)
             {
@@ -288,7 +301,11 @@ namespace Controls
 
         public int GetGridTile(int viewTileX, int viewTileY)
         {
-            return GetGridTile(viewTileX, viewTileY, ViewWidth, ZeroTile);
+            return GetGridTile(
+                viewTileX,
+                viewTileY,
+                ViewWidth,
+                ZeroTile);
         }
 
         public static int GetGridTile(Point viewTile, int viewWidth)
@@ -309,7 +326,11 @@ namespace Controls
             int viewWidth,
             int zeroIndex)
         {
-            return GetGridTile(viewTile.X, viewTile.Y, viewWidth, zeroIndex);
+            return GetGridTile(
+                viewTile.X,
+                viewTile.Y,
+                viewWidth,
+                zeroIndex);
         }
 
         public static int GetGridTile(

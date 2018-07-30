@@ -20,12 +20,14 @@ namespace MushROMs.GenericEditor
         public ChildFormHelper()
         {
             Editors = new EditorFormDictionary(this);
-            EditorFormHelpers = new Dictionary<IEditor, IEditorFormHelper>();
+            EditorFormHelpers =
+                new Dictionary<IEditor, IEditorFormHelper>();
         }
 
         public event EventHandler<EditorFormEventArgs> EditorFormAdded;
 
-        public event EventHandler<EditorFormEventArgs> EditorFormGotFocus;
+        public event EventHandler<EditorFormEventArgs>
+            EditorFormGotFocus;
 
         public event EventHandler<EditorEventArgs> EditorFormClosed;
 
@@ -34,7 +36,8 @@ namespace MushROMs.GenericEditor
             get;
         }
 
-        private IDictionary<IEditor, IEditorFormHelper> EditorFormHelpers
+        private IDictionary<IEditor, IEditorFormHelper>
+            EditorFormHelpers
         {
             get;
         }
@@ -75,7 +78,9 @@ namespace MushROMs.GenericEditor
             IEditor editor,
             out IEditorFormHelper editorFormHelper)
         {
-            return EditorFormHelpers.TryGetValue(editor, out editorFormHelper);
+            return EditorFormHelpers.TryGetValue(
+                editor,
+                out editorFormHelper);
         }
 
         protected virtual void OnEditorFormAdded(EditorFormEventArgs e)
@@ -83,7 +88,8 @@ namespace MushROMs.GenericEditor
             EditorFormAdded?.Invoke(this, e);
         }
 
-        protected virtual void OnEditorFormGotFocus(EditorFormEventArgs e)
+        protected virtual void OnEditorFormGotFocus(
+            EditorFormEventArgs e)
         {
             EditorFormGotFocus?.Invoke(this, e);
         }
@@ -93,7 +99,8 @@ namespace MushROMs.GenericEditor
             EditorFormClosed?.Invoke(this, e);
         }
 
-        private static IEditorFormHelper CreateFormEditor(IEditor editor)
+        private static IEditorFormHelper CreateFormEditor(
+            IEditor editor)
         {
             switch (editor)
             {
@@ -101,7 +108,9 @@ namespace MushROMs.GenericEditor
                     throw new ArgumentNullException(nameof(editor));
 
                 case PaletteEditor paletteEditor:
-                    return new PaletteFormEditor(new PaletteForm(), paletteEditor);
+                    return new PaletteFormEditor(
+                        new PaletteForm(),
+                        paletteEditor);
 
                 default:
                     return null;
@@ -116,7 +125,9 @@ namespace MushROMs.GenericEditor
             OnEditorFormGotFocus(args);
         }
 
-        private void ChildFormClosed(object sender, FormClosedEventArgs e)
+        private void ChildFormClosed(
+            object sender,
+            FormClosedEventArgs e)
         {
             var form = sender as Form;
             var editor = Editors[form];
@@ -131,10 +142,12 @@ namespace MushROMs.GenericEditor
             IDictionary<Form, IEditor>,
             IReadOnlyDictionary<Form, IEditor>
         {
-            public EditorFormDictionary(ChildFormHelper childFormHelper)
+            public EditorFormDictionary(
+                ChildFormHelper childFormHelper)
             {
                 ChildFormHelper = childFormHelper ??
-                    throw new ArgumentNullException(nameof(childFormHelper));
+                    throw new ArgumentNullException(
+                        nameof(childFormHelper));
 
                 Forms = new Dictionary<Form, IEditor>();
             }
@@ -171,7 +184,8 @@ namespace MushROMs.GenericEditor
                 }
             }
 
-            IEnumerable<IEditor> IReadOnlyDictionary<Form, IEditor>.Values
+            IEnumerable<IEditor>
+                IReadOnlyDictionary<Form, IEditor>.Values
             {
                 get
                 {
@@ -272,12 +286,15 @@ namespace MushROMs.GenericEditor
                 return Forms.Remove(item);
             }
 
-            void ICollection<KeyValuePair<Form, IEditor>>.CopyTo(KeyValuePair<Form, IEditor>[] array, int arrayIndex)
+            void ICollection<KeyValuePair<Form, IEditor>>.CopyTo(
+                KeyValuePair<Form, IEditor>[] array,
+                int arrayIndex)
             {
                 Forms.CopyTo(array, arrayIndex);
             }
 
-            public IEnumerator<KeyValuePair<Form, IEditor>> GetEnumerator()
+            public IEnumerator<KeyValuePair<Form, IEditor>>
+                GetEnumerator()
             {
                 return Forms.GetEnumerator();
             }

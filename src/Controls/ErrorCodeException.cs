@@ -43,7 +43,9 @@ namespace Controls
             ErrorCode = UnsafeNativeMethods.LastWin32Error;
         }
 
-        public ErrorCodeException(string message, Exception innerException) :
+        public ErrorCodeException(
+            string message,
+            Exception innerException) :
             base(message, innerException)
         {
             ErrorCode = UnsafeNativeMethods.LastWin32Error;
@@ -78,7 +80,10 @@ namespace Controls
             }
 
             base.GetObjectData(info, context);
-            info.AddValue(nameof(ErrorCode), ErrorCode, ErrorCode.GetType());
+            info.AddValue(
+                nameof(ErrorCode),
+                ErrorCode,
+                ErrorCode.GetType());
         }
     }
 }

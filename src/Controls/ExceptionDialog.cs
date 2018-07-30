@@ -5,11 +5,11 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System;
+    using System.Windows.Forms;
+
     public static class ExceptionDialog
     {
         public static void ShowException(Exception ex)
@@ -17,7 +17,9 @@ namespace Controls
             ShowException(null, ex, null);
         }
 
-        public static void ShowException(IWin32Window owner, Exception ex)
+        public static void ShowException(
+            IWin32Window owner,
+            Exception ex)
         {
             ShowException(owner, ex, null);
         }

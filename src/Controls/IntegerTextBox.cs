@@ -23,7 +23,9 @@ namespace Controls
         private const int FallbackValue = 0;
         private const bool FallbackAllowHex = false;
         private const bool FallbackAllowNegative = false;
-        private const CharacterCasing FallbackCharacterCasing = CharacterCasing.Upper;
+
+        private const CharacterCasing FallbackCharacterCasing =
+            CharacterCasing.Upper;
 
         private bool _allowHex = FallbackAllowHex;
         private bool _allowNegative = FallbackAllowNegative;
@@ -31,7 +33,8 @@ namespace Controls
 
         [Category("Editor")]
         [DefaultValue(FallbackAllowHex)]
-        [Description("Determines whether the control reads hexadecimal values or decimal.")]
+        [Description("Determines whether the control reads " +
+            "hexadecimal values or decimal.")]
         public bool AllowHex
         {
             get
@@ -48,7 +51,8 @@ namespace Controls
 
         [Category("Editor")]
         [DefaultValue(FallbackAllowNegative)]
-        [Description("Determines whether negative numbers are valid input.")]
+        [Description("Determines whether negative numbers are valid " +
+            "input.")]
         public bool AllowNegative
         {
             get
@@ -64,13 +68,21 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         private NumberStyles NumberStyle
         {
             get
             {
-                return (AllowHex ? NumberStyles.AllowHexSpecifier : NumberStyles.None) |
-                    (AllowNegative ? NumberStyles.AllowLeadingSign : NumberStyles.None);
+                var hexSpecifier = AllowHex ?
+                    NumberStyles.AllowHexSpecifier :
+                    NumberStyles.None;
+
+                var allowNegative = AllowNegative ?
+                    NumberStyles.AllowLeadingSign :
+                    NumberStyles.None;
+
+                return hexSpecifier | allowNegative;
             }
         }
 
@@ -85,7 +97,8 @@ namespace Controls
 
         [Category("Behavior")]
         [DefaultValue(FallbackCharacterCasing)]
-        [Description("Indicates if all characters should be left alone or converted to uppercase or lowercase.")]
+        [Description("Indicates if all characters should be left " +
+            "alone or converted to uppercase or lowercase.")]
         public new CharacterCasing CharacterCasing
         {
             get { return base.CharacterCasing; }
@@ -132,31 +145,45 @@ namespace Controls
                 throw new ArgumentNullException(nameof(e));
             }
 
+            var c = e.KeyChar;
+
             // Only accept valid number characters and formatters
-            if (e.KeyChar >= '0' && e.KeyChar <= '9')
+            if (Char.IsDigit(c))
             {
                 return;
             }
-            else if (AllowNegative && e.KeyChar == '-' && SelectionStart == 0 && !Text.Contains("-"))
+
+            if (IsAllowedSignChar(c))
             {
                 return;
             }
-            else if (AllowHex && e.KeyChar >= 'a' && e.KeyChar <= 'f')
+
+            if (IsAllowedHexAlpha(c))
             {
                 return;
             }
-            else if (AllowHex && e.KeyChar >= 'A' && e.KeyChar <= 'F')
+
+            if (e.KeyChar == '\b')
             {
                 return;
             }
-            else if (e.KeyChar == '\b')
-            {
-                return;
-            }
-            else
-            {
-                e.Handled = true;
-            }
+
+            e.Handled = true;
+        }
+
+        private bool IsAllowedHexAlpha(char c)
+        {
+            var isHexLower = c >= 'a' && c <= 'f';
+            var isHexUpper = c >= 'A' && c <= 'F';
+            var isHex = isHexLower || isHexUpper;
+            return AllowHex && isHex;
+        }
+
+        private bool IsAllowedSignChar(char c)
+        {
+            var hasSign = Text.Contains("-");
+            var isSign = c == '-' && SelectionStart == 0;
+            return AllowNegative && isSign && !hasSign;
         }
 
         protected override void OnTextChanged(EventArgs e)
@@ -164,7 +191,11 @@ namespace Controls
             // Save original value.
 
             // Parse new value.
-            if (Int32.TryParse(Text, NumberStyle, CultureInfo.InvariantCulture, out var textValue))
+            if (Int32.TryParse(
+                Text,
+                NumberStyle,
+                CultureInfo.InvariantCulture,
+                out var textValue))
             {
                 // Only raise event if value changed.
                 if (Value != textValue)

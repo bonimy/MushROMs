@@ -124,7 +124,11 @@ namespace Controls
             }
         }
 
-        public WinApiRectangle(int left, int top, int right, int bottom)
+        public WinApiRectangle(
+            int left,
+            int top,
+            int right,
+            int bottom)
         {
             Left = left;
             Top = top;
@@ -166,7 +170,8 @@ namespace Controls
                 Bottom);
         }
 
-        public static implicit operator WinApiRectangle(Rectangle rectangle)
+        public static implicit operator WinApiRectangle(
+            Rectangle rectangle)
         {
             return new WinApiRectangle(
                 rectangle.Left,
@@ -175,7 +180,8 @@ namespace Controls
                 rectangle.Bottom);
         }
 
-        public static implicit operator Rectangle(WinApiRectangle rectangle)
+        public static implicit operator Rectangle(
+            WinApiRectangle rectangle)
         {
             return Rectangle.FromLTRB(
                 rectangle.Left,

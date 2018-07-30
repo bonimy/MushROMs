@@ -5,12 +5,12 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.ComponentModel;
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System;
+    using System.ComponentModel;
+    using System.Windows.Forms;
+
     [ToolboxItem(true)]
     [DesignTimeVisible(true)]
     public abstract class DialogProxy :
