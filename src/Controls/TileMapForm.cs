@@ -5,14 +5,17 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using static System.Math;
+    using static WinApiMethods;
+    using ResizeMode = TileMapResizeMode;
+
     public class TileMapForm : DesignForm
     {
         private TileMapControl _mainTileMapControl;
@@ -36,7 +39,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         private Padding MainTileMapPadding
         {
             get;
@@ -59,6 +63,29 @@ namespace Controls
             }
         }
 
+        private ResizeMode ResizeMode
+        {
+            get
+            {
+                return TileMapControl.TileMapResizeMode;
+            }
+
+            set
+            {
+                TileMapControl.TileMapResizeMode = value;
+            }
+        }
+
+        private bool IsEmptyTileMap
+        {
+            get
+            {
+                return TileMapControl is null ||
+                MainTileMapPadding == Padding.Empty ||
+                TileMapControl.CellSize.IsEmpty;
+            }
+        }
+
         /// <summary>
         /// Do not call this method during this class's constructor. Add an event to <see cref="Form.Load"/> and call it there.
         /// </summary>
@@ -70,41 +97,46 @@ namespace Controls
                 return;
             }
 
-            var form = WinApiMethods.GetWindowRectangle(this);
-            var child = WinApiMethods.GetWindowRectangle(TileMapControl);
-            var client = WinApiMethods.DeflateRectangle(
+            var form = GetWindowRectangle(this);
+            var child = GetWindowRectangle(
+                TileMapControl);
+
+            var client = DeflateRectangle(
                 child,
                 TileMapControl.BorderPadding);
 
-            MainTileMapPadding = WinApiMethods.GetPadding(form, client);
+            MainTileMapPadding = GetPadding(form, client);
         }
 
         protected virtual void SetSizeFromTileMapControl()
         {
-            if (TileMapControl.TileMapResizeMode == TileMapResizeMode.ControlResize)
+            if (ResizeMode == ResizeMode.ControlResize)
             {
                 return;
             }
 
-            if (TileMapControl.TileMapResizeMode == TileMapResizeMode.None)
+            if (ResizeMode == ResizeMode.None)
             {
-                TileMapControl.TileMapResizeMode = TileMapResizeMode.ControlResize;
+                ResizeMode = ResizeMode.ControlResize;
             }
 
-            var window = WinApiMethods.InflateSize(
-                TileMapControl.ClientSize, MainTileMapPadding);
+            var window = InflateSize(
+                TileMapControl.ClientSize,
+                MainTileMapPadding);
+
             window = SizeFromTileMap(window);
             Size = window;
 
-            if (TileMapControl.TileMapResizeMode == TileMapResizeMode.ControlResize)
+            if (ResizeMode == ResizeMode.ControlResize)
             {
-                TileMapControl.TileMapResizeMode = TileMapResizeMode.None;
+                ResizeMode = ResizeMode.None;
             }
         }
 
         private Rectangle GetTileMapRectangle(Size window)
         {
-            return GetTileMapRectangle(new Rectangle(Point.Empty, window));
+            return GetTileMapRectangle(
+                new Rectangle(Point.Empty, window));
         }
 
         private Rectangle GetTileMapRectangle(Rectangle window)
@@ -121,27 +153,35 @@ namespace Controls
             }
 
             // Remove the control padding from rectangle.
-            var tilemap = WinApiMethods.DeflateRectangle(
+            var tilemap = DeflateRectangle(
                 window,
                 MainTileMapPadding);
 
-            var client = WinApiMethods.DeflateRectangle(
-                WinApiMethods.GetWindowRectangle(TileMapControl),
+            var client = DeflateRectangle(
+                GetWindowRectangle(TileMapControl),
                 TileMapControl.BorderPadding);
 
             // Gets the residual width that is not included in the tilemap size.
-            var residualWidth = tilemap.Width % TileMapControl.CellWidth;
-            var residualHeight = tilemap.Height % TileMapControl.CellHeight;
+            var width = tilemap.Width;
+            var height = tilemap.Height;
+
+            var cellWidth = TileMapControl.CellWidth;
+            var cellHeight = TileMapControl.CellHeight;
+
+            var residualWidth = width % cellWidth;
+            var residualHeight = height % cellHeight;
 
             // Get the current dimensions of the window
-            var parent = WinApiMethods.GetWindowRectangle(this);
+            var parent = GetWindowRectangle(this);
 
             // Remove residual area.
             tilemap.Width -= residualWidth;
             tilemap.Height -= residualHeight;
 
             // Left or top adjust the client if sizing on those borders.
-            if (window.Left != parent.Left && window.Right == parent.Right)
+            var leftAligned = window.Left == parent.Left;
+            var rightAligned = window.Right == parent.Right;
+            if (!leftAligned && rightAligned)
             {
                 if (tilemap.Width >= TileMapControl.CellWidth)
                 {
@@ -153,7 +193,9 @@ namespace Controls
                 }
             }
 
-            if (window.Top != parent.Top && window.Bottom == parent.Bottom)
+            var topAligned = window.Top == parent.Top;
+            var bottomAligned = window.Bottom == parent.Bottom;
+            if (!topAligned && bottomAligned)
             {
                 if (tilemap.Height >= TileMapControl.CellHeight)
                 {
@@ -193,8 +235,14 @@ namespace Controls
             max.Add(GetTileMapRectangle(MaximumSize).Size);
 
             // Min/Max tile size according to system-defined min/max size.
-            min.Add(GetTileMapRectangle(SystemInformation.MinimumWindowSize).Size);
-            max.Add(GetTileMapRectangle(SystemInformation.PrimaryMonitorMaximizedWindowSize).Size);
+            var minSystemTileMap = GetTileMapRectangle(
+                SystemInformation.MinimumWindowSize);
+
+            var maxSystemTileMap = GetTileMapRectangle(
+                SystemInformation.PrimaryMonitorMaximizedWindowSize);
+
+            min.Add(minSystemTileMap.Size);
+            max.Add(maxSystemTileMap.Size);
 
             // Min/Max tile size according to the derived value.
             var tileMin = MinimumTileSize;
@@ -215,8 +263,8 @@ namespace Controls
             // Restrict the lower bound of the tilemap.
             foreach (var size in min)
             {
-                window.Width = Math.Max(window.Width, size.Width);
-                window.Height = Math.Max(window.Height, size.Height);
+                window.Width = Max(window.Width, size.Width);
+                window.Height = Max(window.Height, size.Height);
             }
 
             // Restrict upper bounds
@@ -224,12 +272,12 @@ namespace Controls
             {
                 if (size.Width > 0)
                 {
-                    window.Width = Math.Min(window.Width, size.Width);
+                    window.Width = Min(window.Width, size.Width);
                 }
 
                 if (size.Height > 0)
                 {
-                    window.Height = Math.Min(window.Height, size.Height);
+                    window.Height = Min(window.Height, size.Height);
                 }
             }
 
@@ -238,9 +286,9 @@ namespace Controls
 
         protected override void OnResizeBegin(EventArgs e)
         {
-            if (TileMapControl.TileMapResizeMode == TileMapResizeMode.None)
+            if (ResizeMode == ResizeMode.None)
             {
-                TileMapControl.TileMapResizeMode = TileMapResizeMode.FormResize;
+                ResizeMode = ResizeMode.FormResize;
             }
 
             base.OnResizeBegin(e);
@@ -250,13 +298,14 @@ namespace Controls
         {
             base.OnResizeEnd(e);
 
-            if (TileMapControl.TileMapResizeMode == TileMapResizeMode.FormResize)
+            if (ResizeMode == ResizeMode.FormResize)
             {
-                TileMapControl.TileMapResizeMode = TileMapResizeMode.None;
+                ResizeMode = ResizeMode.None;
             }
         }
 
-        protected override void OnAdjustWindowBounds(RectangleEventArgs e)
+        protected override void OnAdjustWindowBounds(
+            RectangleEventArgs e)
         {
             if (e is null)
             {
@@ -266,7 +315,8 @@ namespace Controls
             e.Rectangle = RectangleFromTileMap(e.Rectangle);
         }
 
-        protected override void OnAdjustWindowSize(RectangleEventArgs e)
+        protected override void OnAdjustWindowSize(
+            RectangleEventArgs e)
         {
             if (e is null)
             {
@@ -278,9 +328,7 @@ namespace Controls
 
         private Rectangle RectangleFromTileMap(Rectangle window)
         {
-            if (TileMapControl is null ||
-                MainTileMapPadding == Padding.Empty ||
-                TileMapControl.CellSize.IsEmpty)
+            if (IsEmptyTileMap)
             {
                 return window;
             }
@@ -289,7 +337,7 @@ namespace Controls
             tilemap.Size = GetBoundTileSize(tilemap.Size);
 
             // Set new tile size
-            if (TileMapControl.TileMapResizeMode != TileMapResizeMode.TileMapCellResize)
+            if (ResizeMode != ResizeMode.TileMapCellResize)
             {
                 TileMapControl.ViewSize = new Size(
                     tilemap.Width / TileMapControl.CellWidth,
@@ -297,14 +345,12 @@ namespace Controls
             }
 
             // Adjust window size to bind to tilemap.
-            return WinApiMethods.InflateRectangle(tilemap, MainTileMapPadding);
+            return InflateRectangle(tilemap, MainTileMapPadding);
         }
 
         private Size SizeFromTileMap(Size window)
         {
-            if (TileMapControl is null ||
-                MainTileMapPadding == Padding.Empty ||
-                TileMapControl.CellSize.IsEmpty)
+            if (IsEmptyTileMap)
             {
                 return window;
             }
@@ -313,7 +359,7 @@ namespace Controls
             tilemap = GetBoundTileSize(tilemap);
 
             // Set new tile size
-            if (TileMapControl.TileMapResizeMode == TileMapResizeMode.TileMapCellResize)
+            if (ResizeMode == ResizeMode.TileMapCellResize)
             {
                 TileMapControl.ViewSize = new Size(
                     tilemap.Width / TileMapControl.CellWidth,
@@ -321,7 +367,7 @@ namespace Controls
             }
 
             // Return inflated window size.
-            return WinApiMethods.InflateSize(tilemap, MainTileMapPadding);
+            return InflateSize(tilemap, MainTileMapPadding);
         }
     }
 }

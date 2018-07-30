@@ -5,10 +5,10 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System.Windows.Forms;
-
 namespace Controls.Editors
 {
+    using System.Windows.Forms;
+
     internal partial class CreatePaletteControl : UserControl
     {
         public int NumColors

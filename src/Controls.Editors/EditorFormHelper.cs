@@ -5,14 +5,14 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using MushROMs;
-
 namespace Controls.Editors
 {
+    using System;
+    using System.Drawing;
+    using System.Drawing.Drawing2D;
+    using System.Windows.Forms;
+    using MushROMs;
+
     public abstract class EditorFormHelper : IEditorFormHelper
     {
         public event EventHandler ActiveViewTileChanged;
@@ -82,7 +82,8 @@ namespace Controls.Editors
         {
             if (tileMapControl is null)
             {
-                throw new ArgumentNullException(nameof(tileMapControl));
+                throw new ArgumentNullException(
+                    nameof(tileMapControl));
             }
 
             if (g is null)
@@ -121,7 +122,8 @@ namespace Controls.Editors
         {
             if (tileMapControl is null)
             {
-                throw new ArgumentNullException(nameof(tileMapControl));
+                throw new ArgumentNullException(
+                    nameof(tileMapControl));
             }
 
             var clientRectangle = tileMapControl.ClientRectangle;
@@ -139,7 +141,9 @@ namespace Controls.Editors
             }
         }
 
-        private void TileMapControl_MouseMove(object sender, MouseEventArgs e)
+        private void TileMapControl_MouseMove(
+            object sender,
+            MouseEventArgs e)
         {
             SetActiveViewTileFromPixel(
                 sender as TileMapControl,
@@ -153,27 +157,29 @@ namespace Controls.Editors
             var active = ActiveViewTile;
             switch (keys)
             {
-            case Keys.Left:
-                active.X--;
-                break;
+                case Keys.Left:
+                    active.X--;
+                    break;
 
-            case Keys.Right:
-                active.X++;
-                break;
+                case Keys.Right:
+                    active.X++;
+                    break;
 
-            case Keys.Up:
-                active.Y--;
-                break;
+                case Keys.Up:
+                    active.Y--;
+                    break;
 
-            case Keys.Down:
-                active.Y++;
-                break;
+                case Keys.Down:
+                    active.Y++;
+                    break;
             }
 
             ActiveViewTile = active;
         }
 
-        private void TileMapControl_KeyDown(object sender, KeyEventArgs e)
+        private void TileMapControl_KeyDown(
+            object sender,
+            KeyEventArgs e)
         {
             SetActiveViewTileFromKey(
                 sender as TileMapControl,

@@ -5,10 +5,10 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-
 namespace Controls.Editors
 {
+    using System;
+
     public sealed class ColorizeDialog : DialogProxy
     {
         public event EventHandler ColorValueChanged;
@@ -112,10 +112,13 @@ namespace Controls.Editors
         public ColorizeDialog() : base(new ColorizeForm())
         {
             ColorizeForm = BaseForm as ColorizeForm;
-            ColorizeForm.ColorValueChanged += ColorizeForm_ColorValueChanged;
+            ColorizeForm.ColorValueChanged +=
+                ColorizeForm_ColorValueChanged;
         }
 
-        private void ColorizeForm_ColorValueChanged(object sender, EventArgs e)
+        private void ColorizeForm_ColorValueChanged(
+            object sender,
+            EventArgs e)
         {
             ColorValueChanged?.Invoke(this, e);
         }

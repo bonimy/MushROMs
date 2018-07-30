@@ -5,11 +5,11 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using MushROMs;
-
 namespace Controls.Editors
 {
+    using System;
+    using MushROMs;
+
     public abstract class FormEditorHelper : IEditorFormHelper
     {
         protected TileMapForm Form
@@ -40,8 +40,11 @@ namespace Controls.Editors
 
         protected FormEditorHelper(TileMapForm form, IEditor editor)
         {
-            Form = form ?? throw new ArgumentNullException(nameof(form));
-            Editor = editor ?? throw new ArgumentNullException(nameof(editor));
+            Form = form ??
+                throw new ArgumentNullException(nameof(form));
+
+            Editor = editor ??
+                throw new ArgumentNullException(nameof(editor));
         }
     }
 }

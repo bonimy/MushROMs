@@ -5,11 +5,11 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System.Windows.Forms;
-using Snes;
-
 namespace Controls.Editors
 {
+    using System.Windows.Forms;
+    using Snes;
+
     internal partial class CreateGfxControl : UserControl
     {
         public int NumTiles

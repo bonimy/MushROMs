@@ -5,11 +5,10 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System.Windows.Forms;
+
     public class BufferedDataGridView : DataGridView
     {
         public BufferedDataGridView()

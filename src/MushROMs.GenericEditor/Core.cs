@@ -98,7 +98,8 @@ namespace MushROMs.GenericEditor
             _disposed = true;
         }
 
-        private static EventHandler GetEvent(Action<IWin32Window> action)
+        private static EventHandler GetEvent(
+            Action<IWin32Window> action)
         {
             return (sender, e) => action(sender as IWin32Window);
         }
@@ -176,7 +177,9 @@ namespace MushROMs.GenericEditor
             MainForm.RecentFiles.Add(e.Editor.Path);
         }
 
-        private void CurrentEditorChanged(object sender, EditorEventArgs e)
+        private void CurrentEditorChanged(
+            object sender,
+            EditorEventArgs e)
         {
         }
 
@@ -196,17 +199,23 @@ namespace MushROMs.GenericEditor
             form.Show();
         }
 
-        private void EditorFormCreated(object sender, EditorFormEventArgs e)
+        private void EditorFormCreated(
+            object sender,
+            EditorFormEventArgs e)
         {
             AddEditorForm(e.Form);
         }
 
-        private void EditorFormGotFocus(object sender, EditorFormEventArgs e)
+        private void EditorFormGotFocus(
+            object sender,
+            EditorFormEventArgs e)
         {
             EditorSelector.CurrentEditor = e.Editor;
         }
 
-        private void EditorFormClosed(object sender, EditorEventArgs e)
+        private void EditorFormClosed(
+            object sender,
+            EditorEventArgs e)
         {
             EditorSelector.Items.Remove(e.Editor);
         }

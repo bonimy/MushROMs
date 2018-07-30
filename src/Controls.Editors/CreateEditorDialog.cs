@@ -5,10 +5,10 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using MushROMs;
-
 namespace Controls.Editors
 {
+    using MushROMs;
+
     public class CreateEditorDialog : DialogProxy
     {
         private CreateEditorForm CreateEditorForm
@@ -24,7 +24,9 @@ namespace Controls.Editors
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Reliability",
+            "CA2000:Dispose objects before losing scope")]
         public CreateEditorDialog() : base(new CreateEditorForm())
         {
             CreateEditorForm = BaseForm as CreateEditorForm;

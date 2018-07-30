@@ -5,11 +5,11 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using Helper;
-
 namespace Controls.Editors
 {
+    using System;
+    using Helper;
+
     public sealed class BlendDialog : DialogProxy
     {
         public event EventHandler ColorValueChanged;
@@ -97,14 +97,18 @@ namespace Controls.Editors
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Reliability",
+            "CA2000:Dispose objects before losing scope")]
         public BlendDialog() : base(new BlendForm())
         {
             BlendForm = BaseForm as BlendForm;
             BlendForm.ColorValueChanged += BlendForm_ColorValueChanged;
         }
 
-        private void BlendForm_ColorValueChanged(object sender, EventArgs e)
+        private void BlendForm_ColorValueChanged(
+            object sender,
+            EventArgs e)
         {
             ColorValueChanged?.Invoke(this, e);
         }

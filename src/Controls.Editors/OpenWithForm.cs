@@ -5,20 +5,22 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using MushROMs;
-
 namespace Controls.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Windows.Forms;
+    using MushROMs;
+
     internal partial class OpenWithForm : Form
     {
         public OpenEditorCallback SelectedOpenEditorMethod
         {
             get
             {
-                var info = lbxEditors.SelectedItem as OpenEditorCallbackInfo;
+                var info = lbxEditors.SelectedItem as
+                    OpenEditorCallbackInfo;
+
                 return info.OpenEditorMethod;
             }
         }
@@ -33,12 +35,14 @@ namespace Controls.Editors
             lbxEditors.Items.Clear();
         }
 
-        public void AddEditor(OpenEditorCallbackInfo openEditorCallbackInfo)
+        public void AddEditor(
+            OpenEditorCallbackInfo openEditorCallbackInfo)
         {
             lbxEditors.Items.Add(openEditorCallbackInfo);
         }
 
-        public void AddEditors(IEnumerable<OpenEditorCallbackInfo> types)
+        public void AddEditors(
+            IEnumerable<OpenEditorCallbackInfo> types)
         {
             foreach (var info in types)
             {

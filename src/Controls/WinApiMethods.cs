@@ -5,14 +5,14 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-using static Controls.SafeNativeMethods;
-using static Controls.UnsafeNativeMethods;
-
 namespace Controls
 {
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using static Controls.SafeNativeMethods;
+    using static Controls.UnsafeNativeMethods;
+
     public static class WinApiMethods
     {
         private const int GwlExStyle = -20;
@@ -53,12 +53,18 @@ namespace Controls
 
         public static BorderStyle GetBorderStyle(IWin32Window window)
         {
-            if ((GetWindowLong(window, GwlExStyle) & WsExClientEdge) != 0)
+            var style = GetWindowLong(window, GwlStyle);
+            var exStyle = GetWindowLong(window, GwlExStyle);
+
+            var exClientEdge = exStyle & WsExClientEdge;
+            var border = style & WsBorder;
+
+            if (exClientEdge != 0)
             {
                 return BorderStyle.Fixed3D;
             }
 
-            if ((GetWindowLong(window, GwlStyle) & WsBorder) != 0)
+            if (border != 0)
             {
                 return BorderStyle.FixedSingle;
             }
@@ -66,27 +72,35 @@ namespace Controls
             return BorderStyle.None;
         }
 
-        public static void SetBorderStyle(IWin32Window window, BorderStyle value)
+        public static void SetBorderStyle(
+            IWin32Window window,
+            BorderStyle value)
         {
-            var style = GetWindowLong(window, GwlStyle) & ~WsBorder;
-            var exstyle = GetWindowLong(window, GwlExStyle) & ~WsExClientEdge;
+            var style = GetWindowLong(window, GwlStyle);
+            var exstyle = GetWindowLong(window, GwlExStyle);
+
+            var noBorderStyle = style & ~WsBorder;
+            var noEdgeExStyle = exstyle & ~WsExClientEdge;
+
+            var borderStyle = noBorderStyle | WsBorder;
+            var edgeExStyle = noEdgeExStyle | WsExClientEdge;
 
             switch (value)
             {
-            case BorderStyle.Fixed3D:
-                SetWindowLong(window, GwlStyle, style);
-                SetWindowLong(window, GwlExStyle, exstyle | WsExClientEdge);
-                return;
+                case BorderStyle.Fixed3D:
+                    SetWindowLong(window, GwlStyle, noBorderStyle);
+                    SetWindowLong(window, GwlExStyle, edgeExStyle);
+                    return;
 
-            case BorderStyle.FixedSingle:
-                SetWindowLong(window, GwlStyle, style | WsBorder);
-                SetWindowLong(window, GwlExStyle, exstyle);
-                return;
+                case BorderStyle.FixedSingle:
+                    SetWindowLong(window, GwlStyle, borderStyle);
+                    SetWindowLong(window, GwlExStyle, noEdgeExStyle);
+                    return;
 
-            case BorderStyle.None:
-                SetWindowLong(window, GwlStyle, style);
-                SetWindowLong(window, GwlExStyle, exstyle);
-                return;
+                case BorderStyle.None:
+                    SetWindowLong(window, GwlStyle, noBorderStyle);
+                    SetWindowLong(window, GwlExStyle, noEdgeExStyle);
+                    return;
             }
         }
 
@@ -108,30 +122,36 @@ namespace Controls
         {
             switch (borderStyle)
             {
-            case BorderStyle.None:
-                return Size.Empty;
+                case BorderStyle.None:
+                    return Size.Empty;
 
-            case BorderStyle.FixedSingle:
-                return SystemInformation.BorderSize;
+                case BorderStyle.FixedSingle:
+                    return SystemInformation.BorderSize;
 
-            case BorderStyle.Fixed3D:
-                return SystemInformation.Border3DSize;
+                case BorderStyle.Fixed3D:
+                    return SystemInformation.Border3DSize;
 
-            default:
-                throw new InvalidEnumArgumentException(
-                    nameof(borderStyle),
-                    (int)borderStyle,
-                    typeof(BorderStyle));
+                default:
+                    throw new InvalidEnumArgumentException(
+                        nameof(borderStyle),
+                        (int)borderStyle,
+                        typeof(BorderStyle));
             }
         }
 
         public static Padding GetBorderPadding(IWin32Window window)
         {
             var sz = GetBorderSize(window);
-            return new Padding(sz.Width, sz.Height, sz.Width, sz.Height);
+            return new Padding(
+                sz.Width,
+                sz.Height,
+                sz.Width,
+                sz.Height);
         }
 
-        public static Padding GetPadding(Rectangle large, Rectangle small)
+        public static Padding GetPadding(
+            Rectangle large,
+            Rectangle small)
         {
             return new Padding(
                 small.Left - large.Left,
@@ -155,17 +175,28 @@ namespace Controls
             Rectangle rectangle,
             Padding padding)
         {
-            return InflateRectangle(rectangle, Padding.Empty - padding);
+            var negative = Padding.Empty - padding;
+            return InflateRectangle(rectangle, negative);
         }
 
         public static Size InflateSize(Size size, Padding padding)
         {
-            return InflateRectangle(new Rectangle(Point.Empty, size), padding).Size;
+            var rectangle = new Rectangle(Point.Empty, size);
+            var inflatedRectangle = InflateRectangle(
+                rectangle,
+                padding);
+
+            return inflatedRectangle.Size;
         }
 
         public static Size DeflateSize(Size size, Padding padding)
         {
-            return DeflateRectangle(new Rectangle(Point.Empty, size), padding).Size;
+            var rectangle = new Rectangle(Point.Empty, size);
+            var deflatedRectangle = DeflateRectangle(
+                rectangle,
+                padding);
+
+            return deflatedRectangle.Size;
         }
     }
 }

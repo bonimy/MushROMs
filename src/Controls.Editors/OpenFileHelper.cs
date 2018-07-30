@@ -5,22 +5,23 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Windows.Forms;
-using Helper;
-using MushROMs;
-using Snes;
-using static Controls.ExceptionDialog;
-
 namespace Controls.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Windows.Forms;
+    using Helper;
+    using MushROMs;
+    using Snes;
+    using static Controls.ExceptionDialog;
+
     public class OpenFileHelper
     {
         public event EventHandler<EditorEventArgs> EditorOpened;
 
-        private ExtensionDictionary<OpenEditorCallback> OpenFileAssociations
+        private ExtensionDictionary<OpenEditorCallback>
+            OpenFileAssociations
         {
             get;
         }
@@ -32,14 +33,19 @@ namespace Controls.Editors
 
         public OpenFileHelper()
         {
-            OpenFileAssociations = new ExtensionDictionary<OpenEditorCallback>()
+            OpenFileAssociations =
+                new ExtensionDictionary<OpenEditorCallback>()
             {
                 { ".rpf", OpenRpf },
             };
 
-            OpenEditorCallbackInfo = new List<OpenEditorCallbackInfo>()
+            OpenEditorCallbackInfo =
+                new List<OpenEditorCallbackInfo>()
             {
-                new OpenEditorCallbackInfo(OpenRpf, "Palette Editor", null),
+                new OpenEditorCallbackInfo(
+                    OpenRpf,
+                    "Palette Editor",
+                    null),
             };
         }
 
@@ -73,13 +79,20 @@ namespace Controls.Editors
 
         public void OpenFile(IWin32Window owner, string path)
         {
-            if (OpenFileAssociations.TryGetValue(path, out var openEditor))
+            if (TryGetValue(path, out var openEditor))
             {
                 OpenFile(owner, path, openEditor);
                 return;
             }
 
             OpenFileAs(owner, path);
+
+            bool TryGetValue(string key, out OpenEditorCallback value)
+            {
+                return OpenFileAssociations.TryGetValue(
+                    key,
+                    out value);
+            }
         }
 
         public void OpenFileAs(string path)

@@ -45,7 +45,9 @@ namespace Controls.Editors
             OnEditorCreated(e);
         }
 
-        private bool TryCreateEditor(IWin32Window owner, out IEditor editor)
+        private bool TryCreateEditor(
+            IWin32Window owner,
+            out IEditor editor)
         {
             using (var dlg = new CreateEditorDialog())
             {

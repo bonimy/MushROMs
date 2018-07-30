@@ -5,14 +5,14 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
-using Helper.PixelFormat;
-using static Helper.ThrowHelper;
-
 namespace Controls
 {
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using Helper.PixelFormat;
+    using static Helper.ThrowHelper;
+
     public class CheckerPatternDrawer : Component
     {
         private int _width;
@@ -106,7 +106,7 @@ namespace Controls
             Color color1,
             Color color2,
             Size size)
-            : this(color1, color1, size.Width, size.Height)
+            : this(color1, color2, size.Width, size.Height)
         {
         }
 

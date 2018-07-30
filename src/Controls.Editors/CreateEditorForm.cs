@@ -5,21 +5,22 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Drawing;
-using System.Windows.Forms;
-using Controls.Editors.Properties;
-using MushROMs;
-using Snes;
-
 namespace Controls.Editors
 {
+    using System;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using Controls.Editors.Properties;
+    using MushROMs;
+    using Snes;
+
     internal sealed partial class CreateEditorForm : Form
     {
-        private static readonly Color HoveringCellColor = Color.FromArgb(
-            0xFF,
-            0xFF,
-            0xBF);
+        private static readonly Color HoveringCellColor =
+            Color.FromArgb(
+                0xFF,
+                0xFF,
+                0xBF);
 
         public CreateEditorCallback CreateEditorCallback
         {
@@ -33,6 +34,19 @@ namespace Controls.Editors
         {
             get;
             set;
+        }
+
+        private GridItem CurrentGridItem
+        {
+            get
+            {
+                return GridItems[CurrentRowIndex];
+            }
+
+            set
+            {
+                GridItems[CurrentRowIndex] = value;
+            }
         }
 
         private DataGridViewRowCollection Rows
@@ -75,18 +89,23 @@ namespace Controls.Editors
 
             for (var i = 0; i < GridItems.Length; i++)
             {
-                Rows.Add(GridItems[i].Icon, GridItems[i].FileType, String.Empty);
+                Rows.Add(
+                    GridItems[i].Icon,
+                    GridItems[i].FileType,
+                    String.Empty);
             }
         }
 
         private IEditor CreateEditor()
         {
-            var options = GridItems[CurrentRowIndex].Options;
+            var options = CurrentGridItem.Options;
             switch (options)
             {
-            case CreatePaletteControl createPaletteControl:
-                var palette = new Palette(createPaletteControl.NumColors);
-                return new PaletteEditor(palette);
+                case CreatePaletteControl createPaletteControl:
+                    var palette = new Palette(
+                        createPaletteControl.NumColors);
+
+                    return new PaletteEditor(palette);
             }
 
             return null;
@@ -113,25 +132,33 @@ namespace Controls.Editors
             base.OnKeyDown(e);
         }
 
-        private void NewFileList_CellMouseEnter(object sender, DataGridViewCellEventArgs e)
+        private void NewFileList_CellMouseEnter(
+            object sender,
+            DataGridViewCellEventArgs e)
         {
             SetRowBackColor(e.RowIndex, HoveringCellColor);
         }
 
-        private void NewFileList_CellMouseLeave(object sender, DataGridViewCellEventArgs e)
+        private void NewFileList_CellMouseLeave(
+            object sender,
+            DataGridViewCellEventArgs e)
         {
-            SetRowBackColor(e.RowIndex, SystemColors.ControlLightLight);
+            SetRowBackColor(
+                e.RowIndex,
+                SystemColors.ControlLightLight);
         }
 
         private void CurrentCellChanged(object sender, EventArgs e)
         {
-            lblDescription.Text = GridItems[CurrentRowIndex].FileDescription;
+            lblDescription.Text = CurrentGridItem.FileDescription;
 
             pnlOptions.Controls.Clear();
-            pnlOptions.Controls.Add(GridItems[CurrentRowIndex].Options);
+            pnlOptions.Controls.Add(CurrentGridItem.Options);
         }
 
-        private void Options_ControlAdded(object sender, ControlEventArgs e)
+        private void Options_ControlAdded(
+            object sender,
+            ControlEventArgs e)
         {
             var width = pnlOptions.Width - e.Control.Width;
             var x = width / 2;

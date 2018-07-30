@@ -5,16 +5,16 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Windows.Forms;
-using MushROMs;
-using Snes;
-using static Controls.ExceptionDialog;
-
 namespace Controls.Editors
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Windows.Forms;
+    using MushROMs;
+    using Snes;
+    using static Controls.ExceptionDialog;
+
     public class SaveFileHelper
     {
         public event EventHandler<EditorEventArgs> FileSaved;
@@ -26,7 +26,8 @@ namespace Controls.Editors
 
         public SaveFileHelper()
         {
-            SaveFileAssociations = new Dictionary<Type, SaveEditorCallback>()
+            SaveFileAssociations =
+                new Dictionary<Type, SaveEditorCallback>()
             {
                 { typeof(PaletteEditor), SavePalette },
             };
@@ -47,7 +48,10 @@ namespace Controls.Editors
             SaveFile(owner, editor, editor.Path);
         }
 
-        public void SaveFile(IWin32Window owner, IEditor editor, string path)
+        public void SaveFile(
+            IWin32Window owner,
+            IEditor editor,
+            string path)
         {
             if (editor is null)
             {
@@ -55,12 +59,19 @@ namespace Controls.Editors
             }
 
             var type = editor.GetType();
-            if (!SaveFileAssociations.TryGetValue(type, out var saveEditor))
+            if (!TryGetValue(type, out var saveEditor))
             {
                 return;
             }
 
             SaveFile(owner, editor, path, saveEditor);
+
+            bool TryGetValue(Type key, out SaveEditorCallback value)
+            {
+                return SaveFileAssociations.TryGetValue(
+                    key,
+                    out value);
+            }
         }
 
         public void SaveFile(
@@ -142,7 +153,9 @@ namespace Controls.Editors
             SaveAll(null, editors);
         }
 
-        public void SaveAll(IWin32Window owner, IEnumerable<IEditor> editors)
+        public void SaveAll(
+            IWin32Window owner,
+            IEnumerable<IEditor> editors)
         {
             if (editors is null)
             {

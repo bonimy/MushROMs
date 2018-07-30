@@ -5,13 +5,13 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.ComponentModel;
-using System.Windows.Forms;
-using static System.Math;
-
 namespace Controls.Editors
 {
+    using System;
+    using System.ComponentModel;
+    using System.Windows.Forms;
+    using static System.Math;
+
     internal sealed partial class ColorizeForm : Form
     {
         public event EventHandler ColorValueChanged;
@@ -60,12 +60,14 @@ namespace Controls.Editors
         {
             get
             {
-                return (float)ltbSaturation.Value / ltbSaturation.Maximum;
+                return
+                    (float)ltbSaturation.Value / ltbSaturation.Maximum;
             }
 
             set
             {
-                ltbSaturation.Value = (int)Round(value * ltbSaturation.Maximum);
+                ltbSaturation.Value =
+                    (int)Round(value * ltbSaturation.Maximum);
             }
         }
 
@@ -73,12 +75,14 @@ namespace Controls.Editors
         {
             get
             {
-                return (float)ltbLightness.Value / ltbLightness.Maximum;
+                return
+                    (float)ltbLightness.Value / ltbLightness.Maximum;
             }
 
             set
             {
-                ltbLightness.Value = (int)Round(value * ltbLightness.Maximum);
+                ltbLightness.Value =
+                    (int)Round(value * ltbLightness.Maximum);
             }
         }
 
@@ -110,7 +114,8 @@ namespace Controls.Editors
 
             set
             {
-                ltnWeight.Value = (int)Round(value * ltnWeight.Maximum);
+                ltnWeight.Value =
+                    (int)Round(value * ltnWeight.Maximum);
             }
         }
 
@@ -127,19 +132,19 @@ namespace Controls.Editors
             {
                 switch (value)
                 {
-                case ColorizeMode.Adjust:
-                    chkColorize.Checked = false;
-                    return;
+                    case ColorizeMode.Adjust:
+                        chkColorize.Checked = false;
+                        return;
 
-                case ColorizeMode.Colorize:
-                    chkColorize.Checked = true;
-                    return;
+                    case ColorizeMode.Colorize:
+                        chkColorize.Checked = true;
+                        return;
 
-                default:
-                    throw new InvalidEnumArgumentException(
-                        nameof(value),
-                        (int)value,
-                        typeof(ColorizeMode));
+                    default:
+                        throw new InvalidEnumArgumentException(
+                            nameof(value),
+                            (int)value,
+                            typeof(ColorizeMode));
                 }
             }
         }
@@ -207,7 +212,8 @@ namespace Controls.Editors
                 ltbHue.Maximum = 360;
                 ltbSaturation.Minimum = ltbLightness.Minimum = 0;
                 ltbSaturation.Maximum = ltbLightness.Maximum = 100;
-                ltbSaturation.TickFrequency = ltbLightness.TickFrequency = 5;
+                ltbSaturation.TickFrequency =
+                ltbLightness.TickFrequency = 5;
 
                 CurrentHSL = SavedColorize;
             }
@@ -221,7 +227,8 @@ namespace Controls.Editors
                 ltbSaturation.Minimum = -ltbSaturation.Maximum;
                 ltbLightness.Maximum = 100;
                 ltbLightness.Minimum = -ltbLightness.Maximum;
-                ltbSaturation.TickFrequency = ltbLightness.TickFrequency = 10;
+                ltbSaturation.TickFrequency =
+                ltbLightness.TickFrequency = 10;
 
                 CurrentHSL = SavedAdjust;
             }
@@ -240,7 +247,9 @@ namespace Controls.Editors
             ResetValues();
         }
 
-        private void Colorize_CheckedChanged(object sender, EventArgs e)
+        private void Colorize_CheckedChanged(
+            object sender,
+            EventArgs e)
         {
             SwitchValues();
         }

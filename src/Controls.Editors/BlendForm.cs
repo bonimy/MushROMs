@@ -5,13 +5,13 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Windows.Forms;
-using Helper;
-using static System.Math;
-
 namespace Controls.Editors
 {
+    using System;
+    using System.Windows.Forms;
+    using Helper;
+    using static System.Math;
+
     internal sealed partial class BlendForm : Form
     {
         public event EventHandler ColorValueChanged;

@@ -5,11 +5,11 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System.Windows.Forms;
-using MushROMs;
-
 namespace Controls
 {
+    using System.Windows.Forms;
+    using MushROMs;
+
     public class FormControlTileMapHelper1D : FormControlTileMapHelper
     {
         public new TileMap1D TileMap

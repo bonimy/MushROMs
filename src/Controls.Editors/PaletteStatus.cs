@@ -5,15 +5,15 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.ComponentModel;
-using System.Windows.Forms;
-using Controls.Editors.Properties;
-using Helper.PixelFormat;
-using static Helper.StringHelper;
-
 namespace Controls.Editors
 {
+    using System;
+    using System.ComponentModel;
+    using System.Windows.Forms;
+    using Controls.Editors.Properties;
+    using Helper.PixelFormat;
+    using static Helper.StringHelper;
+
     public partial class PaletteStatus : UserControl
     {
         private Color15BppBgr _activeColor;
@@ -83,7 +83,8 @@ namespace Controls.Editors
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public Color15BppBgr ActiveColor
         {
             get
@@ -105,7 +106,8 @@ namespace Controls.Editors
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public int ZoomScaleCount
         {
             get
@@ -115,7 +117,8 @@ namespace Controls.Editors
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public int PaletteZoomIndex
         {
             get
@@ -140,7 +143,8 @@ namespace Controls.Editors
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public PaletteZoomScale PaletteZoomScale
         {
             get
@@ -155,7 +159,8 @@ namespace Controls.Editors
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public bool ShowAddressScrolling
         {
             get

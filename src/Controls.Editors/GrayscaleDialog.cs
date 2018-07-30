@@ -5,11 +5,11 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using Helper;
-
 namespace Controls.Editors
 {
+    using System;
+    using Helper;
+
     public sealed class GrayscaleDialog : DialogProxy
     {
         private GrayscaleForm GrayscaleForm
@@ -84,11 +84,15 @@ namespace Controls.Editors
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Reliability",
+            "CA2000:Dispose objects before losing scope")]
         public GrayscaleDialog() : base(new GrayscaleForm())
         {
             GrayscaleForm = BaseForm as GrayscaleForm;
-            GrayscaleForm.ColorValueChanged += GrayscaleForm_ColorValueChanged;
+
+            GrayscaleForm.ColorValueChanged +=
+                GrayscaleForm_ColorValueChanged;
         }
 
         public void ResetValues()
@@ -96,7 +100,9 @@ namespace Controls.Editors
             GrayscaleForm.ResetValues();
         }
 
-        private void GrayscaleForm_ColorValueChanged(object sender, EventArgs e)
+        private void GrayscaleForm_ColorValueChanged(
+            object sender,
+            EventArgs e)
         {
             ColorValueChanged?.Invoke(this, e);
         }

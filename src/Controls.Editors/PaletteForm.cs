@@ -5,14 +5,14 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-using Helper.PixelFormat;
-
 namespace Controls.Editors
 {
+    using System;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using Helper.PixelFormat;
+
     public partial class PaletteForm : TileMapForm
     {
         public event PaintEventHandler DrawPalette
@@ -55,7 +55,8 @@ namespace Controls.Editors
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public string Status
         {
             get
@@ -70,7 +71,8 @@ namespace Controls.Editors
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public Color ActiveColor
         {
             get
@@ -85,7 +87,8 @@ namespace Controls.Editors
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public bool ShowRomScrolling
         {
             get
@@ -100,7 +103,8 @@ namespace Controls.Editors
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         private int LastZoomScaleIndex
         {
             get;
@@ -108,7 +112,8 @@ namespace Controls.Editors
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         private Size[] ZoomedViewSizes
         {
             get;
@@ -116,7 +121,8 @@ namespace Controls.Editors
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public PaletteZoomScale PaletteZoomScale
         {
             get
@@ -166,7 +172,8 @@ namespace Controls.Editors
 
             var zoom = (int)PaletteZoomScale;
             TileMapControl.ZoomSize = new Size(zoom, zoom);
-            TileMapControl.ViewSize = ZoomedViewSizes[paletteStatus.PaletteZoomIndex];
+            TileMapControl.ViewSize =
+                ZoomedViewSizes[paletteStatus.PaletteZoomIndex];
 
             LastZoomScaleIndex = paletteStatus.PaletteZoomIndex;
         }
@@ -179,7 +186,9 @@ namespace Controls.Editors
             }
         }
 
-        private void TileMapControl_ClientSizeChanged(object sender, EventArgs e)
+        private void TileMapControl_ClientSizeChanged(
+            object sender,
+            EventArgs e)
         {
             SetSizeFromTileMapControl();
         }

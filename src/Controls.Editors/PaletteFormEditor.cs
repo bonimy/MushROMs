@@ -5,17 +5,17 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Windows.Forms;
-using Helper.PixelFormat;
-using MushROMs;
-using Snes;
-
 namespace Controls.Editors
 {
+    using System;
+    using System.Drawing;
+    using System.Drawing.Imaging;
+    using System.IO;
+    using System.Windows.Forms;
+    using Helper.PixelFormat;
+    using MushROMs;
+    using Snes;
+
     public class PaletteFormEditor : EditorFormHelper
     {
         public event EventHandler StartAddressChanged;
@@ -95,7 +95,8 @@ namespace Controls.Editors
             PaletteForm.DrawPalette += DrawPalette;
             PaletteForm.NextByte += NextByte;
             PaletteForm.LastByte += LastByte;
-            TileMapControl.ZeroIndexChanged += TileMapControl_ZeroIndexChanged;
+            TileMapControl.ZeroIndexChanged +=
+                TileMapControl_ZeroIndexChanged;
 
             _startAddress = 0;
         }
@@ -110,9 +111,12 @@ namespace Controls.Editors
             TileMapControl.Invalidate();
         }
 
-        private void TileMapControl_ZeroIndexChanged(object sender, EventArgs e)
+        private void TileMapControl_ZeroIndexChanged(
+            object sender,
+            EventArgs e)
         {
-            StartAddress = Offset + TileMapControl.ZeroTile * Color15BppBgr.SizeOf;
+            var size = TileMapControl.ZeroTile * Color15BppBgr.SizeOf;
+            StartAddress = Offset + size;
         }
 
         private void LastByte(object sender, EventArgs e)

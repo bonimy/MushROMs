@@ -5,11 +5,11 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System.Collections.Generic;
-using MushROMs;
-
 namespace Controls.Editors
 {
+    using System.Collections.Generic;
+    using MushROMs;
+
     public class OpenWithDialog : DialogProxy
     {
         private OpenWithForm OpenWithForm
@@ -25,7 +25,9 @@ namespace Controls.Editors
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage(
+            "Microsoft.Reliability",
+            "CA2000:Dispose objects before losing scope")]
         public OpenWithDialog() : base(new OpenWithForm())
         {
             OpenWithForm = BaseForm as OpenWithForm;
@@ -36,12 +38,14 @@ namespace Controls.Editors
             OpenWithForm.ClearEditors();
         }
 
-        public void AddEditor(OpenEditorCallbackInfo openEditorCallbackInfo)
+        public void AddEditor(
+            OpenEditorCallbackInfo openEditorCallbackInfo)
         {
             OpenWithForm.AddEditor(openEditorCallbackInfo);
         }
 
-        public void AddEditors(IEnumerable<OpenEditorCallbackInfo> types)
+        public void AddEditors(
+            IEnumerable<OpenEditorCallbackInfo> types)
         {
             OpenWithForm.AddEditors(types);
         }

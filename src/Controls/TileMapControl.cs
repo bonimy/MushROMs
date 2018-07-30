@@ -5,28 +5,34 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using MushROMs;
-
 namespace Controls
 {
-    public abstract partial class TileMapControl : DesignControl, ITileMap
+    using System;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Drawing.Drawing2D;
+    using System.Windows.Forms;
+    using MushROMs;
+    using TileResize = TileMapResizeMode;
+
+    public abstract partial class
+        TileMapControl :
+        DesignControl, ITileMap
     {
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public event PaintEventHandler DrawViewTile;
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public event PaintEventHandler DrawSelection;
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        internal TileMapResizeMode TileMapResizeMode
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
+        internal TileResize TileMapResizeMode
         {
             get;
             set;
@@ -55,26 +61,31 @@ namespace Controls
                 clientSize.Width + padding.Horizontal,
                 clientSize.Height + padding.Vertical);
 
-            base.SetBoundsCore(x, y, size.Width, size.Height, specified);
+            base.SetBoundsCore(
+                x,
+                y,
+                size.Width,
+                size.Height,
+                specified);
         }
 
         protected override void SetClientSizeCore(int x, int y)
         {
-            if (TileMapResizeMode == TileMapResizeMode.ControlResize)
+            if (TileMapResizeMode == TileResize.ControlResize)
             {
                 return;
             }
 
-            if (TileMapResizeMode == TileMapResizeMode.None)
+            if (TileMapResizeMode == TileResize.None)
             {
-                TileMapResizeMode = TileMapResizeMode.ControlResize;
+                TileMapResizeMode = TileResize.ControlResize;
             }
 
             base.SetClientSizeCore(x, y);
 
-            if (TileMapResizeMode == TileMapResizeMode.ControlResize)
+            if (TileMapResizeMode == TileResize.ControlResize)
             {
-                TileMapResizeMode = TileMapResizeMode.None;
+                TileMapResizeMode = TileResize.None;
             }
         }
 
@@ -85,16 +96,16 @@ namespace Controls
                 return;
             }
 
-            if (TileMapResizeMode == TileMapResizeMode.None)
+            if (TileMapResizeMode == TileResize.None)
             {
-                TileMapResizeMode = TileMapResizeMode.TileMapCellResize;
+                TileMapResizeMode = TileResize.TileMapCellResize;
             }
 
             SetClientSizeCore(TileMapSize.Width, TileMapSize.Height);
 
-            if (TileMapResizeMode == TileMapResizeMode.TileMapCellResize)
+            if (TileMapResizeMode == TileResize.TileMapCellResize)
             {
-                TileMapResizeMode = TileMapResizeMode.None;
+                TileMapResizeMode = TileResize.None;
             }
         }
 
