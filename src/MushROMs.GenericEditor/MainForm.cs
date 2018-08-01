@@ -307,7 +307,7 @@ namespace MushROMs.GenericEditor
         private void OpenRecent_Click(object sender, EventArgs e)
         {
             var tsi = sender as ToolStripItem;
-            var path = tsi?.Tag as string;
+            var path = tsi.Tag as string;
 
             var recentFileArgs = new PathEventArgs(path);
             OpenRecentClick?.Invoke(this, recentFileArgs);

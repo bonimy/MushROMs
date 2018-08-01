@@ -10,7 +10,7 @@ namespace MushROMs.GenericEditor
     using System;
     using System.Collections.Specialized;
     using System.Windows.Forms;
-    using MushROMs.GenericEditor.Properties;
+    using Properties;
 
     public static class Program
     {
@@ -40,13 +40,25 @@ namespace MushROMs.GenericEditor
         [STAThread]
         private static void Main()
         {
+            InitializeApplicationState();
+            CheckSettings();
+            RunCore();
+        }
+
+        private static void InitializeApplicationState()
+        {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+
+            // FIXME: Make an exit confirmation dialog? Not sure yet.
             Application.ApplicationExit += (s, e) =>
             {
                 Settings.Save();
             };
+        }
 
+        private static void CheckSettings()
+        {
             if (Settings.FirstTime)
             {
                 InitializeSettings();
@@ -54,7 +66,10 @@ namespace MushROMs.GenericEditor
                 Settings.FirstTime = false;
                 Settings.Save();
             }
+        }
 
+        private static void RunCore()
+        {
             using (var core = new Core())
             {
                 core.MainForm.AboutClick += (sender, e) =>

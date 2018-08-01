@@ -10,7 +10,6 @@ namespace MushROMs
     using System;
     using System.IO;
     using Helper;
-    using static Helper.StringHelper;
     using static System.IO.Path;
 
     public abstract class Editor : IEditor
@@ -20,6 +19,7 @@ namespace MushROMs
         protected Editor(string path)
         {
             Path = path;
+            History = new UndoFactory();
         }
 
         public event EventHandler PathChanged;
