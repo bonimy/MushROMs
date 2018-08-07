@@ -103,7 +103,7 @@ namespace Tests.Helper
         [TestMethod]
         public void CompareToNullString()
         {
-            // TODO: Determine nehavior for null strings.
+            // TODO: Determine behavior for null strings.
             Assert.Inconclusive();
         }
 
