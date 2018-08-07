@@ -6,7 +6,7 @@
 // </copyright>
 
 using System.Windows.Forms;
-using MushROMs;
+using MushROMs.TileMaps;
 
 namespace Controls
 {

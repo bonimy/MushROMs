@@ -1,28 +1,27 @@
-﻿// <copyright file="Selection2D.cs" company="Public Domain">
+﻿// <copyright file="Selection1D.cs" company="Public Domain">
 //     Copyright (c) 2018 Nelson Garcia. All rights reserved
 //     Licensed under GNU Affero General Public License.
 //     See LICENSE in project root for full license information, or visit
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-namespace MushROMs
+namespace MushROMs.TileMaps
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using System.Drawing;
 
-    public abstract class Selection2D : ISelection2D
+    public abstract class Selection1D : ISelection1D
     {
-        public static readonly ISelection2D Empty =
-            new EmptySelection2D();
+        public static readonly ISelection1D Empty =
+            new EmptySelection1D();
 
-        protected Selection2D(Point startPosition)
+        protected Selection1D(int startIndex)
         {
-            StartPosition = startPosition;
+            StartIndex = startIndex;
         }
 
-        public Point StartPosition
+        public int StartIndex
         {
             get;
         }
@@ -32,38 +31,25 @@ namespace MushROMs
             get;
         }
 
-        public abstract Point this[int index]
+        public abstract int this[int index]
         {
             get;
         }
 
-        public abstract Selection2D Copy();
+        public abstract ISelection1D Copy();
 
-        ISelection2D ISelection2D.Copy()
-        {
-            return Copy();
-        }
+        public abstract bool Contains(int index);
 
-        public abstract bool Contains(Point position);
-
-        public abstract IEnumerator<Point> GetEnumerator();
+        public abstract IEnumerator<int> GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
 
-        private sealed class EmptySelection2D : ISelection2D
+        private sealed class EmptySelection1D : ISelection1D
         {
-            Point ISelection2D.StartPosition
-            {
-                get
-                {
-                    return Point.Empty;
-                }
-            }
-
-            int IReadOnlyCollection<Point>.Count
+            int ISelection1D.StartIndex
             {
                 get
                 {
@@ -71,7 +57,15 @@ namespace MushROMs
                 }
             }
 
-            Point IReadOnlyList<Point>.this[int index]
+            int IReadOnlyCollection<int>.Count
+            {
+                get
+                {
+                    return 0;
+                }
+            }
+
+            int IReadOnlyList<int>.this[int index]
             {
                 get
                 {
@@ -79,17 +73,18 @@ namespace MushROMs
                 }
             }
 
-            ISelection2D ISelection2D.Copy()
+            ISelection1D ISelection1D.Copy()
             {
+                // There only ever needs to be one instance.
                 return Empty;
             }
 
-            bool ISelection2D.Contains(Point position)
+            bool ISelection1D.Contains(int index)
             {
                 return false;
             }
 
-            IEnumerator<Point> IEnumerable<Point>.GetEnumerator()
+            IEnumerator<int> IEnumerable<int>.GetEnumerator()
             {
                 return default(Enumerator);
             }
@@ -99,9 +94,9 @@ namespace MushROMs
                 return default(Enumerator);
             }
 
-            private struct Enumerator : IEnumerator<Point>
+            private struct Enumerator : IEnumerator<int>
             {
-                Point IEnumerator<Point>.Current
+                int IEnumerator<int>.Current
                 {
                     get;
                 }

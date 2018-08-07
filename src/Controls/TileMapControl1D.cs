@@ -8,7 +8,7 @@
 using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using MushROMs;
+using MushROMs.TileMaps;
 using static Helper.ThrowHelper;
 
 namespace Controls

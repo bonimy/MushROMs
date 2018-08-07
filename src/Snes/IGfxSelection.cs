@@ -7,7 +7,7 @@
 
 namespace Snes
 {
-    using MushROMs;
+    using MushROMs.TileMaps;
 
     public interface IGfxSelection : ISelection1D
     {

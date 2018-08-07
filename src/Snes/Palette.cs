@@ -11,7 +11,7 @@ namespace Snes
     using System.Collections;
     using System.Collections.Generic;
     using Helper.PixelFormat;
-    using MushROMs;
+    using MushROMs.TileMaps;
 
     public class Palette : IReadOnlyList<byte>
     {

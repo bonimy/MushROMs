@@ -5,7 +5,7 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-namespace MushROMs
+namespace MushROMs.TileMaps
 {
     public interface ITileMap1D : ITileMap
     {

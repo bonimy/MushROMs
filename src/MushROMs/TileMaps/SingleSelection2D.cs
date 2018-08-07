@@ -1,20 +1,21 @@
-﻿// <copyright file="SingleSelection1D.cs" company="Public Domain">
+﻿// <copyright file="SingleSelection2D.cs" company="Public Domain">
 //     Copyright (c) 2018 Nelson Garcia. All rights reserved
 //     Licensed under GNU Affero General Public License.
 //     See LICENSE in project root for full license information, or visit
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-namespace MushROMs
+namespace MushROMs.TileMaps
 {
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Drawing;
 
-    public sealed class SingleSelection1D : Selection1D
+    public sealed class SingleSelection2D : Selection2D
     {
-        public SingleSelection1D(int index)
-            : base(index)
+        public SingleSelection2D(Point position)
+            : base(position)
         {
         }
 
@@ -26,7 +27,7 @@ namespace MushROMs
             }
         }
 
-        public override int this[int index]
+        public override Point this[int index]
         {
             get
             {
@@ -36,35 +37,35 @@ namespace MushROMs
                         nameof(index));
                 }
 
-                return StartIndex;
+                return StartPosition;
             }
         }
 
-        public override ISelection1D Copy()
+        public override Selection2D Copy()
         {
-            return new SingleSelection1D(StartIndex);
+            return new SingleSelection2D(StartPosition);
         }
 
-        public override bool Contains(int index)
+        public override bool Contains(Point position)
         {
-            return index == StartIndex;
+            return position == StartPosition;
         }
 
-        public override IEnumerator<int> GetEnumerator()
+        public override IEnumerator<Point> GetEnumerator()
         {
-            return new Enumerator(StartIndex);
+            return new Enumerator(StartPosition);
         }
 
-        private struct Enumerator : IEnumerator<int>
+        private struct Enumerator : IEnumerator<Point>
         {
-            public Enumerator(int startIndex)
+            public Enumerator(Point startPosition)
             {
                 CanMove = true;
-                StartIndex = startIndex;
+                StartPosition = startPosition;
                 Current = default;
             }
 
-            public int Current
+            public Point Current
             {
                 get;
                 private set;
@@ -78,7 +79,7 @@ namespace MushROMs
                 }
             }
 
-            private int StartIndex
+            private Point StartPosition
             {
                 get;
             }
@@ -99,15 +100,15 @@ namespace MushROMs
             {
                 if (CanMove)
                 {
+                    Current = StartPosition;
                     CanMove = false;
-                    Current = StartIndex;
                     return true;
                 }
 
                 return false;
             }
 
-            void IDisposable.Dispose()
+            public void Dispose()
             {
             }
         }

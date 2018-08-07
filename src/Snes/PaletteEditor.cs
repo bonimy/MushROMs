@@ -11,6 +11,7 @@ namespace Snes
     using Helper;
     using Helper.PixelFormat;
     using MushROMs;
+    using MushROMs.TileMaps;
     using static System.IO.Path;
 
     public class PaletteEditor : Editor

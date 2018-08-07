@@ -11,7 +11,7 @@ namespace Snes
     using System.Collections;
     using System.Collections.Generic;
     using System.ComponentModel;
-    using MushROMs;
+    using MushROMs.TileMaps;
 
     public sealed class GfxSelection : IGfxSelection
     {

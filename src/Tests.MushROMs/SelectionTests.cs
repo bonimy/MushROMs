@@ -7,7 +7,7 @@
 
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using MushROMs;
+using MushROMs.TileMaps;
 
 namespace Tests.Helper
 {

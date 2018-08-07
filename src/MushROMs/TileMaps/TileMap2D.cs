@@ -5,7 +5,7 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-namespace MushROMs
+namespace MushROMs.TileMaps
 {
     using System;
     using System.Drawing;

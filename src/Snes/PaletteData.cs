@@ -12,7 +12,7 @@ namespace Snes
     using System.Collections.Generic;
     using Helper;
     using Helper.PixelFormat;
-    using MushROMs;
+    using MushROMs.TileMaps;
 
     public class PaletteData : IReadOnlyList<Color15BppBgr>
     {

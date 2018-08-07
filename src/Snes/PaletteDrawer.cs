@@ -10,7 +10,7 @@ namespace Snes
     using System;
     using System.Threading.Tasks;
     using Helper.PixelFormat;
-    using MushROMs;
+    using MushROMs.TileMaps;
 
     public class PaletteDrawer
     {
