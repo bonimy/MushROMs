@@ -31,8 +31,4 @@
     <ProjectReference Include="..\Helper\Helper.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="IO\" />
-  </ItemGroup>
-
 </Project>
