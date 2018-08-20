@@ -6,7 +6,7 @@ Please be sure the following are completed before submitting a pull request:
 - [ ] - The documentation has been updated accordingly
 - [ ] - Pull request does not target the master branch
 - [ ] - Code follows our style rules given in [CONTRIBUTING](../CONTRIBUTING.md) guidelines
-- [ ] - There are no similiar pull requests active right now
+- [ ] - There are no similar pull requests active right now
 - [ ] - Are there any breaking changes?
 - [ ] - Does this pull request close any open issues?
 - [ ] - Are there any useful screenshots that can be given?
