@@ -42,7 +42,8 @@ Do you want to add a feature, report a bug, or propose a change to MushROMs? Tha
 
 # Credits
 Major contributors to MushROMs
-* [Nelson Garcia](https://github.com/bonimy)
+* [Nelson Garcia](https://github.com/bonimy) - Project lead and main programmer
+* [randomdude999](https://github.com/randomdude999) - Compression routine documentation
 
 # License
 MushROMs: Super Nintendo game editing libraries and tools
