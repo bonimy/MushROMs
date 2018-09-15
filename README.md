@@ -25,7 +25,7 @@ Presently, the [Visual Studio 2017 IDE](https://www.visualstudio.com/en-us/news/
     - Under the Individual Components tab, select .NET Framework 4.7 SDK and .NET Framework 4.7 targeting pack if they weren't already selected.
     - Under the _Code Tools_ section (still in Individual Components tab), select **Git for Windows** and **GitHub extension for Visual Studio**.
 * Click Install and let the installer do it's thing.
-* Clone our repository and open [MushROMs.sln](MushROMs.sln) in Visual Studio.
+* Clone our repository and open [src/MushROMs.sln](src/MushROMs.sln) in Visual Studio.
 * Hit `F5` to Build and Run and you should be all set!
 
 # History
