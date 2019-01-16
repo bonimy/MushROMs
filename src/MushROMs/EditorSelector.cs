@@ -26,7 +26,6 @@ namespace MushROMs
     using System;
     using System.Collections;
     using System.Collections.Generic;
-    using Helper;
 
     public class EditorSelector
     {
@@ -166,7 +165,6 @@ namespace MushROMs
                     throw new ArgumentNullException(nameof(item));
                 }
 
-                var e = new EditorEventArgs(item);
                 if (Editors.Contains(item))
                 {
                     EditorSelector.CurrentEditor = item;
@@ -174,11 +172,14 @@ namespace MushROMs
                 }
 
                 Editors.Add(item);
+
+                var e = new EditorEventArgs(item);
                 EditorSelector.OnEditorAdded(e);
             }
 
             public void Clear()
             {
+                // Remove each item at a time to trigger their events. This has bad time complexity but there should never be more than 100 editors in a collection.
                 var items = new List<IEditor>(Editors);
                 foreach (var item in items)
                 {

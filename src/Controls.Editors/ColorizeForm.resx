@@ -1,0 +1,711 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btnReset.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="btnReset.Location" type="System.Drawing.Point, System.Drawing">
+    <value>151, 293</value>
+  </data>
+  <data name="btnReset.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="btnReset.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="btnReset.Text" xml:space="preserve">
+    <value>Reset</value>
+  </data>
+  <data name="&gt;&gt;btnReset.Name" xml:space="preserve">
+    <value>btnReset</value>
+  </data>
+  <data name="&gt;&gt;btnReset.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnReset.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnReset.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="chkPreview.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkPreview.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 320</value>
+  </data>
+  <data name="chkPreview.Size" type="System.Drawing.Size, System.Drawing">
+    <value>64, 17</value>
+  </data>
+  <data name="chkPreview.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="chkPreview.Text" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="&gt;&gt;chkPreview.Name" xml:space="preserve">
+    <value>chkPreview</value>
+  </data>
+  <data name="&gt;&gt;chkPreview.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkPreview.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;chkPreview.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="chkColorize.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkColorize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 297</value>
+  </data>
+  <data name="chkColorize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>63, 17</value>
+  </data>
+  <data name="chkColorize.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="chkColorize.Text" xml:space="preserve">
+    <value>Colorize</value>
+  </data>
+  <data name="&gt;&gt;chkColorize.Name" xml:space="preserve">
+    <value>chkColorize</value>
+  </data>
+  <data name="&gt;&gt;chkColorize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkColorize.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;chkColorize.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="btnOK.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnOK.Location" type="System.Drawing.Point, System.Drawing">
+    <value>232, 293</value>
+  </data>
+  <data name="btnOK.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnOK.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="btnOK.Text" xml:space="preserve">
+    <value>&amp;OK</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Name" xml:space="preserve">
+    <value>btnOK</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnOK.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnOK.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="btnCancel.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="btnCancel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>313, 293</value>
+  </data>
+  <data name="btnCancel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>75, 23</value>
+  </data>
+  <data name="btnCancel.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="btnCancel.Text" xml:space="preserve">
+    <value>&amp;Cancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Name" xml:space="preserve">
+    <value>btnCancel</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;btnCancel.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="gbxColorize.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="lblWeight.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblWeight.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 208</value>
+  </data>
+  <data name="lblWeight.Size" type="System.Drawing.Size, System.Drawing">
+    <value>44, 13</value>
+  </data>
+  <data name="lblWeight.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblWeight.Text" xml:space="preserve">
+    <value>Weight:</value>
+  </data>
+  <data name="&gt;&gt;lblWeight.Name" xml:space="preserve">
+    <value>lblWeight</value>
+  </data>
+  <data name="&gt;&gt;lblWeight.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblWeight.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;lblWeight.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ltnWeight.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;ntbWeight.Name" xml:space="preserve">
+    <value>ntbWeight</value>
+  </data>
+  <data name="&gt;&gt;ntbWeight.Type" xml:space="preserve">
+    <value>Controls.IntegerTextBox, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ntbWeight.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ntbWeight.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="ltnWeight.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 224</value>
+  </data>
+  <data name="ltnWeight.Size" type="System.Drawing.Size, System.Drawing">
+    <value>318, 45</value>
+  </data>
+  <data name="ltnWeight.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
+  </data>
+  <data name="&gt;&gt;ltnWeight.Name" xml:space="preserve">
+    <value>ltnWeight</value>
+  </data>
+  <data name="&gt;&gt;ltnWeight.Type" xml:space="preserve">
+    <value>Controls.LinkedTrackBar, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ltnWeight.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ltnWeight.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="ntbWeight.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="ntbWeight.Location" type="System.Drawing.Point, System.Drawing">
+    <value>330, 228</value>
+  </data>
+  <data name="ntbWeight.MaxLength" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="ntbWeight.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 20</value>
+  </data>
+  <data name="ntbWeight.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
+  </data>
+  <data name="ntbWeight.Text" xml:space="preserve">
+    <value>100</value>
+  </data>
+  <data name="ntbWeight.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="&gt;&gt;ntbWeight.Name" xml:space="preserve">
+    <value>ntbWeight</value>
+  </data>
+  <data name="&gt;&gt;ntbWeight.Type" xml:space="preserve">
+    <value>Controls.IntegerTextBox, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ntbWeight.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ntbWeight.ZOrder" xml:space="preserve">
+    <value>2</value>
+  </data>
+  <data name="lblLightness.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblLightness.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 144</value>
+  </data>
+  <data name="lblLightness.Size" type="System.Drawing.Size, System.Drawing">
+    <value>55, 13</value>
+  </data>
+  <data name="lblLightness.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblLightness.Text" xml:space="preserve">
+    <value>Lightness:</value>
+  </data>
+  <data name="&gt;&gt;lblLightness.Name" xml:space="preserve">
+    <value>lblLightness</value>
+  </data>
+  <data name="&gt;&gt;lblLightness.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblLightness.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;lblLightness.ZOrder" xml:space="preserve">
+    <value>3</value>
+  </data>
+  <data name="ltbLightness.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;ntbLightness.Name" xml:space="preserve">
+    <value>ntbLightness</value>
+  </data>
+  <data name="&gt;&gt;ntbLightness.Type" xml:space="preserve">
+    <value>Controls.IntegerTextBox, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ntbLightness.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ntbLightness.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="ltbLightness.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 160</value>
+  </data>
+  <data name="ltbLightness.Size" type="System.Drawing.Size, System.Drawing">
+    <value>318, 45</value>
+  </data>
+  <data name="ltbLightness.TabIndex" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="&gt;&gt;ltbLightness.Name" xml:space="preserve">
+    <value>ltbLightness</value>
+  </data>
+  <data name="&gt;&gt;ltbLightness.Type" xml:space="preserve">
+    <value>Controls.LinkedTrackBar, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ltbLightness.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ltbLightness.ZOrder" xml:space="preserve">
+    <value>4</value>
+  </data>
+  <data name="ntbLightness.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="ntbLightness.Location" type="System.Drawing.Point, System.Drawing">
+    <value>330, 164</value>
+  </data>
+  <data name="ntbLightness.MaxLength" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="ntbLightness.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 20</value>
+  </data>
+  <data name="ntbLightness.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="ntbLightness.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ntbLightness.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="&gt;&gt;ntbLightness.Name" xml:space="preserve">
+    <value>ntbLightness</value>
+  </data>
+  <data name="&gt;&gt;ntbLightness.Type" xml:space="preserve">
+    <value>Controls.IntegerTextBox, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ntbLightness.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ntbLightness.ZOrder" xml:space="preserve">
+    <value>5</value>
+  </data>
+  <data name="lblSaturation.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblSaturation.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 80</value>
+  </data>
+  <data name="lblSaturation.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 13</value>
+  </data>
+  <data name="lblSaturation.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblSaturation.Text" xml:space="preserve">
+    <value>Saturation:</value>
+  </data>
+  <data name="&gt;&gt;lblSaturation.Name" xml:space="preserve">
+    <value>lblSaturation</value>
+  </data>
+  <data name="&gt;&gt;lblSaturation.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblSaturation.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;lblSaturation.ZOrder" xml:space="preserve">
+    <value>6</value>
+  </data>
+  <data name="ltbSaturation.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;ntbSaturation.Name" xml:space="preserve">
+    <value>ntbSaturation</value>
+  </data>
+  <data name="&gt;&gt;ntbSaturation.Type" xml:space="preserve">
+    <value>Controls.IntegerTextBox, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ntbSaturation.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ntbSaturation.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="ltbSaturation.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 96</value>
+  </data>
+  <data name="ltbSaturation.Size" type="System.Drawing.Size, System.Drawing">
+    <value>318, 45</value>
+  </data>
+  <data name="ltbSaturation.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="&gt;&gt;ltbSaturation.Name" xml:space="preserve">
+    <value>ltbSaturation</value>
+  </data>
+  <data name="&gt;&gt;ltbSaturation.Type" xml:space="preserve">
+    <value>Controls.LinkedTrackBar, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ltbSaturation.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ltbSaturation.ZOrder" xml:space="preserve">
+    <value>7</value>
+  </data>
+  <data name="ntbSaturation.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="ntbSaturation.Location" type="System.Drawing.Point, System.Drawing">
+    <value>330, 100</value>
+  </data>
+  <data name="ntbSaturation.MaxLength" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="ntbSaturation.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 20</value>
+  </data>
+  <data name="ntbSaturation.TabIndex" type="System.Int32, mscorlib">
+    <value>3</value>
+  </data>
+  <data name="ntbSaturation.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ntbSaturation.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="&gt;&gt;ntbSaturation.Name" xml:space="preserve">
+    <value>ntbSaturation</value>
+  </data>
+  <data name="&gt;&gt;ntbSaturation.Type" xml:space="preserve">
+    <value>Controls.IntegerTextBox, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ntbSaturation.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ntbSaturation.ZOrder" xml:space="preserve">
+    <value>8</value>
+  </data>
+  <data name="lblHue.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="lblHue.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 16</value>
+  </data>
+  <data name="lblHue.Size" type="System.Drawing.Size, System.Drawing">
+    <value>30, 13</value>
+  </data>
+  <data name="lblHue.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="lblHue.Text" xml:space="preserve">
+    <value>Hue:</value>
+  </data>
+  <data name="&gt;&gt;lblHue.Name" xml:space="preserve">
+    <value>lblHue</value>
+  </data>
+  <data name="&gt;&gt;lblHue.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;lblHue.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;lblHue.ZOrder" xml:space="preserve">
+    <value>9</value>
+  </data>
+  <data name="ltbHue.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Left, Right</value>
+  </data>
+  <data name="&gt;&gt;ntbHue.Name" xml:space="preserve">
+    <value>ntbHue</value>
+  </data>
+  <data name="&gt;&gt;ntbHue.Type" xml:space="preserve">
+    <value>Controls.IntegerTextBox, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ntbHue.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ntbHue.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="ltbHue.Location" type="System.Drawing.Point, System.Drawing">
+    <value>6, 32</value>
+  </data>
+  <data name="ltbHue.Size" type="System.Drawing.Size, System.Drawing">
+    <value>318, 45</value>
+  </data>
+  <data name="ltbHue.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;ltbHue.Name" xml:space="preserve">
+    <value>ltbHue</value>
+  </data>
+  <data name="&gt;&gt;ltbHue.Type" xml:space="preserve">
+    <value>Controls.LinkedTrackBar, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ltbHue.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ltbHue.ZOrder" xml:space="preserve">
+    <value>10</value>
+  </data>
+  <data name="ntbHue.Anchor" type="System.Windows.Forms.AnchorStyles, System.Windows.Forms">
+    <value>Top, Right</value>
+  </data>
+  <data name="ntbHue.Location" type="System.Drawing.Point, System.Drawing">
+    <value>330, 36</value>
+  </data>
+  <data name="ntbHue.MaxLength" type="System.Int32, mscorlib">
+    <value>4</value>
+  </data>
+  <data name="ntbHue.Size" type="System.Drawing.Size, System.Drawing">
+    <value>40, 20</value>
+  </data>
+  <data name="ntbHue.TabIndex" type="System.Int32, mscorlib">
+    <value>1</value>
+  </data>
+  <data name="ntbHue.Text" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="ntbHue.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Right</value>
+  </data>
+  <data name="&gt;&gt;ntbHue.Name" xml:space="preserve">
+    <value>ntbHue</value>
+  </data>
+  <data name="&gt;&gt;ntbHue.Type" xml:space="preserve">
+    <value>Controls.IntegerTextBox, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+  <data name="&gt;&gt;ntbHue.Parent" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;ntbHue.ZOrder" xml:space="preserve">
+    <value>11</value>
+  </data>
+  <data name="gbxColorize.Location" type="System.Drawing.Point, System.Drawing">
+    <value>12, 12</value>
+  </data>
+  <data name="gbxColorize.Size" type="System.Drawing.Size, System.Drawing">
+    <value>376, 275</value>
+  </data>
+  <data name="gbxColorize.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
+  <data name="&gt;&gt;gbxColorize.Name" xml:space="preserve">
+    <value>gbxColorize</value>
+  </data>
+  <data name="&gt;&gt;gbxColorize.Type" xml:space="preserve">
+    <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;gbxColorize.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;gbxColorize.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
+  <data name="chkLuma.AutoSize" type="System.Boolean, mscorlib">
+    <value>True</value>
+  </data>
+  <data name="chkLuma.Location" type="System.Drawing.Point, System.Drawing">
+    <value>81, 297</value>
+  </data>
+  <data name="chkLuma.Size" type="System.Drawing.Size, System.Drawing">
+    <value>52, 17</value>
+  </data>
+  <data name="chkLuma.TabIndex" type="System.Int32, mscorlib">
+    <value>2</value>
+  </data>
+  <data name="chkLuma.Text" xml:space="preserve">
+    <value>Luma</value>
+  </data>
+  <data name="&gt;&gt;chkLuma.Name" xml:space="preserve">
+    <value>chkLuma</value>
+  </data>
+  <data name="&gt;&gt;chkLuma.Type" xml:space="preserve">
+    <value>System.Windows.Forms.CheckBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="&gt;&gt;chkLuma.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;chkLuma.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
+    <value>6, 13</value>
+  </data>
+  <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
+    <value>400, 344</value>
+  </data>
+  <data name="$this.Text" xml:space="preserve">
+    <value>Colorize Palette</value>
+  </data>
+  <data name="&gt;&gt;$this.Name" xml:space="preserve">
+    <value>ColorizeForm</value>
+  </data>
+  <data name="&gt;&gt;$this.Type" xml:space="preserve">
+    <value>Controls.DialogForm, Controls, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</value>
+  </data>
+</root>

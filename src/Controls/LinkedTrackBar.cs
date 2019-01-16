@@ -5,11 +5,11 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System;
+    using System.Windows.Forms;
+
     public class LinkedTrackBar : TrackBar, IIntegerComponent
     {
         private IIntegerComponent _integerComponent;
@@ -38,7 +38,8 @@ namespace Controls
                 // Remove event from last component
                 if (IntegerComponent != null)
                 {
-                    IntegerComponent.ValueChanged -= IntegerComponent_ValueChanged;
+                    IntegerComponent.ValueChanged -=
+                        IntegerComponent_ValueChanged;
                 }
 
                 _integerComponent = value;
@@ -46,7 +47,8 @@ namespace Controls
                 // Observe value of component
                 if (IntegerComponent != null)
                 {
-                    IntegerComponent.ValueChanged += new EventHandler(IntegerComponent_ValueChanged);
+                    IntegerComponent.ValueChanged +=
+                        IntegerComponent_ValueChanged;
                 }
             }
         }
@@ -57,7 +59,9 @@ namespace Controls
             base.OnValueChanged(e);
         }
 
-        private void IntegerComponent_ValueChanged(object sender, EventArgs e)
+        private void IntegerComponent_ValueChanged(
+            object sender,
+            EventArgs e)
         {
             if (IntegerComponent.Value >= Minimum &&
                 IntegerComponent.Value <= Maximum)

@@ -5,14 +5,15 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Windows.Forms;
-using MushROMs;
-
 namespace Controls
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using MushROMs;
+    using static System.Math;
+
     public abstract class FormControlTileMapHelper
     {
         public TileMap TileMap
@@ -174,7 +175,9 @@ namespace Controls
             }
 
             // Return inflated window size.
-            return WinApiMethods.InflateSize(tilemap, FormControlPadding);
+            return WinApiMethods.InflateSize(
+                tilemap,
+                FormControlPadding);
         }
 
         private Size GetBoundTileSize(Size window)
@@ -191,8 +194,14 @@ namespace Controls
             max.Add(GetTileMapSize(Form.MaximumSize));
 
             // Min/Max tile size according to system-defined min/max size.
-            min.Add(GetTileMapSize(SystemInformation.MinimumWindowSize));
-            max.Add(GetTileMapSize(SystemInformation.PrimaryMonitorMaximizedWindowSize));
+            var minSystemTileSize = GetTileMapSize(
+                SystemInformation.MinimumWindowSize);
+
+            var maxSystemTileSize = GetTileMapSize(
+                SystemInformation.PrimaryMonitorMaximizedWindowSize);
+
+            min.Add(minSystemTileSize);
+            max.Add(maxSystemTileSize);
 
             // Min/Max tile size according to the derived value.
             var tileMin = MinimumTileSize;
@@ -213,8 +222,8 @@ namespace Controls
             // Restrict the lower bound of the tilemap.
             foreach (var size in min)
             {
-                window.Width = Math.Max(window.Width, size.Width);
-                window.Height = Math.Max(window.Height, size.Height);
+                window.Width = Max(window.Width, size.Width);
+                window.Height = Max(window.Height, size.Height);
             }
 
             // Restrict upper bounds
@@ -222,12 +231,12 @@ namespace Controls
             {
                 if (size.Width > 0)
                 {
-                    window.Width = Math.Min(window.Width, size.Width);
+                    window.Width = Min(window.Width, size.Width);
                 }
 
                 if (size.Height > 0)
                 {
-                    window.Height = Math.Min(window.Height, size.Height);
+                    window.Height = Min(window.Height, size.Height);
                 }
             }
 
@@ -263,8 +272,11 @@ namespace Controls
             tilemap.Width -= residualWidth;
             tilemap.Height -= residualHeight;
 
+            var leftAligned = window.Left != parent.Left;
+            var rightAligned = window.Right == parent.Right;
+
             // Left or top adjust the client if sizing on those borders.
-            if (window.Left != parent.Left && window.Right == parent.Right)
+            if (!leftAligned && rightAligned)
             {
                 if (tilemap.Width >= TileMap.CellWidth)
                 {
@@ -276,7 +288,10 @@ namespace Controls
                 }
             }
 
-            if (window.Top != parent.Top && window.Bottom == parent.Bottom)
+            var topAligned = window.Top == parent.Top;
+            var bottomAligned = window.Bottom == parent.Bottom;
+
+            if (!topAligned && bottomAligned)
             {
                 if (tilemap.Height >= TileMap.CellHeight)
                 {
@@ -302,7 +317,9 @@ namespace Controls
             return tilemap;
         }
 
-        private void Control_ClientSizeChanged(object sender, EventArgs e)
+        private void Control_ClientSizeChanged(
+            object sender,
+            EventArgs e)
         {
             SetFormSizeFromControl();
         }
@@ -317,12 +334,16 @@ namespace Controls
             throw new NotImplementedException();
         }
 
-        private void Form_AdjustWindowSize(object sender, RectangleEventArgs e)
+        private void Form_AdjustWindowSize(
+            object sender,
+            RectangleEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void Form_AdjustWindowBounds(object sender, RectangleEventArgs e)
+        private void Form_AdjustWindowBounds(
+            object sender,
+            RectangleEventArgs e)
         {
             throw new NotImplementedException();
         }

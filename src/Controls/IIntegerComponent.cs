@@ -5,10 +5,10 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-
 namespace Controls
 {
+    using System;
+
     public interface IIntegerComponent
     {
         event EventHandler ValueChanged;

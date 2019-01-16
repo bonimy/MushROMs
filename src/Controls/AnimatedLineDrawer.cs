@@ -5,15 +5,15 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Windows.Forms;
-using static Helper.ThrowHelper;
-
 namespace Controls
 {
+    using System;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Drawing.Drawing2D;
+    using System.Windows.Forms;
+    using static Helper.ThrowHelper;
+
     public class AnimatedLineDrawer : Component
     {
         private int _length1;
@@ -187,8 +187,17 @@ namespace Controls
                     pen1.DashOffset = Offset;
                     pen2.DashOffset = Offset + Length1;
 
-                    pen1.DashPattern = new float[] { Length1, Length2 };
-                    pen2.DashPattern = new float[] { Length2, Length1 };
+                    pen1.DashPattern = new float[]
+                    {
+                        Length1,
+                        Length2
+                    };
+
+                    pen2.DashPattern = new float[]
+                    {
+                        Length2,
+                        Length1
+                    };
 
                     graphics.DrawPath(pen1, path);
                     graphics.DrawPath(pen2, path);

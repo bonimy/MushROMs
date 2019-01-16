@@ -5,20 +5,21 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-using Helper;
-
 namespace Controls
 {
+    using System;
+    using System.ComponentModel;
+    using System.Drawing;
+    using System.Windows.Forms;
+    using Helper;
+
     public class ColorValueControl : DesignControl
     {
         private Color _selectedColor;
 
         [Category("Editor")]
-        [Description("Occurs when the selected color value of the control changes.")]
+        [Description("Occurs when the selected color value of the " +
+            "control changes.")]
         public event EventHandler ColorValueChanged;
 
         [Category("Appearance")]

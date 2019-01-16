@@ -10,12 +10,12 @@ Taken from:
 http://msdn.microsoft.com/query/dev12.query?appId=Dev12IDEF1&l=EN-US&k=k%28CA1300%29;k%28TargetFrameworkMoniker-.NETFramework
 */
 
-using System;
-using System.Globalization;
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System;
+    using System.Globalization;
+    using System.Windows.Forms;
+
     public static class RtlAwareMessageBox
     {
         public static DialogResult Show(
@@ -396,7 +396,9 @@ namespace Controls
 
         public static bool IsRightToLeft(IWin32Window owner)
         {
-            var current = CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+            var current =
+                CultureInfo.CurrentUICulture.TextInfo.IsRightToLeft;
+
             if (owner is null)
             {
                 return current;

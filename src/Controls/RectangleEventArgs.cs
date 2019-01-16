@@ -5,11 +5,11 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.Drawing;
-
 namespace Controls
 {
+    using System;
+    using System.Drawing;
+
     public class RectangleEventArgs : EventArgs
     {
         public Rectangle Rectangle

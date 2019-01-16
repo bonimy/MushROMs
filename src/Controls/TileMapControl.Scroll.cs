@@ -5,12 +5,12 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System;
-using System.ComponentModel;
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System;
+    using System.ComponentModel;
+    using System.Windows.Forms;
+
     partial class TileMapControl
     {
         private ScrollBar _verticalScrollBar;
@@ -18,7 +18,8 @@ namespace Controls
 
         [Browsable(true)]
         [Category("Tilemap")]
-        [Description("The vertical scroll bar to associate with this tilemap.")]
+        [Description("The vertical scroll bar to associate with this " +
+            "tilemap.")]
         public ScrollBar VerticalScrollBar
         {
             get
@@ -42,7 +43,8 @@ namespace Controls
 
         [Browsable(true)]
         [Category("Tilemap")]
-        [Description("The horizontal scroll bar to associate with this tilemap.")]
+        [Description("The horizontal scroll bar to associate with " +
+            "this tilemap.")]
         public ScrollBar HorizontalScrollBar
         {
             get
@@ -71,8 +73,11 @@ namespace Controls
                 return;
             }
 
-            HorizontalScrollBar.Scroll += HorizontalScrollBar_Scroll;
-            HorizontalScrollBar.ValueChanged += HorizontalScrollBar_ValueChanged;
+            HorizontalScrollBar.Scroll +=
+                HorizontalScrollBar_Scroll;
+
+            HorizontalScrollBar.ValueChanged +=
+                HorizontalScrollBar_ValueChanged;
         }
 
         private void RemoveHorizontalScrollBarEvents()
@@ -82,8 +87,11 @@ namespace Controls
                 return;
             }
 
-            HorizontalScrollBar.Scroll -= HorizontalScrollBar_Scroll;
-            HorizontalScrollBar.ValueChanged -= HorizontalScrollBar_ValueChanged;
+            HorizontalScrollBar.Scroll -=
+                HorizontalScrollBar_Scroll;
+
+            HorizontalScrollBar.ValueChanged -=
+                HorizontalScrollBar_ValueChanged;
         }
 
         private void AddVerticalScrollBarEvents()
@@ -93,8 +101,11 @@ namespace Controls
                 return;
             }
 
-            VerticalScrollBar.Scroll += VerticalScrollBar_Scroll;
-            VerticalScrollBar.ValueChanged += VerticalScrollBar_ValueChanged;
+            VerticalScrollBar.Scroll +=
+                VerticalScrollBar_Scroll;
+
+            VerticalScrollBar.ValueChanged +=
+                VerticalScrollBar_ValueChanged;
         }
 
         private void RemoveVerticalScrollBarEvents()
@@ -104,8 +115,11 @@ namespace Controls
                 return;
             }
 
-            VerticalScrollBar.Scroll -= VerticalScrollBar_Scroll;
-            VerticalScrollBar.ValueChanged -= VerticalScrollBar_ValueChanged;
+            VerticalScrollBar.Scroll -=
+                VerticalScrollBar_Scroll;
+
+            VerticalScrollBar.ValueChanged -=
+                VerticalScrollBar_ValueChanged;
         }
 
         public void ResetScrollBars()
@@ -124,7 +138,9 @@ namespace Controls
 
         protected abstract void ScrollTileMapHorizontal(int value);
 
-        private void HorizontalScrollBar_Scroll(object sender, ScrollEventArgs e)
+        private void HorizontalScrollBar_Scroll(
+            object sender,
+            ScrollEventArgs e)
         {
             if (e.NewValue == e.OldValue)
             {
@@ -135,7 +151,9 @@ namespace Controls
             Invalidate();
         }
 
-        private void VerticalScrollBar_Scroll(object sender, ScrollEventArgs e)
+        private void VerticalScrollBar_Scroll(
+            object sender,
+            ScrollEventArgs e)
         {
             if (e.NewValue == e.OldValue)
             {
@@ -146,13 +164,17 @@ namespace Controls
             Invalidate();
         }
 
-        private void VerticalScrollBar_ValueChanged(object sender, EventArgs e)
+        private void VerticalScrollBar_ValueChanged(
+            object sender,
+            EventArgs e)
         {
             ScrollTileMapVertical(VerticalScrollBar.Value);
             Invalidate();
         }
 
-        private void HorizontalScrollBar_ValueChanged(object sender, EventArgs e)
+        private void HorizontalScrollBar_ValueChanged(
+            object sender,
+            EventArgs e)
         {
             ScrollTileMapHorizontal(HorizontalScrollBar.Value);
             Invalidate();

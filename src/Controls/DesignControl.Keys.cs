@@ -5,16 +5,17 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Security;
-using System.Windows.Forms;
-
 namespace Controls
 {
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Security;
+    using System.Windows.Forms;
+
     partial class DesignControl
     {
-        internal static readonly ICollection<Keys> FallbackOverrideInputKeys = new HashSet<Keys>
+        internal static readonly ICollection<Keys>
+            FallbackOverrideInputKeys = new HashSet<Keys>
         {
             Keys.Up,
             Keys.Up    | Keys.Shift,
@@ -35,7 +36,8 @@ namespace Controls
         };
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public static Keys CurrentKeys
         {
             get;
@@ -43,7 +45,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public static Keys PreviousKeys
         {
             get;
@@ -51,7 +54,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public static Keys ActiveKeys
         {
             get;
@@ -59,7 +63,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public static bool ControlKeyHeld
         {
             get
@@ -69,7 +74,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public static bool ShiftKeyHeld
         {
             get
@@ -79,7 +85,8 @@ namespace Controls
         }
 
         [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [DesignerSerializationVisibility(
+            DesignerSerializationVisibility.Hidden)]
         public static bool AltKeyHeld
         {
             get

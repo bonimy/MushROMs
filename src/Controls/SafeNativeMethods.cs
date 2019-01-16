@@ -5,10 +5,10 @@
 //     https://www.gnu.org/licenses/#AGPL
 // </copyright>
 
-using System.Runtime.InteropServices;
-
 namespace Controls
 {
+    using System.Runtime.InteropServices;
+
     internal static class SafeNativeMethods
     {
         [DllImport("user32.dll")]
